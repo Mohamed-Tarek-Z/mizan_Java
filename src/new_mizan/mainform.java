@@ -403,23 +403,23 @@ public class mainform extends javax.swing.JFrame {
 
             jLabel25.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
             jLabel25.setText("رقم البالته");
-            jFrame1.getContentPane().add(jLabel25, new org.netbeans.lib.awtextra.AbsoluteConstraints(543, 27, -1, -1));
+            jFrame1.getContentPane().add(jLabel25, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 30, -1, -1));
 
             jLabel26.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
             jLabel26.setText("رقم اللوط");
-            jFrame1.getContentPane().add(jLabel26, new org.netbeans.lib.awtextra.AbsoluteConstraints(305, 27, -1, -1));
+            jFrame1.getContentPane().add(jLabel26, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 30, -1, -1));
 
             jLabel27.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
             jLabel27.setText("الصنف");
-            jFrame1.getContentPane().add(jLabel27, new org.netbeans.lib.awtextra.AbsoluteConstraints(187, 27, -1, -1));
+            jFrame1.getContentPane().add(jLabel27, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 30, -1, -1));
 
             jLabel28.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
             jLabel28.setText("عدد الكون");
-            jFrame1.getContentPane().add(jLabel28, new org.netbeans.lib.awtextra.AbsoluteConstraints(428, 27, -1, -1));
+            jFrame1.getContentPane().add(jLabel28, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 30, -1, -1));
 
             jLabel29.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
             jLabel29.setText("الوزن");
-            jFrame1.getContentPane().add(jLabel29, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 27, -1, -1));
+            jFrame1.getContentPane().add(jLabel29, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 30, -1, -1));
 
             jTextField_E_O_lot.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
             jTextField_E_O_lot.setHorizontalAlignment(javax.swing.JTextField.CENTER);
@@ -447,7 +447,7 @@ public class mainform extends javax.swing.JFrame {
 
             jLabel30.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
             jLabel30.setText("الوزن");
-            jFrame1.getContentPane().add(jLabel30, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 180, -1, -1));
+            jFrame1.getContentPane().add(jLabel30, new org.netbeans.lib.awtextra.AbsoluteConstraints(690, 180, -1, -1));
 
             jTextField_E_lot.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
             jTextField_E_lot.setHorizontalAlignment(javax.swing.JTextField.CENTER);
@@ -461,7 +461,7 @@ public class mainform extends javax.swing.JFrame {
                     jTextField_E_lotKeyTyped(evt);
                 }
             });
-            jFrame1.getContentPane().add(jTextField_E_lot, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 220, 90, -1));
+            jFrame1.getContentPane().add(jTextField_E_lot, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 220, 90, -1));
 
             jTextField_E_ConNum.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
             jTextField_E_ConNum.setHorizontalAlignment(javax.swing.JTextField.CENTER);
@@ -475,7 +475,7 @@ public class mainform extends javax.swing.JFrame {
                     jTextField_E_ConNumKeyTyped(evt);
                 }
             });
-            jFrame1.getContentPane().add(jTextField_E_ConNum, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 220, 90, -1));
+            jFrame1.getContentPane().add(jTextField_E_ConNum, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 220, 90, -1));
 
             jTextField_E_PaltNum.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
             jTextField_E_PaltNum.setHorizontalAlignment(javax.swing.JTextField.CENTER);
@@ -489,7 +489,7 @@ public class mainform extends javax.swing.JFrame {
                     jTextField_E_PaltNumKeyTyped(evt);
                 }
             });
-            jFrame1.getContentPane().add(jTextField_E_PaltNum, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 220, 90, -1));
+            jFrame1.getContentPane().add(jTextField_E_PaltNum, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 220, 90, -1));
 
             jTextField_E_Weight.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
             jTextField_E_Weight.setHorizontalAlignment(javax.swing.JTextField.CENTER);
@@ -511,23 +511,23 @@ public class mainform extends javax.swing.JFrame {
                     jComboBox_E_proNameKeyTyped(evt);
                 }
             });
-            jFrame1.getContentPane().add(jComboBox_E_proName, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 220, 143, -1));
+            jFrame1.getContentPane().add(jComboBox_E_proName, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 220, 143, -1));
 
             jLabel31.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
             jLabel31.setText("رقم البالته");
-            jFrame1.getContentPane().add(jLabel31, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 180, -1, -1));
+            jFrame1.getContentPane().add(jLabel31, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 180, -1, -1));
 
             jLabel32.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
             jLabel32.setText("رقم اللوط");
-            jFrame1.getContentPane().add(jLabel32, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 180, -1, -1));
+            jFrame1.getContentPane().add(jLabel32, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 180, -1, -1));
 
             jLabel33.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
             jLabel33.setText("الصنف");
-            jFrame1.getContentPane().add(jLabel33, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 180, -1, 20));
+            jFrame1.getContentPane().add(jLabel33, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 180, -1, 20));
 
             jLabel34.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
             jLabel34.setText("عدد الكون");
-            jFrame1.getContentPane().add(jLabel34, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 180, -1, -1));
+            jFrame1.getContentPane().add(jLabel34, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 180, -1, -1));
 
             jButton_E_Edit.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
             jButton_E_Edit.setText("تعديل");
@@ -562,11 +562,13 @@ public class mainform extends javax.swing.JFrame {
                 }
             });
             jFrame1.getContentPane().add(jButton_E_print, new org.netbeans.lib.awtextra.AbsoluteConstraints(125, 273, 100, 40));
-            jFrame1.getContentPane().add(jTextField_E_Color, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 190, 90, -1));
+
+            jTextField_E_Color.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+            jFrame1.getContentPane().add(jTextField_E_Color, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 210, 130, 40));
 
             jLabel43.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
             jLabel43.setText("اللون");
-            jFrame1.getContentPane().add(jLabel43, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 154, 50, 20));
+            jFrame1.getContentPane().add(jLabel43, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 180, 50, 20));
 
             setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
             setTitle("mizan program");
@@ -1926,7 +1928,7 @@ public class mainform extends javax.swing.JFrame {
                     if (opj.dataRead("*", "products", "pro_name=N'" + jTextField_pro_name.getText() + "'").next()) {
                         JOptionPane.showMessageDialog(null, "<html><body><h1  style='font-family: Arial; font-size: 20pt; text-align: right; width: 150px;'>  هذا الصنف موجود بالفعل </h1></body></html>", "إنتبه", JOptionPane.PLAIN_MESSAGE);
                     } else {
-                        opj.inData("products", "pro_name,weight_of_con,Color", "N'" + jTextField_pro_name.getText() + "',N'" + ToStringEnglish(jTextField_con_weight_add.getText()) + "',N'"+jTextField_pro_color.getText()+"'");
+                        opj.inData("products", "pro_name,weight_of_con,Color", "N'" + jTextField_pro_name.getText() + "',N'" + ToStringEnglish(jTextField_con_weight_add.getText()) + "',N'" + jTextField_pro_color.getText() + "'");
                         jTextField_pro_name.setText("");
                         jTextField_con_weight_add.setText("");
                         jTextField_pro_color.setText("");
@@ -1944,7 +1946,7 @@ public class mainform extends javax.swing.JFrame {
             if (jTextField_pro_name.getText().isBlank()) {
                 JOptionPane.showMessageDialog(null, "<html><body><h1  style='font-family: Arial; font-size: 20pt; text-align: right; width: 150px;'> برجاء أدخال اسم الصنف  </h1></body></html>", "إنتبه", JOptionPane.PLAIN_MESSAGE);
             } else {
-                opj.update("products", "pro_name=N'" + jTextField_pro_name.getText() + "' ,weight_of_con=N'" + ToStringEnglish(jTextField_con_weight_add.getText()) + "' ,Color=N'"+jTextField_pro_color.getText()+"' ", "pro_id=" + pro_Table_SelectedID + " ");
+                opj.update("products", "pro_name=N'" + jTextField_pro_name.getText() + "' ,weight_of_con=N'" + ToStringEnglish(jTextField_con_weight_add.getText()) + "' ,Color=N'" + jTextField_pro_color.getText() + "' ", "pro_id=" + pro_Table_SelectedID + " ");
                 pro_Table_SelectedID = 0;
                 jTextField_pro_name.setText("");
                 jTextField_con_weight_add.setText("");
@@ -2612,7 +2614,7 @@ public class mainform extends javax.swing.JFrame {
                 jTextField_E_ConNum.setText(jTable_storage.getModel().getValueAt(jTable_storage.getSelectedRow(), 1).toString());
                 jTextField_E_PaltNum.setText(jTable_storage.getModel().getValueAt(jTable_storage.getSelectedRow(), 3).toString());
                 jTextField_E_Weight.setText(jTable_storage.getModel().getValueAt(jTable_storage.getSelectedRow(), 0).toString());
-
+                jTextField_E_Color.setText(jTextField_Color.getText());
             } else if (jTable_storage.getSelectedRowCount() > 1) {
                 String newnum = JOptionPane.showInputDialog(null, "أدخل رقم البالتة !", "تغير رقم البالتة للمخار !", JOptionPane.QUESTION_MESSAGE);
                 if (newnum.isBlank()) {
@@ -2690,9 +2692,12 @@ public class mainform extends javax.swing.JFrame {
     private void jButton_E_printActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_E_printActionPerformed
         try {
             // TODO add your handling code here:
-            printex(new ArrayList<>(Arrays.asList(jComboBox_E_proName.getSelectedItem().toString(),
-                    jTextField_E_PaltNum.getText(), jTextField_E_lot.getText(), jTextField_E_ConNum.getText(),
+            printex(new ArrayList<>(Arrays.asList(
+                    jTextField_E_PaltNum.getText(),
                     jTextField_E_Color.getText(),
+                    jComboBox_E_proName.getSelectedItem().toString(),
+                    jTextField_E_lot.getText(),
+                    jTextField_E_ConNum.getText(),
                     "N/A", jTextField_E_Weight.getText())));
         } catch (WriterException | IOException | PrinterException ex) {
             JOptionPane.showMessageDialog(null, ex.getMessage(), "إنتبه", JOptionPane.ERROR_MESSAGE);
@@ -2789,26 +2794,7 @@ public class mainform extends javax.swing.JFrame {
         cell.setCellValue(values.get(1));
 
         cell = sheet.getRow(2).getCell(0);
-        if (values.get(2).length() < 12) {
-            XSSFFont font = workbook.createFont();
-            font.setFontHeightInPoints((short) 18);
-            font.setFontName("Calibri");
-
-            var st = ((Cell)sheet.getRow(0).getCell(0)).getCellStyle();
-            st.setFont(font);
-            cell.setCellValue(values.get(2));
-            cell.setCellStyle(st);
-        } else {
-            XSSFFont font = workbook.createFont();
-            font.setFontHeightInPoints((short) 12);
-            font.setFontName("Calibri");
-
-            var st = ((Cell)sheet.getRow(0).getCell(0)).getCellStyle();
-            st.setFont(font);
-            st.setWrapText(true);
-            cell.setCellValue(values.get(2));
-            cell.setCellStyle(st);
-        }
+        cell.setCellValue(values.get(2));
 
         cell = sheet.getRow(3).getCell(0);
         cell.setCellValue(values.get(3));
@@ -2969,7 +2955,7 @@ public class mainform extends javax.swing.JFrame {
         ResultSet st = opj.dataRead("*", "products");
         try {
             while (st.next()) {
-                model.addRow(new Object[]{st.getString(1), st.getString(2), ToDoubleArabic(st.getString(3)),st.getString(4)});
+                model.addRow(new Object[]{st.getString(1), st.getString(2), ToDoubleArabic(st.getString(3)), st.getString(4)});
             }
         } catch (SQLException ex) {
             Logger.getLogger(mainform.class
