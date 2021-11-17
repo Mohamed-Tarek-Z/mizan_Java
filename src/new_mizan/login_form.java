@@ -6,6 +6,7 @@
 package new_mizan;
 
 import java.awt.event.KeyEvent;
+import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
@@ -120,8 +121,9 @@ static boolean admin=false;
             }
             else
                 JOptionPane.showMessageDialog(null, "كلمه المرور  غير صحيحه", "انتبه", JOptionPane.INFORMATION_MESSAGE);
-        } catch (SQLException ex) {
+        } catch (SQLException | IOException ex) {
             Logger.getLogger(login_form.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(null, ex.getMessage(), "إنتبه", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 

@@ -26,7 +26,10 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.math.RoundingMode;
 import java.text.SimpleDateFormat;
@@ -51,11 +54,11 @@ public class mainform extends javax.swing.JFrame {
 
     sqlcon opj;
 
+    public int tick1num = 0, tick2num = 0;
     private static int BagMax = 2;
     private final JButton jButton_bagmax = new javax.swing.JButton();
 
-
-    public mainform(sqlcon ops) {
+    public mainform(sqlcon ops) throws IOException {
         initComponents();
 
         this.setDefaultCloseOperation(mainform.DO_NOTHING_ON_CLOSE);
@@ -86,6 +89,8 @@ public class mainform extends javax.swing.JFrame {
         combox_fill(this.jComboBox_pro_in_reports, opj.dataRead("pro_name", "products"), true);
         combox_fill(this.jComboBox_E_O_proName, opj.dataRead("pro_name", "products"), true);
         combox_fill(this.jComboBox_E_proName, opj.dataRead("pro_name", "products"), true);
+        tick1num = loadTicknum("TicketNumber1.txt");
+        tick2num = loadTicknum("TicketNumber2.txt");
     }
 
     int pro_Table_SelectedID = 0;
@@ -551,9 +556,7 @@ public class mainform extends javax.swing.JFrame {
             jCheckBox_E_QR.setText("QR");
             jFrame1.getContentPane().add(jCheckBox_E_QR, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 150, -1, -1));
 
-            jCheckBox_E_P.setSelected(true);
             jCheckBox_E_P.setText("print");
-            jCheckBox_E_P.setEnabled(false);
             jFrame1.getContentPane().add(jCheckBox_E_P, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 150, -1, -1));
 
             setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -1585,21 +1588,12 @@ public class mainform extends javax.swing.JFrame {
         if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
             jTextField_pallet_num.requestFocusInWindow();
         }
-        if (evt.getKeyChar() == KeyEvent.VK_PAGE_DOWN) {
-            jTextField_pallet_num.requestFocusInWindow();
-        }
     }//GEN-LAST:event_jTextField_lotKeyTyped
 
     private void jTextField_num_of_conKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_num_of_conKeyTyped
         textbox_number(evt, jTextField_num_of_con, 3);
         calc_net_weight();
         if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
-            jTextField_bag_weight.requestFocusInWindow();
-        }
-        if (evt.getKeyChar() == KeyEvent.VK_PAGE_UP) {
-            jTextField_pallet_num.requestFocusInWindow();
-        }
-        if (evt.getKeyChar() == KeyEvent.VK_PAGE_DOWN) {
             jTextField_bag_weight.requestFocusInWindow();
         }
     }//GEN-LAST:event_jTextField_num_of_conKeyTyped
@@ -1615,12 +1609,6 @@ public class mainform extends javax.swing.JFrame {
         if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
             jTextField_num_of_con.requestFocusInWindow();
         }
-        if (evt.getKeyChar() == KeyEvent.VK_PAGE_UP) {
-            jTextField_lot.requestFocusInWindow();
-        }
-        if (evt.getKeyChar() == KeyEvent.VK_PAGE_DOWN) {
-            jTextField_num_of_con.requestFocusInWindow();
-        }
     }//GEN-LAST:event_jTextField_pallet_numKeyTyped
 
     private void jTextField_net_weightKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_net_weightKeyTyped
@@ -1628,24 +1616,12 @@ public class mainform extends javax.swing.JFrame {
             jTextField_num_of_con.requestFocusInWindow();
             jButton_add_data.doClick();
         }
-        if (evt.getKeyChar() == KeyEvent.VK_PAGE_UP) {
-            jTextField_weight.requestFocusInWindow();
-        }
-        if (evt.getKeyChar() == KeyEvent.VK_PAGE_DOWN) {
-            jTextField_weight_of_con.requestFocusInWindow();
-        }
     }//GEN-LAST:event_jTextField_net_weightKeyTyped
 
     private void jTextField_bag_weightKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_bag_weightKeyTyped
         textbox_number(evt, jTextField_bag_weight, BagMax);
         calc_net_weight();
         if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
-            jTextField_weight.requestFocusInWindow();
-        }
-        if (evt.getKeyChar() == KeyEvent.VK_PAGE_UP) {
-            jTextField_num_of_con.requestFocusInWindow();
-        }
-        if (evt.getKeyChar() == KeyEvent.VK_PAGE_DOWN) {
             jTextField_weight.requestFocusInWindow();
         }
     }//GEN-LAST:event_jTextField_bag_weightKeyTyped
@@ -1656,12 +1632,6 @@ public class mainform extends javax.swing.JFrame {
         if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
             jTextField_net_weight.requestFocusInWindow();
         }
-        if (evt.getKeyChar() == KeyEvent.VK_PAGE_UP) {
-            jTextField_bag_weight.requestFocusInWindow();
-        }
-        if (evt.getKeyChar() == KeyEvent.VK_PAGE_DOWN) {
-            jTextField_net_weight.requestFocusInWindow();
-        }
     }//GEN-LAST:event_jTextField_weightKeyTyped
 
     private void jTextField_weight_of_conKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_weight_of_conKeyTyped
@@ -1669,12 +1639,6 @@ public class mainform extends javax.swing.JFrame {
         calc_net_weight();
         if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
             jTextField_lot.requestFocusInWindow();
-        }
-        if (evt.getKeyChar() == KeyEvent.VK_PAGE_UP) {
-            jTextField_net_weight.requestFocusInWindow();
-        }
-        if (evt.getKeyChar() == KeyEvent.VK_PAGE_DOWN) {
-            jTextField_Color.requestFocusInWindow();
         }
     }//GEN-LAST:event_jTextField_weight_of_conKeyTyped
 
@@ -2248,14 +2212,18 @@ public class mainform extends javax.swing.JFrame {
             int result = JOptionPane.showOptionDialog(null, "<html><body><h1  style='font-family: Arial; font-size: 20pt; text-align: right; width: 150px;'> خد بالك ياجدع  </h1></body></html>", "انتبه ",
                     JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, options1, null);
             if (result == JOptionPane.YES_OPTION) {
+                saveTicknum("TicketNumber1.txt", tick1num);
+                saveTicknum("TicketNumber2.txt", tick2num);
                 login_form opj11 = new login_form();
                 opj11.setVisible(true);
                 this.dispose();
             }
             if (result == JOptionPane.NO_OPTION) {
+                saveTicknum("TicketNumber1.txt", tick1num);
+                saveTicknum("TicketNumber2.txt", tick2num);
                 System.exit(NORMAL);
             }
-        } catch (SQLException ex) {
+        } catch (SQLException | IOException ex) {
             Logger.getLogger(mainform.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(null, ex.getMessage(), "إنتبه", JOptionPane.ERROR_MESSAGE);
         }
@@ -2544,12 +2512,6 @@ public class mainform extends javax.swing.JFrame {
         if (Character.isDigit(evt.getKeyChar())) {
             evt.consume();
         }
-        if (evt.getKeyChar() == KeyEvent.VK_PAGE_UP) {
-            jTextField_weight_of_con.requestFocusInWindow();
-        }
-        if (evt.getKeyChar() == KeyEvent.VK_PAGE_DOWN) {
-            jButton_add_data.requestFocusInWindow();
-        }
     }//GEN-LAST:event_jTextField_ColorKeyTyped
 
     private void jTextField_E_ColorKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_E_ColorKeyTyped
@@ -2595,6 +2557,32 @@ public class mainform extends javax.swing.JFrame {
     }
 
     boolean printex(ArrayList<String> values, boolean b1, boolean b2) throws WriterException, IOException, PrinterException {
+        if (b2) {
+            print_shit.generateQRcode("{\n \"الصنف\": " + values.get(2) + " ,\n\"اللوط\": " + values.get(3) + " ,\n\"الوزن الصافي\": " + values.get(6) + "\n}", values.get(6), 50, 50);
+            jLabel_QR.setIcon(new javax.swing.ImageIcon(System.getProperty("user.dir") + "\\Temp\\QR" + values.get(6) + ".png"));
+
+            PrintRequestAttributeSet attributes = new HashPrintRequestAttributeSet();
+            attributes.add(new MediaPrintableArea(0, 0, 20, 20, MediaPrintableArea.MM));
+            PrinterJob job = PrinterJob.getPrinterJob();
+            job.setJobName("Print QR");
+            for (PrintService printer : PrintServiceLookup.lookupPrintServices(null, null)) {
+                if (printer.getName().contains("Xprinter")) {
+                    job.setPrintService(printer);
+                }
+            }
+            job.setPrintable((Graphics pg, PageFormat pf, int pageNum) -> {
+                pf.setOrientation(PageFormat.PORTRAIT);
+                if (pageNum != 0) {
+                    return Printable.NO_SUCH_PAGE;
+                }
+                jLabel_QR.print(pg);
+                return Printable.PAGE_EXISTS;
+            });
+            job.print(attributes);
+            tick2num++;
+            new File(System.getProperty("user.dir") + "\\Temp\\QR" + values.get(6) + ".png").delete();
+            jLabel_QR.setIcon(null);
+        }
         if (b1) {
             XSSFWorkbook workbook;
             try (FileInputStream EX = new FileInputStream(new File("Ticket.xlsx"))) {
@@ -2623,36 +2611,13 @@ public class mainform extends javax.swing.JFrame {
             cell = sheet.getRow(6).getCell(0);
             cell.setCellValue(values.get(6));
 
-            try (FileOutputStream fileOut = new FileOutputStream("Temp\\myFile.xlsx")) {
+            try (FileOutputStream fileOut = new FileOutputStream(System.getProperty("user.dir") + "\\Temp\\myFile.xlsx")) {
                 workbook.write(fileOut);
             }
             Desktop.getDesktop().print(new File(System.getProperty("user.dir") + "\\Temp\\myFile.xlsx"));
+            tick1num++;
         }
-        if (b2) {
-            print_shit.generateQRcode("{\n \"الصنف\": " + values.get(2) + " ,\n\"اللوط\": " + values.get(3) + " ,\n\"الوزن الصافي\": " + values.get(6) + "\n}",values.get(6));
-            jLabel_QR.setIcon(new javax.swing.ImageIcon(System.getProperty("user.dir") + "\\Temp\\QR"+values.get(6)+".png"));
-            
-            PrintRequestAttributeSet attributes = new HashPrintRequestAttributeSet();
-            attributes.add(new MediaPrintableArea(0, 0, 3000, 2000, MediaPrintableArea.MM));
-            PrinterJob job = PrinterJob.getPrinterJob();
-            job.setJobName("Print QR");
-            for (PrintService printer : PrintServiceLookup.lookupPrintServices(null, null)) {
-                if (printer.getName().contains("Xprinter")) {
-                    job.setPrintService(printer);
-                }
-            }
-            job.setPrintable((Graphics pg, PageFormat pf, int pageNum) -> {
-                pf.setOrientation(PageFormat.PORTRAIT);
-                if (pageNum != 0) {
-                    return Printable.NO_SUCH_PAGE;
-                }
-                jLabel_QR.print(pg);
-                return Printable.PAGE_EXISTS;
-            });
-            job.print(attributes);
-            new File(System.getProperty("user.dir") + "\\Temp\\QR"+values.get(6)+".png").delete();
-            jLabel_QR.setIcon(null);
-        }
+
         if (b1 || b2) {
             return true;
         } else {
@@ -2888,6 +2853,26 @@ public class mainform extends javax.swing.JFrame {
             }
 
         }
+    }
+
+    int loadTicknum(String filename) throws FileNotFoundException, IOException {
+        String num;
+        int nums, i;
+        FileReader fr = new FileReader(System.getProperty("user.dir") + "\\Temp\\" + filename);
+        num = "";
+        while ((i = fr.read()) != -1) {
+            num += Character.digit(i, 10) + "";
+        }
+        nums = Integer.parseInt((num.isBlank() ? "0" : num));
+        fr.close();
+        return nums;
+    }
+
+    int saveTicknum(String filename, int nums) throws FileNotFoundException, IOException {
+        FileWriter fw = new FileWriter(System.getProperty("user.dir") + "\\Temp\\" + filename);
+        fw.write(nums + "");
+        fw.close();
+        return nums;
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
