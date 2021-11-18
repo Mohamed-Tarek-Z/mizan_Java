@@ -8,6 +8,7 @@ import javax.swing.JPanel;
 import java.awt.Desktop;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.HeadlessException;
 import java.awt.event.KeyEvent;
 import java.awt.print.PageFormat;
@@ -1495,10 +1496,13 @@ public class mainform extends javax.swing.JFrame {
             print.setPreferredSize(new java.awt.Dimension(200, 200));
             print.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
+            jLabel_QR.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+            jLabel_QR.setVerticalAlignment(javax.swing.SwingConstants.TOP);
             jLabel_QR.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-            jLabel_QR.setMaximumSize(new java.awt.Dimension(200, 200));
-            jLabel_QR.setMinimumSize(new java.awt.Dimension(200, 200));
-            print.add(jLabel_QR, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 200, 200));
+            jLabel_QR.setMaximumSize(new java.awt.Dimension(40, 40));
+            jLabel_QR.setMinimumSize(new java.awt.Dimension(40, 40));
+            jLabel_QR.setPreferredSize(new java.awt.Dimension(40, 40));
+            print.add(jLabel_QR, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 40, 40));
 
             left_panel.add(print, "card10");
 
@@ -2558,8 +2562,8 @@ public class mainform extends javax.swing.JFrame {
 
     boolean printex(ArrayList<String> values, boolean b1, boolean b2) throws WriterException, IOException, PrinterException {
         if (b2) {
-            print_shit.generateQRcode("{\n \"الصنف\": " + values.get(2) + " ,\n\"اللوط\": " + values.get(3) + " ,\n\"الوزن الصافي\": " + values.get(6) + "\n}", values.get(6), 50, 50);
-            jLabel_QR.setIcon(new javax.swing.ImageIcon(System.getProperty("user.dir") + "\\Temp\\QR" + values.get(6) + ".png"));
+            print_shit.generateQRcode("{\n \"الصنف\": " + values.get(2) + " ,\n\"اللوط\": " + values.get(3) + " ,\n\"الوزن الصافي\": " + values.get(6) + "\n}", ToDoubleEnglish(values.get(6))+"", 40, 40);
+            jLabel_QR.setIcon(new javax.swing.ImageIcon(System.getProperty("user.dir") + "\\Temp\\QR" +ToDoubleEnglish(values.get(6))+ ".png"));
 
             PrintRequestAttributeSet attributes = new HashPrintRequestAttributeSet();
             attributes.add(new MediaPrintableArea(0, 0, 20, 20, MediaPrintableArea.MM));
@@ -2572,15 +2576,18 @@ public class mainform extends javax.swing.JFrame {
             }
             job.setPrintable((Graphics pg, PageFormat pf, int pageNum) -> {
                 pf.setOrientation(PageFormat.PORTRAIT);
+                
                 if (pageNum != 0) {
                     return Printable.NO_SUCH_PAGE;
                 }
-                jLabel_QR.print(pg);
+                Graphics2D g2 = (Graphics2D) pg;
+                g2.scale(1.3, 1.3);
+                jLabel_QR.paint(g2);
                 return Printable.PAGE_EXISTS;
             });
             job.print(attributes);
             tick2num++;
-            new File(System.getProperty("user.dir") + "\\Temp\\QR" + values.get(6) + ".png").delete();
+            new File(System.getProperty("user.dir") + "\\Temp\\QR" + ToDoubleEnglish(values.get(6))+ ".png").delete();
             jLabel_QR.setIcon(null);
         }
         if (b1) {

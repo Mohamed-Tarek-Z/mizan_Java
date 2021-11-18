@@ -477,9 +477,9 @@ public class print_shit {
     }
 
     public static void generateQRcode(String data, String imgName, int SizeX, int SizeY) throws WriterException, IOException {
-        Map<EncodeHintType, Object> hintMap = new EnumMap<EncodeHintType, Object>(EncodeHintType.class);
+        Map<EncodeHintType, Object> hintMap = new EnumMap<>(EncodeHintType.class);
         hintMap.put(EncodeHintType.CHARACTER_SET, "UTF-8");
-        hintMap.put(EncodeHintType.MARGIN, 1);
+        hintMap.put(EncodeHintType.MARGIN, 0);
         hintMap.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.L);
         String path = System.getProperty("user.dir") + "\\Temp\\QR"+imgName+".png";
         BitMatrix matrix = new MultiFormatWriter().encode(new String(data.getBytes("UTF-8"), "UTF-8"), BarcodeFormat.QR_CODE, SizeX, SizeY, hintMap);
