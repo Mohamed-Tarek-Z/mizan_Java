@@ -9,6 +9,7 @@ import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -111,8 +112,11 @@ static boolean admin=false;
        
         try {
             // TODO add your handling code here:
-            
-               ResultSet st=opj.dataRead("status_,weight_of_con", "users","username=N'"+jComboBox1.getSelectedItem().toString()+"' and password_=N'"+jPasswordField1.getText()+"'");
+            String pw = "";
+            for (char c : jPasswordField1.getPassword()) {
+                pw+=c;
+            }
+               ResultSet st=opj.dataRead("status_,weight_of_con", "users","username=N'"+jComboBox1.getSelectedItem().toString()+"' and password_=N'"+pw+"'");
             if(st.next()){
                    admin = "0".equals(st.getString(1));
                    mainform opj1= new mainform(opj);
