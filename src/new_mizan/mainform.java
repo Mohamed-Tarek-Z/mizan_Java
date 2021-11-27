@@ -366,6 +366,8 @@ public class mainform extends javax.swing.JFrame {
         jLabel_BagMax = new javax.swing.JLabel();
         jTextField_BagMax = new javax.swing.JTextField();
         jButton_saveMax = new javax.swing.JButton();
+        jButton_Max_Rest2 = new javax.swing.JButton();
+        jButton_Max_Rest1 = new javax.swing.JButton();
 
         jFileChooser1.setDialogType(javax.swing.JFileChooser.SAVE_DIALOG);
         jFileChooser1.setCurrentDirectory(new java.io.File("F:\\"));
@@ -1532,6 +1534,24 @@ public class mainform extends javax.swing.JFrame {
             });
             Maximum.add(jButton_saveMax, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 290, 140, 70));
 
+            jButton_Max_Rest2.setFont(new java.awt.Font("Tahoma", 3, 18)); // NOI18N
+            jButton_Max_Rest2.setText("Reset2");
+            jButton_Max_Rest2.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    jButton_Max_Rest2ActionPerformed(evt);
+                }
+            });
+            Maximum.add(jButton_Max_Rest2, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 480, 110, 60));
+
+            jButton_Max_Rest1.setFont(new java.awt.Font("Tahoma", 3, 18)); // NOI18N
+            jButton_Max_Rest1.setText("Reset");
+            jButton_Max_Rest1.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    jButton_Max_Rest1ActionPerformed(evt);
+                }
+            });
+            Maximum.add(jButton_Max_Rest1, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 480, 110, 60));
+
             left_panel.add(Maximum, "card11");
 
             jSplitPane1.setLeftComponent(left_panel);
@@ -1633,7 +1653,7 @@ public class mainform extends javax.swing.JFrame {
     private void jTextField_weightKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_weightKeyTyped
         textbox_number_weight(evt, jTextField_weight, 8);
         calc_net_weight();
-        if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
+        if (evt.getKeyChar() == KeyEvent.VK_ENTER && !jTextField_weight.getText().isBlank()) {
             jTextField_net_weight.requestFocusInWindow();
         }
     }//GEN-LAST:event_jTextField_weightKeyTyped
@@ -2525,6 +2545,25 @@ public class mainform extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jTextField_E_ColorKeyTyped
 
+    private void jButton_Max_Rest2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_Max_Rest2ActionPerformed
+        try {
+            // TODO add your handling code here:
+            saveTicknum("TicketNumber1.txt", 0);
+        } catch (IOException ex) {
+            Logger.getLogger(mainform.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+    }//GEN-LAST:event_jButton_Max_Rest2ActionPerformed
+
+    private void jButton_Max_Rest1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_Max_Rest1ActionPerformed
+        try {
+            // TODO add your handling code here:
+            saveTicknum("TicketNumber2.txt", 0);
+        } catch (IOException ex) {
+            Logger.getLogger(mainform.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jButton_Max_Rest1ActionPerformed
+
     private void jButton_bagmaxActionPerformed(java.awt.event.ActionEvent evt) {
         open_panel(Maximum);
         jTextField_BagMax.setText("" + BagMax);
@@ -2562,11 +2601,11 @@ public class mainform extends javax.swing.JFrame {
 
     boolean printex(ArrayList<String> values, boolean b1, boolean b2) throws WriterException, IOException, PrinterException {
         if (b2) {
-            print_shit.generateQRcode("{\n \"الصنف\": " + values.get(2) + " ,\n\"اللوط\": " + values.get(3) + " ,\n\"الوزن الصافي\": " + values.get(6) + "\n}", ToDoubleEnglish(values.get(6))+"", 40, 40);
-            jLabel_QR.setIcon(new javax.swing.ImageIcon(System.getProperty("user.dir") + "\\Temp\\QR" +ToDoubleEnglish(values.get(6))+ ".png"));
+            print_shit.generateQRcode("{\n \"الصنف\": " + values.get(2) + " ,\n\"اللوط\": " + values.get(3) + " ,\n\"الوزن الصافي\": " + values.get(6) + "\n}", ToDoubleEnglish(values.get(6)) + "", 40, 40);
+            jLabel_QR.setIcon(new javax.swing.ImageIcon(System.getProperty("user.dir") + "\\Temp\\QR" + ToDoubleEnglish(values.get(6)) + ".png"));
 
             PrintRequestAttributeSet attributes = new HashPrintRequestAttributeSet();
-            attributes.add(new MediaPrintableArea(0, 0, 20, 20, MediaPrintableArea.MM));
+            attributes.add(new MediaPrintableArea(3, 3, 16, 16, MediaPrintableArea.MM));
             PrinterJob job = PrinterJob.getPrinterJob();
             job.setJobName("Print QR");
             for (PrintService printer : PrintServiceLookup.lookupPrintServices(null, null)) {
@@ -2575,8 +2614,6 @@ public class mainform extends javax.swing.JFrame {
                 }
             }
             job.setPrintable((Graphics pg, PageFormat pf, int pageNum) -> {
-                pf.setOrientation(PageFormat.PORTRAIT);
-                
                 if (pageNum != 0) {
                     return Printable.NO_SUCH_PAGE;
                 }
@@ -2587,7 +2624,7 @@ public class mainform extends javax.swing.JFrame {
             });
             job.print(attributes);
             tick2num++;
-            new File(System.getProperty("user.dir") + "\\Temp\\QR" + ToDoubleEnglish(values.get(6))+ ".png").delete();
+            new File(System.getProperty("user.dir") + "\\Temp\\QR" + ToDoubleEnglish(values.get(6)) + ".png").delete();
             jLabel_QR.setIcon(null);
         }
         if (b1) {
@@ -2901,6 +2938,8 @@ public class mainform extends javax.swing.JFrame {
     private javax.swing.JButton jButton9;
     private javax.swing.JButton jButton_E_Edit;
     private javax.swing.JButton jButton_E_print;
+    private javax.swing.JButton jButton_Max_Rest1;
+    private javax.swing.JButton jButton_Max_Rest2;
     private javax.swing.JButton jButton_add_data;
     private javax.swing.JButton jButton_add_pro;
     private javax.swing.JButton jButton_clear;
