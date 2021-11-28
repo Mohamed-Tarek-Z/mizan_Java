@@ -368,6 +368,8 @@ public class mainform extends javax.swing.JFrame {
         jButton_saveMax = new javax.swing.JButton();
         jButton_Max_Rest2 = new javax.swing.JButton();
         jButton_Max_Rest1 = new javax.swing.JButton();
+        jLabel_tick1 = new javax.swing.JLabel();
+        jLabel_tick2 = new javax.swing.JLabel();
 
         jFileChooser1.setDialogType(javax.swing.JFileChooser.SAVE_DIALOG);
         jFileChooser1.setCurrentDirectory(new java.io.File("F:\\"));
@@ -564,7 +566,9 @@ public class mainform extends javax.swing.JFrame {
 
             setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
             setTitle("mizan program");
-            setMinimumSize(new java.awt.Dimension(1020, 660));
+            setMaximumSize(new java.awt.Dimension(1020, 700));
+            setMinimumSize(new java.awt.Dimension(1020, 700));
+            setPreferredSize(new java.awt.Dimension(1020, 700));
             setResizable(false);
             addWindowListener(new java.awt.event.WindowAdapter() {
                 public void windowClosing(java.awt.event.WindowEvent evt) {
@@ -1499,7 +1503,6 @@ public class mainform extends javax.swing.JFrame {
             print.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
             jLabel_QR.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-            jLabel_QR.setVerticalAlignment(javax.swing.SwingConstants.TOP);
             jLabel_QR.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
             jLabel_QR.setMaximumSize(new java.awt.Dimension(40, 40));
             jLabel_QR.setMinimumSize(new java.awt.Dimension(40, 40));
@@ -1535,13 +1538,13 @@ public class mainform extends javax.swing.JFrame {
             Maximum.add(jButton_saveMax, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 290, 140, 70));
 
             jButton_Max_Rest2.setFont(new java.awt.Font("Tahoma", 3, 18)); // NOI18N
-            jButton_Max_Rest2.setText("Reset2");
+            jButton_Max_Rest2.setText("Reset 2");
             jButton_Max_Rest2.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent evt) {
                     jButton_Max_Rest2ActionPerformed(evt);
                 }
             });
-            Maximum.add(jButton_Max_Rest2, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 480, 110, 60));
+            Maximum.add(jButton_Max_Rest2, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 420, 110, 60));
 
             jButton_Max_Rest1.setFont(new java.awt.Font("Tahoma", 3, 18)); // NOI18N
             jButton_Max_Rest1.setText("Reset");
@@ -1550,7 +1553,9 @@ public class mainform extends javax.swing.JFrame {
                     jButton_Max_Rest1ActionPerformed(evt);
                 }
             });
-            Maximum.add(jButton_Max_Rest1, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 480, 110, 60));
+            Maximum.add(jButton_Max_Rest1, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 420, 110, 60));
+            Maximum.add(jLabel_tick1, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 490, 70, 50));
+            Maximum.add(jLabel_tick2, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 490, 70, 50));
 
             left_panel.add(Maximum, "card11");
 
@@ -1570,6 +1575,8 @@ public class mainform extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jSplitPane1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
             );
+
+            getAccessibleContext().setAccessibleDescription("");
 
             pack();
             setLocationRelativeTo(null);
@@ -1733,6 +1740,8 @@ public class mainform extends javax.swing.JFrame {
         } catch (WriterException | HeadlessException | IOException | SQLException | PrinterException ex) {
             Logger.getLogger(mainform.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(null, ex.getMessage(), "إنتبه", JOptionPane.ERROR_MESSAGE);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(mainform.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_jButton_add_dataActionPerformed
 
@@ -2528,6 +2537,8 @@ public class mainform extends javax.swing.JFrame {
                     "N/A", jTextField_E_Weight.getText())), jCheckBox_E_P.isSelected(), jCheckBox_E_QR.isSelected());
         } catch (WriterException | IOException | PrinterException ex) {
             JOptionPane.showMessageDialog(null, ex.getMessage(), "إنتبه", JOptionPane.ERROR_MESSAGE);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(mainform.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_jButton_E_printActionPerformed
 
@@ -2548,17 +2559,19 @@ public class mainform extends javax.swing.JFrame {
     private void jButton_Max_Rest2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_Max_Rest2ActionPerformed
         try {
             // TODO add your handling code here:
-            saveTicknum("TicketNumber1.txt", 0);
+            tick2num = 0;
+            saveTicknum("TicketNumber2.txt", tick2num);
         } catch (IOException ex) {
             Logger.getLogger(mainform.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
     }//GEN-LAST:event_jButton_Max_Rest2ActionPerformed
 
     private void jButton_Max_Rest1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_Max_Rest1ActionPerformed
         try {
             // TODO add your handling code here:
-            saveTicknum("TicketNumber2.txt", 0);
+            tick1num = 0;
+            saveTicknum("TicketNumber1.txt", tick1num);
         } catch (IOException ex) {
             Logger.getLogger(mainform.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -2567,6 +2580,8 @@ public class mainform extends javax.swing.JFrame {
     private void jButton_bagmaxActionPerformed(java.awt.event.ActionEvent evt) {
         open_panel(Maximum);
         jTextField_BagMax.setText("" + BagMax);
+        jLabel_tick1.setText("" + tick1num);
+        jLabel_tick2.setText("" + tick2num);
     }
 
     void open_panel(JPanel panel) {
@@ -2599,13 +2614,13 @@ public class mainform extends javax.swing.JFrame {
         }
     }
 
-    boolean printex(ArrayList<String> values, boolean b1, boolean b2) throws WriterException, IOException, PrinterException {
+    boolean printex(ArrayList<String> values, boolean b1, boolean b2) throws WriterException, IOException, PrinterException, InterruptedException {
         if (b2) {
-            print_shit.generateQRcode("{\n \"الصنف\": " + values.get(2) + " ,\n\"اللوط\": " + values.get(3) + " ,\n\"الوزن الصافي\": " + values.get(6) + "\n}", ToDoubleEnglish(values.get(6)) + "", 40, 40);
+            print_shit.generateQRcode("{\n \"الصنف\": " + values.get(2) + " ,\n\"اللوط\": " + values.get(3) + " ,\n\"الوزن الصافي\": " + values.get(6) + "\n}", ToDoubleEnglish(values.get(6)) + "", 30, 30);
             jLabel_QR.setIcon(new javax.swing.ImageIcon(System.getProperty("user.dir") + "\\Temp\\QR" + ToDoubleEnglish(values.get(6)) + ".png"));
 
             PrintRequestAttributeSet attributes = new HashPrintRequestAttributeSet();
-            attributes.add(new MediaPrintableArea(3, 3, 16, 16, MediaPrintableArea.MM));
+            attributes.add(new MediaPrintableArea(0, 0, 20, 20, MediaPrintableArea.MM));
             PrinterJob job = PrinterJob.getPrinterJob();
             job.setJobName("Print QR");
             for (PrintService printer : PrintServiceLookup.lookupPrintServices(null, null)) {
@@ -3010,6 +3025,8 @@ public class mainform extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JLabel jLabel_BagMax;
     private javax.swing.JLabel jLabel_QR;
+    private javax.swing.JLabel jLabel_tick1;
+    private javax.swing.JLabel jLabel_tick2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
