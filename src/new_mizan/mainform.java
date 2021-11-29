@@ -11,6 +11,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.HeadlessException;
 import java.awt.event.KeyEvent;
+import java.awt.image.BufferedImage;
 import java.awt.print.PageFormat;
 import java.awt.print.Printable;
 import java.awt.print.PrinterException;
@@ -38,11 +39,13 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import javax.imageio.ImageIO;
 import javax.print.PrintService;
 import javax.print.PrintServiceLookup;
 import javax.print.attribute.HashPrintRequestAttributeSet;
 import javax.print.attribute.PrintRequestAttributeSet;
 import javax.print.attribute.standard.MediaPrintableArea;
+import javax.print.attribute.standard.PrinterResolution;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JTable;
@@ -66,22 +69,25 @@ public class mainform extends javax.swing.JFrame {
         if (!login_form.admin) {
             jButton2.setEnabled(false);
             jButton3.setEnabled(false);
-            jButton5.setEnabled(false);
             jButton10.setEnabled(false);
         } else {
             jButton_bagmax.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
             jButton_bagmax.setText("Seting");
             jButton_bagmax.addActionListener((java.awt.event.ActionEvent evt) -> {
-                jButton_bagmaxActionPerformed(evt);
+                try {
+                    jButton_bagmaxActionPerformed(evt);
+                } catch (IOException ex) {
+                    Logger.getLogger(mainform.class.getName()).log(Level.SEVERE, null, ex);
+                    JOptionPane.showMessageDialog(null, ex.getMessage(), "إنتبه", JOptionPane.ERROR_MESSAGE);
+                }
             });
-            right_panel.add(jButton_bagmax, new org.netbeans.lib.awtextra.AbsoluteConstraints(28, 560, 110, 40));
+            right_panel.add(jButton_bagmax, new org.netbeans.lib.awtextra.AbsoluteConstraints(28, 520, 110, 40));
         }
 
         this.opj = ops;
 
         this.jTable_storage.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
         this.jTable_storage.getTableHeader().setFont(new Font("Tahoma", 1, 16));
-        this.jTable1.getTableHeader().setFont(new Font("Tahoma", 1, 16));
         this.jTable2.getTableHeader().setFont(new Font("Tahoma", 1, 16));
         this.jTable3.getTableHeader().setFont(new Font("Tahoma", 1, 16));
         this.jTable4.getTableHeader().setFont(new Font("Tahoma", 1, 16));
@@ -137,7 +143,6 @@ public class mainform extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
         jButton7 = new javax.swing.JButton();
         jButton8 = new javax.swing.JButton();
         jButton9 = new javax.swing.JButton();
@@ -327,10 +332,6 @@ public class mainform extends javax.swing.JFrame {
         jLabel37 = new javax.swing.JLabel();
         jTextField_pro_color = new javax.swing.JTextField();
         jLabel49 = new javax.swing.JLabel();
-        querys = new javax.swing.JPanel();
-        jScrollPane5 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
-        jButton6 = new javax.swing.JButton();
         stock = new javax.swing.JPanel();
         jComboBox1 = new javax.swing.JComboBox<>();
         jScrollPane6 = new javax.swing.JScrollPane();
@@ -360,8 +361,6 @@ public class mainform extends javax.swing.JFrame {
         jScrollPane9 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
         jLabel38 = new javax.swing.JLabel();
-        print = new javax.swing.JPanel();
-        jLabel_QR = new javax.swing.JLabel();
         Maximum = new javax.swing.JPanel();
         jLabel_BagMax = new javax.swing.JLabel();
         jTextField_BagMax = new javax.swing.JTextField();
@@ -612,15 +611,6 @@ public class mainform extends javax.swing.JFrame {
             });
             right_panel.add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(28, 80, 110, 40));
 
-            jButton5.setFont(new java.awt.Font("sansserif", 0, 18)); // NOI18N
-            jButton5.setText("أستعلامات");
-            jButton5.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent evt) {
-                    jButton5ActionPerformed(evt);
-                }
-            });
-            right_panel.add(jButton5, new org.netbeans.lib.awtextra.AbsoluteConstraints(28, 200, 110, 40));
-
             jButton7.setFont(new java.awt.Font("sansserif", 0, 24)); // NOI18N
             jButton7.setText("باك أب");
             jButton7.addActionListener(new java.awt.event.ActionListener() {
@@ -628,7 +618,7 @@ public class mainform extends javax.swing.JFrame {
                     jButton7ActionPerformed(evt);
                 }
             });
-            right_panel.add(jButton7, new org.netbeans.lib.awtextra.AbsoluteConstraints(28, 260, 110, 40));
+            right_panel.add(jButton7, new org.netbeans.lib.awtextra.AbsoluteConstraints(28, 200, 110, 40));
 
             jButton8.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
             jButton8.setText("رصيد");
@@ -637,7 +627,7 @@ public class mainform extends javax.swing.JFrame {
                     jButton8ActionPerformed(evt);
                 }
             });
-            right_panel.add(jButton8, new org.netbeans.lib.awtextra.AbsoluteConstraints(28, 320, 110, 40));
+            right_panel.add(jButton8, new org.netbeans.lib.awtextra.AbsoluteConstraints(28, 260, 110, 40));
 
             jButton9.setFont(new java.awt.Font("Tahoma", 0, 20)); // NOI18N
             jButton9.setText("إحصائيات");
@@ -646,7 +636,7 @@ public class mainform extends javax.swing.JFrame {
                     jButton9ActionPerformed(evt);
                 }
             });
-            right_panel.add(jButton9, new org.netbeans.lib.awtextra.AbsoluteConstraints(28, 380, 110, 40));
+            right_panel.add(jButton9, new org.netbeans.lib.awtextra.AbsoluteConstraints(28, 320, 110, 40));
 
             jButton10.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
             jButton10.setText("يوميه");
@@ -655,7 +645,7 @@ public class mainform extends javax.swing.JFrame {
                     jButton10ActionPerformed(evt);
                 }
             });
-            right_panel.add(jButton10, new org.netbeans.lib.awtextra.AbsoluteConstraints(28, 440, 110, 40));
+            right_panel.add(jButton10, new org.netbeans.lib.awtextra.AbsoluteConstraints(28, 380, 110, 40));
 
             jButton14.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
             jButton14.setText("أي");
@@ -664,7 +654,7 @@ public class mainform extends javax.swing.JFrame {
                     jButton14ActionPerformed(evt);
                 }
             });
-            right_panel.add(jButton14, new org.netbeans.lib.awtextra.AbsoluteConstraints(28, 500, 110, 40));
+            right_panel.add(jButton14, new org.netbeans.lib.awtextra.AbsoluteConstraints(28, 440, 110, 40));
 
             jSplitPane1.setRightComponent(right_panel);
 
@@ -1169,11 +1159,6 @@ public class mainform extends javax.swing.JFrame {
                     jTable_proMouseClicked(evt);
                 }
             });
-            jTable_pro.addKeyListener(new java.awt.event.KeyAdapter() {
-                public void keyTyped(java.awt.event.KeyEvent evt) {
-                    jTable_proKeyTyped(evt);
-                }
-            });
             jScrollPane2.setViewportView(jTable_pro);
             if (jTable_pro.getColumnModel().getColumnCount() > 0) {
                 jTable_pro.getColumnModel().getColumn(0).setMinWidth(100);
@@ -1225,73 +1210,6 @@ public class mainform extends javax.swing.JFrame {
             add_product.add(jLabel49, new org.netbeans.lib.awtextra.AbsoluteConstraints(125, 50, 70, 30));
 
             left_panel.add(add_product, "card3");
-
-            querys.setMaximumSize(new java.awt.Dimension(834, 600));
-            querys.setMinimumSize(new java.awt.Dimension(834, 600));
-            querys.setPreferredSize(new java.awt.Dimension(834, 600));
-
-            jTable1.setFont(new java.awt.Font("Tahoma", 0, 20)); // NOI18N
-            jTable1.setModel(new javax.swing.table.DefaultTableModel(
-                new Object [][] {
-
-                },
-                new String [] {
-                    "مسلسل", "الأسم", "التاريخ"
-                }
-            ) {
-                boolean[] canEdit = new boolean [] {
-                    false, false, false
-                };
-
-                public boolean isCellEditable(int rowIndex, int columnIndex) {
-                    return canEdit [columnIndex];
-                }
-            });
-            jTable1.setGridColor(new java.awt.Color(0, 0, 0));
-            jTable1.setRowHeight(25);
-            jTable1.setSelectionBackground(new java.awt.Color(0, 0, 0));
-            jScrollPane5.setViewportView(jTable1);
-            if (jTable1.getColumnModel().getColumnCount() > 0) {
-                jTable1.getColumnModel().getColumn(0).setMinWidth(100);
-                jTable1.getColumnModel().getColumn(0).setPreferredWidth(100);
-                jTable1.getColumnModel().getColumn(0).setMaxWidth(100);
-                jTable1.getColumnModel().getColumn(1).setResizable(false);
-                jTable1.getColumnModel().getColumn(2).setResizable(false);
-            }
-
-            jButton6.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
-            jButton6.setText("فتح");
-            jButton6.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent evt) {
-                    jButton6ActionPerformed(evt);
-                }
-            });
-
-            javax.swing.GroupLayout querysLayout = new javax.swing.GroupLayout(querys);
-            querys.setLayout(querysLayout);
-            querysLayout.setHorizontalGroup(
-                querysLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(querysLayout.createSequentialGroup()
-                    .addGap(28, 28, 28)
-                    .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 218, Short.MAX_VALUE)
-                    .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(80, 80, 80))
-            );
-            querysLayout.setVerticalGroup(
-                querysLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(querysLayout.createSequentialGroup()
-                    .addGroup(querysLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(querysLayout.createSequentialGroup()
-                            .addGap(85, 85, 85)
-                            .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(querysLayout.createSequentialGroup()
-                            .addGap(210, 210, 210)
-                            .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addContainerGap(138, Short.MAX_VALUE))
-            );
-
-            left_panel.add(querys, "card5");
 
             stock.setMaximumSize(new java.awt.Dimension(834, 600));
             stock.setMinimumSize(new java.awt.Dimension(834, 600));
@@ -1495,22 +1413,6 @@ public class mainform extends javax.swing.JFrame {
 
             left_panel.add(pause, "card9");
 
-            print.setBackground(new java.awt.Color(255, 255, 255));
-            print.setFocusable(false);
-            print.setMaximumSize(new java.awt.Dimension(300, 300));
-            print.setMinimumSize(new java.awt.Dimension(200, 200));
-            print.setPreferredSize(new java.awt.Dimension(200, 200));
-            print.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-            jLabel_QR.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-            jLabel_QR.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-            jLabel_QR.setMaximumSize(new java.awt.Dimension(40, 40));
-            jLabel_QR.setMinimumSize(new java.awt.Dimension(40, 40));
-            jLabel_QR.setPreferredSize(new java.awt.Dimension(40, 40));
-            print.add(jLabel_QR, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 40, 40));
-
-            left_panel.add(print, "card10");
-
             Maximum.setMaximumSize(new java.awt.Dimension(834, 600));
             Maximum.setMinimumSize(new java.awt.Dimension(834, 600));
             Maximum.setPreferredSize(new java.awt.Dimension(834, 600));
@@ -1643,7 +1545,14 @@ public class mainform extends javax.swing.JFrame {
     }//GEN-LAST:event_jTextField_pallet_numKeyTyped
 
     private void jTextField_net_weightKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_net_weightKeyTyped
+        if (evt.getKeyChar() == KeyEvent.VK_MINUS && (!jTextField_net_weight.getText().isBlank())) {
+            double x = ToDoubleEnglish(jTextField_weight.getText());
+            DecimalFormat df2 = new DecimalFormat("#.##");
+            jTextField_weight.setText(ToDoubleArabic(df2.format(x - 0.02) + ""));
+            calc_net_weight();
+        }
         if (evt.getKeyChar() == KeyEvent.VK_ENTER && (!jTextField_net_weight.getText().isBlank())) {
+            calc_net_weight();
             jTextField_num_of_con.requestFocusInWindow();
             jButton_add_data.doClick();
         }
@@ -1820,7 +1729,7 @@ public class mainform extends javax.swing.JFrame {
             jTextField_pro_name.setText(model.getValueAt(jTable_pro.getSelectedRow(), 1).toString());
             jTextField_con_weight_add.setText(model.getValueAt(jTable_pro.getSelectedRow(), 2).toString());
             pro_Table_SelectedID = Integer.parseInt(model.getValueAt(jTable_pro.getSelectedRow(), 0).toString());
-        } catch (Exception e) {
+        } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(null, "555");
         }
     }//GEN-LAST:event_jTable_proMouseClicked
@@ -1986,40 +1895,6 @@ public class mainform extends javax.swing.JFrame {
 
     }//GEN-LAST:event_jTextField5KeyReleased
 
-    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-        open_panel(querys);
-        File[] files = new File(System.getProperty("user.dir") + "\\querys").listFiles();
-        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-        model.setRowCount(0);
-        ArrayList<String> results = new ArrayList<>();
-        int num = 0;
-        for (File file : files) {
-            if (file.isFile()) {
-                if (file.getName().length() < 8 || file.getName().contains("~$")) {
-                    continue;
-                }
-                results.add(file.getName());
-                model.addRow(new Object[]{++num, file.getName()});
-            }
-        }
-        for (int i = 0; i < jTable1.getRowCount(); i++) {
-            jTable1.setValueAt(results.get(i).substring(results.get(i).length() - 15, results.get(i).length() - 5), i, 2);
-            jTable1.setValueAt(results.get(i).substring(0, results.get(i).length() - 15), i, 1);
-        }
-        jTable1.setAutoCreateRowSorter(true);
-    }//GEN-LAST:event_jButton5ActionPerformed
-
-    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
-        try {
-            File file = new File(System.getProperty("user.dir") + "\\querys\\" + jTable1.getValueAt(jTable1.getSelectedRow(), 1) + jTable1.getValueAt(jTable1.getSelectedRow(), 2) + ".xlsx");
-            Desktop desktop = Desktop.getDesktop();
-            desktop.open(file);
-        } catch (IOException ex) {
-            Logger.getLogger(mainform.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(null, ex.getMessage(), "إنتبه", JOptionPane.ERROR_MESSAGE);
-        }
-    }//GEN-LAST:event_jButton6ActionPerformed
-
     private void jTextField5FocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextField5FocusLost
         if (!jTextField5.getText().isBlank())
             if (ToDoubleEnglish(jTextField5.getText()) > 160) {
@@ -2114,12 +1989,6 @@ public class mainform extends javax.swing.JFrame {
             jButton_del_data.doClick();
         }
     }//GEN-LAST:event_jTable_storageKeyTyped
-
-    private void jTable_proKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTable_proKeyTyped
-        if (evt.getKeyChar() == KeyEvent.VK_DELETE) {
-            jButton6.doClick();
-        }
-    }//GEN-LAST:event_jTable_proKeyTyped
 
     private void jComboBox_pro_in_storageKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jComboBox_pro_in_storageKeyTyped
         if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
@@ -2263,7 +2132,7 @@ public class mainform extends javax.swing.JFrame {
     }//GEN-LAST:event_formWindowClosing
 
     private void jButton12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton12ActionPerformed
-        if (jButton3.isEnabled() && jButton2.isEnabled() && jButton5.isEnabled()) {
+        if (jButton3.isEnabled() && jButton2.isEnabled() ) {
             if (jTable6.getSelectedRow() != -1) {
                 if (JOptionPane.showConfirmDialog(null, "<html><body><h1  style='font-family: Arial; font-size: 20pt; text-align: right; width: 150px;'>  هل تريد استرجاع أزن " + jTable6.getValueAt(jTable6.getSelectedRow(), 0) + " لصنف" + jTable6.getValueAt(jTable6.getSelectedRow(), 1) + " في يوم" + jTable6.getValueAt(jTable6.getSelectedRow(), 5) + " </h1></body></html>", "تنبيه",
                         JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
@@ -2280,7 +2149,7 @@ public class mainform extends javax.swing.JFrame {
                                     + " and exported_date = '" + ToStringEnglish("" + jTable6.getValueAt(jTable6.getSelectedRow(), 5)) + "'"
                                     + "  and num_of_con is not null  and pallet_numb is not null         ");
 
-                            ArrayList<String[]> outerArr = new ArrayList<String[]>();
+                            ArrayList<String[]> outerArr = new ArrayList<>();
 
                             while (s.next()) {
                                 String[] myString12 = {s.getString(1), s.getString(2), s.getString(3), s.getString(4), s.getString(5), s.getString(6), s.getString(7)};
@@ -2577,8 +2446,12 @@ public class mainform extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jButton_Max_Rest1ActionPerformed
 
-    private void jButton_bagmaxActionPerformed(java.awt.event.ActionEvent evt) {
+    private void jButton_bagmaxActionPerformed(java.awt.event.ActionEvent evt) throws IOException {
         open_panel(Maximum);
+        saveTicknum("TicketNumber1.txt", tick1num);
+        saveTicknum("TicketNumber2.txt", tick2num);
+        tick1num = loadTicknum("TicketNumber1.txt");
+        tick2num = loadTicknum("TicketNumber2.txt");
         jTextField_BagMax.setText("" + BagMax);
         jLabel_tick1.setText("" + tick1num);
         jLabel_tick2.setText("" + tick2num);
@@ -2616,11 +2489,12 @@ public class mainform extends javax.swing.JFrame {
 
     boolean printex(ArrayList<String> values, boolean b1, boolean b2) throws WriterException, IOException, PrinterException, InterruptedException {
         if (b2) {
-            print_shit.generateQRcode("{\n \"الصنف\": " + values.get(2) + " ,\n\"اللوط\": " + values.get(3) + " ,\n\"الوزن الصافي\": " + values.get(6) + "\n}", ToDoubleEnglish(values.get(6)) + "", 30, 30);
-            jLabel_QR.setIcon(new javax.swing.ImageIcon(System.getProperty("user.dir") + "\\Temp\\QR" + ToDoubleEnglish(values.get(6)) + ".png"));
-
+            print_shit.generateQRcode("{\n \"الصنف\": " + values.get(2) + " ,\n\"اللوط\": " + values.get(3) + " ,\n\"الوزن الصافي\": " + values.get(6) + "\n}", ToDoubleEnglish(values.get(6)) + "", 300, 300);
+            BufferedImage image = ImageIO.read(new File(System.getProperty("user.dir") + "\\Temp\\QR" + ToDoubleEnglish(values.get(6)) + ".png"));
             PrintRequestAttributeSet attributes = new HashPrintRequestAttributeSet();
-            attributes.add(new MediaPrintableArea(0, 0, 20, 20, MediaPrintableArea.MM));
+            attributes.add(new PrinterResolution(300, 300, PrinterResolution.DPI));
+            attributes.add(new MediaPrintableArea(0f, 0f, 20f, 20f, MediaPrintableArea.MM));
+
             PrinterJob job = PrinterJob.getPrinterJob();
             job.setJobName("Print QR");
             for (PrintService printer : PrintServiceLookup.lookupPrintServices(null, null)) {
@@ -2628,19 +2502,19 @@ public class mainform extends javax.swing.JFrame {
                     job.setPrintService(printer);
                 }
             }
+
             job.setPrintable((Graphics pg, PageFormat pf, int pageNum) -> {
                 if (pageNum != 0) {
                     return Printable.NO_SUCH_PAGE;
                 }
+                pg.drawImage(image, 0, 0, (int) pf.getImageableWidth(), (int) pf.getImageableHeight(), null);
                 Graphics2D g2 = (Graphics2D) pg;
-                g2.scale(1.3, 1.3);
-                jLabel_QR.paint(g2);
+                g2.translate((int) pf.getImageableX(),(int) pf.getImageableY());
                 return Printable.PAGE_EXISTS;
             });
             job.print(attributes);
             tick2num++;
             new File(System.getProperty("user.dir") + "\\Temp\\QR" + ToDoubleEnglish(values.get(6)) + ".png").delete();
-            jLabel_QR.setIcon(null);
         }
         if (b1) {
             XSSFWorkbook workbook;
@@ -2677,11 +2551,7 @@ public class mainform extends javax.swing.JFrame {
             tick1num++;
         }
 
-        if (b1 || b2) {
-            return true;
-        } else {
-            return false;
-        }
+        return b1 || b2;
     }
 
     void textbox_length_limiter(KeyEvent event, JTextField textboxname, int length) {
@@ -2792,6 +2662,7 @@ public class mainform extends javax.swing.JFrame {
         return Arab;
     }
 
+    @SuppressWarnings("unchecked")
     private void combox_fill(JComboBox comboxname, ResultSet st, boolean new_or_add) {
         if (new_or_add) {
             comboxname.removeAllItems();
@@ -2914,7 +2785,7 @@ public class mainform extends javax.swing.JFrame {
         }
     }
 
-    int loadTicknum(String filename) throws FileNotFoundException, IOException {
+    private int loadTicknum(String filename) throws FileNotFoundException, IOException {
         String num;
         int nums, i;
         FileReader fr = new FileReader(System.getProperty("user.dir") + "\\Temp\\" + filename);
@@ -2946,8 +2817,6 @@ public class mainform extends javax.swing.JFrame {
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
-    private javax.swing.JButton jButton6;
     private javax.swing.JButton jButton7;
     private javax.swing.JButton jButton8;
     private javax.swing.JButton jButton9;
@@ -3024,20 +2893,17 @@ public class mainform extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JLabel jLabel_BagMax;
-    private javax.swing.JLabel jLabel_QR;
     private javax.swing.JLabel jLabel_tick1;
     private javax.swing.JLabel jLabel_tick2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
-    private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JScrollPane jScrollPane7;
     private javax.swing.JScrollPane jScrollPane8;
     private javax.swing.JScrollPane jScrollPane9;
     private javax.swing.JSplitPane jSplitPane1;
-    private javax.swing.JTable jTable1;
     private javax.swing.JTable jTable2;
     private javax.swing.JTable jTable3;
     private javax.swing.JTable jTable4;
@@ -3072,8 +2938,6 @@ public class mainform extends javax.swing.JFrame {
     private javax.swing.JPanel left_panel;
     private javax.swing.JTextField pallet_weight;
     private javax.swing.JPanel pause;
-    private javax.swing.JPanel print;
-    private javax.swing.JPanel querys;
     private javax.swing.JPanel reports;
     private javax.swing.JPanel right_panel;
     private javax.swing.JPanel statistics;
