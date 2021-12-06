@@ -739,11 +739,6 @@ public class mainform extends javax.swing.JFrame {
                     jComboBox_pro_in_storageItemStateChanged(evt);
                 }
             });
-            jComboBox_pro_in_storage.addKeyListener(new java.awt.event.KeyAdapter() {
-                public void keyTyped(java.awt.event.KeyEvent evt) {
-                    jComboBox_pro_in_storageKeyTyped(evt);
-                }
-            });
             in_data.add(jComboBox_pro_in_storage, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 40, 200, 30));
 
             jLabel6.setFont(new java.awt.Font("sansserif", 0, 24)); // NOI18N
@@ -1990,12 +1985,6 @@ public class mainform extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jTable_storageKeyTyped
 
-    private void jComboBox_pro_in_storageKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jComboBox_pro_in_storageKeyTyped
-        if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
-            jButton_add_data.doClick();
-        }
-    }//GEN-LAST:event_jComboBox_pro_in_storageKeyTyped
-
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
         jFileChooser1.showSaveDialog(this);
         if (jFileChooser1.getSelectedFile() != null) {
@@ -2703,8 +2692,8 @@ public class mainform extends javax.swing.JFrame {
     void fill_storage_table() {
         DefaultTableModel model = (DefaultTableModel) jTable_storage.getModel();
         model.setRowCount(0);
-        ResultSet st = opj.dataRead("weight_,num_of_con,lot,pallet_numb,storage_id,used", "storage ",
-                "storage.pro_id=(select pro_id from products where pro_name=N'" + jComboBox_pro_in_storage.getSelectedItem() + "')  order by lot DESC, pallet_numb DESC ,storage_id DESC ,used ");
+        ResultSet st = opj.dataRead("weight_,num_of_con,lot,pallet_numb,storage_id,used, (CASE WHEN ISNUMERIC(lot) = 1 THEN 0 ELSE 1 END) IsNum", "storage ",
+                "storage.pro_id=(select pro_id from products where pro_name=N'" + jComboBox_pro_in_storage.getSelectedItem() + "') order by IsNum,lot DESC, pallet_numb DESC, storage_id DESC, used ");
         try {
             while (st.next()) {
                 model.addRow(new Object[]{ToDoubleArabic(st.getString(1)), ToDoubleArabic(st.getString(2)), ToDoubleArabic(st.getString(3)), ToDoubleArabic(st.getString(4)), st.getString(5), "", st.getString(6)});
