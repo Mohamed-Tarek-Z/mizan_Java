@@ -58,8 +58,9 @@ public class mainform extends javax.swing.JFrame {
 
     sqlcon opj;
 
-    public int tick1num = 0, tick2num = 0;
+    public short tick1num = 0, tick2num = 0;
     private static int BagMax = 2;
+    private float Xx = 0, Yy = 0, width = 19, hight = 19;
     private final JButton jButton_bagmax = new javax.swing.JButton();
 
     public mainform(sqlcon ops) throws IOException {
@@ -240,7 +241,7 @@ public class mainform extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jLabel14 = new javax.swing.JLabel();
         pallet_weight = new javax.swing.JTextField();
-        jCheckBox2 = new javax.swing.JCheckBox();
+        jCheckBox_M_Markpage = new javax.swing.JCheckBox();
         jButton_clear = new javax.swing.JButton();
         jCheckBox_print = new javax.swing.JCheckBox();
         jTextField_Color = new javax.swing.JTextField();
@@ -361,14 +362,26 @@ public class mainform extends javax.swing.JFrame {
         jScrollPane9 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
         jLabel38 = new javax.swing.JLabel();
-        Maximum = new javax.swing.JPanel();
-        jLabel_BagMax = new javax.swing.JLabel();
-        jTextField_BagMax = new javax.swing.JTextField();
-        jButton_saveMax = new javax.swing.JButton();
-        jButton_Max_Rest2 = new javax.swing.JButton();
-        jButton_Max_Rest1 = new javax.swing.JButton();
-        jLabel_tick1 = new javax.swing.JLabel();
-        jLabel_tick2 = new javax.swing.JLabel();
+        Settings = new javax.swing.JPanel();
+        jLabel_set_BagMax = new javax.swing.JLabel();
+        jTextField_set_BagMax = new javax.swing.JTextField();
+        jButton_set_saveMax = new javax.swing.JButton();
+        jButton_set_Rest2 = new javax.swing.JButton();
+        jButton_set_Rest1 = new javax.swing.JButton();
+        jLabel_set_tick1 = new javax.swing.JLabel();
+        jLabel_set_tick2 = new javax.swing.JLabel();
+        jSeparator1 = new javax.swing.JSeparator();
+        jSeparator2 = new javax.swing.JSeparator();
+        jSeparator3 = new javax.swing.JSeparator();
+        jLabel_set_x = new javax.swing.JLabel();
+        jLabel_set_y = new javax.swing.JLabel();
+        jLabel_set_width = new javax.swing.JLabel();
+        jLabel_set_hight = new javax.swing.JLabel();
+        jTextField_set_hight = new javax.swing.JTextField();
+        jTextField_set_x = new javax.swing.JTextField();
+        jTextField_set_y = new javax.swing.JTextField();
+        jTextField_set_width = new javax.swing.JTextField();
+        jButton_set_changearea = new javax.swing.JButton();
 
         jFileChooser1.setDialogType(javax.swing.JFileChooser.SAVE_DIALOG);
         jFileChooser1.setCurrentDirectory(new java.io.File("F:\\"));
@@ -895,14 +908,14 @@ public class mainform extends javax.swing.JFrame {
             pallet_weight.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
             in_data.add(pallet_weight, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 490, 140, -1));
 
-            jCheckBox2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-            jCheckBox2.setText("تعليم البالته");
-            jCheckBox2.addKeyListener(new java.awt.event.KeyAdapter() {
+            jCheckBox_M_Markpage.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+            jCheckBox_M_Markpage.setText("تعليم البالته");
+            jCheckBox_M_Markpage.addKeyListener(new java.awt.event.KeyAdapter() {
                 public void keyPressed(java.awt.event.KeyEvent evt) {
-                    jCheckBox2KeyPressed(evt);
+                    jCheckBox_M_MarkpageKeyPressed(evt);
                 }
             });
-            in_data.add(jCheckBox2, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 460, -1, -1));
+            in_data.add(jCheckBox_M_Markpage, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 460, -1, -1));
 
             jButton_clear.setBackground(new java.awt.Color(240, 0, 0));
             jButton_clear.setFont(new java.awt.Font("Tahoma", 1, 10)); // NOI18N
@@ -939,6 +952,7 @@ public class mainform extends javax.swing.JFrame {
             jLabel41.setText("اللون");
             in_data.add(jLabel41, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 540, 70, 40));
 
+            jCheckBox_QR.setSelected(true);
             jCheckBox_QR.setText("QR");
             in_data.add(jCheckBox_QR, new org.netbeans.lib.awtextra.AbsoluteConstraints(790, 10, -1, -1));
 
@@ -1408,53 +1422,109 @@ public class mainform extends javax.swing.JFrame {
 
             left_panel.add(pause, "card9");
 
-            Maximum.setMaximumSize(new java.awt.Dimension(834, 600));
-            Maximum.setMinimumSize(new java.awt.Dimension(834, 600));
-            Maximum.setPreferredSize(new java.awt.Dimension(834, 600));
-            Maximum.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+            Settings.setMaximumSize(new java.awt.Dimension(834, 600));
+            Settings.setMinimumSize(new java.awt.Dimension(834, 600));
+            Settings.setPreferredSize(new java.awt.Dimension(834, 600));
+            Settings.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-            jLabel_BagMax.setFont(new java.awt.Font("Times New Roman", 3, 36)); // NOI18N
-            jLabel_BagMax.setText("Bag Max");
-            Maximum.add(jLabel_BagMax, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 170, 150, 70));
+            jLabel_set_BagMax.setFont(new java.awt.Font("Times New Roman", 3, 36)); // NOI18N
+            jLabel_set_BagMax.setText("Bag Max");
+            Settings.add(jLabel_set_BagMax, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, 150, 70));
 
-            jTextField_BagMax.setFont(new java.awt.Font("Times New Roman", 0, 24)); // NOI18N
-            jTextField_BagMax.addKeyListener(new java.awt.event.KeyAdapter() {
+            jTextField_set_BagMax.setFont(new java.awt.Font("Times New Roman", 0, 24)); // NOI18N
+            jTextField_set_BagMax.addKeyListener(new java.awt.event.KeyAdapter() {
                 public void keyTyped(java.awt.event.KeyEvent evt) {
-                    jTextField_BagMaxKeyTyped(evt);
+                    jTextField_set_BagMaxKeyTyped(evt);
                 }
             });
-            Maximum.add(jTextField_BagMax, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 170, 140, 70));
+            Settings.add(jTextField_set_BagMax, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 20, 140, 70));
 
-            jButton_saveMax.setFont(new java.awt.Font("Times New Roman", 3, 36)); // NOI18N
-            jButton_saveMax.setText("Save");
-            jButton_saveMax.addActionListener(new java.awt.event.ActionListener() {
+            jButton_set_saveMax.setFont(new java.awt.Font("Times New Roman", 3, 36)); // NOI18N
+            jButton_set_saveMax.setText("Save");
+            jButton_set_saveMax.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent evt) {
-                    jButton_saveMaxActionPerformed(evt);
+                    jButton_set_saveMaxActionPerformed(evt);
                 }
             });
-            Maximum.add(jButton_saveMax, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 290, 140, 70));
+            Settings.add(jButton_set_saveMax, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 130, 140, 70));
 
-            jButton_Max_Rest2.setFont(new java.awt.Font("Tahoma", 3, 18)); // NOI18N
-            jButton_Max_Rest2.setText("Reset 2");
-            jButton_Max_Rest2.addActionListener(new java.awt.event.ActionListener() {
+            jButton_set_Rest2.setFont(new java.awt.Font("Tahoma", 3, 18)); // NOI18N
+            jButton_set_Rest2.setText("Reset 2");
+            jButton_set_Rest2.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent evt) {
-                    jButton_Max_Rest2ActionPerformed(evt);
+                    jButton_set_Rest2ActionPerformed(evt);
                 }
             });
-            Maximum.add(jButton_Max_Rest2, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 420, 110, 60));
+            Settings.add(jButton_set_Rest2, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 40, 110, 60));
 
-            jButton_Max_Rest1.setFont(new java.awt.Font("Tahoma", 3, 18)); // NOI18N
-            jButton_Max_Rest1.setText("Reset");
-            jButton_Max_Rest1.addActionListener(new java.awt.event.ActionListener() {
+            jButton_set_Rest1.setFont(new java.awt.Font("Tahoma", 3, 18)); // NOI18N
+            jButton_set_Rest1.setText("Reset");
+            jButton_set_Rest1.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent evt) {
-                    jButton_Max_Rest1ActionPerformed(evt);
+                    jButton_set_Rest1ActionPerformed(evt);
                 }
             });
-            Maximum.add(jButton_Max_Rest1, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 420, 110, 60));
-            Maximum.add(jLabel_tick1, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 490, 70, 50));
-            Maximum.add(jLabel_tick2, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 490, 70, 50));
+            Settings.add(jButton_set_Rest1, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 40, 110, 60));
+            Settings.add(jLabel_set_tick1, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 110, 70, 50));
+            Settings.add(jLabel_set_tick2, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 110, 70, 50));
+            Settings.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 210, 410, 20));
 
-            left_panel.add(Maximum, "card11");
+            jSeparator2.setOrientation(javax.swing.SwingConstants.VERTICAL);
+            Settings.add(jSeparator2, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 0, 10, 210));
+            Settings.add(jSeparator3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 210, 430, 20));
+
+            jLabel_set_x.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+            jLabel_set_x.setText("X");
+            Settings.add(jLabel_set_x, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 360, 20, 20));
+
+            jLabel_set_y.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+            jLabel_set_y.setText("Y");
+            Settings.add(jLabel_set_y, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 360, -1, -1));
+
+            jLabel_set_width.setText("Width");
+            Settings.add(jLabel_set_width, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 360, -1, -1));
+
+            jLabel_set_hight.setText("hight");
+            Settings.add(jLabel_set_hight, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 360, -1, -1));
+
+            jTextField_set_hight.addKeyListener(new java.awt.event.KeyAdapter() {
+                public void keyTyped(java.awt.event.KeyEvent evt) {
+                    jTextField_set_hightKeyTyped(evt);
+                }
+            });
+            Settings.add(jTextField_set_hight, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 380, 70, -1));
+
+            jTextField_set_x.addKeyListener(new java.awt.event.KeyAdapter() {
+                public void keyTyped(java.awt.event.KeyEvent evt) {
+                    jTextField_set_xKeyTyped(evt);
+                }
+            });
+            Settings.add(jTextField_set_x, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 380, 70, -1));
+
+            jTextField_set_y.addKeyListener(new java.awt.event.KeyAdapter() {
+                public void keyTyped(java.awt.event.KeyEvent evt) {
+                    jTextField_set_yKeyTyped(evt);
+                }
+            });
+            Settings.add(jTextField_set_y, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 380, 70, -1));
+
+            jTextField_set_width.addKeyListener(new java.awt.event.KeyAdapter() {
+                public void keyTyped(java.awt.event.KeyEvent evt) {
+                    jTextField_set_widthKeyTyped(evt);
+                }
+            });
+            Settings.add(jTextField_set_width, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 380, 70, -1));
+
+            jButton_set_changearea.setFont(new java.awt.Font("Tahoma", 3, 14)); // NOI18N
+            jButton_set_changearea.setText("Sett");
+            jButton_set_changearea.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    jButton_set_changeareaActionPerformed(evt);
+                }
+            });
+            Settings.add(jButton_set_changearea, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 450, 80, 40));
+
+            left_panel.add(Settings, "card11");
 
             jSplitPane1.setLeftComponent(left_panel);
 
@@ -1529,7 +1599,7 @@ public class mainform extends javax.swing.JFrame {
     private void jTextField_pallet_numKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_pallet_numKeyTyped
         textbox_number(evt, jTextField_pallet_num, 5);
         calc_pallet_weight();
-        jCheckBox2.setSelected(false);
+        jCheckBox_M_Markpage.setSelected(false);
         calc_net_weight();
         if (jTextField_pallet_num.getText().isBlank()) {
             pallet_weight.setText("");
@@ -1582,7 +1652,7 @@ public class mainform extends javax.swing.JFrame {
             if (!jTextField_net_weight.getText().isBlank() && !jTextField_lot.getText().isBlank() && !jTextField_pallet_num.getText().isBlank() && !jTextField_bag_weight.getText().isBlank() && !jTextField_num_of_con.getText().isBlank() && !jTextField_weight.getText().isBlank() && jComboBox_pro_in_storage.getSelectedIndex() != -1) {
                 boolean f = true;
                 if (opj.dataRead("*", "storage", "pallet_numb=" + ToDoubleEnglish(jTextField_pallet_num.getText()) + " and  lot=N'" + ToStringEnglish(jTextField_lot.getText()) + "' and pro_id=(select pro_id from products where pro_name=N'" + jComboBox_pro_in_storage.getSelectedItem() + "') ").next()) {
-                    f = opj.dataRead("*", "storage", "pallet_numb=" + ToDoubleEnglish(jTextField_pallet_num.getText()) + " and  lot=N'" + ToStringEnglish(jTextField_lot.getText()) + "' and pro_id=(select pro_id from products where pro_name=N'" + jComboBox_pro_in_storage.getSelectedItem() + "') and used =" + (jCheckBox2.isSelected() ? 1 : 0) + " ").next();
+                    f = opj.dataRead("TOP 1*", "storage", "pallet_numb=" + ToDoubleEnglish(jTextField_pallet_num.getText()) + " and  lot=N'" + ToStringEnglish(jTextField_lot.getText()) + "' and pro_id=(select pro_id from products where pro_name=N'" + jComboBox_pro_in_storage.getSelectedItem() + "') and used =" + (jCheckBox_M_Markpage.isSelected() ? 1 : 0) + " ").next();
                 }
                 if (f) {
                     if (ToDoubleEnglish(jTextField_weight.getText()) <= 80.0 && ToDoubleEnglish(jTextField_net_weight.getText()) > 0.0) {
@@ -1599,11 +1669,16 @@ public class mainform extends javax.swing.JFrame {
                             if (st.getInt(1) >= 20) {
                                 pallet = (int) ToDoubleEnglish(jTextField_pallet_num.getText());
                                 jTextField_pallet_num.setText(ToDoubleArabic(++pallet + ""));
-                                jCheckBox2.setSelected(false);
+                                f = opj.dataRead("TOP 1 *", "storage", "pallet_numb=" + pallet + " and  lot=N'" + ToStringEnglish(jTextField_lot.getText()) + "' and pro_id=(select pro_id from products where pro_name=N'" + jComboBox_pro_in_storage.getSelectedItem() + "') and used =" + (jCheckBox_M_Markpage.isSelected() ? 1 : 0) + " ").next();
+                                if(!f){
+                                    JOptionPane.showMessageDialog(null, "<html><body><h1  style='font-family: Arial; font-size: 20pt; text-align: right; width: 150px;'> خطأ في تعليم الشكاره</h1></body></html>", "إنتبه", JOptionPane.PLAIN_MESSAGE);
+                                    return;
+                                }
+                                jCheckBox_M_Markpage.setSelected(false);
                             }
                         } while (st.getInt(1) >= 20);
 
-                        int s = jCheckBox2.isSelected() ? 1 : 0;
+                        int s = jCheckBox_M_Markpage.isSelected() ? 1 : 0;
                         opj.inData("storage", "pro_id,weight_,lot,pallet_numb,date_,num_of_con,used",
                                 " (select pro_id from products where pro_name=N'" + jComboBox_pro_in_storage.getSelectedItem()
                                 + "')" + "," + ToDoubleEnglish(jTextField_net_weight.getText()) + ",N'"
@@ -2089,13 +2164,13 @@ public class mainform extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jButton11ActionPerformed
 
-    private void jCheckBox2KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jCheckBox2KeyPressed
+    private void jCheckBox_M_MarkpageKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jCheckBox_M_MarkpageKeyPressed
         if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
             if (!jTextField_net_weight.getText().isBlank()) {
                 jButton_add_data.doClick();
             }
         }
-    }//GEN-LAST:event_jCheckBox2KeyPressed
+    }//GEN-LAST:event_jCheckBox_M_MarkpageKeyPressed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         try {
@@ -2121,7 +2196,7 @@ public class mainform extends javax.swing.JFrame {
     }//GEN-LAST:event_formWindowClosing
 
     private void jButton12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton12ActionPerformed
-        if (jButton3.isEnabled() && jButton2.isEnabled() ) {
+        if (jButton3.isEnabled() && jButton2.isEnabled()) {
             if (jTable6.getSelectedRow() != -1) {
                 if (JOptionPane.showConfirmDialog(null, "<html><body><h1  style='font-family: Arial; font-size: 20pt; text-align: right; width: 150px;'>  هل تريد استرجاع أزن " + jTable6.getValueAt(jTable6.getSelectedRow(), 0) + " لصنف" + jTable6.getValueAt(jTable6.getSelectedRow(), 1) + " في يوم" + jTable6.getValueAt(jTable6.getSelectedRow(), 5) + " </h1></body></html>", "تنبيه",
                         JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
@@ -2373,15 +2448,15 @@ public class mainform extends javax.swing.JFrame {
         jTextField_weight.selectAll();
     }//GEN-LAST:event_jTextField_weightFocusGained
 
-    private void jButton_saveMaxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_saveMaxActionPerformed
-        BagMax = Integer.parseInt(jTextField_BagMax.getText());
-        jTextField_BagMax.setText("" + BagMax);
+    private void jButton_set_saveMaxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_set_saveMaxActionPerformed
+        BagMax = Integer.parseInt(jTextField_set_BagMax.getText());
+        jTextField_set_BagMax.setText("" + BagMax);
         JOptionPane.showMessageDialog(null, "done", "Changed", JOptionPane.INFORMATION_MESSAGE);
-    }//GEN-LAST:event_jButton_saveMaxActionPerformed
+    }//GEN-LAST:event_jButton_set_saveMaxActionPerformed
 
-    private void jTextField_BagMaxKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_BagMaxKeyTyped
-        textbox_number(evt, jTextField_BagMax, 2);
-    }//GEN-LAST:event_jTextField_BagMaxKeyTyped
+    private void jTextField_set_BagMaxKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_set_BagMaxKeyTyped
+        textbox_number(evt, jTextField_set_BagMax, 2);
+    }//GEN-LAST:event_jTextField_set_BagMaxKeyTyped
 
     private void jButton_E_printActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_E_printActionPerformed
         try {
@@ -2414,36 +2489,79 @@ public class mainform extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jTextField_E_ColorKeyTyped
 
-    private void jButton_Max_Rest2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_Max_Rest2ActionPerformed
+    private void jButton_set_Rest2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_set_Rest2ActionPerformed
         try {
             // TODO add your handling code here:
             tick2num = 0;
             saveTicknum("TicketNumber2.txt", tick2num);
+            tick2num = loadTicknum("TicketNumber2.txt");
+            jLabel_set_tick2.setText("" + tick2num);
         } catch (IOException ex) {
             Logger.getLogger(mainform.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-    }//GEN-LAST:event_jButton_Max_Rest2ActionPerformed
+    }//GEN-LAST:event_jButton_set_Rest2ActionPerformed
 
-    private void jButton_Max_Rest1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_Max_Rest1ActionPerformed
+    private void jButton_set_Rest1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_set_Rest1ActionPerformed
         try {
             // TODO add your handling code here:
             tick1num = 0;
             saveTicknum("TicketNumber1.txt", tick1num);
+            tick1num = loadTicknum("TicketNumber1.txt");
+            jLabel_set_tick1.setText("" + tick1num);
         } catch (IOException ex) {
             Logger.getLogger(mainform.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }//GEN-LAST:event_jButton_Max_Rest1ActionPerformed
+    }//GEN-LAST:event_jButton_set_Rest1ActionPerformed
+
+    private void jButton_set_changeareaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_set_changeareaActionPerformed
+        // TODO add your handling code here:
+        Xx = Float.parseFloat(ToStringEnglish(jTextField_set_x.getText()));
+        jTextField_set_x.setText("" + Xx);
+        
+        Yy = Float.parseFloat(ToStringEnglish(jTextField_set_y.getText()));
+        jTextField_set_y.setText("" + Yy);
+        
+        width = Float.parseFloat(ToStringEnglish(jTextField_set_width.getText()));
+        jTextField_set_width.setText("" + width);
+        
+        hight = Float.parseFloat(ToStringEnglish(jTextField_set_hight.getText()));
+        jTextField_set_hight.setText("" + hight);
+    }//GEN-LAST:event_jButton_set_changeareaActionPerformed
+
+    private void jTextField_set_xKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_set_xKeyTyped
+        // TODO add your handling code here:
+        textbox_number_weight(evt, jTextField_set_x, 1);
+    }//GEN-LAST:event_jTextField_set_xKeyTyped
+
+    private void jTextField_set_yKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_set_yKeyTyped
+        // TODO add your handling code here:
+        textbox_number_weight(evt, jTextField_set_y, 1);
+    }//GEN-LAST:event_jTextField_set_yKeyTyped
+
+    private void jTextField_set_widthKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_set_widthKeyTyped
+        // TODO add your handling code here:
+        textbox_number_weight(evt, jTextField_set_width, 2);
+    }//GEN-LAST:event_jTextField_set_widthKeyTyped
+
+    private void jTextField_set_hightKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_set_hightKeyTyped
+        // TODO add your handling code here:
+        textbox_number_weight(evt, jTextField_set_hight, 2);
+    }//GEN-LAST:event_jTextField_set_hightKeyTyped
 
     private void jButton_bagmaxActionPerformed(java.awt.event.ActionEvent evt) throws IOException {
-        open_panel(Maximum);
+        open_panel(Settings);
+        jTextField_set_BagMax.setText("" + BagMax);
+        jTextField_set_x.setText("" + Xx);
+        jTextField_set_y.setText("" + Yy);
+        jTextField_set_width.setText("" + width);
+        jTextField_set_hight.setText("" + hight);
         saveTicknum("TicketNumber1.txt", tick1num);
         saveTicknum("TicketNumber2.txt", tick2num);
         tick1num = loadTicknum("TicketNumber1.txt");
         tick2num = loadTicknum("TicketNumber2.txt");
-        jTextField_BagMax.setText("" + BagMax);
-        jLabel_tick1.setText("" + tick1num);
-        jLabel_tick2.setText("" + tick2num);
+        jLabel_set_tick1.setText("" + tick1num);
+        jLabel_set_tick2.setText("" + tick2num);
     }
 
     void open_panel(JPanel panel) {
@@ -2482,7 +2600,7 @@ public class mainform extends javax.swing.JFrame {
             BufferedImage image = ImageIO.read(new File(System.getProperty("user.dir") + "\\Temp\\QR" + ToDoubleEnglish(values.get(6)) + ".png"));
             PrintRequestAttributeSet attributes = new HashPrintRequestAttributeSet();
             attributes.add(new PrinterResolution(300, 300, PrinterResolution.DPI));
-            attributes.add(new MediaPrintableArea(0f, 0f, 20f, 20f, MediaPrintableArea.MM));
+            attributes.add(new MediaPrintableArea(Xx, Yy, width, hight, MediaPrintableArea.MM));
 
             PrinterJob job = PrinterJob.getPrinterJob();
             job.setJobName("Print QR");
@@ -2498,7 +2616,7 @@ public class mainform extends javax.swing.JFrame {
                 }
                 pg.drawImage(image, 0, 0, (int) pf.getImageableWidth(), (int) pf.getImageableHeight(), null);
                 Graphics2D g2 = (Graphics2D) pg;
-                g2.translate((int) pf.getImageableX(),(int) pf.getImageableY());
+                g2.translate((int) pf.getImageableX(), (int) pf.getImageableY());
                 return Printable.PAGE_EXISTS;
             });
             job.print(attributes);
@@ -2774,20 +2892,19 @@ public class mainform extends javax.swing.JFrame {
         }
     }
 
-    private int loadTicknum(String filename) throws FileNotFoundException, IOException {
+    private short loadTicknum(String filename) throws FileNotFoundException, IOException {
         String num;
-        int nums, i;
+        int i;
         FileReader fr = new FileReader(System.getProperty("user.dir") + "\\Temp\\" + filename);
         num = "";
         while ((i = fr.read()) != -1) {
             num += Character.digit(i, 10) + "";
         }
-        nums = Integer.parseInt((num.isBlank() ? "0" : num));
         fr.close();
-        return nums;
+        return Short.parseShort((num.isBlank() ? "0" : num));
     }
 
-    int saveTicknum(String filename, int nums) throws FileNotFoundException, IOException {
+    int saveTicknum(String filename, short nums) throws FileNotFoundException, IOException {
         FileWriter fw = new FileWriter(System.getProperty("user.dir") + "\\Temp\\" + filename);
         fw.write(nums + "");
         fw.close();
@@ -2795,7 +2912,7 @@ public class mainform extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JPanel Maximum;
+    private javax.swing.JPanel Settings;
     private javax.swing.JPanel add_product;
     private javax.swing.JPanel in_data;
     private javax.swing.JButton jButton1;
@@ -2811,20 +2928,21 @@ public class mainform extends javax.swing.JFrame {
     private javax.swing.JButton jButton9;
     private javax.swing.JButton jButton_E_Edit;
     private javax.swing.JButton jButton_E_print;
-    private javax.swing.JButton jButton_Max_Rest1;
-    private javax.swing.JButton jButton_Max_Rest2;
     private javax.swing.JButton jButton_add_data;
     private javax.swing.JButton jButton_add_pro;
     private javax.swing.JButton jButton_clear;
     private javax.swing.JButton jButton_del_data;
     private javax.swing.JButton jButton_del_pro;
-    private javax.swing.JButton jButton_saveMax;
+    private javax.swing.JButton jButton_set_Rest1;
+    private javax.swing.JButton jButton_set_Rest2;
+    private javax.swing.JButton jButton_set_changearea;
+    private javax.swing.JButton jButton_set_saveMax;
     private javax.swing.JCheckBox jCheckBox1;
-    private javax.swing.JCheckBox jCheckBox2;
     private javax.swing.JCheckBox jCheckBox_E_Mark;
     private javax.swing.JCheckBox jCheckBox_E_O_Mark;
     private javax.swing.JCheckBox jCheckBox_E_P;
     private javax.swing.JCheckBox jCheckBox_E_QR;
+    private javax.swing.JCheckBox jCheckBox_M_Markpage;
     private javax.swing.JCheckBox jCheckBox_QR;
     private javax.swing.JCheckBox jCheckBox_print;
     private javax.swing.JComboBox<String> jComboBox1;
@@ -2881,9 +2999,13 @@ public class mainform extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
-    private javax.swing.JLabel jLabel_BagMax;
-    private javax.swing.JLabel jLabel_tick1;
-    private javax.swing.JLabel jLabel_tick2;
+    private javax.swing.JLabel jLabel_set_BagMax;
+    private javax.swing.JLabel jLabel_set_hight;
+    private javax.swing.JLabel jLabel_set_tick1;
+    private javax.swing.JLabel jLabel_set_tick2;
+    private javax.swing.JLabel jLabel_set_width;
+    private javax.swing.JLabel jLabel_set_x;
+    private javax.swing.JLabel jLabel_set_y;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
@@ -2892,6 +3014,9 @@ public class mainform extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane7;
     private javax.swing.JScrollPane jScrollPane8;
     private javax.swing.JScrollPane jScrollPane9;
+    private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JSeparator jSeparator2;
+    private javax.swing.JSeparator jSeparator3;
     private javax.swing.JSplitPane jSplitPane1;
     private javax.swing.JTable jTable2;
     private javax.swing.JTable jTable3;
@@ -2903,7 +3028,6 @@ public class mainform extends javax.swing.JFrame {
     private javax.swing.JTextArea jTextArea1;
     private javax.swing.JTextField jTextField5;
     private javax.swing.JTextField jTextField6;
-    private javax.swing.JTextField jTextField_BagMax;
     private javax.swing.JTextField jTextField_Color;
     private javax.swing.JTextField jTextField_E_Color;
     private javax.swing.JTextField jTextField_E_ConNum;
@@ -2922,6 +3046,11 @@ public class mainform extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField_pallet_num;
     private javax.swing.JTextField jTextField_pro_color;
     private javax.swing.JTextField jTextField_pro_name;
+    private javax.swing.JTextField jTextField_set_BagMax;
+    private javax.swing.JTextField jTextField_set_hight;
+    private javax.swing.JTextField jTextField_set_width;
+    private javax.swing.JTextField jTextField_set_x;
+    private javax.swing.JTextField jTextField_set_y;
     private javax.swing.JTextField jTextField_weight;
     private javax.swing.JTextField jTextField_weight_of_con;
     private javax.swing.JPanel left_panel;
