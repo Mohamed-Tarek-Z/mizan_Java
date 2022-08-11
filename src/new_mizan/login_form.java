@@ -45,7 +45,10 @@ public class login_form extends javax.swing.JFrame {
         jComboBox1 = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setMinimumSize(new java.awt.Dimension(464, 531));
+        setTitle("تسجيل الدخول");
+        setMaximumSize(new java.awt.Dimension(390, 530));
+        setMinimumSize(new java.awt.Dimension(390, 530));
+        setPreferredSize(new java.awt.Dimension(390, 530));
         setResizable(false);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
@@ -65,7 +68,7 @@ public class login_form extends javax.swing.JFrame {
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         jLabel1.setText("اسم المستخدم");
-        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 70, -1, -1));
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 70, -1, -1));
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         jLabel2.setText("كلمه المرور");
@@ -92,7 +95,7 @@ public class login_form extends javax.swing.JFrame {
                 jComboBox1KeyTyped(evt);
             }
         });
-        getContentPane().add(jComboBox1, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 110, 260, 50));
+        getContentPane().add(jComboBox1, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 110, 240, 50));
 
         pack();
         setLocationRelativeTo(null);
