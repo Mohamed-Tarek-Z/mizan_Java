@@ -262,6 +262,10 @@ public class mainform extends javax.swing.JFrame {
         jTextField_Color = new javax.swing.JTextField();
         jLabel41 = new javax.swing.JLabel();
         jCheckBox_QR = new javax.swing.JCheckBox();
+        jCheckBox_Box = new javax.swing.JCheckBox();
+        jSeparator4 = new javax.swing.JSeparator();
+        jSeparator5 = new javax.swing.JSeparator();
+        jSeparator6 = new javax.swing.JSeparator();
         reports = new javax.swing.JPanel();
         jComboBox_pro_in_reports = new javax.swing.JComboBox<>();
         jLabel1 = new javax.swing.JLabel();
@@ -379,15 +383,11 @@ public class mainform extends javax.swing.JFrame {
         jTextArea1 = new javax.swing.JTextArea();
         jLabel38 = new javax.swing.JLabel();
         Settings = new javax.swing.JPanel();
-        jLabel_set_BagMax = new javax.swing.JLabel();
-        jTextField_set_BagMax = new javax.swing.JTextField();
-        jButton_set_saveMax = new javax.swing.JButton();
         jButton_set_Rest2 = new javax.swing.JButton();
         jButton_set_Rest1 = new javax.swing.JButton();
         jLabel_set_tick1 = new javax.swing.JLabel();
         jLabel_set_tick2 = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
-        jSeparator2 = new javax.swing.JSeparator();
         jSeparator3 = new javax.swing.JSeparator();
         jLabel_set_x = new javax.swing.JLabel();
         jLabel_set_y = new javax.swing.JLabel();
@@ -403,11 +403,13 @@ public class mainform extends javax.swing.JFrame {
         jFileChooser1.setCurrentDirectory(new java.io.File("F:\\"));
             jFileChooser1.setFileSelectionMode(javax.swing.JFileChooser.DIRECTORIES_ONLY);
 
+            SingleEdit.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
             SingleEdit.setTitle("Single Edit");
             SingleEdit.setAlwaysOnTop(true);
             SingleEdit.setLocation(new java.awt.Point(100, 100));
             SingleEdit.setMinimumSize(new java.awt.Dimension(780, 400));
             SingleEdit.setResizable(false);
+            SingleEdit.setType(java.awt.Window.Type.POPUP);
             SingleEdit.addWindowListener(new java.awt.event.WindowAdapter() {
                 public void windowClosing(java.awt.event.WindowEvent evt) {
                     SingleEditWindowClosing(evt);
@@ -583,6 +585,7 @@ public class mainform extends javax.swing.JFrame {
             jLabel44.setText("اللون");
             SingleEdit.getContentPane().add(jLabel44, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 180, 50, 20));
 
+            MultiEdit.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
             MultiEdit.setTitle("Multi Edit");
             MultiEdit.setAlwaysOnTop(true);
             MultiEdit.setLocation(new java.awt.Point(100, 100));
@@ -656,9 +659,10 @@ public class mainform extends javax.swing.JFrame {
             jSplitPane1.setMaximumSize(new java.awt.Dimension(1023, 652));
             jSplitPane1.setMinimumSize(new java.awt.Dimension(1023, 652));
 
-            right_panel.setMaximumSize(new java.awt.Dimension(130, 650));
-            right_panel.setMinimumSize(new java.awt.Dimension(130, 650));
-            right_panel.setPreferredSize(new java.awt.Dimension(130, 650));
+            right_panel.setMaximumSize(new java.awt.Dimension(110, 650));
+            right_panel.setMinimumSize(new java.awt.Dimension(110, 650));
+            right_panel.setPreferredSize(new java.awt.Dimension(110, 650));
+            right_panel.setRequestFocusEnabled(false);
             right_panel.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
             jButton1.setFont(new java.awt.Font("sansserif", 0, 18)); // NOI18N
@@ -798,7 +802,7 @@ public class mainform extends javax.swing.JFrame {
                     jButton_add_dataActionPerformed(evt);
                 }
             });
-            in_data.add(jButton_add_data, new org.netbeans.lib.awtextra.AbsoluteConstraints(740, 590, 90, 50));
+            in_data.add(jButton_add_data, new org.netbeans.lib.awtextra.AbsoluteConstraints(745, 590, 90, 50));
 
             jButton_del_data.setFont(new java.awt.Font("sansserif", 0, 24)); // NOI18N
             jButton_del_data.setText("حذف");
@@ -807,7 +811,7 @@ public class mainform extends javax.swing.JFrame {
                     jButton_del_dataActionPerformed(evt);
                 }
             });
-            in_data.add(jButton_del_data, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 590, 80, 50));
+            in_data.add(jButton_del_data, new org.netbeans.lib.awtextra.AbsoluteConstraints(605, 590, 80, 50));
 
             jComboBox_pro_in_storage.setFont(new java.awt.Font("sansserif", 0, 18)); // NOI18N
             jComboBox_pro_in_storage.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
@@ -816,11 +820,11 @@ public class mainform extends javax.swing.JFrame {
                     jComboBox_pro_in_storageItemStateChanged(evt);
                 }
             });
-            in_data.add(jComboBox_pro_in_storage, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 40, 200, 30));
+            in_data.add(jComboBox_pro_in_storage, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 40, 210, 30));
 
             jLabel6.setFont(new java.awt.Font("sansserif", 0, 24)); // NOI18N
             jLabel6.setText("الصنف");
-            in_data.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 10, -1, 20));
+            in_data.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(690, 12, -1, 20));
 
             jTextField_lot.setFont(new java.awt.Font("sansserif", 0, 24)); // NOI18N
             jTextField_lot.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
@@ -830,7 +834,7 @@ public class mainform extends javax.swing.JFrame {
                     jTextField_lotKeyTyped(evt);
                 }
             });
-            in_data.add(jTextField_lot, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 90, 120, 36));
+            in_data.add(jTextField_lot, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 120, 120, 36));
 
             jTextField_weight.setBackground(new java.awt.Color(255, 204, 204));
             jTextField_weight.setFont(new java.awt.Font("sansserif", 0, 24)); // NOI18N
@@ -849,7 +853,7 @@ public class mainform extends javax.swing.JFrame {
                     jTextField_weightKeyTyped(evt);
                 }
             });
-            in_data.add(jTextField_weight, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 300, 120, -1));
+            in_data.add(jTextField_weight, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 340, 120, -1));
 
             jTextField_bag_weight.setFont(new java.awt.Font("sansserif", 0, 24)); // NOI18N
             jTextField_bag_weight.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
@@ -864,7 +868,7 @@ public class mainform extends javax.swing.JFrame {
                     jTextField_bag_weightKeyTyped(evt);
                 }
             });
-            in_data.add(jTextField_bag_weight, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 250, 120, -1));
+            in_data.add(jTextField_bag_weight, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 290, 120, -1));
 
             jTextField_num_of_con.setFont(new java.awt.Font("sansserif", 0, 24)); // NOI18N
             jTextField_num_of_con.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
@@ -879,35 +883,35 @@ public class mainform extends javax.swing.JFrame {
                     jTextField_num_of_conKeyTyped(evt);
                 }
             });
-            in_data.add(jTextField_num_of_con, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 200, 120, -1));
+            in_data.add(jTextField_num_of_con, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 240, 120, -1));
 
             jLabel7.setFont(new java.awt.Font("sansserif", 0, 18)); // NOI18N
             jLabel7.setText("الوزن القائم");
             jLabel7.setMaximumSize(new java.awt.Dimension(82, 24));
             jLabel7.setMinimumSize(new java.awt.Dimension(82, 24));
             jLabel7.setPreferredSize(new java.awt.Dimension(82, 24));
-            in_data.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 300, -1, 30));
+            in_data.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 340, -1, 30));
 
             jLabel8.setFont(new java.awt.Font("sansserif", 0, 18)); // NOI18N
             jLabel8.setText("اللوط");
             jLabel8.setMaximumSize(new java.awt.Dimension(82, 24));
             jLabel8.setMinimumSize(new java.awt.Dimension(82, 24));
             jLabel8.setPreferredSize(new java.awt.Dimension(82, 24));
-            in_data.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 90, -1, 30));
+            in_data.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 120, -1, 30));
 
             jLabel9.setFont(new java.awt.Font("sansserif", 0, 18)); // NOI18N
             jLabel9.setText("عدد الكون");
             jLabel9.setMaximumSize(new java.awt.Dimension(82, 24));
             jLabel9.setMinimumSize(new java.awt.Dimension(82, 24));
             jLabel9.setPreferredSize(new java.awt.Dimension(82, 24));
-            in_data.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 200, -1, 30));
+            in_data.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 240, -1, 30));
 
             jLabel10.setFont(new java.awt.Font("sansserif", 0, 18)); // NOI18N
             jLabel10.setText("وزن الكونه");
             jLabel10.setMaximumSize(new java.awt.Dimension(82, 24));
             jLabel10.setMinimumSize(new java.awt.Dimension(82, 24));
             jLabel10.setPreferredSize(new java.awt.Dimension(82, 24));
-            in_data.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 420, -1, 30));
+            in_data.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 440, -1, 30));
 
             jTextField_pallet_num.setFont(new java.awt.Font("sansserif", 0, 24)); // NOI18N
             jTextField_pallet_num.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
@@ -922,7 +926,7 @@ public class mainform extends javax.swing.JFrame {
                     jTextField_pallet_numKeyTyped(evt);
                 }
             });
-            in_data.add(jTextField_pallet_num, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 140, 120, -1));
+            in_data.add(jTextField_pallet_num, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 162, 120, -1));
 
             jTextField_weight_of_con.setFont(new java.awt.Font("sansserif", 0, 24)); // NOI18N
             jTextField_weight_of_con.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
@@ -932,18 +936,18 @@ public class mainform extends javax.swing.JFrame {
                     jTextField_weight_of_conKeyTyped(evt);
                 }
             });
-            in_data.add(jTextField_weight_of_con, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 420, 120, -1));
+            in_data.add(jTextField_weight_of_con, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 440, 120, -1));
 
-            jLabel11.setFont(new java.awt.Font("sansserif", 0, 18)); // NOI18N
+            jLabel11.setFont(new java.awt.Font("sansserif", 1, 16)); // NOI18N
             jLabel11.setText("فارغ الشيكاره");
             jLabel11.setMaximumSize(new java.awt.Dimension(82, 24));
             jLabel11.setMinimumSize(new java.awt.Dimension(82, 24));
             jLabel11.setPreferredSize(new java.awt.Dimension(82, 24));
-            in_data.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 250, -1, 30));
+            in_data.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(735, 290, -1, 30));
 
             jLabel12.setFont(new java.awt.Font("sansserif", 0, 18)); // NOI18N
             jLabel12.setText("الوزن الصافي");
-            in_data.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 350, -1, 30));
+            in_data.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 390, -1, 30));
 
             jTextField_net_weight.setEditable(false);
             jTextField_net_weight.setBackground(new java.awt.Color(204, 255, 204));
@@ -955,14 +959,14 @@ public class mainform extends javax.swing.JFrame {
                     jTextField_net_weightKeyTyped(evt);
                 }
             });
-            in_data.add(jTextField_net_weight, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 350, 120, -1));
+            in_data.add(jTextField_net_weight, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 390, 120, -1));
 
             jLabel2.setFont(new java.awt.Font("sansserif", 0, 18)); // NOI18N
             jLabel2.setText("رقم البالتة");
             jLabel2.setMaximumSize(new java.awt.Dimension(82, 24));
             jLabel2.setMinimumSize(new java.awt.Dimension(82, 24));
             jLabel2.setPreferredSize(new java.awt.Dimension(82, 24));
-            in_data.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 140, -1, 30));
+            in_data.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 162, -1, 30));
 
             jLabel14.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
             jLabel14.setText("وزن البالتة");
@@ -979,7 +983,7 @@ public class mainform extends javax.swing.JFrame {
                     jCheckBox_M_MarkpageKeyPressed(evt);
                 }
             });
-            in_data.add(jCheckBox_M_Markpage, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 460, -1, -1));
+            in_data.add(jCheckBox_M_Markpage, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 205, -1, 20));
 
             jButton_clear.setBackground(new java.awt.Color(240, 0, 0));
             jButton_clear.setFont(new java.awt.Font("Tahoma", 1, 10)); // NOI18N
@@ -995,12 +999,12 @@ public class mainform extends javax.swing.JFrame {
                     jButton_clearActionPerformed(evt);
                 }
             });
-            in_data.add(jButton_clear, new org.netbeans.lib.awtextra.AbsoluteConstraints(690, 610, 40, -1));
+            in_data.add(jButton_clear, new org.netbeans.lib.awtextra.AbsoluteConstraints(695, 610, 40, -1));
 
             jCheckBox_print.setSelected(true);
             jCheckBox_print.setText("طباعة");
             jCheckBox_print.setFocusable(false);
-            in_data.add(jCheckBox_print, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 10, -1, -1));
+            in_data.add(jCheckBox_print, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 80, -1, -1));
 
             jTextField_Color.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
             jTextField_Color.setHorizontalAlignment(javax.swing.JTextField.CENTER);
@@ -1018,7 +1022,18 @@ public class mainform extends javax.swing.JFrame {
 
             jCheckBox_QR.setSelected(true);
             jCheckBox_QR.setText("QR");
-            in_data.add(jCheckBox_QR, new org.netbeans.lib.awtextra.AbsoluteConstraints(790, 10, -1, -1));
+            in_data.add(jCheckBox_QR, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 80, -1, -1));
+
+            jCheckBox_Box.setText("صندوق");
+            jCheckBox_Box.addItemListener(new java.awt.event.ItemListener() {
+                public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                    jCheckBox_BoxItemStateChanged(evt);
+                }
+            });
+            in_data.add(jCheckBox_Box, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 80, -1, -1));
+            in_data.add(jSeparator4, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 232, 210, -1));
+            in_data.add(jSeparator5, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 110, 210, -1));
+            in_data.add(jSeparator6, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 482, 210, -1));
 
             left_panel.add(in_data, "card2");
 
@@ -1499,27 +1514,6 @@ public class mainform extends javax.swing.JFrame {
             Settings.setPreferredSize(new java.awt.Dimension(834, 600));
             Settings.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-            jLabel_set_BagMax.setFont(new java.awt.Font("Times New Roman", 3, 36)); // NOI18N
-            jLabel_set_BagMax.setText("Bag Max");
-            Settings.add(jLabel_set_BagMax, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, 150, 70));
-
-            jTextField_set_BagMax.setFont(new java.awt.Font("Times New Roman", 0, 24)); // NOI18N
-            jTextField_set_BagMax.addKeyListener(new java.awt.event.KeyAdapter() {
-                public void keyTyped(java.awt.event.KeyEvent evt) {
-                    jTextField_set_BagMaxKeyTyped(evt);
-                }
-            });
-            Settings.add(jTextField_set_BagMax, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 20, 140, 70));
-
-            jButton_set_saveMax.setFont(new java.awt.Font("Times New Roman", 3, 36)); // NOI18N
-            jButton_set_saveMax.setText("Save");
-            jButton_set_saveMax.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent evt) {
-                    jButton_set_saveMaxActionPerformed(evt);
-                }
-            });
-            Settings.add(jButton_set_saveMax, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 130, 140, 70));
-
             jButton_set_Rest2.setFont(new java.awt.Font("Tahoma", 3, 18)); // NOI18N
             jButton_set_Rest2.setText("Reset 2");
             jButton_set_Rest2.addActionListener(new java.awt.event.ActionListener() {
@@ -1527,7 +1521,7 @@ public class mainform extends javax.swing.JFrame {
                     jButton_set_Rest2ActionPerformed(evt);
                 }
             });
-            Settings.add(jButton_set_Rest2, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 40, 110, 60));
+            Settings.add(jButton_set_Rest2, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 70, 110, 60));
 
             jButton_set_Rest1.setFont(new java.awt.Font("Tahoma", 3, 18)); // NOI18N
             jButton_set_Rest1.setText("Reset");
@@ -1536,13 +1530,10 @@ public class mainform extends javax.swing.JFrame {
                     jButton_set_Rest1ActionPerformed(evt);
                 }
             });
-            Settings.add(jButton_set_Rest1, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 40, 110, 60));
-            Settings.add(jLabel_set_tick1, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 110, 70, 50));
-            Settings.add(jLabel_set_tick2, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 110, 70, 50));
+            Settings.add(jButton_set_Rest1, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 70, 110, 60));
+            Settings.add(jLabel_set_tick1, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 140, 70, 50));
+            Settings.add(jLabel_set_tick2, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 140, 70, 50));
             Settings.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 210, 410, 20));
-
-            jSeparator2.setOrientation(javax.swing.SwingConstants.VERTICAL);
-            Settings.add(jSeparator2, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 0, 10, 210));
             Settings.add(jSeparator3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 210, 430, 20));
 
             jLabel_set_x.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
@@ -2471,16 +2462,6 @@ public class mainform extends javax.swing.JFrame {
         jTextField_weight.selectAll();
     }//GEN-LAST:event_jTextField_weightFocusGained
 
-    private void jButton_set_saveMaxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_set_saveMaxActionPerformed
-        BagMax = Integer.parseInt(jTextField_set_BagMax.getText());
-        jTextField_set_BagMax.setText("" + BagMax);
-        JOptionPane.showMessageDialog(null, "done", "Changed", JOptionPane.INFORMATION_MESSAGE);
-    }//GEN-LAST:event_jButton_set_saveMaxActionPerformed
-
-    private void jTextField_set_BagMaxKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_set_BagMaxKeyTyped
-        textbox_number(evt, jTextField_set_BagMax, 2);
-    }//GEN-LAST:event_jTextField_set_BagMaxKeyTyped
-
     private void jButton_E_printActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_E_printActionPerformed
         try {
             // TODO add your handling code here:
@@ -2624,6 +2605,7 @@ public class mainform extends javax.swing.JFrame {
                     break;
                 }
             }
+            MultiEdit.dispose();
             JOptionPane.showMessageDialog(null, "<html><body><h1  style='font-family: Arial; font-size: 20pt; text-align: right; width: 150px;'> تم تعديل البيانات بنجاح  </h1></body></html>", "إنتبه", JOptionPane.PLAIN_MESSAGE);
         } else {
             JOptionPane.showMessageDialog(null, "Please enter a valid number", "إنتبه", JOptionPane.PLAIN_MESSAGE);
@@ -2706,9 +2688,14 @@ public class mainform extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jButton_stockActionPerformed
 
+    private void jCheckBox_BoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jCheckBox_BoxItemStateChanged
+        // TODO add your handling code here:
+        BagMax = jCheckBox_Box.isSelected() ? 3 : 2;
+        jLabel11.setText(!jCheckBox_Box.isSelected() ? "فارغ الشيكاره" : "فارغ الصندوق");
+    }//GEN-LAST:event_jCheckBox_BoxItemStateChanged
+
     private void jButton_bagmaxActionPerformed(java.awt.event.ActionEvent evt) throws IOException {
         open_panel(Settings);
-        jTextField_set_BagMax.setText("" + BagMax);
         jTextField_set_x.setText("" + Xx);
         jTextField_set_y.setText("" + Yy);
         jTextField_set_width.setText("" + width);
@@ -3098,9 +3085,9 @@ public class mainform extends javax.swing.JFrame {
     private javax.swing.JButton jButton_set_Rest1;
     private javax.swing.JButton jButton_set_Rest2;
     private javax.swing.JButton jButton_set_changearea;
-    private javax.swing.JButton jButton_set_saveMax;
     private javax.swing.JButton jButton_stock;
     private javax.swing.JCheckBox jCheckBox1;
+    private javax.swing.JCheckBox jCheckBox_Box;
     private javax.swing.JCheckBox jCheckBox_E_Mark;
     private javax.swing.JCheckBox jCheckBox_E_O_Mark;
     private javax.swing.JCheckBox jCheckBox_E_P;
@@ -3165,7 +3152,6 @@ public class mainform extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
-    private javax.swing.JLabel jLabel_set_BagMax;
     private javax.swing.JLabel jLabel_set_hight;
     private javax.swing.JLabel jLabel_set_tick1;
     private javax.swing.JLabel jLabel_set_tick2;
@@ -3181,8 +3167,10 @@ public class mainform extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane8;
     private javax.swing.JScrollPane jScrollPane9;
     private javax.swing.JSeparator jSeparator1;
-    private javax.swing.JSeparator jSeparator2;
     private javax.swing.JSeparator jSeparator3;
+    private javax.swing.JSeparator jSeparator4;
+    private javax.swing.JSeparator jSeparator5;
+    private javax.swing.JSeparator jSeparator6;
     private javax.swing.JSplitPane jSplitPane1;
     private javax.swing.JTable jTable2;
     private javax.swing.JTable jTable3;
@@ -3215,7 +3203,6 @@ public class mainform extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField_pallet_num;
     private javax.swing.JTextField jTextField_pro_color;
     private javax.swing.JTextField jTextField_pro_name;
-    private javax.swing.JTextField jTextField_set_BagMax;
     private javax.swing.JTextField jTextField_set_hight;
     private javax.swing.JTextField jTextField_set_width;
     private javax.swing.JTextField jTextField_set_x;

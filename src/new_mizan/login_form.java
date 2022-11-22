@@ -197,7 +197,7 @@ static boolean admin=false;
             try {
                 new login_form().setVisible(true);
             } catch (SQLException ex) {
-                JOptionPane.showMessageDialog(null, ex, "إنتبه", JOptionPane.PLAIN_MESSAGE);
+                JOptionPane.showMessageDialog(null, ex.getMessage().substring(0, 67), "إنتبه", JOptionPane.PLAIN_MESSAGE);
                 System.exit(NORMAL);
             }
         });

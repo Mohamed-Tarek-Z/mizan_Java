@@ -49,7 +49,7 @@ public class print_shit {
             DateTimeFormatter arabicDateFormatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT).withLocale(arabicLocale).withDecimalStyle(DecimalStyle.of(arabicLocale));
             LocalDate date_now = LocalDate.now();
             XSSFWorkbook workbook;
-            try (FileInputStream file = new FileInputStream(new File("120.xlsx"))) {
+            try ( FileInputStream file = new FileInputStream(new File("120.xlsx"))) {
                 workbook = new XSSFWorkbook(file);
                 XSSFSheet sheet = workbook.getSheetAt(0);
                 Cell cell = null;
@@ -69,8 +69,9 @@ public class print_shit {
                 }
                 cell = sheet.getRow(0).getCell(0);
                 cell.setCellValue(_1 + _2 + _3 + "\n" + "\n" + _4 + _5);
-
-                String __1 = "عدد الشكاير :          " + mainform.ToDoubleArabic((int) mainform.ToDoubleEnglish(jTextField5.getText()) + "") + "  شيكاره";
+                String __1 = (_4.contains("ليكرا") ? "عدد الصناديق :          " : "عدد الشكاير :          ")
+                        + mainform.ToDoubleArabic((int) mainform.ToDoubleEnglish(jTextField5.getText()) + "")
+                        + (_4.contains("ليكرا") ? " صندوق" : "  شيكاره");
                 String __2 = "الــــــــــــــــــــــــــــــــوزن :       " + mainform.ToDoubleArabic(total_weight.getText()) + "";
                 cell = sheet.getRow(23).getCell(11);
                 cell.setCellValue(__1 + "\n" + __2);
@@ -120,7 +121,7 @@ public class print_shit {
             DateTimeFormatter arabicDateFormatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT).withLocale(arabicLocale).withDecimalStyle(DecimalStyle.of(arabicLocale));
             LocalDate date_now = LocalDate.now();
             XSSFWorkbook workbook;
-            try (FileInputStream file = new FileInputStream(new File("160.xlsx"))) {
+            try ( FileInputStream file = new FileInputStream(new File("160.xlsx"))) {
                 workbook = new XSSFWorkbook(file);
                 XSSFSheet sheet = workbook.getSheetAt(0);
                 Cell cell = null;
@@ -140,8 +141,9 @@ public class print_shit {
                 }
                 cell = sheet.getRow(0).getCell(0);
                 cell.setCellValue(_1 + _2 + _3 + "\n" + "\n" + _4 + _5);
-
-                String __1 = "عدد الشكاير :           " + mainform.ToDoubleArabic((int) mainform.ToDoubleEnglish(jTextField5.getText()) + "") + "  شيكاره";
+                String __1 = (_4.contains("ليكرا") ? "عدد الصناديق :          " : "عدد الشكاير :          ")
+                        + mainform.ToDoubleArabic((int) mainform.ToDoubleEnglish(jTextField5.getText()) + "")
+                        + (_4.contains("ليكرا") ? " صندوق" : "  شيكاره");
                 String __2 = "الــــــــــــــــــــــــــــــــوزن :       " + mainform.ToDoubleArabic(total_weight.getText()) + "";
                 cell = sheet.getRow(23).getCell(16);
                 cell.setCellValue(__1 + "\n" + __2);
@@ -207,7 +209,7 @@ public class print_shit {
             DateTimeFormatter arabicDateFormatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT).withLocale(arabicLocale).withDecimalStyle(DecimalStyle.of(arabicLocale));
             LocalDate date_now = LocalDate.now();
             XSSFWorkbook workbook;
-            try (FileInputStream file = new FileInputStream(new File("60-60.xlsx"))) {
+            try ( FileInputStream file = new FileInputStream(new File("60-60.xlsx"))) {
                 workbook = new XSSFWorkbook(file);
                 XSSFSheet sheet = workbook.getSheetAt(0);
                 Cell cell = null;
@@ -234,10 +236,15 @@ public class print_shit {
 
                 cell = sheet.getRow(0).getCell(0);
                 cell.setCellValue(_1 + _2 + _3 + "\n" + _4 + _6 + "\n" + _5 + _7);
+                
 
-                String __1 = "عدد الشكاير : " + mainform.ToDoubleArabic((int) mainform.ToDoubleEnglish(num_of_shikra) + "") + " شيكاره";
+                String __1 = (_4.contains("ليكرا") ? "عدد الصناديق : ": "عدد الشكاير : ") +
+                        mainform.ToDoubleArabic((int) mainform.ToDoubleEnglish(num_of_shikra) + "") +
+                        (_4.contains("ليكرا") ? " صندوق" : "  شيكاره");
                 String __2 = "الـــــــوزن :  " + mainform.ToDoubleArabic(wieght) + "";
-                String __3 = "عدد الشكاير : " + mainform.ToDoubleArabic((int) mainform.ToDoubleEnglish(jTextField5.getText()) + "") + " شيكاره";
+                String __3 = (_5.contains("ليكرا") ? "عدد الصناديق : ": "عدد الشكاير : ") +
+                        mainform.ToDoubleArabic((int) mainform.ToDoubleEnglish(jTextField5.getText()) + "") +
+                        (_5.contains("ليكرا") ? " صندوق" : "  شيكاره");
                 String __4 = "الـــــــوزن :  " + mainform.ToDoubleArabic(total_weight.getText()) + "";
                 cell = sheet.getRow(23).getCell(11);
                 cell.setCellValue(__1 + "  " + __2 + "\n" + __3 + " " + __4);
@@ -305,7 +312,7 @@ public class print_shit {
             }
 
             File file = this.NewName(System.getProperty("user.dir") + "\\querys\\" + jTextField6.getText() + "~" + date_now + ".xlsx");
-            try (FileOutputStream outFile = new FileOutputStream(file)) {
+            try ( FileOutputStream outFile = new FileOutputStream(file)) {
                 workbook.write(outFile);
                 Desktop desktop = Desktop.getDesktop();
                 jFileChooser1.showSaveDialog(jTable3);
@@ -417,7 +424,7 @@ public class print_shit {
 
     void create_excel_in_path(int serial, List<String> order_ids, JTextField total_weight, JTable jTable3, JTextField jTextField6, LocalDate date_now, XSSFWorkbook workbook, sqlcon opj, JFileChooser jFileChooser1, JComboBox combox_product) throws FileNotFoundException, IOException {
         File file = this.NewName(System.getProperty("user.dir") + "\\querys\\" + jTextField6.getText() + "~" + date_now + ".xlsx");
-        try (FileOutputStream outFile = new FileOutputStream(file)) {
+        try ( FileOutputStream outFile = new FileOutputStream(file)) {
             workbook.write(outFile);
             Desktop desktop = Desktop.getDesktop();
             jFileChooser1.showSaveDialog(jTable3);
@@ -476,7 +483,7 @@ public class print_shit {
         hintMap.put(EncodeHintType.CHARACTER_SET, "UTF-8");
         hintMap.put(EncodeHintType.MARGIN, 0);
         hintMap.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.L);
-        String path = System.getProperty("user.dir") + "\\Temp\\QR"+imgName+".png";
+        String path = System.getProperty("user.dir") + "\\Temp\\QR" + imgName + ".png";
         BitMatrix matrix = new MultiFormatWriter().encode(new String(data.getBytes("UTF-8"), "UTF-8"), BarcodeFormat.QR_CODE, SizeX, SizeY, hintMap);
         MatrixToImageWriter.writeToPath(matrix, path.substring(path.lastIndexOf('.') + 1), new File(path).toPath());
     }
