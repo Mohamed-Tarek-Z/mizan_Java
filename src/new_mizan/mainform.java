@@ -2692,6 +2692,7 @@ public class mainform extends javax.swing.JFrame {
         // TODO add your handling code here:
         BagMax = jCheckBox_Box.isSelected() ? 3 : 2;
         jLabel11.setText(!jCheckBox_Box.isSelected() ? "فارغ الشيكاره" : "فارغ الصندوق");
+        jTextField_bag_weight.setBackground(jCheckBox_Box.isSelected() ? Color.pink : Color.WHITE);
     }//GEN-LAST:event_jCheckBox_BoxItemStateChanged
 
     private void jButton_bagmaxActionPerformed(java.awt.event.ActionEvent evt) throws IOException {
