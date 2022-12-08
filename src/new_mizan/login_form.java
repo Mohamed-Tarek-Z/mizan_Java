@@ -24,6 +24,7 @@ public class login_form extends javax.swing.JFrame {
      * Creates new form NewJFrame1
      */
     sqlcon opj;
+
     public login_form() throws SQLException {
         initComponents();
         opj = new sqlcon();
@@ -105,28 +106,28 @@ public class login_form extends javax.swing.JFrame {
         // TODO add your handling code here:
         textbox_length_limiter(evt, jPasswordField1, 30);
         if (evt.getKeyChar() == 10) {
-           jButton1.doClick();
+            jButton1.doClick();
         }
     }//GEN-LAST:event_jPasswordField1KeyTyped
-static boolean admin=false;
+    static boolean admin = false;
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-       
+
         try {
             // TODO add your handling code here:
             String pw = "";
             for (char c : jPasswordField1.getPassword()) {
-                pw+=c;
+                pw += c;
             }
-               ResultSet st=opj.dataRead("status_,weight_of_con", "users","username=N'"+jComboBox1.getSelectedItem().toString()+"' and password_=N'"+pw+"'");
-            if(st.next()){
-                   admin = "0".equals(st.getString(1));
-                   mainform opj1= new mainform(opj);
-                       opj1.setVisible(true);
-                       this.dispose();
-            }
-            else
+            ResultSet st = opj.dataRead("status_,weight_of_con", "users", "username=N'" + jComboBox1.getSelectedItem().toString() + "' and password_=N'" + pw + "'");
+            if (st.next()) {
+                admin = "0".equals(st.getString(1));
+                mainform opj1 = new mainform(opj);
+                opj1.setVisible(true);
+                this.dispose();
+            } else {
                 JOptionPane.showMessageDialog(null, "كلمه المرور  غير صحيحه", "انتبه", JOptionPane.INFORMATION_MESSAGE);
+            }
         } catch (SQLException | IOException ex) {
             Logger.getLogger(login_form.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(null, ex.getMessage(), "إنتبه", JOptionPane.ERROR_MESSAGE);
@@ -140,10 +141,10 @@ static boolean admin=false;
 
     private void jComboBox1ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jComboBox1ItemStateChanged
         // TODO add your handling code here:
-        if(jComboBox1.getSelectedIndex()==0){
+        if (jComboBox1.getSelectedIndex() == 0) {
             jPasswordField1.setText("12345");
         }
-        if(jComboBox1.getSelectedIndex()==1){
+        if (jComboBox1.getSelectedIndex() == 1) {
             jPasswordField1.requestFocus();
         }
     }//GEN-LAST:event_jComboBox1ItemStateChanged
@@ -151,19 +152,16 @@ static boolean admin=false;
     private void jComboBox1KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jComboBox1KeyTyped
         // TODO add your handling code here:
         if (evt.getKeyChar() == 10) {
-           jButton1.doClick();
+            jButton1.doClick();
         }
     }//GEN-LAST:event_jComboBox1KeyTyped
 
-    
-    
-       void textbox_length_limiter(KeyEvent event, JTextField textboxname, int length) {
+    void textbox_length_limiter(KeyEvent event, JTextField textboxname, int length) {
         if (textboxname.getText().length() > length - 1) {
             event.consume();
         }
     }
 
-    
     /**
      * @param args the command line arguments
      */
@@ -191,7 +189,9 @@ static boolean admin=false;
         }
         //</editor-fold>
         //</editor-fold>
-
+        int x = 5;
+        int y = 3;
+        System.out.println(x > 3 && y < 5);
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> {
             try {

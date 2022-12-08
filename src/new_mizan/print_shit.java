@@ -236,15 +236,14 @@ public class print_shit {
 
                 cell = sheet.getRow(0).getCell(0);
                 cell.setCellValue(_1 + _2 + _3 + "\n" + _4 + _6 + "\n" + _5 + _7);
-                
 
-                String __1 = (_4.contains("ليكرا") ? "عدد الصناديق : ": "عدد الشكاير : ") +
-                        mainform.ToDoubleArabic((int) mainform.ToDoubleEnglish(num_of_shikra) + "") +
-                        (_4.contains("ليكرا") ? " صندوق" : "  شيكاره");
+                String __1 = (_4.contains("ليكرا") ? "عدد الصناديق : " : "عدد الشكاير : ")
+                        + mainform.ToDoubleArabic((int) mainform.ToDoubleEnglish(num_of_shikra) + "")
+                        + (_4.contains("ليكرا") ? " صندوق" : "  شيكاره");
                 String __2 = "الـــــــوزن :  " + mainform.ToDoubleArabic(wieght) + "";
-                String __3 = (_5.contains("ليكرا") ? "عدد الصناديق : ": "عدد الشكاير : ") +
-                        mainform.ToDoubleArabic((int) mainform.ToDoubleEnglish(jTextField5.getText()) + "") +
-                        (_5.contains("ليكرا") ? " صندوق" : "  شيكاره");
+                String __3 = (_5.contains("ليكرا") ? "عدد الصناديق : " : "عدد الشكاير : ")
+                        + mainform.ToDoubleArabic((int) mainform.ToDoubleEnglish(jTextField5.getText()) + "")
+                        + (_5.contains("ليكرا") ? " صندوق" : "  شيكاره");
                 String __4 = "الـــــــوزن :  " + mainform.ToDoubleArabic(total_weight.getText()) + "";
                 cell = sheet.getRow(23).getCell(11);
                 cell.setCellValue(__1 + "  " + __2 + "\n" + __3 + " " + __4);
@@ -310,7 +309,7 @@ public class print_shit {
                 }
 
             }
-
+            Files.createDirectories(Paths.get(System.getProperty("user.dir") + "\\querys"));
             File file = this.NewName(System.getProperty("user.dir") + "\\querys\\" + jTextField6.getText() + "~" + date_now + ".xlsx");
             try ( FileOutputStream outFile = new FileOutputStream(file)) {
                 workbook.write(outFile);
@@ -328,9 +327,10 @@ public class print_shit {
                     opj.inData("clients", "cli_name", "N'" + jTextField6.getText() + "'");
                 }
                 order_ids.forEach(order_id -> {
-                    opj.inData("export", "pro_id,cli_id,weight_,lot,inserted_date,exported_date,num_of_con,pallet_numb,used",
+                    opj.inData("export", "pro_id,cli_id,tot_wight,weight_,lot,inserted_date,exported_date,num_of_con,pallet_numb,used",
                             "(select pro_id from products where pro_name=N'" + jComboBox_pro_in_reports.getSelectedItem() + "')"
                             + ",(select top(1) cli_id from clients where cli_name=N'" + jTextField6.getText() + "')"
+                            + ",(select tot_wight from storage where storage_id=" + order_id + ")"
                             + ",(select weight_ from storage where storage_id=" + order_id + ")"
                             + ",(select lot from storage where storage_id= " + order_id + " )"
                             + ",(select date_ from storage where storage_id= " + order_id + " )"
@@ -342,9 +342,10 @@ public class print_shit {
                     opj.delData("storage", "storage_id=" + order_id + "");
                 });
                 ne.forEach(nes -> {
-                    opj.inData("export", "pro_id,cli_id,weight_,lot,inserted_date,exported_date,num_of_con,pallet_numb,used",
+                    opj.inData("export", "pro_id,cli_id,tot_wight,weight_,lot,inserted_date,exported_date,num_of_con,pallet_numb,used",
                             "(select pro_id from products where pro_name=N'" + name_of_type + "')"
                             + ",(select top(1) cli_id from clients where cli_name=N'" + jTextField6.getText() + "')"
+                            + ",(select tot_wight from storage where storage_id=" + nes + ")"
                             + ",(select weight_ from storage where storage_id=" + nes + ")"
                             + ",(select lot from storage where storage_id= " + nes + " )"
                             + ",(select date_ from storage where storage_id= " + nes + " )"
@@ -423,6 +424,7 @@ public class print_shit {
     }
 
     void create_excel_in_path(int serial, List<String> order_ids, JTextField total_weight, JTable jTable3, JTextField jTextField6, LocalDate date_now, XSSFWorkbook workbook, sqlcon opj, JFileChooser jFileChooser1, JComboBox combox_product) throws FileNotFoundException, IOException {
+        Files.createDirectories(Paths.get(System.getProperty("user.dir") + "\\querys"));
         File file = this.NewName(System.getProperty("user.dir") + "\\querys\\" + jTextField6.getText() + "~" + date_now + ".xlsx");
         try ( FileOutputStream outFile = new FileOutputStream(file)) {
             workbook.write(outFile);
@@ -442,9 +444,10 @@ public class print_shit {
 
             order_ids.forEach(order_id -> {
 
-                opj.inData("export", "pro_id,cli_id,weight_,lot,inserted_date,exported_date,num_of_con,pallet_numb,used",
+                opj.inData("export", "pro_id,cli_id,tot_wight,weight_,lot,inserted_date,exported_date,num_of_con,pallet_numb,used",
                         "(select pro_id from products where pro_name=N'" + combox_product.getSelectedItem() + "')"
                         + ",(select  top(1) cli_id from clients where cli_name=N'" + jTextField6.getText() + "')"
+                        + ",(select tot_wight from storage where storage_id=" + order_id + ")"
                         + ",(select weight_ from storage where storage_id=" + order_id + ")"
                         + ",(select lot from storage where storage_id= " + order_id + " )"
                         + ",(select date_ from storage where storage_id= " + order_id + " )"
@@ -463,6 +466,7 @@ public class print_shit {
         } catch (SQLException ex) {
             Logger.getLogger(print_shit.class.getName()).log(Level.SEVERE, null, ex);
         }
+
     }
 
     File NewName(String fileName) {
