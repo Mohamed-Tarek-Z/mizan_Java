@@ -241,9 +241,9 @@ public class print_shit {
                         + mainform.ToDoubleArabic((int) mainform.ToDoubleEnglish(num_of_shikra) + "")
                         + (_4.contains("ليكرا") ? " صندوق" : "  شيكاره");
                 String __2 = "الـــــــوزن :  " + mainform.ToDoubleArabic(wieght) + "";
-                String __3 = (_5.contains("ليكرا") ? "عدد الصناديق : " : "عدد الشكاير : ")
+                String __3 = (_6.contains("ليكرا") ? "عدد الصناديق : " : "عدد الشكاير : ")
                         + mainform.ToDoubleArabic((int) mainform.ToDoubleEnglish(jTextField5.getText()) + "")
-                        + (_5.contains("ليكرا") ? " صندوق" : "  شيكاره");
+                        + (_6.contains("ليكرا") ? " صندوق" : "  شيكاره");
                 String __4 = "الـــــــوزن :  " + mainform.ToDoubleArabic(total_weight.getText()) + "";
                 cell = sheet.getRow(23).getCell(11);
                 cell.setCellValue(__1 + "  " + __2 + "\n" + __3 + " " + __4);
