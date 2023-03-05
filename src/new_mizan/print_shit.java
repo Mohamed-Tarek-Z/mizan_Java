@@ -49,7 +49,7 @@ public class print_shit {
             DateTimeFormatter arabicDateFormatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT).withLocale(arabicLocale).withDecimalStyle(DecimalStyle.of(arabicLocale));
             LocalDate date_now = LocalDate.now();
             XSSFWorkbook workbook;
-            try ( FileInputStream file = new FileInputStream(new File("120.xlsx"))) {
+            try ( FileInputStream file = new FileInputStream(new File("Donot_Change\\120.xlsx"))) {
                 workbook = new XSSFWorkbook(file);
                 XSSFSheet sheet = workbook.getSheetAt(0);
                 Cell cell = null;
@@ -121,7 +121,7 @@ public class print_shit {
             DateTimeFormatter arabicDateFormatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT).withLocale(arabicLocale).withDecimalStyle(DecimalStyle.of(arabicLocale));
             LocalDate date_now = LocalDate.now();
             XSSFWorkbook workbook;
-            try ( FileInputStream file = new FileInputStream(new File("160.xlsx"))) {
+            try ( FileInputStream file = new FileInputStream(new File("Donot_Change\\160.xlsx"))) {
                 workbook = new XSSFWorkbook(file);
                 XSSFSheet sheet = workbook.getSheetAt(0);
                 Cell cell = null;
@@ -209,7 +209,7 @@ public class print_shit {
             DateTimeFormatter arabicDateFormatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT).withLocale(arabicLocale).withDecimalStyle(DecimalStyle.of(arabicLocale));
             LocalDate date_now = LocalDate.now();
             XSSFWorkbook workbook;
-            try ( FileInputStream file = new FileInputStream(new File("60-60.xlsx"))) {
+            try ( FileInputStream file = new FileInputStream(new File("Donot_Change\\60-60.xlsx"))) {
                 workbook = new XSSFWorkbook(file);
                 XSSFSheet sheet = workbook.getSheetAt(0);
                 Cell cell = null;
@@ -469,7 +469,7 @@ public class print_shit {
 
     }
 
-    File NewName(String fileName) {
+    public static File NewName(String fileName) {
         int idxOfDot = fileName.lastIndexOf('.');
         String extension = fileName.substring(idxOfDot + 1);
         String fullname = fileName.substring(0, idxOfDot);

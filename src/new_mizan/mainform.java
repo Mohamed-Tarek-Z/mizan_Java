@@ -2424,7 +2424,7 @@ public class mainform extends javax.swing.JFrame {
         if (Character.isDigit(input)) {
             evt.setKeyChar(ToNumArab(input));
         }
-        if ((!Character.isDigit(input)) && input != 'أ' && input != 'س' && input != 'و' && input != 'د' && input != 'ط' && input != 'ب' && input != 'ا' && input != 'ع' && input != 'ه' && input != 'م' && input != 'ن'&& input != 'ي'&& input != 'ض') {
+        if ((!Character.isDigit(input)) && input != 'أ' && input != 'س' && input != 'و' && input != 'د' && input != 'ط' && input != 'ب' && input != 'ا' && input != 'ع' && input != 'ه' && input != 'م' && input != 'ن' && input != 'ي' && input != 'ض') {
             evt.consume();
         }
     }//GEN-LAST:event_jTextField_E_lotKeyTyped
@@ -2599,7 +2599,7 @@ public class mainform extends javax.swing.JFrame {
         if (Character.isDigit(input)) {
             evt.setKeyChar(ToNumArab(input));
         }
-        if ((!Character.isDigit(input)) && input != 'أ' && input != 'س' && input != 'و' && input != 'د' && input != 'ط' && input != 'ب' && input != 'ا' && input != 'ع' && input != 'ه' && input != 'م' && input != 'ن'&& input != 'ي'&& input != 'ض') {
+        if ((!Character.isDigit(input)) && input != 'أ' && input != 'س' && input != 'و' && input != 'د' && input != 'ط' && input != 'ب' && input != 'ا' && input != 'ع' && input != 'ه' && input != 'م' && input != 'ن' && input != 'ي' && input != 'ض') {
             evt.consume();
         }
     }//GEN-LAST:event_jTextField_ME_lotKeyTyped
@@ -2675,7 +2675,7 @@ public class mainform extends javax.swing.JFrame {
             Locale arabicLocale = Locale.forLanguageTag("ar");
             DateTimeFormatter arabicDateFormatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.FULL).withLocale(arabicLocale).withDecimalStyle(DecimalStyle.of(arabicLocale));
             LocalDate date_now = LocalDate.now();
-            FileInputStream EX = new FileInputStream(new File("Stock.xlsx"));
+            FileInputStream EX = new FileInputStream(new File("Donot_Change\\Stock.xlsx"));
             XSSFWorkbook workbook = new XSSFWorkbook(EX);
             XSSFSheet sheet = workbook.getSheetAt(0);
             Cell cell = sheet.getRow(1).getCell(1);
@@ -2822,7 +2822,7 @@ public class mainform extends javax.swing.JFrame {
         }
         if (b1) {
             XSSFWorkbook workbook;
-            try ( FileInputStream EX = new FileInputStream(new File("Ticket.xlsx"))) {
+            try ( FileInputStream EX = new FileInputStream(new File("Donot_Change\\Ticket.xlsx"))) {
                 workbook = new XSSFWorkbook(EX);
                 EX.close();
             }
@@ -3093,14 +3093,17 @@ public class mainform extends javax.swing.JFrame {
     }
 
     private short loadTicknum(String filename) throws FileNotFoundException, IOException {
-        String num;
+        String num = "";
         int i;
-        FileReader fr = new FileReader(System.getProperty("user.dir") + "\\Temp\\" + filename);
-        num = "";
-        while ((i = fr.read()) != -1) {
-            num += Character.digit(i, 10) + "";
+        Files.createDirectories(Paths.get(System.getProperty("user.dir") + "\\Temp"));
+        try ( FileReader fr = new FileReader(System.getProperty("user.dir") + "\\Temp\\" + filename)) {
+            num = "";
+            while ((i = fr.read()) != -1) {
+                num += Character.digit(i, 10) + "";
+            }
+        }catch(Exception e){
+            print_shit.NewName(System.getProperty("user.dir") + filename);
         }
-        fr.close();
         return Short.parseShort((num.isBlank() ? "0" : num));
     }
 
