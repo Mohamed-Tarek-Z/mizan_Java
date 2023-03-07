@@ -70,7 +70,7 @@ public class mainform extends javax.swing.JFrame {
     private static int BagMax = 2;
     private float Xx = 0, Yy = 0, width = 19, hight = 19;
     private final JButton jButton_bagmax = new javax.swing.JButton();
-
+    String Version = "V 48.0.0";
     public mainform(sqlcon ops) throws IOException {
         initComponents();
 
@@ -84,7 +84,7 @@ public class mainform extends javax.swing.JFrame {
             jButton_bagmax.setText("Seting");
             jButton_bagmax.addActionListener((java.awt.event.ActionEvent evt) -> {
                 try {
-                    jButton_bagmaxActionPerformed(evt);
+                    jButton_bagmaxActionPerformed();
                 } catch (IOException ex) {
                     Logger.getLogger(mainform.class.getName()).log(Level.SEVERE, null, ex);
                     JOptionPane.showMessageDialog(null, ex.getMessage(), "exception", JOptionPane.PLAIN_MESSAGE);
@@ -168,6 +168,7 @@ public class mainform extends javax.swing.JFrame {
         jButton9 = new javax.swing.JButton();
         jButton10 = new javax.swing.JButton();
         jButton14 = new javax.swing.JButton();
+        jLabel42 = new javax.swing.JLabel();
         left_panel = new javax.swing.JPanel();
         in_data = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -403,6 +404,7 @@ public class mainform extends javax.swing.JFrame {
         jTextField_set_y = new javax.swing.JTextField();
         jTextField_set_width = new javax.swing.JTextField();
         jButton_set_changearea = new javax.swing.JButton();
+        jLabel40 = new javax.swing.JLabel();
 
         jFileChooser1.setDialogType(javax.swing.JFileChooser.SAVE_DIALOG);
         jFileChooser1.setCurrentDirectory(new java.io.File("F:\\"));
@@ -593,7 +595,6 @@ public class mainform extends javax.swing.JFrame {
             jTextField_E_O_TotWight.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
             jTextField_E_O_TotWight.setEnabled(false);
             jTextField_E_O_TotWight.setFocusable(false);
-            jTextField_E_O_TotWight.setPreferredSize(new java.awt.Dimension(64, 28));
             jTextField_E_O_TotWight.setRequestFocusEnabled(false);
             SingleEdit.getContentPane().add(jTextField_E_O_TotWight, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 50, 90, -1));
 
@@ -660,9 +661,12 @@ public class mainform extends javax.swing.JFrame {
             MultiEdit.getAccessibleContext().setAccessibleName("Multiedit_Window");
 
             setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-            setTitle("mizan program");
+            setTitle("mizan program " + Version);
+            setLocation(new java.awt.Point(0, 0));
+            setLocationByPlatform(true);
             setMaximumSize(new java.awt.Dimension(1020, 700));
             setMinimumSize(new java.awt.Dimension(1020, 700));
+            setName("Main_Frame"); // NOI18N
             setPreferredSize(new java.awt.Dimension(1020, 700));
             setResizable(false);
             addWindowListener(new java.awt.event.WindowAdapter() {
@@ -756,6 +760,17 @@ public class mainform extends javax.swing.JFrame {
                 }
             });
             right_panel.add(jButton14, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 430, 110, 40));
+
+            jLabel42.setFont(new java.awt.Font("Segoe UI", 2, 20)); // NOI18N
+            jLabel42.setText(Version);
+            jLabel42.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(255, 51, 51), 3, true));
+            jLabel42.setCursor(new java.awt.Cursor(java.awt.Cursor.CROSSHAIR_CURSOR));
+            jLabel42.setFocusable(false);
+            jLabel42.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+            jLabel42.setRequestFocusEnabled(false);
+            jLabel42.setVerifyInputWhenFocusTarget(false);
+            right_panel.add(jLabel42, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 596, 110, 40));
+            jLabel42.getAccessibleContext().setAccessibleName("Right_version");
 
             jSplitPane1.setRightComponent(right_panel);
 
@@ -1621,6 +1636,18 @@ public class mainform extends javax.swing.JFrame {
                 }
             });
             Settings.add(jButton_set_changearea, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 450, 80, 40));
+
+            jLabel40.setBackground(new java.awt.Color(204, 255, 204));
+            jLabel40.setFont(new java.awt.Font("Segoe UI", 3, 48)); // NOI18N
+            jLabel40.setText(Version);
+            jLabel40.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(102, 255, 255)));
+            jLabel40.setFocusable(false);
+            jLabel40.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+            jLabel40.setName("setting_version"); // NOI18N
+            jLabel40.setRequestFocusEnabled(false);
+            jLabel40.setVerifyInputWhenFocusTarget(false);
+            Settings.add(jLabel40, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 500, 690, 140));
+            jLabel40.getAccessibleContext().setAccessibleDescription("Setting page Version");
 
             left_panel.add(Settings, "card11");
 
@@ -2746,7 +2773,7 @@ public class mainform extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jButton5ActionPerformed
 
-    private void jButton_bagmaxActionPerformed(java.awt.event.ActionEvent evt) throws IOException {
+    private void jButton_bagmaxActionPerformed() throws IOException {
         open_panel(Settings);
         jTextField_set_x.setText("" + Xx);
         jTextField_set_y.setText("" + Yy);
@@ -3108,9 +3135,9 @@ public class mainform extends javax.swing.JFrame {
     }
 
     int saveTicknum(String filename, short nums) throws FileNotFoundException, IOException {
-        FileWriter fw = new FileWriter(System.getProperty("user.dir") + "\\Temp\\" + filename);
-        fw.write(nums + "");
-        fw.close();
+        try (FileWriter fw = new FileWriter(System.getProperty("user.dir") + "\\Temp\\" + filename)) {
+            fw.write(nums + "");
+        }
         return nums;
     }
 
@@ -3199,7 +3226,9 @@ public class mainform extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel38;
     private javax.swing.JLabel jLabel39;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel40;
     private javax.swing.JLabel jLabel41;
+    private javax.swing.JLabel jLabel42;
     private javax.swing.JLabel jLabel43;
     private javax.swing.JLabel jLabel44;
     private javax.swing.JLabel jLabel47;

@@ -52,7 +52,7 @@ public class print_shit {
             try ( FileInputStream file = new FileInputStream(new File("Donot_Change\\120.xlsx"))) {
                 workbook = new XSSFWorkbook(file);
                 XSSFSheet sheet = workbook.getSheetAt(0);
-                Cell cell = null;
+                Cell cell ;
 
                 String _1 = "                                                  إذن تـسليم بضاعة\n";
                 String _2 = "السيد :" + jTextField6.getText() + "";
@@ -124,7 +124,7 @@ public class print_shit {
             try ( FileInputStream file = new FileInputStream(new File("Donot_Change\\160.xlsx"))) {
                 workbook = new XSSFWorkbook(file);
                 XSSFSheet sheet = workbook.getSheetAt(0);
-                Cell cell = null;
+                Cell cell ;
 
                 String _1 = "                  إذن تـسليم بضاعة\n";
                 String _2 = "السيد :" + jTextField6.getText() + "";
@@ -212,7 +212,7 @@ public class print_shit {
             try ( FileInputStream file = new FileInputStream(new File("Donot_Change\\60-60.xlsx"))) {
                 workbook = new XSSFWorkbook(file);
                 XSSFSheet sheet = workbook.getSheetAt(0);
-                Cell cell = null;
+                Cell cell ;
 
                 String _1 = "                                                  إذن تـسليم بضاعة\n";
                 String _2 = "السيد :" + jTextField6.getText() + "";
@@ -310,13 +310,13 @@ public class print_shit {
 
             }
             Files.createDirectories(Paths.get(System.getProperty("user.dir") + "\\querys"));
-            File file = this.NewName(System.getProperty("user.dir") + "\\querys\\" + jTextField6.getText() + "~" + date_now + ".xlsx");
+            File file = print_shit.NewName(System.getProperty("user.dir") + "\\querys\\" + jTextField6.getText() + "~" + date_now + ".xlsx");
             try ( FileOutputStream outFile = new FileOutputStream(file)) {
                 workbook.write(outFile);
                 Desktop desktop = Desktop.getDesktop();
                 jFileChooser1.showSaveDialog(jTable3);
                 if (jFileChooser1.getSelectedFile() != null) {
-                    File file1 = this.NewName(jFileChooser1.getSelectedFile().getAbsolutePath() + "\\" + jTextField6.getText() + "~" + date_now + ".xlsx");
+                    File file1 = print_shit.NewName(jFileChooser1.getSelectedFile().getAbsolutePath() + "\\" + jTextField6.getText() + "~" + date_now + ".xlsx");
                     FileOutputStream outFile1 = new FileOutputStream(file1);
                     workbook.write(outFile1);
                 }
@@ -425,13 +425,13 @@ public class print_shit {
 
     void create_excel_in_path(int serial, List<String> order_ids, JTextField total_weight, JTable jTable3, JTextField jTextField6, LocalDate date_now, XSSFWorkbook workbook, sqlcon opj, JFileChooser jFileChooser1, JComboBox combox_product) throws FileNotFoundException, IOException {
         Files.createDirectories(Paths.get(System.getProperty("user.dir") + "\\querys"));
-        File file = this.NewName(System.getProperty("user.dir") + "\\querys\\" + jTextField6.getText() + "~" + date_now + ".xlsx");
+        File file = print_shit.NewName(System.getProperty("user.dir") + "\\querys\\" + jTextField6.getText() + "~" + date_now + ".xlsx");
         try ( FileOutputStream outFile = new FileOutputStream(file)) {
             workbook.write(outFile);
             Desktop desktop = Desktop.getDesktop();
             jFileChooser1.showSaveDialog(jTable3);
             if (jFileChooser1.getSelectedFile() != null) {
-                File file1 = this.NewName(jFileChooser1.getSelectedFile().getAbsolutePath() + "\\" + jTextField6.getText() + "~" + date_now + ".xlsx");
+                File file1 = print_shit.NewName(jFileChooser1.getSelectedFile().getAbsolutePath() + "\\" + jTextField6.getText() + "~" + date_now + ".xlsx");
                 FileOutputStream outFile1 = new FileOutputStream(file1);
                 workbook.write(outFile1);
             }
