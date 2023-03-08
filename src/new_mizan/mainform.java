@@ -1083,7 +1083,7 @@ public class mainform extends javax.swing.JFrame {
                     jButton5ActionPerformed(evt);
                 }
             });
-            in_data.add(jButton5, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 10, 50, 20));
+            in_data.add(jButton5, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 10, 60, 20));
 
             left_panel.add(in_data, "card2");
 
