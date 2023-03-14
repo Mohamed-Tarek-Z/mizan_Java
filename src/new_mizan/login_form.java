@@ -119,7 +119,7 @@ public class login_form extends javax.swing.JFrame {
             for (char c : jPasswordField1.getPassword()) {
                 pw += c;
             }
-            ResultSet st = opj.dataRead("status_,weight_of_con", "users", "username=N'" + jComboBox1.getSelectedItem().toString() + "' and password_=N'" + pw + "'");
+            ResultSet st = opj.dataRead("status_", "users", "username=N'" + jComboBox1.getSelectedItem().toString() + "' and password_=N'" + pw + "'");
             if (st.next()) {
                 admin = "0".equals(st.getString(1));
                 mainform opj1 = new mainform(opj);

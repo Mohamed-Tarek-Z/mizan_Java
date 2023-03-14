@@ -52,7 +52,7 @@ public class print_shit {
             try ( FileInputStream file = new FileInputStream(new File("Donot_Change\\120.xlsx"))) {
                 workbook = new XSSFWorkbook(file);
                 XSSFSheet sheet = workbook.getSheetAt(0);
-                Cell cell ;
+                Cell cell;
 
                 String _1 = "                                                  إذن تـسليم بضاعة\n";
                 String _2 = "السيد :" + jTextField6.getText() + "";
@@ -124,7 +124,7 @@ public class print_shit {
             try ( FileInputStream file = new FileInputStream(new File("Donot_Change\\160.xlsx"))) {
                 workbook = new XSSFWorkbook(file);
                 XSSFSheet sheet = workbook.getSheetAt(0);
-                Cell cell ;
+                Cell cell;
 
                 String _1 = "                  إذن تـسليم بضاعة\n";
                 String _2 = "السيد :" + jTextField6.getText() + "";
@@ -212,7 +212,7 @@ public class print_shit {
             try ( FileInputStream file = new FileInputStream(new File("Donot_Change\\60-60.xlsx"))) {
                 workbook = new XSSFWorkbook(file);
                 XSSFSheet sheet = workbook.getSheetAt(0);
-                Cell cell ;
+                Cell cell;
 
                 String _1 = "                                                  إذن تـسليم بضاعة\n";
                 String _2 = "السيد :" + jTextField6.getText() + "";
@@ -326,8 +326,9 @@ public class print_shit {
                 if (!opj.dataRead("*", "clients", "cli_name=N'" + jTextField6.getText() + "'").next()) {
                     opj.inData("clients", "cli_name", "N'" + jTextField6.getText() + "'");
                 }
+                opj.inData("orders", "ordWight,ordDate", mainform.ToDoubleEnglish(total_weight.getText()) + ",GETDATE()");
                 order_ids.forEach(order_id -> {
-                    opj.inData("export", "pro_id,cli_id,tot_wight,weight_,lot,inserted_date,exported_date,num_of_con,pallet_numb,used",
+                    opj.inData("export", "pro_id,cli_id,tot_wight,weight_,lot,inserted_date,exported_date,num_of_con,pallet_numb,used,ord_id",
                             "(select pro_id from products where pro_name=N'" + jComboBox_pro_in_reports.getSelectedItem() + "')"
                             + ",(select top(1) cli_id from clients where cli_name=N'" + jTextField6.getText() + "')"
                             + ",(select tot_wight from storage where storage_id=" + order_id + ")"
@@ -337,12 +338,15 @@ public class print_shit {
                             + ",GETDATE()"
                             + ",(select num_of_con from storage where storage_id= " + order_id + " ) "
                             + ",(select pallet_numb from storage where storage_id= " + order_id + " )"
-                            + ",(select used from storage where storage_id= " + order_id + " )");
+                            + ",(select used from storage where storage_id= " + order_id + " )"
+                            + ",(SELECT TOP 1 ord_id FROM orders where ordWight=" + mainform.ToDoubleEnglish(total_weight.getText()) + " ORDER BY ord_id DESC)"
+                    );
 
                     opj.delData("storage", "storage_id=" + order_id + "");
                 });
+                opj.inData("orders", "ordWight,ordDate", mainform.ToDoubleEnglish(wieght) + ",GETDATE()");
                 ne.forEach(nes -> {
-                    opj.inData("export", "pro_id,cli_id,tot_wight,weight_,lot,inserted_date,exported_date,num_of_con,pallet_numb,used",
+                    opj.inData("export", "pro_id,cli_id,tot_wight,weight_,lot,inserted_date,exported_date,num_of_con,pallet_numb,used,ord_id",
                             "(select pro_id from products where pro_name=N'" + name_of_type + "')"
                             + ",(select top(1) cli_id from clients where cli_name=N'" + jTextField6.getText() + "')"
                             + ",(select tot_wight from storage where storage_id=" + nes + ")"
@@ -352,7 +356,9 @@ public class print_shit {
                             + ",GETDATE()  "
                             + ",(select num_of_con from storage where storage_id= " + nes + " ) "
                             + ",(select pallet_numb from storage where storage_id= " + nes + " )"
-                            + ",(select used from storage where storage_id= " + nes + " )");
+                            + ",(select used from storage where storage_id= " + nes + " )"
+                            + ",(SELECT TOP 1 ord_id FROM orders where ordWight=" + mainform.ToDoubleEnglish(wieght) + " ORDER BY ord_id DESC)"
+                    );
                     opj.delData("storage", "storage_id=" + nes + "");
                 });
                 ((DefaultTableModel) jTable3.getModel()).setRowCount(0);
@@ -441,10 +447,10 @@ public class print_shit {
             if (!opj.dataRead("*", "clients", "cli_name=N'" + jTextField6.getText() + "'").next()) {
                 opj.inData("clients", "cli_name", "N'" + jTextField6.getText() + "'");
             }
-
+            opj.inData("orders", "ordWight,ordDate", mainform.ToDoubleEnglish(total_weight.getText()) + ",GETDATE()");
             order_ids.forEach(order_id -> {
 
-                opj.inData("export", "pro_id,cli_id,tot_wight,weight_,lot,inserted_date,exported_date,num_of_con,pallet_numb,used",
+                opj.inData("export", "pro_id,cli_id,tot_wight,weight_,lot,inserted_date,exported_date,num_of_con,pallet_numb,used,ord_id",
                         "(select pro_id from products where pro_name=N'" + combox_product.getSelectedItem() + "')"
                         + ",(select  top(1) cli_id from clients where cli_name=N'" + jTextField6.getText() + "')"
                         + ",(select tot_wight from storage where storage_id=" + order_id + ")"
@@ -454,7 +460,9 @@ public class print_shit {
                         + ",GETDATE() "
                         + ",(select num_of_con from storage where storage_id= " + order_id + " )"
                         + ",(select pallet_numb from storage where storage_id= " + order_id + " )"
-                        + ",(select used from storage where storage_id= " + order_id + " )  ");
+                        + ",(select used from storage where storage_id= " + order_id + " )"
+                        + ",(SELECT TOP 1 ord_id FROM orders where ordWight=" + mainform.ToDoubleEnglish(total_weight.getText()) + " ORDER BY ord_id DESC)"
+                );
 
                 opj.delData("storage", "storage_id=" + order_id + "");
             });

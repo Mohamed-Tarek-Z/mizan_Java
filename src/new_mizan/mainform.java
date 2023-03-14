@@ -70,7 +70,7 @@ public class mainform extends javax.swing.JFrame {
     private static int BagMax = 2;
     private float Xx = 0, Yy = 0, width = 19, hight = 19;
     private final JButton jButton_bagmax = new javax.swing.JButton();
-    String Version = "V 49.0.0";
+    String Version = "V 50.0.0";
 
     public mainform(sqlcon ops) throws IOException {
         initComponents();
@@ -1497,9 +1497,11 @@ public class mainform extends javax.swing.JFrame {
                 }
             });
             jTable_yumia.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
+            jTable_yumia.setColumnSelectionAllowed(true);
             jTable_yumia.setRowHeight(25);
             jTable_yumia.getTableHeader().setReorderingAllowed(false);
             jScrollPane8.setViewportView(jTable_yumia);
+            jTable_yumia.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
             if (jTable_yumia.getColumnModel().getColumnCount() > 0) {
                 jTable_yumia.getColumnModel().getColumn(0).setPreferredWidth(250);
                 jTable_yumia.getColumnModel().getColumn(1).setPreferredWidth(250);
@@ -2348,12 +2350,12 @@ public class mainform extends javax.swing.JFrame {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             String date1 = sdf.format(jDateChooser_yum_fromDate.getCalendar().getTime());
             String date2 = sdf.format(jDateChooser_yum_ToDate.getCalendar().getTime());
-            ResultSet st = opj.dataRead("sum(weight_),pro_name,cli_name,lot,FORMAT (exported_date, 'yyyy-MM-dd'),count(weight_)",
-                    "export inner join clients on clients.cli_id=export.cli_id inner join products on products.pro_id=export.pro_id",
+            ResultSet st = opj.dataRead("ordWight,pro_name,cli_name,lot,FORMAT (exported_date, 'yyyy-MM-dd'),count(weight_)",
+                    "export inner join clients on clients.cli_id=export.cli_id inner join products on products.pro_id=export.pro_id inner join orders on orders.ord_id=export.ord_id",
                     jTable_youm_clinets.getSelectedRowCount() > 0 ? "  exported_date between '" + date1 + "' and '" + date2 + "' and export.cli_id in (" + selectedCIDs + ") "
-                    + " group by products.pro_name,clients.cli_name,lot,exported_date order by exported_date ,cli_name "
+                    + " group by orders.ordWight,products.pro_name,clients.cli_name,lot,exported_date order by exported_date ,cli_name "
                     : "  exported_date between '" + date1 + "' and '" + date2 + "' "
-                    + " group by products.pro_name,clients.cli_name,lot,exported_date order by exported_date ,cli_name "
+                    + " group by orders.ordWight,products.pro_name,clients.cli_name,lot,exported_date order by exported_date ,cli_name "
             );
 
             try {
@@ -2410,41 +2412,32 @@ public class mainform extends javax.swing.JFrame {
                                 + " and exported_date = '" + ToStringEnglish("" + jTable_yumia.getValueAt(jTable_yumia.getSelectedRow(), 5)) + "'"
                                 + "  and num_of_con is not null  and pallet_numb is not null         ").next()) {
 
-                            ResultSet s = opj.dataRead("pro_id,weight_,lot,pallet_numb,FORMAT (inserted_date, 'yyyy-MM-dd'),num_of_con,used,tot_wight", "export", "lot=N'" + ToStringEnglish("" + jTable_yumia.getValueAt(jTable_yumia.getSelectedRow(), 2)) + "' "
+                            ResultSet s = opj.dataRead("pro_id,weight_,lot,pallet_numb,FORMAT (inserted_date, 'yyyy-MM-dd'),num_of_con,used,tot_wight,ord_id", "export", "lot=N'" + ToStringEnglish("" + jTable_yumia.getValueAt(jTable_yumia.getSelectedRow(), 2)) + "' "
                                     + "and pro_id=(select pro_id from products where pro_name=N'" + jTable_yumia.getValueAt(jTable_yumia.getSelectedRow(), 1) + "') "
                                     + "and cli_id=(select top(1) cli_id from clients where cli_name=N'" + jTable_yumia.getValueAt(jTable_yumia.getSelectedRow(), 0) + "')"
                                     + " and exported_date = '" + ToStringEnglish("" + jTable_yumia.getValueAt(jTable_yumia.getSelectedRow(), 5)) + "'"
                                     + "  and num_of_con is not null  and pallet_numb is not null         ");
 
                             ArrayList<String[]> outerArr = new ArrayList<>();
-
+                            int ordTid = 0;
                             while (s.next()) {
                                 String[] myString12 = {s.getString(1), s.getString(2), s.getString(3), s.getString(4), s.getString(5), s.getString(6), s.getString(7), s.getString(8)};
                                 outerArr.add(myString12);
+                                ordTid = s.getInt(9);
                             }
-
                             for (int i = outerArr.size() - 1; i > -1; i--) {
                                 String[] myString;
                                 myString = outerArr.get(i);
                                 opj.inData("storage", "pro_id,weight_,lot,pallet_numb,date_,num_of_con,used,tot_wight", "" + myString[0] + "," + myString[1] + ",N'" + myString[2] + "'," + myString[3] + ",'" + myString[4] + "'," + myString[5] + "," + myString[6] + "," + myString[7] + " ");
-
                             }
 
-                            opj.delData("export", "lot=N'" + ToStringEnglish("" + jTable_yumia.getValueAt(jTable_yumia.getSelectedRow(), 2)) + "' "
-                                    + "and pro_id=(select pro_id from products where pro_name=N'" + jTable_yumia.getValueAt(jTable_yumia.getSelectedRow(), 1) + "') "
-                                    + "and cli_id=(select top(1) cli_id from clients where cli_name=N'" + jTable_yumia.getValueAt(jTable_yumia.getSelectedRow(), 0) + "')"
-                                    + " and exported_date = '" + ToStringEnglish("" + jTable_yumia.getValueAt(jTable_yumia.getSelectedRow(), 5)) + "'"
-                                    + "  and num_of_con is not null  and pallet_numb is not null         ");
+                            opj.delData("export", "ord_id=" + ordTid);
+                            opj.delData("orders", "ord_id=" + ordTid);
+                            System.out.println(ordTid);
 
-                            if (!opj.dataRead("*", "export", "lot=N'" + ToStringEnglish("" + jTable_yumia.getValueAt(jTable_yumia.getSelectedRow(), 2)) + "' "
-                                    + "and pro_id=(select pro_id from products where pro_name=N'" + jTable_yumia.getValueAt(jTable_yumia.getSelectedRow(), 1) + "') "
-                                    + "and cli_id=(select top(1) cli_id from clients where cli_name=N'" + jTable_yumia.getValueAt(jTable_yumia.getSelectedRow(), 0) + "')"
-                                    + " and exported_date = '" + ToStringEnglish("" + jTable_yumia.getValueAt(jTable_yumia.getSelectedRow(), 5)) + "'"
-                                    + "  and num_of_con is not null  and pallet_numb is not null         ").next()) {
-
+                            if (!opj.dataRead("*", "export", "ord_id=" + ordTid).next()) {
                                 JOptionPane.showMessageDialog(null, "<html><body><h1  style='font-family: Arial; font-size: 20pt; text-align: right; width: 150px;'> تم استرجاع البيان بنجاح  </h1></body></html>", "إنتبه", JOptionPane.PLAIN_MESSAGE);
                             } else {
-
                                 JOptionPane.showMessageDialog(null, "<html><body><h1  style='font-family: Arial; font-size: 20pt; text-align: right; width: 150px;'> حدث خطأ ما  </h1></body></html>", "إنتبه", JOptionPane.PLAIN_MESSAGE);
                             }
 
