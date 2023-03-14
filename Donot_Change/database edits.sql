@@ -1,26 +1,10 @@
-﻿drop table users;
-
-CREATE TABLE users (
-    userId int IDENTITY(1,1) PRIMARY KEY,
-    username nvarchar(35) NOT NULL,
-    password_ nvarchar(35) NOT NULL,
-    status_ bit default 0
-);
-
-
-INSERT INTO users
-VALUES ('محمد نشأت'
-, '6282', 0);
-
-INSERT INTO users
-VALUES ('ميزان'
-, '12345', 1);
+﻿ALTER TABLE export
+DROP CONSTRAINT FK__export__ord_id__2DE6D218;
 
 ALTER TABLE export
-ADD PRIMARY KEY (exp_id);
+DROP COLUMN ord_id; 
 
-ALTER TABLE storage
-ADD PRIMARY KEY (storage_id);
+drop table orders;
 
 CREATE TABLE orders (
     ord_id int IDENTITY(1,1) PRIMARY KEY,

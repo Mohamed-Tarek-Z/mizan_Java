@@ -389,6 +389,7 @@ public class mainform extends javax.swing.JFrame {
         jScrollPane10 = new javax.swing.JScrollPane();
         jTable_youm_clinets = new javax.swing.JTable();
         jButton_youm_getClients = new javax.swing.JButton();
+        jCheckBox_youm_old = new javax.swing.JCheckBox();
         pause = new javax.swing.JPanel();
         jScrollPane9 = new javax.swing.JScrollPane();
         jTextArea_emp = new javax.swing.JTextArea();
@@ -1584,6 +1585,9 @@ public class mainform extends javax.swing.JFrame {
             });
             yomia.add(jButton_youm_getClients, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 20, 120, 40));
 
+            jCheckBox_youm_old.setText("Old");
+            yomia.add(jCheckBox_youm_old, new org.netbeans.lib.awtextra.AbsoluteConstraints(740, 140, -1, -1));
+
             left_panel.add(yomia, "yomia");
 
             pause.setEnabled(false);
@@ -2350,13 +2354,19 @@ public class mainform extends javax.swing.JFrame {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             String date1 = sdf.format(jDateChooser_yum_fromDate.getCalendar().getTime());
             String date2 = sdf.format(jDateChooser_yum_ToDate.getCalendar().getTime());
-            ResultSet st = opj.dataRead("ordWight,pro_name,cli_name,lot,FORMAT (exported_date, 'yyyy-MM-dd'),count(weight_)",
-                    "export inner join clients on clients.cli_id=export.cli_id inner join products on products.pro_id=export.pro_id inner join orders on orders.ord_id=export.ord_id",
+            ResultSet st = jCheckBox_youm_old.isSelected() ? opj.dataRead("sum(weight_),pro_name,cli_name,lot,FORMAT (exported_date, 'yyyy-MM-dd'),count(weight_)",
+                    "export inner join clients on clients.cli_id=export.cli_id inner join products on products.pro_id=export.pro_id",
                     jTable_youm_clinets.getSelectedRowCount() > 0 ? "  exported_date between '" + date1 + "' and '" + date2 + "' and export.cli_id in (" + selectedCIDs + ") "
-                    + " group by orders.ordWight,products.pro_name,clients.cli_name,lot,exported_date order by exported_date ,cli_name "
+                    + " group by products.pro_name,clients.cli_name,lot,exported_date order by exported_date ,cli_name "
                     : "  exported_date between '" + date1 + "' and '" + date2 + "' "
-                    + " group by orders.ordWight,products.pro_name,clients.cli_name,lot,exported_date order by exported_date ,cli_name "
-            );
+                    + " group by products.pro_name,clients.cli_name,lot,exported_date order by exported_date ,cli_name ")
+                    : opj.dataRead("ord_wight,pro_name,cli_name,lot,FORMAT (exported_date, 'yyyy-MM-dd'),count(weight_)",
+                            "export inner join clients on clients.cli_id=export.cli_id inner join products on products.pro_id=export.pro_id inner join orders on orders.ord_id=export.ord_id",
+                            jTable_youm_clinets.getSelectedRowCount() > 0 ? "  exported_date between '" + date1 + "' and '" + date2 + "' and export.cli_id in (" + selectedCIDs + ") "
+                            + " group by orders.ord_wight,products.pro_name,clients.cli_name,lot,exported_date order by exported_date ,cli_name "
+                            : "  exported_date between '" + date1 + "' and '" + date2 + "' "
+                            + " group by orders.ord_wight,products.pro_name,clients.cli_name,lot,exported_date order by exported_date ,cli_name "
+                    );
 
             try {
                 while (st.next()) {
@@ -2431,14 +2441,31 @@ public class mainform extends javax.swing.JFrame {
                                 opj.inData("storage", "pro_id,weight_,lot,pallet_numb,date_,num_of_con,used,tot_wight", "" + myString[0] + "," + myString[1] + ",N'" + myString[2] + "'," + myString[3] + ",'" + myString[4] + "'," + myString[5] + "," + myString[6] + "," + myString[7] + " ");
                             }
 
-                            opj.delData("export", "ord_id=" + ordTid);
-                            opj.delData("orders", "ord_id=" + ordTid);
-                            System.out.println(ordTid);
+                            if (jCheckBox_youm_old.isSelected()) {
+                                opj.delData("export", "lot=N'" + ToStringEnglish("" + jTable_yumia.getValueAt(jTable_yumia.getSelectedRow(), 2)) + "' "
+                                        + "and pro_id=(select pro_id from products where pro_name=N'" + jTable_yumia.getValueAt(jTable_yumia.getSelectedRow(), 1) + "') "
+                                        + "and cli_id=(select top(1) cli_id from clients where cli_name=N'" + jTable_yumia.getValueAt(jTable_yumia.getSelectedRow(), 0) + "')"
+                                        + " and exported_date = '" + ToStringEnglish("" + jTable_yumia.getValueAt(jTable_yumia.getSelectedRow(), 5)) + "'"
+                                        + "  and num_of_con is not null  and pallet_numb is not null         ");
+                                if (!opj.dataRead("*", "export", "lot=N'" + ToStringEnglish("" + jTable_yumia.getValueAt(jTable_yumia.getSelectedRow(), 2)) + "' "
+                                        + "and pro_id=(select pro_id from products where pro_name=N'" + jTable_yumia.getValueAt(jTable_yumia.getSelectedRow(), 1) + "') "
+                                        + "and cli_id=(select top(1) cli_id from clients where cli_name=N'" + jTable_yumia.getValueAt(jTable_yumia.getSelectedRow(), 0) + "')"
+                                        + " and exported_date = '" + ToStringEnglish("" + jTable_yumia.getValueAt(jTable_yumia.getSelectedRow(), 5)) + "'"
+                                        + "  and num_of_con is not null  and pallet_numb is not null         ").next()) {
+                                    JOptionPane.showMessageDialog(null, "<html><body><h1  style='font-family: Arial; font-size: 20pt; text-align: right; width: 150px;'> تم استرجاع البيان بنجاح  </h1></body></html>", "إنتبه", JOptionPane.PLAIN_MESSAGE);
+                                } else {
+                                    JOptionPane.showMessageDialog(null, "<html><body><h1  style='font-family: Arial; font-size: 20pt; text-align: right; width: 150px;'> حدث خطأ ما  </h1></body></html>", "إنتبه", JOptionPane.PLAIN_MESSAGE);
+                                }
 
-                            if (!opj.dataRead("*", "export", "ord_id=" + ordTid).next()) {
-                                JOptionPane.showMessageDialog(null, "<html><body><h1  style='font-family: Arial; font-size: 20pt; text-align: right; width: 150px;'> تم استرجاع البيان بنجاح  </h1></body></html>", "إنتبه", JOptionPane.PLAIN_MESSAGE);
                             } else {
-                                JOptionPane.showMessageDialog(null, "<html><body><h1  style='font-family: Arial; font-size: 20pt; text-align: right; width: 150px;'> حدث خطأ ما  </h1></body></html>", "إنتبه", JOptionPane.PLAIN_MESSAGE);
+                                opj.delData("export", "ord_id=" + ordTid);
+                                opj.delData("orders", "ord_id=" + ordTid);
+
+                                if (!opj.dataRead("*", "export", "ord_id=" + ordTid).next()) {
+                                    JOptionPane.showMessageDialog(null, "<html><body><h1  style='font-family: Arial; font-size: 20pt; text-align: right; width: 150px;'> تم استرجاع البيان بنجاح  </h1></body></html>", "إنتبه", JOptionPane.PLAIN_MESSAGE);
+                                } else {
+                                    JOptionPane.showMessageDialog(null, "<html><body><h1  style='font-family: Arial; font-size: 20pt; text-align: right; width: 150px;'> حدث خطأ ما  </h1></body></html>", "إنتبه", JOptionPane.PLAIN_MESSAGE);
+                                }
                             }
 
                             jButton_youm_search.doClick();
@@ -3266,6 +3293,7 @@ public class mainform extends javax.swing.JFrame {
     private javax.swing.JCheckBox jCheckBox_QR;
     private javax.swing.JCheckBox jCheckBox_print;
     private javax.swing.JCheckBox jCheckBox_rep_2n1;
+    private javax.swing.JCheckBox jCheckBox_youm_old;
     private javax.swing.JComboBox<String> jComboBox_E_O_proName;
     private javax.swing.JComboBox<String> jComboBox_E_proName;
     private javax.swing.JComboBox<String> jComboBox_pro_in_storage;
