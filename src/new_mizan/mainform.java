@@ -390,6 +390,7 @@ public class mainform extends javax.swing.JFrame {
         jTable_youm_clinets = new javax.swing.JTable();
         jButton_youm_getClients = new javax.swing.JButton();
         jCheckBox_youm_old = new javax.swing.JCheckBox();
+        jButton_youm_createExcel = new javax.swing.JButton();
         pause = new javax.swing.JPanel();
         jScrollPane9 = new javax.swing.JScrollPane();
         jTextArea_emp = new javax.swing.JTextArea();
@@ -1587,6 +1588,16 @@ public class mainform extends javax.swing.JFrame {
 
             jCheckBox_youm_old.setText("Old");
             yomia.add(jCheckBox_youm_old, new org.netbeans.lib.awtextra.AbsoluteConstraints(740, 140, -1, -1));
+
+            jButton_youm_createExcel.setBackground(new java.awt.Color(255, 255, 0));
+            jButton_youm_createExcel.setFont(new java.awt.Font("SansSerif", 0, 24)); // NOI18N
+            jButton_youm_createExcel.setText("طباعة البيان");
+            jButton_youm_createExcel.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    jButton_youm_createExcelActionPerformed(evt);
+                }
+            });
+            yomia.add(jButton_youm_createExcel, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 230, 150, 40));
 
             left_panel.add(yomia, "yomia");
 
@@ -2802,7 +2813,7 @@ public class mainform extends javax.swing.JFrame {
             ArrayList<Integer> reg = new ArrayList<>();
             while (st.next()) {
 
-                if (RowIndex >= 14) {
+                if (RowIndex >= 6) {
                     CellCopyPolicy poli = new CellCopyPolicy();
                     poli.setCopyCellStyle(true);
                     poli.setCopyCellValue(true);
@@ -2884,6 +2895,49 @@ public class mainform extends javax.swing.JFrame {
             evt.consume();
         }
     }//GEN-LAST:event_jTextField_youm_ClientFilterKeyTyped
+
+    private void jButton_youm_createExcelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_youm_createExcelActionPerformed
+        int RowIndex = 4;
+        XSSFWorkbook workbook;
+        try ( FileInputStream EX = new FileInputStream(new File("Donot_Change\\report.xlsx"))) {
+            workbook = new XSSFWorkbook(EX);
+            XSSFSheet sheet = workbook.getSheetAt(0);
+            Cell cell = sheet.getRow(1).getCell(1);
+            cell.setCellValue("الاستاذ :   " + jTable_yumia.getValueAt(0, 0) + "");
+            jTable_yumia.selectAll();
+            for (int selectedRow : jTable_yumia.getSelectedRows()) {
+                if (RowIndex >= 6) {
+                    CellCopyPolicy poli = new CellCopyPolicy();
+                    poli.setCopyCellStyle(true);
+                    poli.setCopyCellValue(true);
+                    sheet.copyRows(RowIndex - 1, RowIndex, RowIndex, poli);
+                }
+                cell = sheet.getRow(RowIndex).getCell(1);
+                cell.setCellValue(jTable_yumia.getValueAt(selectedRow, 1).toString());
+
+                cell = sheet.getRow(RowIndex).getCell(2);
+                cell.setCellValue(jTable_yumia.getValueAt(selectedRow, 2).toString());
+
+                cell = sheet.getRow(RowIndex).getCell(3);
+                cell.setCellValue(jTable_yumia.getValueAt(selectedRow, 3).toString());
+
+                cell = sheet.getRow(RowIndex).getCell(4);
+                cell.setCellValue(jTable_yumia.getValueAt(selectedRow, 4).toString());
+
+                cell = sheet.getRow(RowIndex).getCell(5);
+                cell.setCellValue(jTable_yumia.getValueAt(selectedRow, 5).toString());
+
+                RowIndex++;
+            }
+
+            try (FileOutputStream fileOut = new FileOutputStream(System.getProperty("user.dir") + "\\Temp\\report.xlsx")) {
+                workbook.write(fileOut);
+            }
+            JOptionPane.showMessageDialog(null, "please print the Execl", "Done", JOptionPane.PLAIN_MESSAGE);
+        } catch (IOException ex) {
+            JOptionPane.showMessageDialog(null, ex.getMessage(), "exception", JOptionPane.PLAIN_MESSAGE);
+        }
+    }//GEN-LAST:event_jButton_youm_createExcelActionPerformed
 
     private void jButton_bagmaxActionPerformed() throws IOException {
         open_panel(Settings);
@@ -3129,6 +3183,7 @@ public class mainform extends javax.swing.JFrame {
         try {
             while (st.next()) {
                 model.addRow(new Object[]{st.getString(1), st.getString(2), ToDoubleArabic(st.getString(3)), st.getString(4)});
+
             }
         } catch (SQLException ex) {
             Logger.getLogger(mainform.class
@@ -3162,6 +3217,7 @@ public class mainform extends javax.swing.JFrame {
             st = opj.dataRead("Color", "products", "pro_name=N'" + jComboBox_pro_in_storage.getSelectedItem() + "' ");
             while (st.next()) {
                 jTextField_Color.setText(st.getString(1));
+
             }
         } catch (SQLException ex) {
             Logger.getLogger(mainform.class
@@ -3190,6 +3246,7 @@ public class mainform extends javax.swing.JFrame {
                 while (st.next()) {
                     if (st.getString(1) != null) {
                         pallet_weight.setText(ToDoubleArabic(st.getString(1)));
+
                     }
                 }
             } catch (SQLException ex) {
@@ -3211,6 +3268,7 @@ public class mainform extends javax.swing.JFrame {
             try {
                 while (st.next()) {
                     model.addRow(new Object[]{ToDoubleArabic(st.getString(1)), ToDoubleArabic(st.getString(2)), ToDoubleArabic(st.getString(3))});
+
                 }
             } catch (SQLException ex) {
                 Logger.getLogger(mainform.class
@@ -3221,6 +3279,7 @@ public class mainform extends javax.swing.JFrame {
             try {
                 while (st.next()) {
                     model.addRow(new Object[]{ToDoubleArabic(st.getString(1)), ToDoubleArabic(st.getString(2)), ToDoubleArabic(st.getString(3))});
+
                 }
             } catch (SQLException ex) {
                 Logger.getLogger(mainform.class
@@ -3281,6 +3340,7 @@ public class mainform extends javax.swing.JFrame {
     private javax.swing.JButton jButton_set_Rest2;
     private javax.swing.JButton jButton_set_changearea;
     private javax.swing.JButton jButton_stock_createExcl;
+    private javax.swing.JButton jButton_youm_createExcel;
     private javax.swing.JButton jButton_youm_getClients;
     private javax.swing.JButton jButton_youm_refund;
     private javax.swing.JButton jButton_youm_search;
