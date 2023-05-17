@@ -70,7 +70,7 @@ public class mainform extends javax.swing.JFrame {
     private static int BagMax = 2;
     private float Xx = 0, Yy = 0, width = 19, hight = 19;
     private final JButton jButton_bagmax = new javax.swing.JButton();
-    String Version = "V 50.0.0";
+    String Version = "V 51.0.0";
 
     public mainform(sqlcon ops) throws IOException {
         initComponents();
@@ -1808,7 +1808,11 @@ public class mainform extends javax.swing.JFrame {
         if (evt.getKeyChar() == KeyEvent.VK_MINUS && (!jTextField_net_weight.getText().isBlank())) {
             double x = ToDoubleEnglish(jTextField_weight.getText());
             DecimalFormat df2 = new DecimalFormat("#.##");
-            jTextField_weight.setText(ToDoubleArabic(df2.format(x - 0.02) + ""));
+            if ((evt.getModifiersEx() & KeyEvent.SHIFT_DOWN_MASK) != 0) {
+                jTextField_weight.setText(ToDoubleArabic(df2.format(x + 0.02) + ""));
+            } else {
+                jTextField_weight.setText(ToDoubleArabic(df2.format(x - 0.02) + ""));
+            }
             calc_net_weight();
         }
         if (evt.getKeyChar() == KeyEvent.VK_ENTER && (!jTextField_net_weight.getText().isBlank())) {
@@ -2620,6 +2624,7 @@ public class mainform extends javax.swing.JFrame {
         jTextField_bag_weight.setText("");
         jTextField_weight.setText("");
         jTextField_net_weight.setText("");
+        jTextField_num_of_con.setText("");
         jTextField_num_of_con.requestFocus();
     }//GEN-LAST:event_jButton_clearActionPerformed
 
@@ -2930,7 +2935,7 @@ public class mainform extends javax.swing.JFrame {
                 RowIndex++;
             }
 
-            try (FileOutputStream fileOut = new FileOutputStream(System.getProperty("user.dir") + "\\Temp\\report.xlsx")) {
+            try ( FileOutputStream fileOut = new FileOutputStream(System.getProperty("user.dir") + "\\Temp\\report.xlsx")) {
                 workbook.write(fileOut);
             }
             JOptionPane.showMessageDialog(null, "please print the Execl", "Done", JOptionPane.PLAIN_MESSAGE);
@@ -2962,6 +2967,9 @@ public class mainform extends javax.swing.JFrame {
 
     void textbox_number_weight(KeyEvent event, JTextField textboxname, int length) {
         if (event.getKeyChar() == KeyEvent.VK_DELETE) {
+            if ((event.getModifiersEx() & KeyEvent.SHIFT_DOWN_MASK) != 0) {
+                jButton_clear.doClick();
+            }
             textboxname.setText("");
         }
         if (textboxname.getText().length() > length - 1 && event.getKeyChar() != KeyEvent.VK_ENTER && event.getKeyChar() != KeyEvent.VK_BACK_SPACE) {
@@ -3058,12 +3066,18 @@ public class mainform extends javax.swing.JFrame {
             event.consume();
         }
         if (event.getKeyChar() == KeyEvent.VK_DELETE) {
+            if ((event.getModifiersEx() & KeyEvent.SHIFT_DOWN_MASK) != 0) {
+                jButton_clear.doClick();
+            }
             textboxname.setText("");
         }
     }
 
     void textbox_number(KeyEvent event, JTextField textboxname, int length) {
         if (event.getKeyChar() == KeyEvent.VK_DELETE) {
+            if ((event.getModifiersEx() & KeyEvent.SHIFT_DOWN_MASK) != 0) {
+                jButton_clear.doClick();
+            }
             textboxname.setText("");
         }
         if (textboxname.getText().length() > length - 1 && event.getKeyChar() != KeyEvent.VK_ENTER && event.getKeyChar() != KeyEvent.VK_BACK_SPACE) {
