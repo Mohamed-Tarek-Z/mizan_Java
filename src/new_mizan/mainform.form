@@ -2528,6 +2528,9 @@
                           <TableHeader reorderingAllowed="false" resizingAllowed="true"/>
                         </Property>
                       </Properties>
+                      <Events>
+                        <EventHandler event="mouseReleased" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jTable_yumiaMouseReleased"/>
+                      </Events>
                     </Component>
                   </SubComponents>
                 </Container>
