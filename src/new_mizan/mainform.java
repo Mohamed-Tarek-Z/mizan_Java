@@ -70,7 +70,7 @@ public class mainform extends javax.swing.JFrame {
     private static int BagMax = 2;
     private float Xx = 0, Yy = 0, width = 19, hight = 19;
     private final JButton jButton_bagmax = new javax.swing.JButton();
-    String Version = "V 52.0.0";
+    String Version = "V 53.0.0";
 
     public mainform(sqlcon ops) throws IOException {
         initComponents();
@@ -2954,16 +2954,15 @@ public class mainform extends javax.swing.JFrame {
         if (evt.getClickCount() == 3) {
             TableModel model = jTable_yumia.getModel();
             String temp = "";
-            ResultSet st = opj.dataRead("STRING_AGG(pal,',')", "(SELECT distinct pallet_numb as pal FROM export inner join orders on orders.ord_id=export.ord_id where pro_id = ( select pro_id from products where pro_name =N'"
+            ResultSet st = opj.dataRead("distinct pallet_numb", "export inner join orders on orders.ord_id=export.ord_id", "pro_id = ( select pro_id from products where pro_name =N'"
                     + model.getValueAt(jTable_yumia.getSelectedRow(), 1).toString() + "') and"
                     + " cli_id IN ( select cli_id from clients where cli_name=N'" + model.getValueAt(jTable_yumia.getSelectedRow(), 0).toString() + "') and"
                     + " lot = N'" + ToStringEnglish(model.getValueAt(jTable_yumia.getSelectedRow(), 2).toString()) + "' and"
                     + " exported_date='" + ToStringEnglish(model.getValueAt(jTable_yumia.getSelectedRow(), 5).toString()) + "'and ord_wight ="
-                    + ToDoubleEnglish(model.getValueAt(jTable_yumia.getSelectedRow(), 4).toString())
-                    + "	group by pallet_numb)as temp");
+                    + ToDoubleEnglish(model.getValueAt(jTable_yumia.getSelectedRow(), 4).toString()));
             try {
                 while (st.next()) {
-                    temp = st.getString(1);
+                    temp += st.getString(1)+" , ";
                 }
                 JOptionPane.showMessageDialog(null, temp, "Pallets", JOptionPane.PLAIN_MESSAGE);
             } catch (SQLException ex) {
