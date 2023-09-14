@@ -70,11 +70,10 @@ public class mainform extends javax.swing.JFrame {
     private static int BagMax = 2;
     private float Xx = 0, Yy = 0, width = 19, hight = 19;
     private final JButton jButton_bagmax = new javax.swing.JButton();
-    String Version = "V 53.0.0";
+    String Version = "V 54.0.1";
 
     public mainform(sqlcon ops) throws IOException {
         initComponents();
-
         this.setDefaultCloseOperation(mainform.DO_NOTHING_ON_CLOSE);
         if (!login_form.admin) {
             jButton_addPro_opener.setEnabled(false);
@@ -88,7 +87,7 @@ public class mainform extends javax.swing.JFrame {
                     jButton_bagmaxActionPerformed();
                 } catch (IOException ex) {
                     Logger.getLogger(mainform.class.getName()).log(Level.SEVERE, null, ex);
-                    JOptionPane.showMessageDialog(null, ex.getMessage(), "exception", JOptionPane.PLAIN_MESSAGE);
+                    JOptionPane.showMessageDialog(this, ex.getMessage(), "exception", JOptionPane.PLAIN_MESSAGE);
                 }
             });
             right_panel_menu.add(jButton_bagmax, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 520, 110, 40));
@@ -106,6 +105,7 @@ public class mainform extends javax.swing.JFrame {
         combox_fill(this.jComboBox_rep_Pros, opj.dataRead("pro_name", "products"), true);
         combox_fill(this.jComboBox_E_O_proName, opj.dataRead("pro_name", "products"), true);
         combox_fill(this.jComboBox_E_proName, opj.dataRead("pro_name", "products"), true);
+        combox_fill(this.jComboBox_ME_type, opj.dataRead("pro_name", "products"), true);
         tick1num = loadTicknum("TicketNumber1.txt");
         tick2num = loadTicknum("TicketNumber2.txt");
     }
@@ -159,6 +159,8 @@ public class mainform extends javax.swing.JFrame {
         jLabel48 = new javax.swing.JLabel();
         jButton_ME_Edit = new javax.swing.JButton();
         jLabel53 = new javax.swing.JLabel();
+        jLabel21 = new javax.swing.JLabel();
+        jComboBox_ME_type = new javax.swing.JComboBox<>();
         jSplitPane1 = new javax.swing.JSplitPane();
         right_panel_menu = new javax.swing.JPanel();
         jButton_Mizan_opener = new javax.swing.JButton();
@@ -416,12 +418,18 @@ public class mainform extends javax.swing.JFrame {
         jFileChooser1.setDialogType(javax.swing.JFileChooser.SAVE_DIALOG);
         jFileChooser1.setCurrentDirectory(new java.io.File("F:\\"));
             jFileChooser1.setFileSelectionMode(javax.swing.JFileChooser.DIRECTORIES_ONLY);
+            jFileChooser1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
 
             SingleEdit.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
             SingleEdit.setTitle("Single Edit");
             SingleEdit.setAlwaysOnTop(true);
+            SingleEdit.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
             SingleEdit.setLocation(new java.awt.Point(100, 100));
+            SingleEdit.setLocationByPlatform(true);
+            SingleEdit.setMaximumSize(new java.awt.Dimension(780, 400));
             SingleEdit.setMinimumSize(new java.awt.Dimension(780, 400));
+            SingleEdit.setName("Single Edit"); // NOI18N
+            SingleEdit.setPreferredSize(new java.awt.Dimension(780, 400));
             SingleEdit.setResizable(false);
             SingleEdit.setType(java.awt.Window.Type.POPUP);
             SingleEdit.addWindowListener(new java.awt.event.WindowAdapter() {
@@ -612,11 +620,13 @@ public class mainform extends javax.swing.JFrame {
             MultiEdit.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
             MultiEdit.setTitle("Multi Edit");
             MultiEdit.setAlwaysOnTop(true);
+            MultiEdit.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
             MultiEdit.setLocation(new java.awt.Point(100, 100));
             MultiEdit.setLocationByPlatform(true);
-            MultiEdit.setMaximumSize(new java.awt.Dimension(500, 290));
-            MultiEdit.setMinimumSize(new java.awt.Dimension(500, 290));
-            MultiEdit.setPreferredSize(new java.awt.Dimension(500, 290));
+            MultiEdit.setMaximumSize(new java.awt.Dimension(500, 350));
+            MultiEdit.setMinimumSize(new java.awt.Dimension(500, 350));
+            MultiEdit.setName("Multi Edit"); // NOI18N
+            MultiEdit.setPreferredSize(new java.awt.Dimension(500, 350));
             MultiEdit.setResizable(false);
             MultiEdit.setType(java.awt.Window.Type.POPUP);
             MultiEdit.addWindowListener(new java.awt.event.WindowAdapter() {
@@ -633,7 +643,7 @@ public class mainform extends javax.swing.JFrame {
                     jTextField_ME_lotKeyTyped(evt);
                 }
             });
-            MultiEdit.getContentPane().add(jTextField_ME_lot, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 100, 90, -1));
+            MultiEdit.getContentPane().add(jTextField_ME_lot, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 170, 90, -1));
 
             jTextField_ME_PaltNum.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
             jTextField_ME_PaltNum.setHorizontalAlignment(javax.swing.JTextField.CENTER);
@@ -642,15 +652,15 @@ public class mainform extends javax.swing.JFrame {
                     jTextField_ME_PaltNumKeyTyped(evt);
                 }
             });
-            MultiEdit.getContentPane().add(jTextField_ME_PaltNum, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 100, 90, -1));
+            MultiEdit.getContentPane().add(jTextField_ME_PaltNum, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 170, 90, -1));
 
             jLabel47.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
             jLabel47.setText("رقم البالته");
-            MultiEdit.getContentPane().add(jLabel47, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 60, -1, -1));
+            MultiEdit.getContentPane().add(jLabel47, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 130, -1, -1));
 
             jLabel48.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
             jLabel48.setText("رقم اللوط");
-            MultiEdit.getContentPane().add(jLabel48, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 60, -1, -1));
+            MultiEdit.getContentPane().add(jLabel48, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 130, -1, -1));
 
             jButton_ME_Edit.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
             jButton_ME_Edit.setText("تعديل");
@@ -659,16 +669,25 @@ public class mainform extends javax.swing.JFrame {
                     jButton_ME_EditActionPerformed(evt);
                 }
             });
-            MultiEdit.getContentPane().add(jButton_ME_Edit, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 150, 170, 60));
+            MultiEdit.getContentPane().add(jButton_ME_Edit, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 220, 170, 60));
 
             jLabel53.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
             jLabel53.setText("القيم الجديده");
-            MultiEdit.getContentPane().add(jLabel53, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 20, -1, -1));
+            MultiEdit.getContentPane().add(jLabel53, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 10, -1, -1));
+
+            jLabel21.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+            jLabel21.setText("الصنف");
+            MultiEdit.getContentPane().add(jLabel21, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 50, -1, -1));
+
+            jComboBox_ME_type.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+            MultiEdit.getContentPane().add(jComboBox_ME_type, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 80, 220, -1));
 
             MultiEdit.getAccessibleContext().setAccessibleName("Multiedit_Window");
 
             setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
             setTitle("mizan program " + Version);
+            setAlwaysOnTop(true);
+            setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
             setLocation(new java.awt.Point(0, 0));
             setLocationByPlatform(true);
             setMaximumSize(new java.awt.Dimension(1020, 700));
@@ -685,18 +704,20 @@ public class mainform extends javax.swing.JFrame {
             jSplitPane1.setDividerLocation(840);
             jSplitPane1.setEnabled(false);
             jSplitPane1.setFocusable(false);
+            jSplitPane1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
             jSplitPane1.setMaximumSize(new java.awt.Dimension(1020, 655));
             jSplitPane1.setMinimumSize(new java.awt.Dimension(1020, 655));
             jSplitPane1.setName(""); // NOI18N
             jSplitPane1.setPreferredSize(new java.awt.Dimension(1010, 650));
 
+            right_panel_menu.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
             right_panel_menu.setMaximumSize(new java.awt.Dimension(110, 650));
             right_panel_menu.setMinimumSize(new java.awt.Dimension(110, 650));
             right_panel_menu.setPreferredSize(new java.awt.Dimension(110, 650));
             right_panel_menu.setRequestFocusEnabled(false);
             right_panel_menu.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-            jButton_Mizan_opener.setFont(new java.awt.Font("sansserif", 0, 18)); // NOI18N
+            jButton_Mizan_opener.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
             jButton_Mizan_opener.setText("ميزان");
             jButton_Mizan_opener.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -705,7 +726,7 @@ public class mainform extends javax.swing.JFrame {
             });
             right_panel_menu.add(jButton_Mizan_opener, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 10, 110, 40));
 
-            jButton_addPro_opener.setFont(new java.awt.Font("sansserif", 0, 18)); // NOI18N
+            jButton_addPro_opener.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
             jButton_addPro_opener.setText("إضافه صنف");
             jButton_addPro_opener.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -714,7 +735,7 @@ public class mainform extends javax.swing.JFrame {
             });
             right_panel_menu.add(jButton_addPro_opener, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 130, 110, 40));
 
-            jButton_Ezn_opener.setFont(new java.awt.Font("sansserif", 0, 18)); // NOI18N
+            jButton_Ezn_opener.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
             jButton_Ezn_opener.setText("إذن غزل");
             jButton_Ezn_opener.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -723,7 +744,7 @@ public class mainform extends javax.swing.JFrame {
             });
             right_panel_menu.add(jButton_Ezn_opener, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 70, 110, 40));
 
-            jButton_DoBack.setFont(new java.awt.Font("sansserif", 0, 24)); // NOI18N
+            jButton_DoBack.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
             jButton_DoBack.setText("باك أب");
             jButton_DoBack.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -732,7 +753,7 @@ public class mainform extends javax.swing.JFrame {
             });
             right_panel_menu.add(jButton_DoBack, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 190, 110, 40));
 
-            jButton_Stock_opener.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+            jButton_Stock_opener.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
             jButton_Stock_opener.setText("رصيد");
             jButton_Stock_opener.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -741,7 +762,7 @@ public class mainform extends javax.swing.JFrame {
             });
             right_panel_menu.add(jButton_Stock_opener, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 250, 110, 40));
 
-            jButton_Statics_opener.setFont(new java.awt.Font("Tahoma", 0, 20)); // NOI18N
+            jButton_Statics_opener.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
             jButton_Statics_opener.setText("إحصائيات");
             jButton_Statics_opener.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -750,7 +771,7 @@ public class mainform extends javax.swing.JFrame {
             });
             right_panel_menu.add(jButton_Statics_opener, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 310, 110, 40));
 
-            jButton_Outs_opener.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+            jButton_Outs_opener.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
             jButton_Outs_opener.setText("يوميه");
             jButton_Outs_opener.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -759,7 +780,7 @@ public class mainform extends javax.swing.JFrame {
             });
             right_panel_menu.add(jButton_Outs_opener, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 370, 110, 40));
 
-            jButton_Emp_opener.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+            jButton_Emp_opener.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
             jButton_Emp_opener.setText("أي");
             jButton_Emp_opener.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -768,7 +789,7 @@ public class mainform extends javax.swing.JFrame {
             });
             right_panel_menu.add(jButton_Emp_opener, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 460, 110, 40));
 
-            jLabel_version.setFont(new java.awt.Font("Segoe UI", 2, 20)); // NOI18N
+            jLabel_version.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
             jLabel_version.setText(Version);
             jLabel_version.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(255, 51, 51), 3, true));
             jLabel_version.setCursor(new java.awt.Cursor(java.awt.Cursor.CROSSHAIR_CURSOR));
@@ -782,11 +803,13 @@ public class mainform extends javax.swing.JFrame {
             jSplitPane1.setRightComponent(right_panel_menu);
 
             left_panel.setBorder(new javax.swing.border.MatteBorder(null));
+            left_panel.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
             left_panel.setMaximumSize(new java.awt.Dimension(895, 650));
             left_panel.setMinimumSize(new java.awt.Dimension(840, 645));
             left_panel.setPreferredSize(new java.awt.Dimension(840, 645));
             left_panel.setLayout(new java.awt.CardLayout());
 
+            in_data.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
             in_data.setMaximumSize(new java.awt.Dimension(835, 640));
             in_data.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
@@ -859,7 +882,6 @@ public class mainform extends javax.swing.JFrame {
             in_data.add(jButton_del_data, new org.netbeans.lib.awtextra.AbsoluteConstraints(605, 590, 80, 50));
 
             jComboBox_pro_in_storage.setFont(new java.awt.Font("sansserif", 0, 18)); // NOI18N
-            jComboBox_pro_in_storage.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
             jComboBox_pro_in_storage.addItemListener(new java.awt.event.ItemListener() {
                 public void itemStateChanged(java.awt.event.ItemEvent evt) {
                     jComboBox_pro_in_storageItemStateChanged(evt);
@@ -1101,6 +1123,7 @@ public class mainform extends javax.swing.JFrame {
 
             left_panel.add(in_data, "Mizan");
 
+            reports.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
             reports.setMaximumSize(new java.awt.Dimension(835, 640));
             reports.setMinimumSize(new java.awt.Dimension(835, 640));
             reports.setPreferredSize(new java.awt.Dimension(835, 640));
@@ -1264,6 +1287,7 @@ public class mainform extends javax.swing.JFrame {
 
             left_panel.add(reports, "Ezn");
 
+            add_product.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
             add_product.setMaximumSize(new java.awt.Dimension(835, 640));
             add_product.setMinimumSize(new java.awt.Dimension(835, 640));
             add_product.setPreferredSize(new java.awt.Dimension(835, 640));
@@ -1363,6 +1387,7 @@ public class mainform extends javax.swing.JFrame {
 
             left_panel.add(add_product, "add Pro");
 
+            stock.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
             stock.setMaximumSize(new java.awt.Dimension(835, 640));
             stock.setMinimumSize(new java.awt.Dimension(835, 640));
             stock.setPreferredSize(new java.awt.Dimension(835, 640));
@@ -1415,6 +1440,7 @@ public class mainform extends javax.swing.JFrame {
 
             left_panel.add(stock, "stock");
 
+            statistics.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
             statistics.setMaximumSize(new java.awt.Dimension(835, 640));
             statistics.setMinimumSize(new java.awt.Dimension(835, 640));
             statistics.setPreferredSize(new java.awt.Dimension(835, 640));
@@ -1476,6 +1502,7 @@ public class mainform extends javax.swing.JFrame {
 
             left_panel.add(statistics, "statis");
 
+            yomia.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
             yomia.setMaximumSize(new java.awt.Dimension(835, 640));
             yomia.setMinimumSize(new java.awt.Dimension(835, 640));
             yomia.setPreferredSize(new java.awt.Dimension(835, 640));
@@ -1608,6 +1635,7 @@ public class mainform extends javax.swing.JFrame {
 
             pause.setEnabled(false);
             pause.setFocusable(false);
+            pause.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
             pause.setMaximumSize(new java.awt.Dimension(835, 640));
             pause.setMinimumSize(new java.awt.Dimension(835, 640));
             pause.setPreferredSize(new java.awt.Dimension(835, 640));
@@ -1633,6 +1661,7 @@ public class mainform extends javax.swing.JFrame {
 
             left_panel.add(pause, "emp");
 
+            Settings.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
             Settings.setMaximumSize(new java.awt.Dimension(835, 640));
             Settings.setMinimumSize(new java.awt.Dimension(835, 640));
             Settings.setPreferredSize(new java.awt.Dimension(835, 640));
@@ -1825,6 +1854,11 @@ public class mainform extends javax.swing.JFrame {
             jTextField_num_of_con.requestFocusInWindow();
             jButton_add_data.doClick();
         }
+        if (evt.getKeyChar() == KeyEvent.VK_DELETE) {
+            if ((evt.getModifiersEx() & KeyEvent.SHIFT_DOWN_MASK) != 0) {
+                jButton_clear.doClick();
+            }
+        }
     }//GEN-LAST:event_jTextField_net_weightKeyTyped
 
     private void jTextField_bag_weightKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_bag_weightKeyTyped
@@ -1882,13 +1916,13 @@ public class mainform extends javax.swing.JFrame {
                     st.next();
                     int NUC = st.getInt(1);
                     if (UC > 0 && NUC > 0) {
-                        JOptionPane.showMessageDialog(null, "<html><body><h1  style='font-family: Arial; font-size: 20pt; text-align: right; width: 150px;'> رجاء حل مشكلة التعليم اولا</h1></body></html>", "إنتبه", JOptionPane.PLAIN_MESSAGE);
+                        JOptionPane.showMessageDialog(this, " رجاء حل مشكلة التعليم اولا", "إنتبه", JOptionPane.PLAIN_MESSAGE);
                         return;
                     } else if ((UC == 0 && NUC > 0) && jCheckBox_M_Markpage.isSelected()) {
-                        JOptionPane.showMessageDialog(null, "<html><body><h1  style='font-family: Arial; font-size: 20pt; text-align: right; width: 150px;'> خطأ في تعليم الشكاره</h1></body></html>", "إنتبه", JOptionPane.PLAIN_MESSAGE);
+                        JOptionPane.showMessageDialog(this, " خطأ في تعليم الشكاره", "إنتبه", JOptionPane.PLAIN_MESSAGE);
                         return;
                     } else if ((NUC == 0 && UC > 0) && !jCheckBox_M_Markpage.isSelected()) {
-                        JOptionPane.showMessageDialog(null, "<html><body><h1  style='font-family: Arial; font-size: 20pt; text-align: right; width: 150px;'> خطأ في تعليم الشكاره</h1></body></html>", "إنتبه", JOptionPane.PLAIN_MESSAGE);
+                        JOptionPane.showMessageDialog(this, " خطأ في تعليم الشكاره", "إنتبه", JOptionPane.PLAIN_MESSAGE);
                         return;
                     }
 
@@ -1922,7 +1956,7 @@ public class mainform extends javax.swing.JFrame {
                             jTextField_bag_weight.setText("");
                             fill_storage_table();
                         } else {
-                            JOptionPane.showMessageDialog(null, "<html><body><h1  style='font-family: Arial; font-size: 20pt; text-align: right; width: 150px;'>printing faild</h1></body></html>", "إنتبه", JOptionPane.PLAIN_MESSAGE);
+                            JOptionPane.showMessageDialog(this, "printing faild", "إنتبه", JOptionPane.PLAIN_MESSAGE);
                         }
                     } else {
                         jTextField_net_weight.setText("");
@@ -1931,33 +1965,33 @@ public class mainform extends javax.swing.JFrame {
                         fill_storage_table();
                     }
                 } else {
-                    JOptionPane.showMessageDialog(null, "<html><body><h1  style='font-family: Arial; font-size: 20pt; text-align: right; width: 150px;'>خطأ في وزن الشيكاره </h1></body></html>", "إنتبه", JOptionPane.PLAIN_MESSAGE);
+                    JOptionPane.showMessageDialog(this, "خطأ في وزن الشيكاره ", "إنتبه", JOptionPane.PLAIN_MESSAGE);
                     jTextField_weight.requestFocus();
                     jTextField_weight.selectAll();
                 }
             } else {
-                JOptionPane.showMessageDialog(null, "<html><body><h1  style='font-family: Arial; font-size: 20pt; text-align: right; width: 150px;'> برجاء إدخال البيانات كامله</h1></body></html>", "إنتبه", JOptionPane.PLAIN_MESSAGE);
+                JOptionPane.showMessageDialog(this, " برجاء إدخال البيانات كامله", "إنتبه", JOptionPane.PLAIN_MESSAGE);
             }
         } catch (WriterException | HeadlessException | IOException | SQLException | PrinterException | InterruptedException ex) {
             Logger.getLogger(mainform.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(null, ex.getMessage(), "exception", JOptionPane.PLAIN_MESSAGE);
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "exception", JOptionPane.PLAIN_MESSAGE);
         }
     }//GEN-LAST:event_jButton_add_dataActionPerformed
 
     private void jButton_del_dataActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_del_dataActionPerformed
-        if (JOptionPane.showConfirmDialog(null, "هل تريد الحذف ؟", "تنبيه", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+        if (JOptionPane.showConfirmDialog(this, "هل تريد الحذف ؟", "تنبيه", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
             if (jTable_storage.getSelectedRowCount() == 1) {
                 opj.delData("storage", "storage_id=" + Integer.valueOf(jTable_storage.getModel().getValueAt(jTable_storage.getSelectedRow(), 4).toString()) + " ");
-                JOptionPane.showMessageDialog(null, "<html><body><h1  style='font-family: Arial; font-size: 20pt; text-align: right; width: 150px;'> تم حذف البيان بنجاح </h1></body></html>", "ناجح", JOptionPane.PLAIN_MESSAGE);
+                JOptionPane.showMessageDialog(this, " تم حذف البيان بنجاح ", "ناجح", JOptionPane.PLAIN_MESSAGE);
                 fill_storage_table();
             } else if (jTable_storage.getSelectedRowCount() > 1) {
                 for (int row : jTable_storage.getSelectedRows()) {
                     opj.delData("storage", "storage_id=" + Integer.valueOf(jTable_storage.getModel().getValueAt(row, 4).toString()) + " ");
                 }
                 fill_storage_table();
-                JOptionPane.showMessageDialog(null, "<html><body><h1  style='font-family: Arial; font-size: 20pt; text-align: right; width: 150px;'> تم حذف البيــانات بنجاح </h1></body></html>", "ناجح", JOptionPane.PLAIN_MESSAGE);
+                JOptionPane.showMessageDialog(this, " تم حذف البيــانات بنجاح ", "ناجح", JOptionPane.PLAIN_MESSAGE);
             } else {
-                JOptionPane.showMessageDialog(null, "<html><body><h1  style='font-family: Arial; font-size: 20pt; text-align: right; width: 150px;'> برجاء أختيار بيان من الجدول أولا  </h1></body></html>", "إنتبه", JOptionPane.PLAIN_MESSAGE);
+                JOptionPane.showMessageDialog(this, " برجاء أختيار بيان من الجدول أولا  ", "إنتبه", JOptionPane.PLAIN_MESSAGE);
             }
         }
     }//GEN-LAST:event_jButton_del_dataActionPerformed
@@ -1965,11 +1999,11 @@ public class mainform extends javax.swing.JFrame {
     private void jButton_add_proActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_add_proActionPerformed
         if (pro_Table_SelectedID == 0) {
             if (jTextField_pro_name.getText().isBlank() || jTextField_Pros_conWight.getText().isBlank()) {
-                JOptionPane.showMessageDialog(null, "<html><body><h1  style='font-family: Arial; font-size: 20pt; text-align: right; width: 150px;'> برجاء أدخال البيانات كامله  </h1></body></html>", "إنتبه", JOptionPane.PLAIN_MESSAGE);
+                JOptionPane.showMessageDialog(this, " برجاء أدخال البيانات كامله  ", "إنتبه", JOptionPane.PLAIN_MESSAGE);
             } else {
                 try {
                     if (opj.dataRead("*", "products", "pro_name=N'" + jTextField_pro_name.getText() + "'").next()) {
-                        JOptionPane.showMessageDialog(null, "<html><body><h1  style='font-family: Arial; font-size: 20pt; text-align: right; width: 150px;'>  هذا الصنف موجود بالفعل </h1></body></html>", "إنتبه", JOptionPane.PLAIN_MESSAGE);
+                        JOptionPane.showMessageDialog(this, "  هذا الصنف موجود بالفعل ", "إنتبه", JOptionPane.PLAIN_MESSAGE);
                     } else {
                         opj.inData("products", "pro_name,weight_of_con,Color", "N'" + jTextField_pro_name.getText() + "',N'" + ToStringEnglish(jTextField_Pros_conWight.getText()) + "',N'" + jTextField_Pros_color.getText() + "'");
                         jTextField_pro_name.setText("");
@@ -1978,16 +2012,16 @@ public class mainform extends javax.swing.JFrame {
                         fill_pro_table();
                         combox_fill(jComboBox_pro_in_storage, opj.dataRead("pro_name", "products"), true);
                         combox_fill(jComboBox_rep_Pros, opj.dataRead("pro_name", "products"), true);
-                        JOptionPane.showMessageDialog(null, "<html><body><h1  style='font-family: Arial; font-size: 20pt; text-align: right; width: 150px;'> تم إدخال الصنف بنجاح  </h1></body></html>", "ناجح", JOptionPane.PLAIN_MESSAGE);
+                        JOptionPane.showMessageDialog(this, " تم إدخال الصنف بنجاح  ", "ناجح", JOptionPane.PLAIN_MESSAGE);
                     }
                 } catch (SQLException ex) {
                     Logger.getLogger(mainform.class.getName()).log(Level.SEVERE, null, ex);
-                    JOptionPane.showMessageDialog(null, ex.getMessage(), "exception", JOptionPane.PLAIN_MESSAGE);
+                    JOptionPane.showMessageDialog(this, ex.getMessage(), "exception", JOptionPane.PLAIN_MESSAGE);
                 }
             }
         } else {
             if (jTextField_pro_name.getText().isBlank()) {
-                JOptionPane.showMessageDialog(null, "<html><body><h1  style='font-family: Arial; font-size: 20pt; text-align: right; width: 150px;'> برجاء أدخال اسم الصنف  </h1></body></html>", "إنتبه", JOptionPane.PLAIN_MESSAGE);
+                JOptionPane.showMessageDialog(this, " برجاء أدخال اسم الصنف  ", "إنتبه", JOptionPane.PLAIN_MESSAGE);
             } else {
                 opj.update("products", "pro_name=N'" + jTextField_pro_name.getText() + "' ,weight_of_con=N'" + ToStringEnglish(jTextField_Pros_conWight.getText()) + "' ,Color=N'" + jTextField_Pros_color.getText() + "' ", "pro_id=" + pro_Table_SelectedID + " ");
                 pro_Table_SelectedID = 0;
@@ -1997,7 +2031,7 @@ public class mainform extends javax.swing.JFrame {
                 fill_pro_table();
                 combox_fill(jComboBox_pro_in_storage, opj.dataRead("pro_name", "products"), true);
                 combox_fill(jComboBox_rep_Pros, opj.dataRead("pro_name", "products"), true);
-                JOptionPane.showMessageDialog(null, "<html><body><h1  style='font-family: Arial; font-size: 20pt; text-align: right; width: 150px;'>  تم تعديل الصنف بنجاح </h1></body></html>", "ناجح", JOptionPane.PLAIN_MESSAGE);
+                JOptionPane.showMessageDialog(this, "  تم تعديل الصنف بنجاح ", "ناجح", JOptionPane.PLAIN_MESSAGE);
             }
         }
     }//GEN-LAST:event_jButton_add_proActionPerformed
@@ -2020,7 +2054,7 @@ public class mainform extends javax.swing.JFrame {
             jTextField_Pros_conWight.setText(model.getValueAt(jTable_pro.getSelectedRow(), 2).toString());
             pro_Table_SelectedID = Integer.parseInt(model.getValueAt(jTable_pro.getSelectedRow(), 0).toString());
         } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(null, e.getMessage(), "exception", JOptionPane.PLAIN_MESSAGE);
+            JOptionPane.showMessageDialog(this, e.getMessage(), "exception", JOptionPane.PLAIN_MESSAGE);
         }
     }//GEN-LAST:event_jTable_proMouseClicked
 
@@ -2029,21 +2063,21 @@ public class mainform extends javax.swing.JFrame {
             try {
                 if (!opj.dataRead("*", "storage", "pro_id=" + pro_Table_SelectedID + "").next()) {
                     opj.delData("products", "pro_id=" + pro_Table_SelectedID + " ");
-                    JOptionPane.showMessageDialog(null, "<html><body><h1  style='font-family: Arial; font-size: 20pt; text-align: right; width: 150px;'>  تم حذف الصنف بنجاح </h1></body></html>", "ناجح", JOptionPane.PLAIN_MESSAGE);
+                    JOptionPane.showMessageDialog(this, "  تم حذف الصنف بنجاح ", "ناجح", JOptionPane.PLAIN_MESSAGE);
                     jTextField_pro_name.setText("");
                     pro_Table_SelectedID = 0;
                     fill_pro_table();
                     combox_fill(jComboBox_pro_in_storage, opj.dataRead("pro_name", "products"), true);
                     combox_fill(jComboBox_rep_Pros, opj.dataRead("pro_name", "products"), true);
                 } else {
-                    JOptionPane.showMessageDialog(null, "<html><body><h1  style='font-family: Arial; font-size: 20pt; text-align: right; width: 150px;'> لا يمكن حذف هذا الصنف  </h1></body></html>", "إنتبه", JOptionPane.PLAIN_MESSAGE);
+                    JOptionPane.showMessageDialog(this, " لا يمكن حذف هذا الصنف  ", "إنتبه", JOptionPane.PLAIN_MESSAGE);
                 }
             } catch (SQLException ex) {
                 Logger.getLogger(mainform.class.getName()).log(Level.SEVERE, null, ex);
-                JOptionPane.showMessageDialog(null, ex.getMessage(), "exception", JOptionPane.PLAIN_MESSAGE);
+                JOptionPane.showMessageDialog(this, ex.getMessage(), "exception", JOptionPane.PLAIN_MESSAGE);
             }
         } else {
-            JOptionPane.showMessageDialog(null, "<html><body><h1  style='font-family: Arial; font-size: 20pt; text-align: right; width: 150px;'> برجاء أختيار صنف من الجدول أولا  </h1></body></html>", "إنتبه", JOptionPane.PLAIN_MESSAGE);
+            JOptionPane.showMessageDialog(this, " برجاء أختيار صنف من الجدول أولا  ", "إنتبه", JOptionPane.PLAIN_MESSAGE);
         }
 
     }//GEN-LAST:event_jButton_del_proActionPerformed
@@ -2080,7 +2114,7 @@ public class mainform extends javax.swing.JFrame {
                 }
             } catch (SQLException ex) {
                 Logger.getLogger(mainform.class.getName()).log(Level.SEVERE, null, ex);
-                JOptionPane.showMessageDialog(null, ex.getMessage(), "exception", JOptionPane.PLAIN_MESSAGE);
+                JOptionPane.showMessageDialog(this, ex.getMessage(), "exception", JOptionPane.PLAIN_MESSAGE);
             }
             ((DefaultTableModel) jTable_rep_preview.getModel()).setRowCount(0);
             serial = 0;
@@ -2101,7 +2135,7 @@ public class mainform extends javax.swing.JFrame {
 
         if (jTable_rep_preview.getRowCount() >= 0 && !jTextField_rep_clientName.getText().isBlank() && jTable_rep_preview.getRowCount() == (int) ToDoubleEnglish(jTextField_rep_numOfBag.getText())) {
 
-            if (JOptionPane.showConfirmDialog(null, "<html><body><h1  style='font-family: Arial; font-size: 20pt; text-align: right; width: 150px;'>  سيتم التصدير للأكسل </h1></body></html>", "تنبيه",
+            if (JOptionPane.showConfirmDialog(this, "  سيتم التصدير للأكسل ", "تنبيه",
                     JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
                 print_shit opject = new print_shit();
                 if (Integer.parseInt(jTextField_rep_numOfBag.getText()) <= 60 && jCheckBox_rep_2n1.isSelected()) {
@@ -2126,11 +2160,11 @@ public class mainform extends javax.swing.JFrame {
                         jTextField_rep_totweight.setText("");
                         jComboBox_rep_palletsNrep.removeAllItems();
 
-                        JOptionPane.showMessageDialog(null, "<html><body><h1  style='font-family: Arial; font-size: 20pt; text-align: right; width: 150px;'> ادخل الأذن الثاني  </h1></body></html>", "إنتبه", JOptionPane.PLAIN_MESSAGE);
+                        JOptionPane.showMessageDialog(this, " ادخل الأذن الثاني  ", "إنتبه", JOptionPane.PLAIN_MESSAGE);
 
                     } else {
                         if (name_of_type == jComboBox_rep_Pros.getSelectedItem() && first_table.getValueAt(0, 2).toString().equals(ToStringEnglish(jTable_rep_preview.getValueAt(0, 2).toString()))) {
-                            JOptionPane.showMessageDialog(null, "<html><body><h1  style='font-family: Arial; font-size: 20pt; text-align: right; width: 150px;'> برجاء تغير الصنف أو اللوط  </h1></body></html>", "إنتبه", JOptionPane.PLAIN_MESSAGE);
+                            JOptionPane.showMessageDialog(this, " برجاء تغير الصنف أو اللوط  ", "إنتبه", JOptionPane.PLAIN_MESSAGE);
 
                             second = !second;
                         } else {
@@ -2154,7 +2188,7 @@ public class mainform extends javax.swing.JFrame {
 
             }
         } else {
-            JOptionPane.showMessageDialog(null, "<html><body><h1  style='font-family: Arial; font-size: 20pt; text-align: right; width: 150px;'> تدخل البيانات كامله أولا  </h1></body></html>", "إنتبه", JOptionPane.PLAIN_MESSAGE);
+            JOptionPane.showMessageDialog(this, " تدخل البيانات كامله أولا  ", "إنتبه", JOptionPane.PLAIN_MESSAGE);
         }
 
     }//GEN-LAST:event_jButton_rep_printRepActionPerformed
@@ -2173,7 +2207,7 @@ public class mainform extends javax.swing.JFrame {
                 }
             } catch (SQLException ex) {
                 Logger.getLogger(mainform.class.getName()).log(Level.SEVERE, null, ex);
-                JOptionPane.showMessageDialog(null, ex.getMessage(), "exception", JOptionPane.PLAIN_MESSAGE);
+                JOptionPane.showMessageDialog(this, ex.getMessage(), "exception", JOptionPane.PLAIN_MESSAGE);
             }
 
             ((DefaultTableModel) jTable_rep_preview.getModel()).setRowCount(0);
@@ -2211,7 +2245,7 @@ public class mainform extends javax.swing.JFrame {
                         }
                     }
                     if (loot) {
-                        if (JOptionPane.showConfirmDialog(null, "<html><body><h1  style='font-family: Arial; font-size: 20pt; text-align: right; width: 150px;'>هل تريد إضافه البالته رقم  " + jTable_rep_select.getValueAt(jTable_rep_select.getSelectedRow(), 3) + "</h1></body></html>", "تنبيه",
+                        if (JOptionPane.showConfirmDialog(this, "هل تريد إضافه البالته رقم  " + jTable_rep_select.getValueAt(jTable_rep_select.getSelectedRow(), 3) + "", "تنبيه",
                                 JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
                             int num_of_order = (int) ToDoubleEnglish(jTextField_rep_numOfBag.getText());
                             if (num_of_order > 0 && serial < num_of_order) {
@@ -2229,7 +2263,7 @@ public class mainform extends javax.swing.JFrame {
                                         }
                                     }
                                 } catch (SQLException ex) {
-                                    JOptionPane.showMessageDialog(null, ex, "إنتبه", JOptionPane.PLAIN_MESSAGE);
+                                    JOptionPane.showMessageDialog(this, ex, "إنتبه", JOptionPane.PLAIN_MESSAGE);
                                 }
                                 double ss;
                                 ss = weight_sum;
@@ -2249,7 +2283,7 @@ public class mainform extends javax.swing.JFrame {
                                             jTable_rep_select.getModel().setValueAt(ToDoubleArabic(df.format(ToDoubleEnglish(jTable_rep_select.getModel().getValueAt(jTable_rep_select.getSelectedRow(), 1).toString()) - Double.parseDouble(st.getString(1)))), jTable_rep_select.getSelectedRow(), 1);
                                         }
                                     } catch (SQLException ex) {
-                                        JOptionPane.showMessageDialog(null, ex, "إنتبه", JOptionPane.PLAIN_MESSAGE);
+                                        JOptionPane.showMessageDialog(this, ex, "إنتبه", JOptionPane.PLAIN_MESSAGE);
                                     }
                                     jTable_rep_select.getModel().setValueAt(ToDoubleArabic((Integer.parseInt(jTable_rep_select.getModel().getValueAt(jTable_rep_select.getSelectedRow(), 0).toString()) - (num_of_order - numm)) + ""), jTable_rep_select.getSelectedRow(), 0);
                                     if (ToDoubleEnglish(jTable_rep_select.getValueAt(jTable_rep_select.getSelectedRow(), 0).toString()) == 0.0 && ToDoubleEnglish(jTable_rep_select.getValueAt(jTable_rep_select.getSelectedRow(), 1).toString()) == 0.0) {
@@ -2260,16 +2294,16 @@ public class mainform extends javax.swing.JFrame {
                             jTable_rep_preview.changeSelection(jTable_rep_preview.getRowCount() - 1, 0, false, false);
                         }
                     } else {
-                        JOptionPane.showMessageDialog(null, "<html><body><h1  style='font-family: Arial; font-size: 20pt; text-align: right; width: 150px;'>  لا يمكن ادخال اكثر من لوط  </h1></body></html>", "إنتبه", JOptionPane.PLAIN_MESSAGE);
+                        JOptionPane.showMessageDialog(this, "  لا يمكن ادخال اكثر من لوط  ", "إنتبه", JOptionPane.PLAIN_MESSAGE);
                     }
                 } else {
-                    JOptionPane.showMessageDialog(null, "<html><body><h1  style='font-family: Arial; font-size: 20pt; text-align: right; width: 150px;'> لقد اكتمل العدد  </h1></body></html>", "إنتبه", JOptionPane.PLAIN_MESSAGE);
+                    JOptionPane.showMessageDialog(this, " لقد اكتمل العدد  ", "إنتبه", JOptionPane.PLAIN_MESSAGE);
                 }
             } else {
-                JOptionPane.showMessageDialog(null, "<html><body><h1  style='font-family: Arial; font-size: 20pt; text-align: right; width: 150px;'>  برجاء ادخال عدد الشكاير </h1></body></html>", "إنتبه", JOptionPane.PLAIN_MESSAGE);
+                JOptionPane.showMessageDialog(this, "  برجاء ادخال عدد الشكاير ", "إنتبه", JOptionPane.PLAIN_MESSAGE);
             }
         } catch (HeadlessException | NumberFormatException e) {
-            JOptionPane.showMessageDialog(null, "555 Ex");
+            JOptionPane.showMessageDialog(this, "555 Ex");
         }
     }//GEN-LAST:event_jTable_rep_selectMouseClicked
 
@@ -2286,10 +2320,10 @@ public class mainform extends javax.swing.JFrame {
                     || jFileChooser1.getSelectedFile().getName().endsWith(".tm")) {
 
                 opj.backup(jFileChooser1.getSelectedFile().getAbsolutePath() + " " + LocalDate.now() + ".tm");
-                JOptionPane.showMessageDialog(null, "<html><body><h1  style='font-family: Arial; font-size: 20pt; text-align: right; width: 150px;'>  Back up succes </h1></body></html>", "3aaash", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(this, "  Back up succes ", "3aaash", JOptionPane.INFORMATION_MESSAGE);
             } else {
                 opj.backup(jFileChooser1.getSelectedFile().getAbsolutePath() + " " + LocalDate.now() + ".bak");
-                JOptionPane.showMessageDialog(null, "<html><body><h1  style='font-family: Arial; font-size: 20pt; text-align: right; width: 150px;'>  Back up succes </h1></body></html>", "3aaash", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(this, "  Back up succes ", "3aaash", JOptionPane.INFORMATION_MESSAGE);
             }
         }
 
@@ -2327,7 +2361,7 @@ public class mainform extends javax.swing.JFrame {
                 }
             } catch (SQLException ex) {
                 Logger.getLogger(mainform.class.getName()).log(Level.SEVERE, null, ex);
-                JOptionPane.showMessageDialog(null, ex.getMessage(), "exception", JOptionPane.PLAIN_MESSAGE);
+                JOptionPane.showMessageDialog(this, ex.getMessage(), "exception", JOptionPane.PLAIN_MESSAGE);
             }
         }
     }//GEN-LAST:event_jComboBox_stock_ProsItemStateChanged
@@ -2394,7 +2428,7 @@ public class mainform extends javax.swing.JFrame {
                 }
             } catch (SQLException ex) {
                 Logger.getLogger(mainform.class.getName()).log(Level.SEVERE, null, ex);
-                JOptionPane.showMessageDialog(null, ex.getMessage(), "exception", JOptionPane.PLAIN_MESSAGE);
+                JOptionPane.showMessageDialog(this, ex.getMessage(), "exception", JOptionPane.PLAIN_MESSAGE);
             }
         }
     }//GEN-LAST:event_jButton_youm_searchActionPerformed
@@ -2409,8 +2443,8 @@ public class mainform extends javax.swing.JFrame {
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         try {
-            Object[] options1 = {"<html><body><h1  style='font-family: Arial; font-size: 20pt; text-align: center; width: 80px;'>  تسجيل الخروج </h1></body></html>", "<html><body><h1  style='font-family: Arial; font-size: 20pt; text-align: center; width: 80px;'>  قفل البرنامج </h1></body></html>"};
-            int result = JOptionPane.showOptionDialog(null, "<html><body><h1  style='font-family: Arial; font-size: 20pt; text-align: right; width: 150px;'> خد بالك ياجدع  </h1></body></html>", "انتبه ",
+            Object[] options1 = {"<html><body><h1  style='font-family: Arial; font-size: 20pt; text-align: center; width: 80px;'>  تسجيل الخروج ", "<html><body><h1  style='font-family: Arial; font-size: 20pt; text-align: center; width: 80px;'>  قفل البرنامج "};
+            int result = JOptionPane.showOptionDialog(this, " خد بالك ياجدع  ", "انتبه ",
                     JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, options1, null);
             if (result == JOptionPane.YES_OPTION) {
                 saveTicknum("TicketNumber1.txt", tick1num);
@@ -2426,14 +2460,14 @@ public class mainform extends javax.swing.JFrame {
             }
         } catch (SQLException | IOException ex) {
             Logger.getLogger(mainform.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(null, ex.getMessage(), "exception", JOptionPane.PLAIN_MESSAGE);
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "exception", JOptionPane.PLAIN_MESSAGE);
         }
     }//GEN-LAST:event_formWindowClosing
 
     private void jButton_youm_refundActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_youm_refundActionPerformed
         if (jButton_Ezn_opener.isEnabled() && jButton_addPro_opener.isEnabled()) {
             if (jTable_yumia.getSelectedRow() != -1) {
-                if (JOptionPane.showConfirmDialog(null, "<html><body><h1  style='font-family: Arial; font-size: 20pt; text-align: right; width: 150px;'>  هل تريد استرجاع أزن " + jTable_yumia.getValueAt(jTable_yumia.getSelectedRow(), 0) + " لصنف" + jTable_yumia.getValueAt(jTable_yumia.getSelectedRow(), 1) + " في يوم" + jTable_yumia.getValueAt(jTable_yumia.getSelectedRow(), 5) + " </h1></body></html>", "تنبيه",
+                if (JOptionPane.showConfirmDialog(this, "  هل تريد استرجاع أزن " + jTable_yumia.getValueAt(jTable_yumia.getSelectedRow(), 0) + " لصنف" + jTable_yumia.getValueAt(jTable_yumia.getSelectedRow(), 1) + " في يوم" + jTable_yumia.getValueAt(jTable_yumia.getSelectedRow(), 5) + " ", "تنبيه",
                         JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
                     try {
                         if (opj.dataRead("*", "export", "lot=N'" + ToStringEnglish("" + jTable_yumia.getValueAt(jTable_yumia.getSelectedRow(), 2)) + "' "
@@ -2472,9 +2506,9 @@ public class mainform extends javax.swing.JFrame {
                                         + "and cli_id=(select top(1) cli_id from clients where cli_name=N'" + jTable_yumia.getValueAt(jTable_yumia.getSelectedRow(), 0) + "')"
                                         + " and exported_date = '" + ToStringEnglish("" + jTable_yumia.getValueAt(jTable_yumia.getSelectedRow(), 5)) + "'"
                                         + "  and num_of_con is not null  and pallet_numb is not null         ").next()) {
-                                    JOptionPane.showMessageDialog(null, "<html><body><h1  style='font-family: Arial; font-size: 20pt; text-align: right; width: 150px;'> تم استرجاع البيان بنجاح  </h1></body></html>", "إنتبه", JOptionPane.PLAIN_MESSAGE);
+                                    JOptionPane.showMessageDialog(this, " تم استرجاع البيان بنجاح  ", "إنتبه", JOptionPane.PLAIN_MESSAGE);
                                 } else {
-                                    JOptionPane.showMessageDialog(null, "<html><body><h1  style='font-family: Arial; font-size: 20pt; text-align: right; width: 150px;'> حدث خطأ ما  </h1></body></html>", "إنتبه", JOptionPane.PLAIN_MESSAGE);
+                                    JOptionPane.showMessageDialog(this, " حدث خطأ ما  ", "إنتبه", JOptionPane.PLAIN_MESSAGE);
                                 }
 
                             } else {
@@ -2482,26 +2516,26 @@ public class mainform extends javax.swing.JFrame {
                                 opj.delData("orders", "ord_id=" + ordTid);
 
                                 if (!opj.dataRead("*", "export", "ord_id=" + ordTid).next()) {
-                                    JOptionPane.showMessageDialog(null, "<html><body><h1  style='font-family: Arial; font-size: 20pt; text-align: right; width: 150px;'> تم استرجاع البيان بنجاح  </h1></body></html>", "إنتبه", JOptionPane.PLAIN_MESSAGE);
+                                    JOptionPane.showMessageDialog(this, " تم استرجاع البيان بنجاح  ", "إنتبه", JOptionPane.PLAIN_MESSAGE);
                                 } else {
-                                    JOptionPane.showMessageDialog(null, "<html><body><h1  style='font-family: Arial; font-size: 20pt; text-align: right; width: 150px;'> حدث خطأ ما  </h1></body></html>", "إنتبه", JOptionPane.PLAIN_MESSAGE);
+                                    JOptionPane.showMessageDialog(this, " حدث خطأ ما  ", "إنتبه", JOptionPane.PLAIN_MESSAGE);
                                 }
                             }
 
                             jButton_youm_search.doClick();
                         } else {
-                            JOptionPane.showMessageDialog(null, "<html><body><h1  style='font-family: Arial; font-size: 20pt; text-align: right; width: 150px;'>  لا يمكن استرجاع البيان </h1></body></html>", "إنتبه", JOptionPane.PLAIN_MESSAGE);
+                            JOptionPane.showMessageDialog(this, "  لا يمكن استرجاع البيان ", "إنتبه", JOptionPane.PLAIN_MESSAGE);
                         }
                     } catch (SQLException ex) {
                         Logger.getLogger(mainform.class.getName()).log(Level.SEVERE, null, ex);
-                        JOptionPane.showMessageDialog(null, ex.getMessage(), "exception", JOptionPane.PLAIN_MESSAGE);
+                        JOptionPane.showMessageDialog(this, ex.getMessage(), "exception", JOptionPane.PLAIN_MESSAGE);
                     }
                 }
             } else {
-                JOptionPane.showMessageDialog(null, "<html><body><h1  style='font-family: Arial; font-size: 20pt; text-align: right; width: 150px;'> يجب اختيار بيان من الجدول </h1></body></html>", "إنتبه", JOptionPane.PLAIN_MESSAGE);
+                JOptionPane.showMessageDialog(this, " يجب اختيار بيان من الجدول ", "إنتبه", JOptionPane.PLAIN_MESSAGE);
             }
         } else {
-            JOptionPane.showMessageDialog(null, "<html><body><h1  style='font-family: Arial; font-size: 20pt; text-align: right; width: 150px;'>  لا يمكن اجراء العمليه </h1></body></html>", "إنتبه", JOptionPane.PLAIN_MESSAGE);
+            JOptionPane.showMessageDialog(this, "  لا يمكن اجراء العمليه ", "إنتبه", JOptionPane.PLAIN_MESSAGE);
         }
     }//GEN-LAST:event_jButton_youm_refundActionPerformed
 
@@ -2519,7 +2553,7 @@ public class mainform extends javax.swing.JFrame {
                 }
             } catch (SQLException ex) {
                 Logger.getLogger(mainform.class.getName()).log(Level.SEVERE, null, ex);
-                JOptionPane.showMessageDialog(null, ex.getMessage(), "exception", JOptionPane.PLAIN_MESSAGE);
+                JOptionPane.showMessageDialog(this, ex.getMessage(), "exception", JOptionPane.PLAIN_MESSAGE);
             }
             if (num_of_shikra1 < 20) {
 
@@ -2535,12 +2569,12 @@ public class mainform extends javax.swing.JFrame {
                 this.setEnabled(true);
                 fill_storage_table();
                 SingleEdit.dispose();
-                JOptionPane.showMessageDialog(null, "<html><body><h1  style='font-family: Arial; font-size: 20pt; text-align: right; width: 150px;'> تم تعديل البيانات بنجاح  </h1></body></html>", "إنتبه", JOptionPane.PLAIN_MESSAGE);
+                JOptionPane.showMessageDialog(this, " تم تعديل البيانات بنجاح  ", "إنتبه", JOptionPane.PLAIN_MESSAGE);
             } else {
-                JOptionPane.showMessageDialog(null, "<html><body><h1  style='font-family: Arial; font-size: 20pt; text-align: right; width: 150px;'>  هذه البالته ممتلئه </h1></body></html>", "إنتبه", JOptionPane.PLAIN_MESSAGE);
+                JOptionPane.showMessageDialog(this, "  هذه البالته ممتلئه ", "إنتبه", JOptionPane.PLAIN_MESSAGE);
             }
         } else {
-            JOptionPane.showMessageDialog(null, "<html><body><h1  style='font-family: Arial; font-size: 20pt; text-align: right; width: 150px;'>  برجاء ادخال البيانات صحيحه </h1></body></html>", "إنتبه", JOptionPane.PLAIN_MESSAGE);
+            JOptionPane.showMessageDialog(this, "  برجاء ادخال البيانات صحيحه ", "إنتبه", JOptionPane.PLAIN_MESSAGE);
         }
     }//GEN-LAST:event_jButton_E_EditActionPerformed
 
@@ -2597,7 +2631,7 @@ public class mainform extends javax.swing.JFrame {
                     jTextField_E_TotWight.setText(ToDoubleArabic(st.getString(1)));
                 } catch (SQLException ex) {
                     Logger.getLogger(mainform.class.getName()).log(Level.SEVERE, null, ex);
-                    JOptionPane.showMessageDialog(null, ex.getMessage(), "exception", JOptionPane.PLAIN_MESSAGE);
+                    JOptionPane.showMessageDialog(this, ex.getMessage(), "exception", JOptionPane.PLAIN_MESSAGE);
                 }
                 jComboBox_E_O_proName.setSelectedItem(jComboBox_pro_in_storage.getSelectedItem());
                 jComboBox_E_proName.setSelectedItem(jComboBox_pro_in_storage.getSelectedItem());
@@ -2613,10 +2647,10 @@ public class mainform extends javax.swing.JFrame {
 
             } else if (jTable_storage.getSelectedRowCount() > 1) {
                 MultiEdit.setVisible(true);
-                MultiEdit.setSize(500, 290);
                 this.setEnabled(false);
-                jTextField_ME_PaltNum.setText("");
-                jTextField_ME_lot.setText("");
+                jComboBox_ME_type.setSelectedItem(jComboBox_pro_in_storage.getSelectedItem());
+                jTextField_ME_PaltNum.setText(jTable_storage.getModel().getValueAt(jTable_storage.getSelectedRow(), 3).toString());
+                jTextField_ME_lot.setText(jTable_storage.getModel().getValueAt(jTable_storage.getSelectedRow(), 2).toString());
             }
         }
     }//GEN-LAST:event_jTable_storageMouseReleased
@@ -2653,7 +2687,7 @@ public class mainform extends javax.swing.JFrame {
                     jTextField_E_TotWight.getText(), jTextField_E_Weight.getText())),
                     jCheckBox_E_P.isSelected(), jCheckBox_E_QR.isSelected());
         } catch (WriterException | IOException | PrinterException ex) {
-            JOptionPane.showMessageDialog(null, ex.getMessage(), "exception", JOptionPane.PLAIN_MESSAGE);
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "exception", JOptionPane.PLAIN_MESSAGE);
         } catch (InterruptedException ex) {
             Logger.getLogger(mainform.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -2754,40 +2788,34 @@ public class mainform extends javax.swing.JFrame {
             for (int i = jTable_storage.getSelectedRows().length - 1; i > -1; i--) {
                 ResultSet st = opj.dataRead("count(*)", "storage",
                         "lot=N'"
-                        + ToStringEnglish(jTextField_ME_lot.getText().isBlank()
-                                ? jTable_storage.getModel().getValueAt(jTable_storage.getSelectedRows()[i], 2).toString()
-                                : jTextField_ME_lot.getText())
+                        + ToStringEnglish(jTextField_ME_lot.getText())
                         + "' and pallet_numb="
-                        + ToStringEnglish(jTextField_ME_PaltNum.getText().isBlank()
-                                ? jTable_storage.getModel().getValueAt(jTable_storage.getSelectedRows()[i], 3).toString()
-                                : jTextField_ME_PaltNum.getText())
-                        + " and pro_id=(select pro_id from products where pro_name=N'" + jComboBox_pro_in_storage.getSelectedItem().toString() + "') ");
+                        + ToStringEnglish(jTextField_ME_PaltNum.getText())
+                        + " and pro_id=(select pro_id from products where pro_name=N'" + jComboBox_ME_type.getSelectedItem().toString() + "') ");
                 int num_of_shikra1 = 0;
                 try {
                     while (st.next()) {
                         num_of_shikra1 = st.getInt(1);
                     }
                 } catch (SQLException ex) {
-                    JOptionPane.showMessageDialog(null, ex.getMessage(), "exception", JOptionPane.PLAIN_MESSAGE);
+                    JOptionPane.showMessageDialog(this, ex.getMessage(), "exception", JOptionPane.PLAIN_MESSAGE);
                 }
                 if (num_of_shikra1 < 20) {
                     opj.update("storage",
-                            (jTextField_ME_PaltNum.getText().isBlank()
-                            ? " " : "pallet_numb=" + ToStringEnglish(jTextField_ME_PaltNum.getText()))
-                            + (jTextField_ME_lot.getText().isBlank()
-                            ? " " : (jTextField_ME_PaltNum.getText().isBlank() ? "lot=N'" + ToStringEnglish(jTextField_ME_lot.getText()) + "'"
-                            : ",lot=N'" + ToStringEnglish(jTextField_ME_lot.getText()) + "'")),
+                            "pallet_numb=" + ToStringEnglish(jTextField_ME_PaltNum.getText())
+                            + ",lot=N'" + ToStringEnglish(jTextField_ME_lot.getText()) + "'"
+                            + ",pro_id=(select pro_id from products where pro_name=N'" + jComboBox_ME_type.getSelectedItem().toString() + "')",
                             "storage_id=" + jTable_storage.getModel().getValueAt(jTable_storage.getSelectedRows()[i], 4).toString() + ""
                     );
                 } else {
-                    JOptionPane.showMessageDialog(null, "<html><body><h1  style='font-family: Arial; font-size: 20pt; text-align: right; width: 150px;'>  هذه البالته ممتلئه </h1></body></html>", "إنتبه", JOptionPane.PLAIN_MESSAGE);
+                    JOptionPane.showMessageDialog(this, "  هذه البالته ممتلئه ", "إنتبه", JOptionPane.PLAIN_MESSAGE);
                     break;
                 }
             }
             MultiEdit.dispose();
-            JOptionPane.showMessageDialog(null, "<html><body><h1  style='font-family: Arial; font-size: 20pt; text-align: right; width: 150px;'> تم تعديل البيانات بنجاح  </h1></body></html>", "إنتبه", JOptionPane.PLAIN_MESSAGE);
+            JOptionPane.showMessageDialog(this, " تم تعديل البيانات بنجاح  ", "إنتبه", JOptionPane.PLAIN_MESSAGE);
         } else {
-            JOptionPane.showMessageDialog(null, "Please enter a valid number", "إنتبه", JOptionPane.PLAIN_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Please enter a valid number", "إنتبه", JOptionPane.PLAIN_MESSAGE);
         }
         this.setEnabled(true);
         fill_storage_table();
@@ -2861,9 +2889,9 @@ public class mainform extends javax.swing.JFrame {
             FileOutputStream fileOut = new FileOutputStream(System.getProperty("user.dir") + "\\Temp\\Stock.xlsx");
             workbook.write(fileOut);
             fileOut.close();
-            JOptionPane.showMessageDialog(null, "please print the Execl", "Done", JOptionPane.PLAIN_MESSAGE);
+            JOptionPane.showMessageDialog(this, "please print the Execl", "Done", JOptionPane.PLAIN_MESSAGE);
         } catch (IOException | SQLException ex) {
-            JOptionPane.showMessageDialog(null, ex.getMessage(), "exception", JOptionPane.PLAIN_MESSAGE);
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "exception", JOptionPane.PLAIN_MESSAGE);
         }
     }//GEN-LAST:event_jButton_stock_createExclActionPerformed
 
@@ -2880,7 +2908,7 @@ public class mainform extends javax.swing.JFrame {
             Desktop.getDesktop().print(new File(System.getProperty("user.dir") + "\\Temp\\myFile.xlsx"));
             tick1num++;
         } catch (IOException ex) {
-            JOptionPane.showMessageDialog(null, ex.getMessage(), "exception", JOptionPane.PLAIN_MESSAGE);
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "exception", JOptionPane.PLAIN_MESSAGE);
             Logger.getLogger(mainform.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_jButton5ActionPerformed
@@ -2896,7 +2924,7 @@ public class mainform extends javax.swing.JFrame {
             }
         } catch (SQLException ex) {
             Logger.getLogger(mainform.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(null, ex.getMessage(), "exception", JOptionPane.PLAIN_MESSAGE);
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "exception", JOptionPane.PLAIN_MESSAGE);
         }
     }//GEN-LAST:event_jButton_youm_getClientsActionPerformed
 
@@ -2943,9 +2971,9 @@ public class mainform extends javax.swing.JFrame {
             try ( FileOutputStream fileOut = new FileOutputStream(System.getProperty("user.dir") + "\\Temp\\report.xlsx")) {
                 workbook.write(fileOut);
             }
-            JOptionPane.showMessageDialog(null, "please print the Execl", "Done", JOptionPane.PLAIN_MESSAGE);
+            JOptionPane.showMessageDialog(this, "please print the Execl", "Done", JOptionPane.PLAIN_MESSAGE);
         } catch (IOException ex) {
-            JOptionPane.showMessageDialog(null, ex.getMessage(), "exception", JOptionPane.PLAIN_MESSAGE);
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "exception", JOptionPane.PLAIN_MESSAGE);
         }
     }//GEN-LAST:event_jButton_youm_createExcelActionPerformed
 
@@ -2962,11 +2990,11 @@ public class mainform extends javax.swing.JFrame {
                     + ToDoubleEnglish(model.getValueAt(jTable_yumia.getSelectedRow(), 4).toString()));
             try {
                 while (st.next()) {
-                    temp += st.getString(1)+" , ";
+                    temp += st.getString(1) + " , ";
                 }
-                JOptionPane.showMessageDialog(null, temp, "Pallets", JOptionPane.PLAIN_MESSAGE);
+                JOptionPane.showMessageDialog(this, temp, "Pallets", JOptionPane.PLAIN_MESSAGE);
             } catch (SQLException ex) {
-                JOptionPane.showMessageDialog(null, ex.getMessage(), "exception", JOptionPane.PLAIN_MESSAGE);
+                JOptionPane.showMessageDialog(this, ex.getMessage(), "exception", JOptionPane.PLAIN_MESSAGE);
             }
         }
 
@@ -2994,6 +3022,7 @@ public class mainform extends javax.swing.JFrame {
     }
 
     void textbox_number_weight(KeyEvent event, JTextField textboxname, int length) {
+
         if (event.getKeyChar() == KeyEvent.VK_DELETE) {
             if ((event.getModifiersEx() & KeyEvent.SHIFT_DOWN_MASK) != 0) {
                 jButton_clear.doClick();
@@ -3021,8 +3050,13 @@ public class mainform extends javax.swing.JFrame {
 
     boolean printex(ArrayList<String> values, boolean b1, boolean b2) throws WriterException, IOException, PrinterException, InterruptedException {
         Files.createDirectories(Paths.get(System.getProperty("user.dir") + "\\Temp"));
+        System.out.println(values.get(2).length());
+        String n = values.get(2);
+        while (n.length() < 20) {
+            n += " ";
+        }
         if (b2) {
-            print_shit.generateQRcode("{\n \"الصنف\": " + values.get(2) + " ,\n\"اللوط\": " + values.get(3) + " ,\n\"الوزن الصافي\": " + values.get(6) + "\n}", ToDoubleEnglish(values.get(6)) + "", 300, 300);
+            print_shit.generateQRcode("{\n \"الصنف\": " + n + " ,\n\"اللوط\": " + values.get(3) + " ,\n\"الوزن الصافي\": " + values.get(6) + "\n}", ToDoubleEnglish(values.get(6)) + "", 300, 300);
             BufferedImage image = ImageIO.read(new File(System.getProperty("user.dir") + "\\Temp\\QR" + ToDoubleEnglish(values.get(6)) + ".png"));
             PrintRequestAttributeSet attributes = new HashPrintRequestAttributeSet();
             attributes.add(new PrinterResolution(300, 300, PrinterResolution.DPI));
@@ -3102,6 +3136,7 @@ public class mainform extends javax.swing.JFrame {
     }
 
     void textbox_number(KeyEvent event, JTextField textboxname, int length) {
+
         if (event.getKeyChar() == KeyEvent.VK_DELETE) {
             if ((event.getModifiersEx() & KeyEvent.SHIFT_DOWN_MASK) != 0) {
                 jButton_clear.doClick();
@@ -3213,7 +3248,7 @@ public class mainform extends javax.swing.JFrame {
                 comboxname.addItem(st.getString(1));
             }
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, ex.getMessage(), "exception", JOptionPane.PLAIN_MESSAGE);
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "exception", JOptionPane.PLAIN_MESSAGE);
         }
         comboxname.setSelectedIndex(-1);
     }
@@ -3230,7 +3265,7 @@ public class mainform extends javax.swing.JFrame {
         } catch (SQLException ex) {
             Logger.getLogger(mainform.class
                     .getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(null, ex.getMessage(), "exception", JOptionPane.PLAIN_MESSAGE);
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "exception", JOptionPane.PLAIN_MESSAGE);
         }
     }
 
@@ -3264,7 +3299,7 @@ public class mainform extends javax.swing.JFrame {
         } catch (SQLException ex) {
             Logger.getLogger(mainform.class
                     .getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(null, ex.getMessage(), "exception", JOptionPane.PLAIN_MESSAGE);
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "exception", JOptionPane.PLAIN_MESSAGE);
         }
         if (model.getRowCount() != 0) {
             String lott = ToStringEnglish(model.getValueAt(model.getRowCount() - 1, 2).toString()), pallet_num = ToStringEnglish(model.getValueAt(model.getRowCount() - 1, 3).toString());
@@ -3294,7 +3329,7 @@ public class mainform extends javax.swing.JFrame {
             } catch (SQLException ex) {
                 Logger.getLogger(mainform.class
                         .getName()).log(Level.SEVERE, null, ex);
-                JOptionPane.showMessageDialog(null, ex.getMessage(), "exception", JOptionPane.PLAIN_MESSAGE);
+                JOptionPane.showMessageDialog(this, ex.getMessage(), "exception", JOptionPane.PLAIN_MESSAGE);
             }
         }
     }
@@ -3315,7 +3350,7 @@ public class mainform extends javax.swing.JFrame {
             } catch (SQLException ex) {
                 Logger.getLogger(mainform.class
                         .getName()).log(Level.SEVERE, null, ex);
-                JOptionPane.showMessageDialog(null, ex.getMessage(), "exception", JOptionPane.PLAIN_MESSAGE);
+                JOptionPane.showMessageDialog(this, ex.getMessage(), "exception", JOptionPane.PLAIN_MESSAGE);
             }
             st = opj.dataRead("lot,count(weight_),Sum(weight_)", "export", "pro_id=(select  pro_id from products where pro_name=N'" + jComboBox_statis_pros.getSelectedItem() + "') and (inserted_date between '" + date1 + "'  and '" + date2 + "')  group by lot");
             try {
@@ -3326,7 +3361,7 @@ public class mainform extends javax.swing.JFrame {
             } catch (SQLException ex) {
                 Logger.getLogger(mainform.class
                         .getName()).log(Level.SEVERE, null, ex);
-                JOptionPane.showMessageDialog(null, ex.getMessage(), "exception", JOptionPane.PLAIN_MESSAGE);
+                JOptionPane.showMessageDialog(this, ex.getMessage(), "exception", JOptionPane.PLAIN_MESSAGE);
             }
 
         }
@@ -3398,6 +3433,7 @@ public class mainform extends javax.swing.JFrame {
     private javax.swing.JCheckBox jCheckBox_youm_old;
     private javax.swing.JComboBox<String> jComboBox_E_O_proName;
     private javax.swing.JComboBox<String> jComboBox_E_proName;
+    private javax.swing.JComboBox<String> jComboBox_ME_type;
     private javax.swing.JComboBox<String> jComboBox_pro_in_storage;
     private javax.swing.JComboBox<String> jComboBox_rep_Pros;
     private javax.swing.JComboBox<String> jComboBox_rep_palletsNrep;
@@ -3421,6 +3457,7 @@ public class mainform extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel20;
+    private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel22;
     private javax.swing.JLabel jLabel23;
     private javax.swing.JLabel jLabel24;
