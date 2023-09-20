@@ -70,7 +70,7 @@ public class mainform extends javax.swing.JFrame {
     private static int BagMax = 2;
     private float Xx = 0, Yy = 0, width = 19, hight = 19;
     private final JButton jButton_bagmax = new javax.swing.JButton();
-    String Version = "V 54.0.1";
+    String Version = "V 55.0.0";
 
     public mainform(sqlcon ops) throws IOException {
         initComponents();
@@ -108,6 +108,7 @@ public class mainform extends javax.swing.JFrame {
         combox_fill(this.jComboBox_ME_type, opj.dataRead("pro_name", "products"), true);
         tick1num = loadTicknum("TicketNumber1.txt");
         tick2num = loadTicknum("TicketNumber2.txt");
+        this.setAlwaysOnTop(true);
     }
 
     int pro_Table_SelectedID = 0;
@@ -426,10 +427,8 @@ public class mainform extends javax.swing.JFrame {
             SingleEdit.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
             SingleEdit.setLocation(new java.awt.Point(100, 100));
             SingleEdit.setLocationByPlatform(true);
-            SingleEdit.setMaximumSize(new java.awt.Dimension(780, 400));
             SingleEdit.setMinimumSize(new java.awt.Dimension(780, 400));
             SingleEdit.setName("Single Edit"); // NOI18N
-            SingleEdit.setPreferredSize(new java.awt.Dimension(780, 400));
             SingleEdit.setResizable(false);
             SingleEdit.setType(java.awt.Window.Type.POPUP);
             SingleEdit.addWindowListener(new java.awt.event.WindowAdapter() {
@@ -686,7 +685,6 @@ public class mainform extends javax.swing.JFrame {
 
             setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
             setTitle("mizan program " + Version);
-            setAlwaysOnTop(true);
             setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
             setLocation(new java.awt.Point(0, 0));
             setLocationByPlatform(true);
@@ -1784,6 +1782,7 @@ public class mainform extends javax.swing.JFrame {
             DefaultTableModel model = (DefaultTableModel) jTable_storage.getModel();
             model.setRowCount(0);
         }
+        this.setAlwaysOnTop(true);
     }//GEN-LAST:event_jButton_Mizan_openerActionPerformed
 
     private void jButton_addPro_openerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_addPro_openerActionPerformed
@@ -1916,13 +1915,13 @@ public class mainform extends javax.swing.JFrame {
                     st.next();
                     int NUC = st.getInt(1);
                     if (UC > 0 && NUC > 0) {
-                        JOptionPane.showMessageDialog(this, " رجاء حل مشكلة التعليم اولا", "إنتبه", JOptionPane.PLAIN_MESSAGE);
+                        JOptionPane.showMessageDialog(this, addStyle(" رجاء حل مشكلة التعليم اولا"), "إنتبه", JOptionPane.PLAIN_MESSAGE);
                         return;
                     } else if ((UC == 0 && NUC > 0) && jCheckBox_M_Markpage.isSelected()) {
-                        JOptionPane.showMessageDialog(this, " خطأ في تعليم الشكاره", "إنتبه", JOptionPane.PLAIN_MESSAGE);
+                        JOptionPane.showMessageDialog(this, addStyle(" خطأ في تعليم الشكاره"), "إنتبه", JOptionPane.PLAIN_MESSAGE);
                         return;
                     } else if ((NUC == 0 && UC > 0) && !jCheckBox_M_Markpage.isSelected()) {
-                        JOptionPane.showMessageDialog(this, " خطأ في تعليم الشكاره", "إنتبه", JOptionPane.PLAIN_MESSAGE);
+                        JOptionPane.showMessageDialog(this, addStyle(" خطأ في تعليم الشكاره"), "إنتبه", JOptionPane.PLAIN_MESSAGE);
                         return;
                     }
 
@@ -1956,7 +1955,7 @@ public class mainform extends javax.swing.JFrame {
                             jTextField_bag_weight.setText("");
                             fill_storage_table();
                         } else {
-                            JOptionPane.showMessageDialog(this, "printing faild", "إنتبه", JOptionPane.PLAIN_MESSAGE);
+                            JOptionPane.showMessageDialog(this, addStyle("printing faild"), "إنتبه", JOptionPane.PLAIN_MESSAGE);
                         }
                     } else {
                         jTextField_net_weight.setText("");
@@ -1965,12 +1964,12 @@ public class mainform extends javax.swing.JFrame {
                         fill_storage_table();
                     }
                 } else {
-                    JOptionPane.showMessageDialog(this, "خطأ في وزن الشيكاره ", "إنتبه", JOptionPane.PLAIN_MESSAGE);
+                    JOptionPane.showMessageDialog(this, addStyle("خطأ في وزن الشيكاره "), "إنتبه", JOptionPane.PLAIN_MESSAGE);
                     jTextField_weight.requestFocus();
                     jTextField_weight.selectAll();
                 }
             } else {
-                JOptionPane.showMessageDialog(this, " برجاء إدخال البيانات كامله", "إنتبه", JOptionPane.PLAIN_MESSAGE);
+                JOptionPane.showMessageDialog(this, addStyle(" برجاء إدخال البيانات كامله"), "إنتبه", JOptionPane.PLAIN_MESSAGE);
             }
         } catch (WriterException | HeadlessException | IOException | SQLException | PrinterException | InterruptedException ex) {
             Logger.getLogger(mainform.class.getName()).log(Level.SEVERE, null, ex);
@@ -1979,19 +1978,19 @@ public class mainform extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton_add_dataActionPerformed
 
     private void jButton_del_dataActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_del_dataActionPerformed
-        if (JOptionPane.showConfirmDialog(this, "هل تريد الحذف ؟", "تنبيه", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+        if (JOptionPane.showConfirmDialog(this, addStyle("هل تريد الحذف ؟"), "تنبيه", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
             if (jTable_storage.getSelectedRowCount() == 1) {
                 opj.delData("storage", "storage_id=" + Integer.valueOf(jTable_storage.getModel().getValueAt(jTable_storage.getSelectedRow(), 4).toString()) + " ");
-                JOptionPane.showMessageDialog(this, " تم حذف البيان بنجاح ", "ناجح", JOptionPane.PLAIN_MESSAGE);
+                JOptionPane.showMessageDialog(this, addStyle(" تم حذف البيان بنجاح "), "ناجح", JOptionPane.PLAIN_MESSAGE);
                 fill_storage_table();
             } else if (jTable_storage.getSelectedRowCount() > 1) {
                 for (int row : jTable_storage.getSelectedRows()) {
                     opj.delData("storage", "storage_id=" + Integer.valueOf(jTable_storage.getModel().getValueAt(row, 4).toString()) + " ");
                 }
                 fill_storage_table();
-                JOptionPane.showMessageDialog(this, " تم حذف البيــانات بنجاح ", "ناجح", JOptionPane.PLAIN_MESSAGE);
+                JOptionPane.showMessageDialog(this, addStyle(" تم حذف البيــانات بنجاح "), "ناجح", JOptionPane.PLAIN_MESSAGE);
             } else {
-                JOptionPane.showMessageDialog(this, " برجاء أختيار بيان من الجدول أولا  ", "إنتبه", JOptionPane.PLAIN_MESSAGE);
+                JOptionPane.showMessageDialog(this, addStyle(" برجاء أختيار بيان من الجدول أولا  "), "إنتبه", JOptionPane.PLAIN_MESSAGE);
             }
         }
     }//GEN-LAST:event_jButton_del_dataActionPerformed
@@ -1999,11 +1998,11 @@ public class mainform extends javax.swing.JFrame {
     private void jButton_add_proActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_add_proActionPerformed
         if (pro_Table_SelectedID == 0) {
             if (jTextField_pro_name.getText().isBlank() || jTextField_Pros_conWight.getText().isBlank()) {
-                JOptionPane.showMessageDialog(this, " برجاء أدخال البيانات كامله  ", "إنتبه", JOptionPane.PLAIN_MESSAGE);
+                JOptionPane.showMessageDialog(this, addStyle(" برجاء أدخال البيانات كامله  "), "إنتبه", JOptionPane.PLAIN_MESSAGE);
             } else {
                 try {
                     if (opj.dataRead("*", "products", "pro_name=N'" + jTextField_pro_name.getText() + "'").next()) {
-                        JOptionPane.showMessageDialog(this, "  هذا الصنف موجود بالفعل ", "إنتبه", JOptionPane.PLAIN_MESSAGE);
+                        JOptionPane.showMessageDialog(this, addStyle("هذا الصنف موجود بالفعل "), "إنتبه", JOptionPane.PLAIN_MESSAGE);
                     } else {
                         opj.inData("products", "pro_name,weight_of_con,Color", "N'" + jTextField_pro_name.getText() + "',N'" + ToStringEnglish(jTextField_Pros_conWight.getText()) + "',N'" + jTextField_Pros_color.getText() + "'");
                         jTextField_pro_name.setText("");
@@ -2012,7 +2011,7 @@ public class mainform extends javax.swing.JFrame {
                         fill_pro_table();
                         combox_fill(jComboBox_pro_in_storage, opj.dataRead("pro_name", "products"), true);
                         combox_fill(jComboBox_rep_Pros, opj.dataRead("pro_name", "products"), true);
-                        JOptionPane.showMessageDialog(this, " تم إدخال الصنف بنجاح  ", "ناجح", JOptionPane.PLAIN_MESSAGE);
+                        JOptionPane.showMessageDialog(this, addStyle(" تم إدخال الصنف بنجاح  "), "ناجح", JOptionPane.PLAIN_MESSAGE);
                     }
                 } catch (SQLException ex) {
                     Logger.getLogger(mainform.class.getName()).log(Level.SEVERE, null, ex);
@@ -2021,7 +2020,7 @@ public class mainform extends javax.swing.JFrame {
             }
         } else {
             if (jTextField_pro_name.getText().isBlank()) {
-                JOptionPane.showMessageDialog(this, " برجاء أدخال اسم الصنف  ", "إنتبه", JOptionPane.PLAIN_MESSAGE);
+                JOptionPane.showMessageDialog(this, addStyle(" برجاء أدخال اسم الصنف  "), "إنتبه", JOptionPane.PLAIN_MESSAGE);
             } else {
                 opj.update("products", "pro_name=N'" + jTextField_pro_name.getText() + "' ,weight_of_con=N'" + ToStringEnglish(jTextField_Pros_conWight.getText()) + "' ,Color=N'" + jTextField_Pros_color.getText() + "' ", "pro_id=" + pro_Table_SelectedID + " ");
                 pro_Table_SelectedID = 0;
@@ -2031,7 +2030,7 @@ public class mainform extends javax.swing.JFrame {
                 fill_pro_table();
                 combox_fill(jComboBox_pro_in_storage, opj.dataRead("pro_name", "products"), true);
                 combox_fill(jComboBox_rep_Pros, opj.dataRead("pro_name", "products"), true);
-                JOptionPane.showMessageDialog(this, "  تم تعديل الصنف بنجاح ", "ناجح", JOptionPane.PLAIN_MESSAGE);
+                JOptionPane.showMessageDialog(this, addStyle("تم تعديل الصنف بنجاح "), "ناجح", JOptionPane.PLAIN_MESSAGE);
             }
         }
     }//GEN-LAST:event_jButton_add_proActionPerformed
@@ -2063,21 +2062,21 @@ public class mainform extends javax.swing.JFrame {
             try {
                 if (!opj.dataRead("*", "storage", "pro_id=" + pro_Table_SelectedID + "").next()) {
                     opj.delData("products", "pro_id=" + pro_Table_SelectedID + " ");
-                    JOptionPane.showMessageDialog(this, "  تم حذف الصنف بنجاح ", "ناجح", JOptionPane.PLAIN_MESSAGE);
+                    JOptionPane.showMessageDialog(this, addStyle("تم حذف الصنف بنجاح "), "ناجح", JOptionPane.PLAIN_MESSAGE);
                     jTextField_pro_name.setText("");
                     pro_Table_SelectedID = 0;
                     fill_pro_table();
                     combox_fill(jComboBox_pro_in_storage, opj.dataRead("pro_name", "products"), true);
                     combox_fill(jComboBox_rep_Pros, opj.dataRead("pro_name", "products"), true);
                 } else {
-                    JOptionPane.showMessageDialog(this, " لا يمكن حذف هذا الصنف  ", "إنتبه", JOptionPane.PLAIN_MESSAGE);
+                    JOptionPane.showMessageDialog(this, addStyle("لا يمكن حذف هذا الصنف "), "إنتبه", JOptionPane.PLAIN_MESSAGE);
                 }
             } catch (SQLException ex) {
                 Logger.getLogger(mainform.class.getName()).log(Level.SEVERE, null, ex);
                 JOptionPane.showMessageDialog(this, ex.getMessage(), "exception", JOptionPane.PLAIN_MESSAGE);
             }
         } else {
-            JOptionPane.showMessageDialog(this, " برجاء أختيار صنف من الجدول أولا  ", "إنتبه", JOptionPane.PLAIN_MESSAGE);
+            JOptionPane.showMessageDialog(this, addStyle(" برجاء أختيار صنف من الجدول أولا"), "إنتبه", JOptionPane.PLAIN_MESSAGE);
         }
 
     }//GEN-LAST:event_jButton_del_proActionPerformed
@@ -2135,7 +2134,7 @@ public class mainform extends javax.swing.JFrame {
 
         if (jTable_rep_preview.getRowCount() >= 0 && !jTextField_rep_clientName.getText().isBlank() && jTable_rep_preview.getRowCount() == (int) ToDoubleEnglish(jTextField_rep_numOfBag.getText())) {
 
-            if (JOptionPane.showConfirmDialog(this, "  سيتم التصدير للأكسل ", "تنبيه",
+            if (JOptionPane.showConfirmDialog(this, addStyle("سيتم التصدير للأكسل "), "تنبيه",
                     JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
                 print_shit opject = new print_shit();
                 if (Integer.parseInt(jTextField_rep_numOfBag.getText()) <= 60 && jCheckBox_rep_2n1.isSelected()) {
@@ -2160,11 +2159,11 @@ public class mainform extends javax.swing.JFrame {
                         jTextField_rep_totweight.setText("");
                         jComboBox_rep_palletsNrep.removeAllItems();
 
-                        JOptionPane.showMessageDialog(this, " ادخل الأذن الثاني  ", "إنتبه", JOptionPane.PLAIN_MESSAGE);
+                        JOptionPane.showMessageDialog(this, addStyle(" ادخل الأذن الثاني  "), "إنتبه", JOptionPane.PLAIN_MESSAGE);
 
                     } else {
                         if (name_of_type == jComboBox_rep_Pros.getSelectedItem() && first_table.getValueAt(0, 2).toString().equals(ToStringEnglish(jTable_rep_preview.getValueAt(0, 2).toString()))) {
-                            JOptionPane.showMessageDialog(this, " برجاء تغير الصنف أو اللوط  ", "إنتبه", JOptionPane.PLAIN_MESSAGE);
+                            JOptionPane.showMessageDialog(this, addStyle(" برجاء تغير الصنف أو اللوط  "), "إنتبه", JOptionPane.PLAIN_MESSAGE);
 
                             second = !second;
                         } else {
@@ -2188,7 +2187,7 @@ public class mainform extends javax.swing.JFrame {
 
             }
         } else {
-            JOptionPane.showMessageDialog(this, " تدخل البيانات كامله أولا  ", "إنتبه", JOptionPane.PLAIN_MESSAGE);
+            JOptionPane.showMessageDialog(this, addStyle(" تدخل البيانات كامله أولا"), "إنتبه", JOptionPane.PLAIN_MESSAGE);
         }
 
     }//GEN-LAST:event_jButton_rep_printRepActionPerformed
@@ -2294,13 +2293,13 @@ public class mainform extends javax.swing.JFrame {
                             jTable_rep_preview.changeSelection(jTable_rep_preview.getRowCount() - 1, 0, false, false);
                         }
                     } else {
-                        JOptionPane.showMessageDialog(this, "  لا يمكن ادخال اكثر من لوط  ", "إنتبه", JOptionPane.PLAIN_MESSAGE);
+                        JOptionPane.showMessageDialog(this, addStyle("لا يمكن ادخال اكثر من لوط  "), "إنتبه", JOptionPane.PLAIN_MESSAGE);
                     }
                 } else {
-                    JOptionPane.showMessageDialog(this, " لقد اكتمل العدد  ", "إنتبه", JOptionPane.PLAIN_MESSAGE);
+                    JOptionPane.showMessageDialog(this, addStyle(" لقد اكتمل العدد "), "إنتبه", JOptionPane.PLAIN_MESSAGE);
                 }
             } else {
-                JOptionPane.showMessageDialog(this, "  برجاء ادخال عدد الشكاير ", "إنتبه", JOptionPane.PLAIN_MESSAGE);
+                JOptionPane.showMessageDialog(this, addStyle("برجاء ادخال عدد الشكاير "), "إنتبه", JOptionPane.PLAIN_MESSAGE);
             }
         } catch (HeadlessException | NumberFormatException e) {
             JOptionPane.showMessageDialog(this, "555 Ex");
@@ -2320,10 +2319,10 @@ public class mainform extends javax.swing.JFrame {
                     || jFileChooser1.getSelectedFile().getName().endsWith(".tm")) {
 
                 opj.backup(jFileChooser1.getSelectedFile().getAbsolutePath() + " " + LocalDate.now() + ".tm");
-                JOptionPane.showMessageDialog(this, "  Back up succes ", "3aaash", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(this, addStyle("Back up succes "), "3aaash", JOptionPane.INFORMATION_MESSAGE);
             } else {
                 opj.backup(jFileChooser1.getSelectedFile().getAbsolutePath() + " " + LocalDate.now() + ".bak");
-                JOptionPane.showMessageDialog(this, "  Back up succes ", "3aaash", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(this, addStyle("Back up succes "), "3aaash", JOptionPane.INFORMATION_MESSAGE);
             }
         }
 
@@ -2410,15 +2409,15 @@ public class mainform extends javax.swing.JFrame {
             String date2 = sdf.format(jDateChooser_yum_ToDate.getCalendar().getTime());
             ResultSet st = jCheckBox_youm_old.isSelected() ? opj.dataRead("sum(weight_),pro_name,cli_name,lot,FORMAT (exported_date, 'yyyy-MM-dd'),count(weight_)",
                     "export inner join clients on clients.cli_id=export.cli_id inner join products on products.pro_id=export.pro_id",
-                    jTable_youm_clinets.getSelectedRowCount() > 0 ? "  exported_date between '" + date1 + "' and '" + date2 + "' and export.cli_id in (" + selectedCIDs + ") "
+                    jTable_youm_clinets.getSelectedRowCount() > 0 ? "exported_date between '" + date1 + "' and '" + date2 + "' and export.cli_id in (" + selectedCIDs + ") "
                     + " group by products.pro_name,clients.cli_name,lot,exported_date order by exported_date ,cli_name "
-                    : "  exported_date between '" + date1 + "' and '" + date2 + "' "
+                    : "exported_date between '" + date1 + "' and '" + date2 + "' "
                     + " group by products.pro_name,clients.cli_name,lot,exported_date order by exported_date ,cli_name ")
                     : opj.dataRead("ord_wight,pro_name,cli_name,lot,FORMAT (exported_date, 'yyyy-MM-dd'),count(weight_)",
                             "export inner join clients on clients.cli_id=export.cli_id inner join products on products.pro_id=export.pro_id inner join orders on orders.ord_id=export.ord_id",
-                            jTable_youm_clinets.getSelectedRowCount() > 0 ? "  exported_date between '" + date1 + "' and '" + date2 + "' and export.cli_id in (" + selectedCIDs + ") "
+                            jTable_youm_clinets.getSelectedRowCount() > 0 ? "exported_date between '" + date1 + "' and '" + date2 + "' and export.cli_id in (" + selectedCIDs + ") "
                             + " group by orders.ord_wight,products.pro_name,clients.cli_name,lot,exported_date order by exported_date ,cli_name "
-                            : "  exported_date between '" + date1 + "' and '" + date2 + "' "
+                            : "exported_date between '" + date1 + "' and '" + date2 + "' "
                             + " group by orders.ord_wight,products.pro_name,clients.cli_name,lot,exported_date order by exported_date ,cli_name "
                     );
 
@@ -2443,8 +2442,8 @@ public class mainform extends javax.swing.JFrame {
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         try {
-            Object[] options1 = {"<html><body><h1  style='font-family: Arial; font-size: 20pt; text-align: center; width: 80px;'>  تسجيل الخروج ", "<html><body><h1  style='font-family: Arial; font-size: 20pt; text-align: center; width: 80px;'>  قفل البرنامج "};
-            int result = JOptionPane.showOptionDialog(this, " خد بالك ياجدع  ", "انتبه ",
+            Object[] options1 = {"<html><body><h1  style='font-family: Arial; font-size: 20pt; text-align: center; width: 80px;'>  تسجيل الخروج </h1></body></html>", "<html><body><h1  style='font-family: Arial; font-size: 20pt; text-align: center; width: 80px;'>  قفل البرنامج </h1></body></html>"};
+            int result = JOptionPane.showOptionDialog(this, addStyle(" خد بالك ياجدع  "), "انتبه ",
                     JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, options1, null);
             if (result == JOptionPane.YES_OPTION) {
                 saveTicknum("TicketNumber1.txt", tick1num);
@@ -2467,20 +2466,20 @@ public class mainform extends javax.swing.JFrame {
     private void jButton_youm_refundActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_youm_refundActionPerformed
         if (jButton_Ezn_opener.isEnabled() && jButton_addPro_opener.isEnabled()) {
             if (jTable_yumia.getSelectedRow() != -1) {
-                if (JOptionPane.showConfirmDialog(this, "  هل تريد استرجاع أزن " + jTable_yumia.getValueAt(jTable_yumia.getSelectedRow(), 0) + " لصنف" + jTable_yumia.getValueAt(jTable_yumia.getSelectedRow(), 1) + " في يوم" + jTable_yumia.getValueAt(jTable_yumia.getSelectedRow(), 5) + " ", "تنبيه",
+                if (JOptionPane.showConfirmDialog(this, "هل تريد استرجاع أزن " + jTable_yumia.getValueAt(jTable_yumia.getSelectedRow(), 0) + " لصنف" + jTable_yumia.getValueAt(jTable_yumia.getSelectedRow(), 1) + " في يوم" + jTable_yumia.getValueAt(jTable_yumia.getSelectedRow(), 5) + " ", "تنبيه",
                         JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
                     try {
                         if (opj.dataRead("*", "export", "lot=N'" + ToStringEnglish("" + jTable_yumia.getValueAt(jTable_yumia.getSelectedRow(), 2)) + "' "
                                 + "and pro_id=(select pro_id from products where pro_name=N'" + jTable_yumia.getValueAt(jTable_yumia.getSelectedRow(), 1) + "') "
                                 + "and cli_id=(select top(1) cli_id from clients where cli_name=N'" + jTable_yumia.getValueAt(jTable_yumia.getSelectedRow(), 0) + "')"
                                 + " and exported_date = '" + ToStringEnglish("" + jTable_yumia.getValueAt(jTable_yumia.getSelectedRow(), 5)) + "'"
-                                + "  and num_of_con is not null  and pallet_numb is not null         ").next()) {
+                                + "and num_of_con is not null  and pallet_numb is not null         ").next()) {
 
                             ResultSet s = opj.dataRead("pro_id,weight_,lot,pallet_numb,FORMAT (inserted_date, 'yyyy-MM-dd'),num_of_con,used,tot_wight,ord_id", "export", "lot=N'" + ToStringEnglish("" + jTable_yumia.getValueAt(jTable_yumia.getSelectedRow(), 2)) + "' "
                                     + "and pro_id=(select pro_id from products where pro_name=N'" + jTable_yumia.getValueAt(jTable_yumia.getSelectedRow(), 1) + "') "
                                     + "and cli_id=(select top(1) cli_id from clients where cli_name=N'" + jTable_yumia.getValueAt(jTable_yumia.getSelectedRow(), 0) + "')"
                                     + " and exported_date = '" + ToStringEnglish("" + jTable_yumia.getValueAt(jTable_yumia.getSelectedRow(), 5)) + "'"
-                                    + "  and num_of_con is not null  and pallet_numb is not null         ");
+                                    + "and num_of_con is not null  and pallet_numb is not null         ");
 
                             ArrayList<String[]> outerArr = new ArrayList<>();
                             int ordTid = 0;
@@ -2500,15 +2499,15 @@ public class mainform extends javax.swing.JFrame {
                                         + "and pro_id=(select pro_id from products where pro_name=N'" + jTable_yumia.getValueAt(jTable_yumia.getSelectedRow(), 1) + "') "
                                         + "and cli_id=(select top(1) cli_id from clients where cli_name=N'" + jTable_yumia.getValueAt(jTable_yumia.getSelectedRow(), 0) + "')"
                                         + " and exported_date = '" + ToStringEnglish("" + jTable_yumia.getValueAt(jTable_yumia.getSelectedRow(), 5)) + "'"
-                                        + "  and num_of_con is not null  and pallet_numb is not null         ");
+                                        + "and num_of_con is not null  and pallet_numb is not null         ");
                                 if (!opj.dataRead("*", "export", "lot=N'" + ToStringEnglish("" + jTable_yumia.getValueAt(jTable_yumia.getSelectedRow(), 2)) + "' "
                                         + "and pro_id=(select pro_id from products where pro_name=N'" + jTable_yumia.getValueAt(jTable_yumia.getSelectedRow(), 1) + "') "
                                         + "and cli_id=(select top(1) cli_id from clients where cli_name=N'" + jTable_yumia.getValueAt(jTable_yumia.getSelectedRow(), 0) + "')"
                                         + " and exported_date = '" + ToStringEnglish("" + jTable_yumia.getValueAt(jTable_yumia.getSelectedRow(), 5)) + "'"
-                                        + "  and num_of_con is not null  and pallet_numb is not null         ").next()) {
-                                    JOptionPane.showMessageDialog(this, " تم استرجاع البيان بنجاح  ", "إنتبه", JOptionPane.PLAIN_MESSAGE);
+                                        + "and num_of_con is not null  and pallet_numb is not null         ").next()) {
+                                    JOptionPane.showMessageDialog(this, addStyle(" تم استرجاع البيان بنجاح"), "إنتبه", JOptionPane.PLAIN_MESSAGE);
                                 } else {
-                                    JOptionPane.showMessageDialog(this, " حدث خطأ ما  ", "إنتبه", JOptionPane.PLAIN_MESSAGE);
+                                    JOptionPane.showMessageDialog(this, addStyle(" حدث خطأ ما"), "إنتبه", JOptionPane.PLAIN_MESSAGE);
                                 }
 
                             } else {
@@ -2516,15 +2515,15 @@ public class mainform extends javax.swing.JFrame {
                                 opj.delData("orders", "ord_id=" + ordTid);
 
                                 if (!opj.dataRead("*", "export", "ord_id=" + ordTid).next()) {
-                                    JOptionPane.showMessageDialog(this, " تم استرجاع البيان بنجاح  ", "إنتبه", JOptionPane.PLAIN_MESSAGE);
+                                    JOptionPane.showMessageDialog(this, addStyle(" تم استرجاع البيان بنجاح"), "إنتبه", JOptionPane.PLAIN_MESSAGE);
                                 } else {
-                                    JOptionPane.showMessageDialog(this, " حدث خطأ ما  ", "إنتبه", JOptionPane.PLAIN_MESSAGE);
+                                    JOptionPane.showMessageDialog(this, addStyle("حدث خطأ ما "), "إنتبه", JOptionPane.PLAIN_MESSAGE);
                                 }
                             }
 
                             jButton_youm_search.doClick();
                         } else {
-                            JOptionPane.showMessageDialog(this, "  لا يمكن استرجاع البيان ", "إنتبه", JOptionPane.PLAIN_MESSAGE);
+                            JOptionPane.showMessageDialog(this, addStyle("لا يمكن استرجاع البيان "), "إنتبه", JOptionPane.PLAIN_MESSAGE);
                         }
                     } catch (SQLException ex) {
                         Logger.getLogger(mainform.class.getName()).log(Level.SEVERE, null, ex);
@@ -2532,10 +2531,10 @@ public class mainform extends javax.swing.JFrame {
                     }
                 }
             } else {
-                JOptionPane.showMessageDialog(this, " يجب اختيار بيان من الجدول ", "إنتبه", JOptionPane.PLAIN_MESSAGE);
+                JOptionPane.showMessageDialog(this, addStyle(" يجب اختيار بيان من الجدول "), "إنتبه", JOptionPane.PLAIN_MESSAGE);
             }
         } else {
-            JOptionPane.showMessageDialog(this, "  لا يمكن اجراء العمليه ", "إنتبه", JOptionPane.PLAIN_MESSAGE);
+            JOptionPane.showMessageDialog(this, addStyle("لا يمكن اجراء العمليه "), "إنتبه", JOptionPane.PLAIN_MESSAGE);
         }
     }//GEN-LAST:event_jButton_youm_refundActionPerformed
 
@@ -2569,12 +2568,12 @@ public class mainform extends javax.swing.JFrame {
                 this.setEnabled(true);
                 fill_storage_table();
                 SingleEdit.dispose();
-                JOptionPane.showMessageDialog(this, " تم تعديل البيانات بنجاح  ", "إنتبه", JOptionPane.PLAIN_MESSAGE);
+                JOptionPane.showMessageDialog(this, addStyle(" تم تعديل البيانات بنجاح  "), "إنتبه", JOptionPane.PLAIN_MESSAGE);
             } else {
-                JOptionPane.showMessageDialog(this, "  هذه البالته ممتلئه ", "إنتبه", JOptionPane.PLAIN_MESSAGE);
+                JOptionPane.showMessageDialog(this, addStyle("هذه البالته ممتلئه "), "إنتبه", JOptionPane.PLAIN_MESSAGE);
             }
         } else {
-            JOptionPane.showMessageDialog(this, "  برجاء ادخال البيانات صحيحه ", "إنتبه", JOptionPane.PLAIN_MESSAGE);
+            JOptionPane.showMessageDialog(this, addStyle("برجاء ادخال البيانات صحيحه "), "إنتبه", JOptionPane.PLAIN_MESSAGE);
         }
     }//GEN-LAST:event_jButton_E_EditActionPerformed
 
@@ -2808,14 +2807,14 @@ public class mainform extends javax.swing.JFrame {
                             "storage_id=" + jTable_storage.getModel().getValueAt(jTable_storage.getSelectedRows()[i], 4).toString() + ""
                     );
                 } else {
-                    JOptionPane.showMessageDialog(this, "  هذه البالته ممتلئه ", "إنتبه", JOptionPane.PLAIN_MESSAGE);
+                    JOptionPane.showMessageDialog(this, addStyle("هذه البالته ممتلئه "), "إنتبه", JOptionPane.PLAIN_MESSAGE);
                     break;
                 }
             }
             MultiEdit.dispose();
-            JOptionPane.showMessageDialog(this, " تم تعديل البيانات بنجاح  ", "إنتبه", JOptionPane.PLAIN_MESSAGE);
+            JOptionPane.showMessageDialog(this, addStyle(" تم تعديل البيانات بنجاح  "), "إنتبه", JOptionPane.PLAIN_MESSAGE);
         } else {
-            JOptionPane.showMessageDialog(this, "Please enter a valid number", "إنتبه", JOptionPane.PLAIN_MESSAGE);
+            JOptionPane.showMessageDialog(this, addStyle("Please enter a valid number"), "إنتبه", JOptionPane.PLAIN_MESSAGE);
         }
         this.setEnabled(true);
         fill_storage_table();
@@ -2889,7 +2888,7 @@ public class mainform extends javax.swing.JFrame {
             FileOutputStream fileOut = new FileOutputStream(System.getProperty("user.dir") + "\\Temp\\Stock.xlsx");
             workbook.write(fileOut);
             fileOut.close();
-            JOptionPane.showMessageDialog(this, "please print the Execl", "Done", JOptionPane.PLAIN_MESSAGE);
+            JOptionPane.showMessageDialog(this, addStyle("please print the Execl"), "Done", JOptionPane.PLAIN_MESSAGE);
         } catch (IOException | SQLException ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage(), "exception", JOptionPane.PLAIN_MESSAGE);
         }
@@ -2971,7 +2970,7 @@ public class mainform extends javax.swing.JFrame {
             try ( FileOutputStream fileOut = new FileOutputStream(System.getProperty("user.dir") + "\\Temp\\report.xlsx")) {
                 workbook.write(fileOut);
             }
-            JOptionPane.showMessageDialog(this, "please print the Execl", "Done", JOptionPane.PLAIN_MESSAGE);
+            JOptionPane.showMessageDialog(this, addStyle("please print the Execl"), "Done", JOptionPane.PLAIN_MESSAGE);
         } catch (IOException ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage(), "exception", JOptionPane.PLAIN_MESSAGE);
         }
@@ -3019,6 +3018,7 @@ public class mainform extends javax.swing.JFrame {
         left_panel.add(panel);
         left_panel.revalidate();
         left_panel.repaint();
+        this.setAlwaysOnTop(false);
     }
 
     void textbox_number_weight(KeyEvent event, JTextField textboxname, int length) {
@@ -3387,6 +3387,10 @@ public class mainform extends javax.swing.JFrame {
             fw.write(nums + "");
         }
         return nums;
+    }
+
+    String addStyle(String text) {
+        return "<html><body><h1 style='font-family: Arial; font-size: 20pt; text-align: right; width: 150px;'>" + text.strip() + "</h1></body></html>";
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
