@@ -67,10 +67,10 @@ public class mainform extends javax.swing.JFrame {
     sqlcon opj;
 
     public short tick1num = 0, tick2num = 0;
-    private static int BagMax = 2;
+    private int BagMax = 2;
     private float Xx = 0, Yy = 0, width = 19, hight = 19;
     private final JButton jButton_bagmax = new javax.swing.JButton();
-    String Version = "V 55.0.0";
+    String Version = "V 56.0.0";
 
     public mainform(sqlcon ops) throws IOException {
         initComponents();
@@ -81,7 +81,7 @@ public class mainform extends javax.swing.JFrame {
             jButton_Outs_opener.setEnabled(false);
         } else {
             jButton_bagmax.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
-            jButton_bagmax.setText("Seting");
+            jButton_bagmax.setText("Setting");
             jButton_bagmax.addActionListener((java.awt.event.ActionEvent evt) -> {
                 try {
                     jButton_bagmaxActionPerformed();
@@ -352,6 +352,7 @@ public class mainform extends javax.swing.JFrame {
         jCheckBox_rep_2n1 = new javax.swing.JCheckBox();
         jComboBox_rep_palletsNrep = new javax.swing.JComboBox<>();
         jLabel16 = new javax.swing.JLabel();
+        jButton_reps_clear = new javax.swing.JButton();
         add_product = new javax.swing.JPanel();
         jTextField_pro_name = new javax.swing.JTextField();
         jButton_add_pro = new javax.swing.JButton();
@@ -415,6 +416,7 @@ public class mainform extends javax.swing.JFrame {
         jTextField_set_width = new javax.swing.JTextField();
         jButton_set_changearea = new javax.swing.JButton();
         jLabel40 = new javax.swing.JLabel();
+        jCheckBox_ignore_limits = new javax.swing.JCheckBox();
 
         jFileChooser1.setDialogType(javax.swing.JFileChooser.SAVE_DIALOG);
         jFileChooser1.setCurrentDirectory(new java.io.File("F:\\"));
@@ -1168,7 +1170,7 @@ public class mainform extends javax.swing.JFrame {
                     jButton_rep_printRepActionPerformed(evt);
                 }
             });
-            reports.add(jButton_rep_printRep, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 560, 120, 50));
+            reports.add(jButton_rep_printRep, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 500, 120, 50));
 
             jTable_rep_preview.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
             jTable_rep_preview.setModel(new javax.swing.table.DefaultTableModel(
@@ -1282,6 +1284,17 @@ public class mainform extends javax.swing.JFrame {
             jLabel16.setFont(new java.awt.Font("sansserif", 0, 24)); // NOI18N
             jLabel16.setText("رقم البالته");
             reports.add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 250, -1, -1));
+
+            jButton_reps_clear.setBackground(new java.awt.Color(255, 0, 0));
+            jButton_reps_clear.setFont(new java.awt.Font("Segoe UI", 3, 18)); // NOI18N
+            jButton_reps_clear.setForeground(new java.awt.Color(255, 255, 255));
+            jButton_reps_clear.setText("Clear All");
+            jButton_reps_clear.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    jButton_reps_clearActionPerformed(evt);
+                }
+            });
+            reports.add(jButton_reps_clear, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 580, 130, 40));
 
             left_panel.add(reports, "Ezn");
 
@@ -1750,6 +1763,9 @@ public class mainform extends javax.swing.JFrame {
             Settings.add(jLabel40, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 500, 690, 140));
             jLabel40.getAccessibleContext().setAccessibleDescription("Setting page Version");
 
+            jCheckBox_ignore_limits.setText("ignore limits");
+            Settings.add(jCheckBox_ignore_limits, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 240, 100, 40));
+
             left_panel.add(Settings, "settings");
 
             jSplitPane1.setLeftComponent(left_panel);
@@ -1793,12 +1809,12 @@ public class mainform extends javax.swing.JFrame {
 
     private void jButton_Ezn_openerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_Ezn_openerActionPerformed
         open_panel(reports);
-        ((DefaultTableModel) jTable_rep_select.getModel()).setRowCount(0);
-        ((DefaultTableModel) jTable_rep_preview.getModel()).setRowCount(0);
-        jComboBox_rep_Pros.setSelectedIndex(-1);
-        second = false;
-        jTextField_rep_totweight.setText("");
-        jComboBox_rep_palletsNrep.removeAllItems();
+//        ((DefaultTableModel) jTable_rep_select.getModel()).setRowCount(0);
+//        ((DefaultTableModel) jTable_rep_preview.getModel()).setRowCount(0);
+//        jComboBox_rep_Pros.setSelectedIndex(-1);
+//        second = false;
+//        jTextField_rep_totweight.setText("");
+//        jComboBox_rep_palletsNrep.removeAllItems();
     }//GEN-LAST:event_jButton_Ezn_openerActionPerformed
 
     private void jTextField_lotKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_lotKeyTyped
@@ -1888,7 +1904,7 @@ public class mainform extends javax.swing.JFrame {
         try {
             if (!jTextField_net_weight.getText().isBlank() && !jTextField_lot.getText().isBlank() && !jTextField_pallet_num.getText().isBlank() && !jTextField_bag_weight.getText().isBlank() && !jTextField_num_of_con.getText().isBlank() && !jTextField_weight.getText().isBlank() && jComboBox_pro_in_storage.getSelectedIndex() != -1) {
 
-                if (ToDoubleEnglish(jTextField_weight.getText()) <= 80.0 && ToDoubleEnglish(jTextField_net_weight.getText()) > 0.0) {
+                if ((ToDoubleEnglish(jTextField_weight.getText()) <= 60.0 && ToDoubleEnglish(jTextField_net_weight.getText()) > 5.0)||jCheckBox_ignore_limits.isSelected()) {
                     calc_net_weight();
 
                     ResultSet st = opj.dataRead("count(storage_id) ", "storage",
@@ -2999,6 +3015,16 @@ public class mainform extends javax.swing.JFrame {
 
     }//GEN-LAST:event_jTable_yumiaMouseReleased
 
+    private void jButton_reps_clearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_reps_clearActionPerformed
+        // TODO add your handling code here:
+        ((DefaultTableModel) jTable_rep_select.getModel()).setRowCount(0);
+        ((DefaultTableModel) jTable_rep_preview.getModel()).setRowCount(0);
+        jComboBox_rep_Pros.setSelectedIndex(-1);
+        second = false;
+        jTextField_rep_totweight.setText("");
+        jComboBox_rep_palletsNrep.removeAllItems();
+    }//GEN-LAST:event_jButton_reps_clearActionPerformed
+
     private void jButton_bagmaxActionPerformed() throws IOException {
         open_panel(Settings);
         jTextField_set_x.setText("" + Xx);
@@ -3417,6 +3443,7 @@ public class mainform extends javax.swing.JFrame {
     private javax.swing.JButton jButton_del_data;
     private javax.swing.JButton jButton_del_pro;
     private javax.swing.JButton jButton_rep_printRep;
+    private javax.swing.JButton jButton_reps_clear;
     private javax.swing.JButton jButton_set_Rest1;
     private javax.swing.JButton jButton_set_Rest2;
     private javax.swing.JButton jButton_set_changearea;
@@ -3432,6 +3459,7 @@ public class mainform extends javax.swing.JFrame {
     private javax.swing.JCheckBox jCheckBox_E_QR;
     private javax.swing.JCheckBox jCheckBox_M_Markpage;
     private javax.swing.JCheckBox jCheckBox_QR;
+    private javax.swing.JCheckBox jCheckBox_ignore_limits;
     private javax.swing.JCheckBox jCheckBox_print;
     private javax.swing.JCheckBox jCheckBox_rep_2n1;
     private javax.swing.JCheckBox jCheckBox_youm_old;
