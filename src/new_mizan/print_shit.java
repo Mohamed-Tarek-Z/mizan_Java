@@ -42,7 +42,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
  */
 public class print_shit {
 
-    void excel_120(int serial, List<String> order_ids, JTextField total_weight, JTextField jTextField6, JComboBox jComboBox_pro_in_reports, JTable jTable3, JTextField jTextField5, sqlcon opj, JFileChooser jFileChooser1) {
+    void excel_120(int serial, List<String> order_ids, JTextField total_weight, JTextField jTextField6, JComboBox jComboBox_pro_in_reports, JTable jTable3, sqlcon opj, JFileChooser jFileChooser1) {
 
         try {
             Locale arabicLocale = Locale.forLanguageTag("ar");
@@ -70,7 +70,7 @@ public class print_shit {
                 cell = sheet.getRow(0).getCell(0);
                 cell.setCellValue(_1 + _2 + _3 + "\n" + "\n" + _4 + _5);
                 String __1 = (_4.contains("ليكرا") ? "عدد الصناديق :          " : "عدد الشكاير :          ")
-                        + mainform.ToDoubleArabic((int) mainform.ToDoubleEnglish(jTextField5.getText()) + "")
+                        + mainform.ToDoubleArabic(jTable3.getRowCount() + "")
                         + (_4.contains("ليكرا") ? " صندوق" : "  شيكاره");
                 String __2 = "الــــــــــــــــــــــــــــــــوزن :       " + mainform.ToDoubleArabic(total_weight.getText()) + "";
                 cell = sheet.getRow(23).getCell(11);
@@ -92,7 +92,7 @@ public class print_shit {
                 int f = 1;
                 for (int t = 0; t < 121; t += 20) {
 
-                    for (int i = 2 + t; i <= 21 + t && i - 1 <= mainform.ToDoubleEnglish(jTextField5.getText()); i++) {
+                    for (int i = 2 + t; i <= 21 + t && i - 1 <= jTable3.getRowCount(); i++) {
                         if (jTable3.getRowCount() == i - 2) {
                             break;
                         }
@@ -106,7 +106,6 @@ public class print_shit {
 
             }
             create_excel_in_path(serial, order_ids, total_weight, jTable3, jTextField6, date_now, workbook, opj, jFileChooser1, jComboBox_pro_in_reports);
-            jTextField5.setText("");
         } catch (FileNotFoundException ex) {
             Logger.getLogger(mainform.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
@@ -115,7 +114,7 @@ public class print_shit {
 
     }
 
-    void excel_160(int serial, List<String> order_ids, JTextField total_weight, JTextField jTextField6, JComboBox jComboBox_pro_in_reports, JTable jTable3, JTextField jTextField5, sqlcon opj, JFileChooser jFileChooser1) {
+    void excel_160(int serial, List<String> order_ids, JTextField total_weight, JTextField jTextField6, JComboBox jComboBox_pro_in_reports, JTable jTable3, sqlcon opj, JFileChooser jFileChooser1) {
         try {
             Locale arabicLocale = Locale.forLanguageTag("ar");
             DateTimeFormatter arabicDateFormatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT).withLocale(arabicLocale).withDecimalStyle(DecimalStyle.of(arabicLocale));
@@ -142,7 +141,7 @@ public class print_shit {
                 cell = sheet.getRow(0).getCell(0);
                 cell.setCellValue(_1 + _2 + _3 + "\n" + "\n" + _4 + _5);
                 String __1 = (_4.contains("ليكرا") ? "عدد الصناديق :          " : "عدد الشكاير :          ")
-                        + mainform.ToDoubleArabic((int) mainform.ToDoubleEnglish(jTextField5.getText()) + "")
+                        + mainform.ToDoubleArabic(jTable3.getRowCount() + "")
                         + (_4.contains("ليكرا") ? " صندوق" : "  شيكاره");
                 String __2 = "الــــــــــــــــــــــــــــــــوزن :       " + mainform.ToDoubleArabic(total_weight.getText()) + "";
                 cell = sheet.getRow(23).getCell(16);
@@ -181,7 +180,7 @@ public class print_shit {
                 int f = 1;
                 for (int t = 0; t < 161; t += 20) {
 
-                    for (int i = 2 + t; i <= 21 + t && i - 1 <= mainform.ToDoubleEnglish(jTextField5.getText()); i++) {
+                    for (int i = 2 + t; i <= 21 + t && i - 1 <= jTable3.getRowCount(); i++) {
                         if (jTable3.getRowCount() == i - 2) {
                             break;
                         }
@@ -195,7 +194,6 @@ public class print_shit {
 
             }
             create_excel_in_path(serial, order_ids, total_weight, jTable3, jTextField6, date_now, workbook, opj, jFileChooser1, jComboBox_pro_in_reports);
-            jTextField5.setText("");
         } catch (FileNotFoundException ex) {
             Logger.getLogger(mainform.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
@@ -203,7 +201,7 @@ public class print_shit {
         }
     }
 
-    void excel_60_60(int serial, List<String> order_ids, List<String> ne, JTextField total_weight, JTextField jTextField6, JComboBox jComboBox_pro_in_reports, JTable jTable3, JTable first_table, JTextField jTextField5, String num_of_shikra, String wieght, String name_of_type, sqlcon opj, JFileChooser jFileChooser1) {
+    void excel_60_60(int serial, List<String> order_ids, List<String> ne, JTextField total_weight, JTextField jTextField6, JComboBox jComboBox_pro_in_reports, JTable jTable3, JTable first_table, String num_of_shikra, String wieght, String name_of_type, sqlcon opj, JFileChooser jFileChooser1) {
         try {
             Locale arabicLocale = Locale.forLanguageTag("ar");
             DateTimeFormatter arabicDateFormatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT).withLocale(arabicLocale).withDecimalStyle(DecimalStyle.of(arabicLocale));
@@ -242,7 +240,7 @@ public class print_shit {
                         + (_4.contains("ليكرا") ? " صندوق" : "  شيكاره");
                 String __2 = "الـــــــوزن :  " + mainform.ToDoubleArabic(wieght) + "";
                 String __3 = (_6.contains("ليكرا") ? "عدد الصناديق : " : "عدد الشكاير : ")
-                        + mainform.ToDoubleArabic((int) mainform.ToDoubleEnglish(jTextField5.getText()) + "")
+                        + mainform.ToDoubleArabic(jTable3.getRowCount()  + "")
                         + (_6.contains("ليكرا") ? " صندوق" : "  شيكاره");
                 String __4 = "الـــــــوزن :  " + mainform.ToDoubleArabic(total_weight.getText()) + "";
                 cell = sheet.getRow(23).getCell(11);
@@ -296,7 +294,7 @@ public class print_shit {
                 f = 10;
                 for (int t = 60; t < 121; t += 20) {
 
-                    for (int i = 2 + t; i <= 21 + t && i - 60 - 1 <= mainform.ToDoubleEnglish(jTextField5.getText()); i++) {
+                    for (int i = 2 + t; i <= 21 + t && i - 60 - 1 <= jTable3.getRowCount() ; i++) {
                         if (jTable3.getRowCount() == i + 60 - 2) {
                             break;
                         }
