@@ -1472,7 +1472,7 @@ public class mainform extends javax.swing.JFrame {
 
                 },
                 new String [] {
-                    "اللوط", "عدد الشكاير", "إجمالي الوزن", "Export"
+                    "اللوط", "عدد الشكاير", "إجمالي الوزن", "في المخزن"
                 }
             ) {
                 Class[] types = new Class [] {
@@ -1497,12 +1497,10 @@ public class mainform extends javax.swing.JFrame {
                 jTable_statis.getColumnModel().getColumn(0).setResizable(false);
                 jTable_statis.getColumnModel().getColumn(1).setResizable(false);
                 jTable_statis.getColumnModel().getColumn(2).setResizable(false);
-                jTable_statis.getColumnModel().getColumn(3).setMinWidth(80);
-                jTable_statis.getColumnModel().getColumn(3).setPreferredWidth(0);
-                jTable_statis.getColumnModel().getColumn(3).setMaxWidth(80);
+                jTable_statis.getColumnModel().getColumn(3).setResizable(false);
             }
 
-            statistics.add(jScrollPane7, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 140, 760, 420));
+            statistics.add(jScrollPane7, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 140, 790, 420));
 
             jLabel17.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
             jLabel17.setText("الصنف");
@@ -3480,7 +3478,7 @@ public class mainform extends javax.swing.JFrame {
             ResultSet st = opj.dataRead("lot,count(weight_),Sum(weight_)", "storage", "pro_id=(select  pro_id from products where pro_name=N'" + jComboBox_statis_pros.getSelectedItem() + "') and (date_ between '" + date1 + "'  and '" + date2 + "')  group by lot");
             try {
                 while (st.next()) {
-                    model.addRow(new Object[]{ToDoubleArabic(st.getString(1)), ToDoubleArabic(st.getString(2)), ToDoubleArabic(st.getString(3)), false});
+                    model.addRow(new Object[]{ToDoubleArabic(st.getString(1)), ToDoubleArabic(st.getString(2)), ToDoubleArabic(st.getString(3)), true});
 
                 }
             } catch (SQLException ex) {
@@ -3491,7 +3489,7 @@ public class mainform extends javax.swing.JFrame {
             st = opj.dataRead("lot,count(weight_),Sum(weight_)", "export", "pro_id=(select  pro_id from products where pro_name=N'" + jComboBox_statis_pros.getSelectedItem() + "') and (inserted_date between '" + date1 + "'  and '" + date2 + "')  group by lot");
             try {
                 while (st.next()) {
-                    model.addRow(new Object[]{ToDoubleArabic(st.getString(1)), ToDoubleArabic(st.getString(2)), ToDoubleArabic(st.getString(3)), true});
+                    model.addRow(new Object[]{ToDoubleArabic(st.getString(1)), ToDoubleArabic(st.getString(2)), ToDoubleArabic(st.getString(3)), false});
 
                 }
                 double tot = 0.0;
