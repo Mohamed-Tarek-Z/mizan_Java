@@ -71,7 +71,7 @@ public class mainform extends javax.swing.JFrame {
     private int BagMax = 2, repDiff = 30;
     private float Xx = 0, Yy = 0, width = 19, hight = 19;
     private final JButton jButton_bagmax = new javax.swing.JButton();
-    String Version = "V 57.0.0 Home";
+    String Version = "V 57.0.1.H";
 
     public mainform(sqlcon ops) throws IOException {
         initComponents();
@@ -2336,7 +2336,7 @@ public class mainform extends javax.swing.JFrame {
                                     DecimalFormat df = new DecimalFormat("#.###");
                                     jTable_rep_select.getModel().setValueAt(ToDoubleArabic(df.format(ToDoubleEnglish(jTable_rep_select.getModel().getValueAt(jTable_rep_select.getSelectedRow(), 1).toString()) - weight_sum)), jTable_rep_select.getSelectedRow(), 1);
                                     jTable_rep_select.getModel().setValueAt(ToDoubleArabic((Integer.parseInt(jTable_rep_select.getModel().getValueAt(jTable_rep_select.getSelectedRow(), 0).toString()) - pcount) + ""), jTable_rep_select.getSelectedRow(), 0);
-                                    if (ToDoubleEnglish(jTable_rep_select.getValueAt(jTable_rep_select.getSelectedRow(), 0).toString()) == 0.0 && ToDoubleEnglish(jTable_rep_select.getValueAt(jTable_rep_select.getSelectedRow(), 1).toString()) == 0.0) {
+                                    if (ToDoubleEnglish(jTable_rep_select.getValueAt(jTable_rep_select.getSelectedRow(), 0).toString()) <= 0.0 || ToDoubleEnglish(jTable_rep_select.getValueAt(jTable_rep_select.getSelectedRow(), 1).toString()) <= 0.0) {
                                         ((DefaultTableModel) jTable_rep_select.getModel()).removeRow(jTable_rep_select.getSelectedRow());
                                     }
 
@@ -3131,7 +3131,7 @@ public class mainform extends javax.swing.JFrame {
         // TODO add your handling code here:
         textbox_number(evt, jTextField_setting_repsDiff, 2);
         if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
-            repDiff = Integer.parseInt(jTextField_setting_repsDiff.getText());
+            repDiff = Integer.parseInt(ToStringEnglish(jTextField_setting_repsDiff.getText()));
         }
     }//GEN-LAST:event_jTextField_setting_repsDiffKeyTyped
 
@@ -3141,7 +3141,7 @@ public class mainform extends javax.swing.JFrame {
         jTextField_set_y.setText("" + Yy);
         jTextField_set_width.setText("" + width);
         jTextField_set_hight.setText("" + hight);
-        jTextField_setting_repsDiff.setText("" + repDiff);
+        jTextField_setting_repsDiff.setText(ToDoubleArabic(repDiff + ""));
         saveTicknum("TicketNumber1.txt", tick1num);
         saveTicknum("TicketNumber2.txt", tick2num);
         tick1num = loadTicknum("TicketNumber1.txt");
