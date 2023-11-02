@@ -375,15 +375,14 @@ public class mainform extends javax.swing.JFrame {
         statistics = new javax.swing.JPanel();
         jScrollPane7 = new javax.swing.JScrollPane();
         jTable_statis = new javax.swing.JTable();
-        jLabel17 = new javax.swing.JLabel();
         jLabel18 = new javax.swing.JLabel();
         jLabel19 = new javax.swing.JLabel();
-        jComboBox_statis_pros = new javax.swing.JComboBox<>();
         jDateChooser_statis_fromDate = new com.toedter.calendar.JDateChooser();
         jDateChooser_statis_toDate = new com.toedter.calendar.JDateChooser();
         jLabel20 = new javax.swing.JLabel();
         jLabel42 = new javax.swing.JLabel();
         jTextField_statis_tot = new javax.swing.JTextField();
+        jButton1 = new javax.swing.JButton();
         yomia = new javax.swing.JPanel();
         jScrollPane8 = new javax.swing.JScrollPane();
         jTable_yumia = new javax.swing.JTable();
@@ -1472,19 +1471,12 @@ public class mainform extends javax.swing.JFrame {
 
                 },
                 new String [] {
-                    "اللوط", "عدد الشكاير", "إجمالي الوزن", "في المخزن"
+                    "الصنف", "اللوط", "عدد الشكاير", "إجمالي الوزن"
                 }
             ) {
-                Class[] types = new Class [] {
-                    java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Boolean.class
-                };
                 boolean[] canEdit = new boolean [] {
                     false, false, false, false
                 };
-
-                public Class getColumnClass(int columnIndex) {
-                    return types [columnIndex];
-                }
 
                 public boolean isCellEditable(int rowIndex, int columnIndex) {
                     return canEdit [columnIndex];
@@ -1494,7 +1486,6 @@ public class mainform extends javax.swing.JFrame {
             jTable_statis.setShowGrid(true);
             jScrollPane7.setViewportView(jTable_statis);
             if (jTable_statis.getColumnModel().getColumnCount() > 0) {
-                jTable_statis.getColumnModel().getColumn(0).setResizable(false);
                 jTable_statis.getColumnModel().getColumn(1).setResizable(false);
                 jTable_statis.getColumnModel().getColumn(2).setResizable(false);
                 jTable_statis.getColumnModel().getColumn(3).setResizable(false);
@@ -1502,31 +1493,19 @@ public class mainform extends javax.swing.JFrame {
 
             statistics.add(jScrollPane7, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 140, 790, 420));
 
-            jLabel17.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
-            jLabel17.setText("الصنف");
-            statistics.add(jLabel17, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 20, -1, -1));
-
             jLabel18.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
             jLabel18.setText("إلي");
-            statistics.add(jLabel18, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 20, -1, -1));
+            statistics.add(jLabel18, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 20, -1, -1));
 
             jLabel19.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
             jLabel19.setText("من");
-            statistics.add(jLabel19, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 10, -1, -1));
-
-            jComboBox_statis_pros.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
-            jComboBox_statis_pros.addItemListener(new java.awt.event.ItemListener() {
-                public void itemStateChanged(java.awt.event.ItemEvent evt) {
-                    jComboBox_statis_prosItemStateChanged(evt);
-                }
-            });
-            statistics.add(jComboBox_statis_pros, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 60, 340, -1));
-            statistics.add(jDateChooser_statis_fromDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 60, 140, 30));
-            statistics.add(jDateChooser_statis_toDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 60, 140, 30));
+            statistics.add(jLabel19, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 20, -1, -1));
+            statistics.add(jDateChooser_statis_fromDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 70, 140, 30));
+            statistics.add(jDateChooser_statis_toDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 70, 140, 30));
 
             jLabel20.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
             jLabel20.setText("التاريخ:");
-            statistics.add(jLabel20, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 10, -1, -1));
+            statistics.add(jLabel20, new org.netbeans.lib.awtextra.AbsoluteConstraints(730, 30, -1, -1));
 
             jLabel42.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
             jLabel42.setText("المجموع");
@@ -1535,6 +1514,15 @@ public class mainform extends javax.swing.JFrame {
             jTextField_statis_tot.setEditable(false);
             jTextField_statis_tot.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
             statistics.add(jTextField_statis_tot, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 572, 200, 50));
+
+            jButton1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+            jButton1.setText("بحث");
+            jButton1.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    jButton1ActionPerformed(evt);
+                }
+            });
+            statistics.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 85, 80, 40));
 
             left_panel.add(statistics, "statis");
 
@@ -2491,15 +2479,7 @@ public class mainform extends javax.swing.JFrame {
         jTable_statis.setAutoCreateRowSorter(true);
         jDateChooser_statis_fromDate.setCalendar(null);
         jDateChooser_statis_toDate.setCalendar(null);
-        combox_fill(jComboBox_statis_pros, opj.dataRead("pro_name", "products"), true);
-        jComboBox_statis_pros.setSelectedIndex(-1);
     }//GEN-LAST:event_jButton_Statics_openerActionPerformed
-
-    private void jComboBox_statis_prosItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jComboBox_statis_prosItemStateChanged
-        if (jComboBox_statis_pros.getSelectedIndex() != -1 && jComboBox_statis_pros.hasFocus()) {
-            fill_jtable5();
-        }
-    }//GEN-LAST:event_jComboBox_statis_prosItemStateChanged
 
     private void jButton_Outs_openerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_Outs_openerActionPerformed
         open_panel(yomia);
@@ -3133,6 +3113,11 @@ public class mainform extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jTextField_setting_repsDiffKeyTyped
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        fill_jtable5();
+    }//GEN-LAST:event_jButton1ActionPerformed
+
     private void jButton_bagmaxActionPerformed() throws IOException {
         open_panel(Settings);
         jTextField_set_x.setText("" + Xx);
@@ -3475,26 +3460,19 @@ public class mainform extends javax.swing.JFrame {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             String date1 = sdf.format(jDateChooser_statis_fromDate.getCalendar().getTime());
             String date2 = sdf.format(jDateChooser_statis_toDate.getCalendar().getTime());
-            ResultSet st = opj.dataRead("lot,count(weight_),Sum(weight_)", "storage", "pro_id=(select  pro_id from products where pro_name=N'" + jComboBox_statis_pros.getSelectedItem() + "') and (date_ between '" + date1 + "'  and '" + date2 + "')  group by lot");
+            ResultSet st = opj.dataRead(
+                    "(select pro_name from products where products.pro_id=s.pro_id) as TypeName, lot as Lot, sum(bags) as Bags, sum(total) as Total",
+                    "( select pro_id, lot, count(weight_)as bags, sum(weight_) as total from storage where (date_ between '" + date1 + "'  and '" + date2
+                    + "') group by lot, pro_id UNION ALL select pro_id, lot, count(weight_)as bags, sum(weight_) as total from export where (inserted_date between '" + date1 + "'  and '" + date2
+                    + "') group by lot, pro_id )s group by s.lot, s.pro_id order by s.pro_id");
             try {
                 while (st.next()) {
-                    model.addRow(new Object[]{ToDoubleArabic(st.getString(1)), ToDoubleArabic(st.getString(2)), ToDoubleArabic(st.getString(3)), true});
-
-                }
-            } catch (SQLException ex) {
-                Logger.getLogger(mainform.class
-                        .getName()).log(Level.SEVERE, null, ex);
-                JOptionPane.showMessageDialog(this, ex.getMessage(), "exception", JOptionPane.PLAIN_MESSAGE);
-            }
-            st = opj.dataRead("lot,count(weight_),Sum(weight_)", "export", "pro_id=(select  pro_id from products where pro_name=N'" + jComboBox_statis_pros.getSelectedItem() + "') and (inserted_date between '" + date1 + "'  and '" + date2 + "')  group by lot");
-            try {
-                while (st.next()) {
-                    model.addRow(new Object[]{ToDoubleArabic(st.getString(1)), ToDoubleArabic(st.getString(2)), ToDoubleArabic(st.getString(3)), false});
+                    model.addRow(new Object[]{st.getString(1), ToDoubleArabic(st.getString(2)), ToDoubleArabic(st.getString(3)), ToDoubleArabic(st.getString(4))});
 
                 }
                 double tot = 0.0;
                 for (int i = 0; i < model.getRowCount(); i++) {
-                    tot += ToDoubleEnglish(model.getValueAt(i, 2).toString());
+                    tot += ToDoubleEnglish(model.getValueAt(i, 3).toString());
                 }
                 jTextField_statis_tot.setText(ToDoubleArabic(new DecimalFormat("#.##").format(tot) + ""));
             } catch (SQLException ex) {
@@ -3538,6 +3516,7 @@ public class mainform extends javax.swing.JFrame {
     private javax.swing.JFrame SingleEdit;
     private javax.swing.JPanel add_product;
     private javax.swing.JPanel in_data;
+    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton_DoBack;
     private javax.swing.JButton jButton_E_Edit;
@@ -3583,7 +3562,6 @@ public class mainform extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> jComboBox_pro_in_storage;
     private javax.swing.JComboBox<String> jComboBox_rep_Pros;
     private javax.swing.JComboBox<String> jComboBox_rep_palletsNrep;
-    private javax.swing.JComboBox<String> jComboBox_statis_pros;
     private javax.swing.JComboBox<String> jComboBox_stock_Pros;
     private com.toedter.calendar.JDateChooser jDateChooser_statis_fromDate;
     private com.toedter.calendar.JDateChooser jDateChooser_statis_toDate;
@@ -3598,7 +3576,6 @@ public class mainform extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
-    private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
