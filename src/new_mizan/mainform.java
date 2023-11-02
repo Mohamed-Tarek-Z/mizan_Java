@@ -383,6 +383,7 @@ public class mainform extends javax.swing.JFrame {
         jLabel42 = new javax.swing.JLabel();
         jTextField_statis_tot = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
+        jButton_statis_createExcl = new javax.swing.JButton();
         yomia = new javax.swing.JPanel();
         jScrollPane8 = new javax.swing.JScrollPane();
         jTable_yumia = new javax.swing.JTable();
@@ -1523,6 +1524,14 @@ public class mainform extends javax.swing.JFrame {
                 }
             });
             statistics.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 85, 80, 40));
+
+            jButton_statis_createExcl.setText("Create Excel");
+            jButton_statis_createExcl.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    jButton_statis_createExclActionPerformed(evt);
+                }
+            });
+            statistics.add(jButton_statis_createExcl, new org.netbeans.lib.awtextra.AbsoluteConstraints(720, 590, -1, -1));
 
             left_panel.add(statistics, "statis");
 
@@ -3118,6 +3127,82 @@ public class mainform extends javax.swing.JFrame {
         fill_jtable5();
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    private void jButton_statis_createExclActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_statis_createExclActionPerformed
+        // TODO add your handling code here:
+        if (jDateChooser_statis_fromDate.getCalendar() != null && jDateChooser_statis_toDate.getCalendar() != null) {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            String date1 = sdf.format(jDateChooser_statis_fromDate.getCalendar().getTime());
+            String date2 = sdf.format(jDateChooser_statis_toDate.getCalendar().getTime());
+            ResultSet st = opj.dataRead(
+                    "(select pro_name from products where products.pro_id=s.pro_id) as TypeName, lot as Lot, sum(bags) as Bags, sum(total) as Total",
+                    "( select pro_id, lot, count(weight_)as bags, sum(weight_) as total from storage where (date_ between '" + date1 + "'  and '" + date2
+                    + "') group by lot, pro_id UNION ALL select pro_id, lot, count(weight_)as bags, sum(weight_) as total from export where (inserted_date between '" + date1 + "'  and '" + date2
+                    + "') group by lot, pro_id )s group by s.lot, s.pro_id order by s.pro_id");
+            int RowIndex = 4;
+            try {
+                FileInputStream EX = new FileInputStream(new File("Donot_Change\\Stock.xlsx"));
+                XSSFWorkbook workbook = new XSSFWorkbook(EX);
+                XSSFSheet sheet = workbook.getSheetAt(0);
+                Cell cell = sheet.getRow(1).getCell(1);
+                cell.setCellValue("التاريـــخ من :   " + ToDoubleArabic(date1) + "  إلى : " + ToDoubleArabic(date2));
+                double prevTot = 0.0;
+                String prevName = "";
+                ArrayList<Integer> reg = new ArrayList<>();
+                while (st.next()) {
+
+                    if (RowIndex >= 6) {
+                        CellCopyPolicy poli = new CellCopyPolicy();
+                        poli.setCopyCellStyle(true);
+                        poli.setCopyCellValue(true);
+                        sheet.copyRows(RowIndex - 1, RowIndex, RowIndex, poli);
+                    }
+                    if (prevName.equalsIgnoreCase(st.getString(1))) {
+                        reg.add(RowIndex);
+                        prevTot += Double.parseDouble(st.getString(4));
+                    } else {
+                        if (reg.size() > 1) {
+                            sheet.addMergedRegion(new CellRangeAddress(reg.get(0), reg.get(reg.size() - 1), 1, 1));
+                            sheet.addMergedRegion(new CellRangeAddress(reg.get(0), reg.get(reg.size() - 1), 5, 5));
+                            cell = sheet.getRow(reg.get(0)).getCell(5);
+                            cell.setCellValue(ToDoubleArabic(new DecimalFormat("#.###").format(prevTot)));
+                        }
+                        reg.clear();
+                        reg.add(RowIndex);
+                        prevName = st.getString(1);
+
+                        cell = sheet.getRow(RowIndex).getCell(1);
+                        cell.setCellValue(st.getString(1));
+
+                        prevTot = Double.parseDouble(st.getString(4));
+                    }
+
+                    cell = sheet.getRow(RowIndex).getCell(2);
+                    cell.setCellValue(ToDoubleArabic(st.getString(2)));
+
+                    cell = sheet.getRow(RowIndex).getCell(3);
+                    cell.setCellValue(ToDoubleArabic(st.getString(3)));
+
+                    cell = sheet.getRow(RowIndex).getCell(4);
+                    cell.setCellValue(ToDoubleArabic(st.getString(4)));
+
+                    RowIndex++;
+                }
+                if (reg.size() > 1) {
+                    sheet.addMergedRegion(new CellRangeAddress(reg.get(0), reg.get(reg.size() - 1), 1, 1));
+                    sheet.addMergedRegion(new CellRangeAddress(reg.get(0), reg.get(reg.size() - 1), 5, 5));
+                }
+                reg.clear();
+                EX.close();
+                FileOutputStream fileOut = new FileOutputStream(System.getProperty("user.dir") + "\\Temp\\Statistics.xlsx");
+                workbook.write(fileOut);
+                fileOut.close();
+                JOptionPane.showMessageDialog(this, addStyle("please print the Execl"), "Done", JOptionPane.PLAIN_MESSAGE);
+            } catch (IOException | SQLException ex) {
+                JOptionPane.showMessageDialog(this, ex.getMessage(), "exception", JOptionPane.PLAIN_MESSAGE);
+            }
+        }
+    }//GEN-LAST:event_jButton_statis_createExclActionPerformed
+
     private void jButton_bagmaxActionPerformed() throws IOException {
         open_panel(Settings);
         jTextField_set_x.setText("" + Xx);
@@ -3539,6 +3624,7 @@ public class mainform extends javax.swing.JFrame {
     private javax.swing.JButton jButton_set_Rest1;
     private javax.swing.JButton jButton_set_Rest2;
     private javax.swing.JButton jButton_set_changearea;
+    private javax.swing.JButton jButton_statis_createExcl;
     private javax.swing.JButton jButton_stock_createExcl;
     private javax.swing.JButton jButton_youm_createExcel;
     private javax.swing.JButton jButton_youm_getClients;
