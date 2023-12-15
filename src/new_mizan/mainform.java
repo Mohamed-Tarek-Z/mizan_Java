@@ -163,6 +163,7 @@ public class mainform extends javax.swing.JFrame {
         jLabel53 = new javax.swing.JLabel();
         jLabel21 = new javax.swing.JLabel();
         jComboBox_ME_type = new javax.swing.JComboBox<>();
+        jCheckBox_ME_MarkBag = new javax.swing.JCheckBox();
         jSplitPane1 = new javax.swing.JSplitPane();
         right_panel_menu = new javax.swing.JPanel();
         jButton_Mizan_opener = new javax.swing.JButton();
@@ -423,6 +424,7 @@ public class mainform extends javax.swing.JFrame {
         jCheckBox_ignore_limits = new javax.swing.JCheckBox();
         jLabel45 = new javax.swing.JLabel();
         jTextField_setting_repsDiff = new javax.swing.JTextField();
+        jCheckBox_rev_order = new javax.swing.JCheckBox();
 
         jFileChooser1.setDialogType(javax.swing.JFileChooser.SAVE_DIALOG);
         jFileChooser1.setCurrentDirectory(new java.io.File("F:\\"));
@@ -630,10 +632,10 @@ public class mainform extends javax.swing.JFrame {
             MultiEdit.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
             MultiEdit.setLocation(new java.awt.Point(100, 100));
             MultiEdit.setLocationByPlatform(true);
-            MultiEdit.setMaximumSize(new java.awt.Dimension(500, 350));
-            MultiEdit.setMinimumSize(new java.awt.Dimension(500, 350));
+            MultiEdit.setMaximumSize(new java.awt.Dimension(500, 400));
+            MultiEdit.setMinimumSize(new java.awt.Dimension(500, 400));
             MultiEdit.setName("Multi Edit"); // NOI18N
-            MultiEdit.setPreferredSize(new java.awt.Dimension(500, 350));
+            MultiEdit.setPreferredSize(new java.awt.Dimension(500, 400));
             MultiEdit.setResizable(false);
             MultiEdit.setType(java.awt.Window.Type.POPUP);
             MultiEdit.addWindowListener(new java.awt.event.WindowAdapter() {
@@ -650,7 +652,7 @@ public class mainform extends javax.swing.JFrame {
                     jTextField_ME_lotKeyTyped(evt);
                 }
             });
-            MultiEdit.getContentPane().add(jTextField_ME_lot, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 170, 90, -1));
+            MultiEdit.getContentPane().add(jTextField_ME_lot, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 170, 90, -1));
 
             jTextField_ME_PaltNum.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
             jTextField_ME_PaltNum.setHorizontalAlignment(javax.swing.JTextField.CENTER);
@@ -659,15 +661,15 @@ public class mainform extends javax.swing.JFrame {
                     jTextField_ME_PaltNumKeyTyped(evt);
                 }
             });
-            MultiEdit.getContentPane().add(jTextField_ME_PaltNum, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 170, 90, -1));
+            MultiEdit.getContentPane().add(jTextField_ME_PaltNum, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 170, 90, -1));
 
             jLabel47.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
             jLabel47.setText("رقم البالته");
-            MultiEdit.getContentPane().add(jLabel47, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 130, -1, -1));
+            MultiEdit.getContentPane().add(jLabel47, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 130, -1, -1));
 
             jLabel48.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
             jLabel48.setText("رقم اللوط");
-            MultiEdit.getContentPane().add(jLabel48, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 130, -1, -1));
+            MultiEdit.getContentPane().add(jLabel48, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 130, -1, -1));
 
             jButton_ME_Edit.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
             jButton_ME_Edit.setText("تعديل");
@@ -676,7 +678,7 @@ public class mainform extends javax.swing.JFrame {
                     jButton_ME_EditActionPerformed(evt);
                 }
             });
-            MultiEdit.getContentPane().add(jButton_ME_Edit, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 220, 170, 60));
+            MultiEdit.getContentPane().add(jButton_ME_Edit, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 260, 170, 60));
 
             jLabel53.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
             jLabel53.setText("القيم الجديده");
@@ -688,6 +690,10 @@ public class mainform extends javax.swing.JFrame {
 
             jComboBox_ME_type.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
             MultiEdit.getContentPane().add(jComboBox_ME_type, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 80, 220, -1));
+
+            jCheckBox_ME_MarkBag.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+            jCheckBox_ME_MarkBag.setText("تعليم الشائر");
+            MultiEdit.getContentPane().add(jCheckBox_ME_MarkBag, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 140, -1, -1));
 
             MultiEdit.getAccessibleContext().setAccessibleName("Multiedit_Window");
 
@@ -919,9 +925,6 @@ public class mainform extends javax.swing.JFrame {
                 }
             });
             jTextField_weight.addKeyListener(new java.awt.event.KeyAdapter() {
-                public void keyReleased(java.awt.event.KeyEvent evt) {
-                    jTextField_weightKeyReleased(evt);
-                }
                 public void keyTyped(java.awt.event.KeyEvent evt) {
                     jTextField_weightKeyTyped(evt);
                 }
@@ -1800,6 +1803,9 @@ public class mainform extends javax.swing.JFrame {
             });
             Settings.add(jTextField_setting_repsDiff, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 280, 160, 70));
 
+            jCheckBox_rev_order.setText("Rev order");
+            Settings.add(jCheckBox_rev_order, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 230, -1, -1));
+
             left_panel.add(Settings, "settings");
 
             jSplitPane1.setLeftComponent(left_panel);
@@ -1898,10 +1904,15 @@ public class mainform extends javax.swing.JFrame {
             }
             calc_net_weight();
         }
-        if (evt.getKeyChar() == KeyEvent.VK_ENTER && (!jTextField_net_weight.getText().isBlank())) {
+        if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
             calc_net_weight();
-            jTextField_num_of_con.requestFocusInWindow();
-            jButton_add_data.doClick();
+            if (jCheckBox_rev_order.isSelected()) {
+            } else {
+                jTextField_num_of_con.requestFocusInWindow();
+            }
+            if (!jTextField_net_weight.getText().isBlank()) {
+                jButton_add_data.doClick();
+            }
         }
         if (evt.getKeyChar() == KeyEvent.VK_DELETE) {
             if ((evt.getModifiersEx() & KeyEvent.SHIFT_DOWN_MASK) != 0) {
@@ -1924,6 +1935,7 @@ public class mainform extends javax.swing.JFrame {
         if (evt.getKeyChar() == KeyEvent.VK_ENTER && !jTextField_weight.getText().isBlank()) {
             jTextField_net_weight.requestFocusInWindow();
         }
+        calc_net_weight();
     }//GEN-LAST:event_jTextField_weightKeyTyped
 
     private void jTextField_weight_of_conKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_weight_of_conKeyTyped
@@ -2755,13 +2767,10 @@ public class mainform extends javax.swing.JFrame {
                 jComboBox_ME_type.setSelectedItem(jComboBox_pro_in_storage.getSelectedItem());
                 jTextField_ME_PaltNum.setText(jTable_storage.getModel().getValueAt(jTable_storage.getSelectedRow(), 3).toString());
                 jTextField_ME_lot.setText(jTable_storage.getModel().getValueAt(jTable_storage.getSelectedRow(), 2).toString());
+                jCheckBox_ME_MarkBag.setSelected(jTable_storage.getModel().getValueAt(jTable_storage.getSelectedRow(), 6).toString().equals("0"));
             }
         }
     }//GEN-LAST:event_jTable_storageMouseReleased
-
-    private void jTextField_weightKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_weightKeyReleased
-        calc_net_weight();
-    }//GEN-LAST:event_jTextField_weightKeyReleased
 
     private void jButton_clearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_clearActionPerformed
         jTextField_bag_weight.setText("");
@@ -2908,6 +2917,7 @@ public class mainform extends javax.swing.JFrame {
                     opj.update("storage",
                             "pallet_numb=" + ToStringEnglish(jTextField_ME_PaltNum.getText())
                             + ",lot=N'" + ToStringEnglish(jTextField_ME_lot.getText()) + "'"
+                            + "used=" + (jCheckBox_ME_MarkBag.isSelected() ? 1 : 0) + " "
                             + ",pro_id=(select pro_id from products where pro_name=N'" + jComboBox_ME_type.getSelectedItem().toString() + "')",
                             "storage_id=" + jTable_storage.getModel().getValueAt(jTable_storage.getSelectedRows()[i], 4).toString() + ""
                     );
@@ -3635,12 +3645,14 @@ public class mainform extends javax.swing.JFrame {
     private javax.swing.JCheckBox jCheckBox_E_O_Mark;
     private javax.swing.JCheckBox jCheckBox_E_P;
     private javax.swing.JCheckBox jCheckBox_E_QR;
+    private javax.swing.JCheckBox jCheckBox_ME_MarkBag;
     private javax.swing.JCheckBox jCheckBox_M_Markpage;
     private javax.swing.JCheckBox jCheckBox_QR;
     private javax.swing.JCheckBox jCheckBox_ignore_limits;
     private javax.swing.JCheckBox jCheckBox_print;
     private javax.swing.JCheckBox jCheckBox_rep_2n1;
     private javax.swing.JCheckBox jCheckBox_rep_wzn;
+    private javax.swing.JCheckBox jCheckBox_rev_order;
     private javax.swing.JCheckBox jCheckBox_youm_old;
     private javax.swing.JComboBox<String> jComboBox_E_O_proName;
     private javax.swing.JComboBox<String> jComboBox_E_proName;
