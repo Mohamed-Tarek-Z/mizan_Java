@@ -71,7 +71,7 @@ public class mainform extends javax.swing.JFrame {
     private int BagMax = 2, repDiff = 30;
     private float Xx = 0, Yy = 0, width = 19, hight = 19;
     private final JButton jButton_bagmax = new javax.swing.JButton();
-    String Version = "V 57.0.1.H";
+    String Version = "V 58.0.0.H";
 
     public mainform(sqlcon ops) throws IOException {
         initComponents();
