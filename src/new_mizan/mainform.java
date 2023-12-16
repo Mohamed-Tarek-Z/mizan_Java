@@ -68,10 +68,10 @@ public class mainform extends javax.swing.JFrame {
     sqlcon opj;
 
     public short tick1num = 0, tick2num = 0;
-    private int BagMax = 2, repDiff = 30;
+    private int BagMax = 2, repDiff = 20;
     private float Xx = 0, Yy = 0, width = 19, hight = 19;
     private final JButton jButton_bagmax = new javax.swing.JButton();
-    String Version = "V 58.0.0.H";
+    String Version = "V 58.1.0.W";
 
     public mainform(sqlcon ops) throws IOException {
         initComponents();
@@ -1306,6 +1306,11 @@ public class mainform extends javax.swing.JFrame {
             reports.add(jButton_reps_clear, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 580, 130, 40));
 
             jCheckBox_rep_wzn.setText("وزن");
+            jCheckBox_rep_wzn.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    jCheckBox_rep_wznActionPerformed(evt);
+                }
+            });
             reports.add(jCheckBox_rep_wzn, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 130, -1, -1));
 
             left_panel.add(reports, "Ezn");
@@ -1907,6 +1912,7 @@ public class mainform extends javax.swing.JFrame {
         if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
             calc_net_weight();
             if (jCheckBox_rev_order.isSelected()) {
+                jTextField_weight.requestFocusInWindow();
             } else {
                 jTextField_num_of_con.requestFocusInWindow();
             }
@@ -2917,7 +2923,7 @@ public class mainform extends javax.swing.JFrame {
                     opj.update("storage",
                             "pallet_numb=" + ToStringEnglish(jTextField_ME_PaltNum.getText())
                             + ",lot=N'" + ToStringEnglish(jTextField_ME_lot.getText()) + "'"
-                            + "used=" + (jCheckBox_ME_MarkBag.isSelected() ? 1 : 0) + " "
+                            + ",used=" + (jCheckBox_ME_MarkBag.isSelected() ? 1 : 0) + " "
                             + ",pro_id=(select pro_id from products where pro_name=N'" + jComboBox_ME_type.getSelectedItem().toString() + "')",
                             "storage_id=" + jTable_storage.getModel().getValueAt(jTable_storage.getSelectedRows()[i], 4).toString() + ""
                     );
@@ -3212,6 +3218,28 @@ public class mainform extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_jButton_statis_createExclActionPerformed
+
+    private void jCheckBox_rep_wznActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox_rep_wznActionPerformed
+        // TODO add your handling code here:
+        if (jComboBox_rep_Pros.getSelectedIndex() != -1) {
+            ((DefaultTableModel) jTable_rep_select.getModel()).setRowCount(0);
+            ResultSet st = opj.dataRead("count(*),sum(weight_),lot,pallet_numb,used", "storage", "pro_id=(select pro_id from products where pro_name=N'" + jComboBox_rep_Pros.getSelectedItem().toString() + "' )  GROUP BY lot,pallet_numb,used");
+            try {
+                while (st.next()) {
+                    ((DefaultTableModel) jTable_rep_select.getModel()).addRow(new Object[]{ToDoubleArabic(st.getString(1)), ToDoubleArabic(st.getString(2)), ToDoubleArabic(st.getString(3)), ToDoubleArabic(st.getString(4)), ToDoubleArabic(st.getString(5))});
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(mainform.class.getName()).log(Level.SEVERE, null, ex);
+                JOptionPane.showMessageDialog(this, ex.getMessage(), "exception", JOptionPane.PLAIN_MESSAGE);
+            }
+
+            ((DefaultTableModel) jTable_rep_preview.getModel()).setRowCount(0);
+            serial = 0;
+            order_ids.clear();
+            jTextField_rep_totweight.setText("");
+            jComboBox_rep_palletsNrep.removeAllItems();
+        }
+    }//GEN-LAST:event_jCheckBox_rep_wznActionPerformed
 
     private void jButton_bagmaxActionPerformed() throws IOException {
         open_panel(Settings);
