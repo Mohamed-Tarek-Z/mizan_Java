@@ -71,7 +71,7 @@ public class mainform extends javax.swing.JFrame {
     private int BagMax = 2, repDiff = 20;
     private float Xx = 0, Yy = 0, width = 19, hight = 19;
     private final JButton jButton_bagmax = new javax.swing.JButton();
-    String Version = "V 58.1.0.W";
+    String Version = "V 58.2.1.H";
 
     public mainform(sqlcon ops) throws IOException {
         initComponents();
@@ -1931,7 +1931,11 @@ public class mainform extends javax.swing.JFrame {
         textbox_number(evt, jTextField_bag_weight, BagMax);
         calc_net_weight();
         if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
-            jTextField_weight.requestFocusInWindow();
+            if (jCheckBox_rev_order.isSelected()) {
+                jTextField_net_weight.requestFocusInWindow();
+            } else {
+                jTextField_weight.requestFocusInWindow();
+            }
         }
     }//GEN-LAST:event_jTextField_bag_weightKeyTyped
 
@@ -3010,7 +3014,8 @@ public class mainform extends javax.swing.JFrame {
             workbook.write(fileOut);
             fileOut.close();
             JOptionPane.showMessageDialog(this, addStyle("please print the Execl"), "Done", JOptionPane.PLAIN_MESSAGE);
-        } catch (IOException | SQLException ex) {
+            Desktop.getDesktop().open(new File(System.getProperty("user.dir") + "\\Temp\\"));
+        } catch (HeadlessException | IOException | SQLException ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage(), "exception", JOptionPane.PLAIN_MESSAGE);
         }
     }//GEN-LAST:event_jButton_stock_createExclActionPerformed
@@ -3027,6 +3032,7 @@ public class mainform extends javax.swing.JFrame {
             // TODO add your handling code here:
             Desktop.getDesktop().print(new File(System.getProperty("user.dir") + "\\Temp\\myFile.xlsx"));
             tick1num++;
+            this.jTextField_num_of_con.requestFocusInWindow();
         } catch (IOException ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage(), "exception", JOptionPane.PLAIN_MESSAGE);
             Logger.getLogger(mainform.class.getName()).log(Level.SEVERE, null, ex);
@@ -3213,6 +3219,7 @@ public class mainform extends javax.swing.JFrame {
                 workbook.write(fileOut);
                 fileOut.close();
                 JOptionPane.showMessageDialog(this, addStyle("please print the Execl"), "Done", JOptionPane.PLAIN_MESSAGE);
+                Desktop.getDesktop().open(new File(System.getProperty("user.dir") + "\\Temp\\"));
             } catch (IOException | SQLException ex) {
                 JOptionPane.showMessageDialog(this, ex.getMessage(), "exception", JOptionPane.PLAIN_MESSAGE);
             }
