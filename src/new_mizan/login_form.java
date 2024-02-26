@@ -146,6 +146,7 @@ public class login_form extends javax.swing.JFrame {
         }
         if (jComboBox1.getSelectedIndex() == 1) {
             jPasswordField1.requestFocus();
+            jPasswordField1.setText("628");
         }
     }//GEN-LAST:event_jComboBox1ItemStateChanged
 
