@@ -350,7 +350,7 @@ public class mainform extends javax.swing.JFrame {
         ;
         jTextField_rep_totweight = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
-        jLabel13 = new javax.swing.JLabel();
+        jLabel_Order_num = new javax.swing.JLabel();
         jCheckBox_rep_2n1 = new javax.swing.JCheckBox();
         jComboBox_rep_palletsNrep = new javax.swing.JComboBox<>();
         jLabel16 = new javax.swing.JLabel();
@@ -1279,9 +1279,9 @@ public class mainform extends javax.swing.JFrame {
             jLabel3.setText("إجمالي الوزن");
             reports.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 380, -1, -1));
 
-            jLabel13.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-            jLabel13.setText("عدد الشكاير");
-            reports.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 100, -1, -1));
+            jLabel_Order_num.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+            jLabel_Order_num.setText("عدد الشكاير");
+            reports.add(jLabel_Order_num, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 100, -1, -1));
 
             jCheckBox_rep_2n1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
             jCheckBox_rep_2n1.setText(" صنفين في اذن واحد");
@@ -3246,6 +3246,7 @@ public class mainform extends javax.swing.JFrame {
             jTextField_rep_totweight.setText("");
             jComboBox_rep_palletsNrep.removeAllItems();
         }
+        jLabel_Order_num.setText(!jCheckBox_rep_wzn.isSelected()?"عدد الشكاير":"الوزن المطلوب");
     }//GEN-LAST:event_jCheckBox_rep_wznActionPerformed
 
     private void jButton_bagmaxActionPerformed() throws IOException {
@@ -3705,7 +3706,6 @@ public class mainform extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
-    private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
@@ -3749,6 +3749,7 @@ public class mainform extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
+    private javax.swing.JLabel jLabel_Order_num;
     private javax.swing.JLabel jLabel_set_hight;
     private javax.swing.JLabel jLabel_set_tick1;
     private javax.swing.JLabel jLabel_set_tick2;
