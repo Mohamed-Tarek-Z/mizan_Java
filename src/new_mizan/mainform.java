@@ -68,10 +68,10 @@ public class mainform extends javax.swing.JFrame {
     sqlcon opj;
 
     public short tick1num = 0, tick2num = 0;
-    private int BagMax = 2, repDiff = 20;
+    private int BagMax = 2, repDiff = 15;
     private float Xx = 0, Yy = 0, width = 19, hight = 19;
     private final JButton jButton_bagmax = new javax.swing.JButton();
-    String Version = "V 58.2.1.H";
+    String Version = "V 60.0.0.H";
 
     public mainform(sqlcon ops) throws IOException {
         initComponents();
@@ -1157,11 +1157,6 @@ public class mainform extends javax.swing.JFrame {
 
             jTextField_rep_numOfBag.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
             jTextField_rep_numOfBag.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
-            jTextField_rep_numOfBag.addFocusListener(new java.awt.event.FocusAdapter() {
-                public void focusLost(java.awt.event.FocusEvent evt) {
-                    jTextField_rep_numOfBagFocusLost(evt);
-                }
-            });
             jTextField_rep_numOfBag.addKeyListener(new java.awt.event.KeyAdapter() {
                 public void keyReleased(java.awt.event.KeyEvent evt) {
                     jTextField_rep_numOfBagKeyReleased(evt);
@@ -2288,13 +2283,6 @@ public class mainform extends javax.swing.JFrame {
 
     }//GEN-LAST:event_jTextField_rep_numOfBagKeyReleased
 
-    private void jTextField_rep_numOfBagFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextField_rep_numOfBagFocusLost
-        if (!jTextField_rep_numOfBag.getText().isBlank())
-            if (ToDoubleEnglish(jTextField_rep_numOfBag.getText()) > 160 && !jCheckBox_rep_wzn.isSelected()) {
-                jTextField_rep_numOfBag.setText("١٦٠");
-            }
-    }//GEN-LAST:event_jTextField_rep_numOfBagFocusLost
-
     private void jTextField_rep_totweightKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_rep_totweightKeyTyped
         evt.consume();
     }//GEN-LAST:event_jTextField_rep_totweightKeyTyped
@@ -2330,6 +2318,8 @@ public class mainform extends javax.swing.JFrame {
                                         + "and lot=N'" + ToStringEnglish(jTable_rep_select.getModel().getValueAt(jTable_rep_select.getSelectedRow(), 2).toString()) + "'  order by pallet_numb ,storage_id DESC ");
 
                                 try {
+                                    boolean bagOutOfOrder = false;
+                                    ArrayList<String> OutOfOrderBags = new ArrayList<>();
                                     while (st.next()) {
                                         if (wight_of_order + repDiff > ss + weight_sum + Double.parseDouble(st.getString(1))) {
                                             pcount++;
@@ -2339,7 +2329,25 @@ public class mainform extends javax.swing.JFrame {
                                             if (((DefaultComboBoxModel) jComboBox_rep_palletsNrep.getModel()).getIndexOf(ToDoubleArabic(st.getString(3))) == -1) {
                                                 jComboBox_rep_palletsNrep.addItem(ToDoubleArabic(st.getString(3)));
                                             }
-
+                                            if (bagOutOfOrder) {
+                                                OutOfOrderBags.add(ToDoubleArabic(st.getString(1)) + "");
+                                            }
+                                        } else {
+                                            if (!bagOutOfOrder) {
+                                                if (JOptionPane.showConfirmDialog(this, addStyle("هل تريد إضافه شكائر خارج الترتيب إن أمكن؟"), "خارج الترتيب",
+                                                        JOptionPane.YES_NO_OPTION) == JOptionPane.NO_OPTION) {
+                                                    break;
+                                                } else {
+                                                    bagOutOfOrder = true;
+                                                }
+                                            }
+                                        }
+                                    }
+                                    if (bagOutOfOrder) {
+                                        if (OutOfOrderBags.isEmpty()) {
+                                            JOptionPane.showMessageDialog(this, addStyle("لم يتم إضافة شكائر"), "ملحوظة", JOptionPane.PLAIN_MESSAGE);
+                                        } else {
+                                            JOptionPane.showMessageDialog(this, addStyle("الشكائر هى: " + OutOfOrderBags.toString()), "ملحوظة", JOptionPane.PLAIN_MESSAGE);
                                         }
                                     }
                                 } catch (SQLException ex) {
@@ -3063,7 +3071,7 @@ public class mainform extends javax.swing.JFrame {
     private void jButton_youm_createExcelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_youm_createExcelActionPerformed
         int RowIndex = 4;
         XSSFWorkbook workbook;
-        try ( FileInputStream EX = new FileInputStream(new File("Donot_Change\\report.xlsx"))) {
+        try (FileInputStream EX = new FileInputStream(new File("Donot_Change\\report.xlsx"))) {
             workbook = new XSSFWorkbook(EX);
             XSSFSheet sheet = workbook.getSheetAt(0);
             Cell cell = sheet.getRow(1).getCell(1);
@@ -3094,7 +3102,7 @@ public class mainform extends javax.swing.JFrame {
                 RowIndex++;
             }
 
-            try ( FileOutputStream fileOut = new FileOutputStream(System.getProperty("user.dir") + "\\Temp\\report.xlsx")) {
+            try (FileOutputStream fileOut = new FileOutputStream(System.getProperty("user.dir") + "\\Temp\\report.xlsx")) {
                 workbook.write(fileOut);
             }
             JOptionPane.showMessageDialog(this, addStyle("please print the Execl"), "Done", JOptionPane.PLAIN_MESSAGE);
@@ -3246,7 +3254,7 @@ public class mainform extends javax.swing.JFrame {
             jTextField_rep_totweight.setText("");
             jComboBox_rep_palletsNrep.removeAllItems();
         }
-        jLabel_Order_num.setText(!jCheckBox_rep_wzn.isSelected()?"عدد الشكاير":"الوزن المطلوب");
+        jLabel_Order_num.setText(!jCheckBox_rep_wzn.isSelected() ? "عدد الشكاير" : "الوزن المطلوب");
     }//GEN-LAST:event_jCheckBox_rep_wznActionPerformed
 
     private void jButton_bagmaxActionPerformed() throws IOException {
@@ -3335,7 +3343,7 @@ public class mainform extends javax.swing.JFrame {
         }
         if (b1) {
             XSSFWorkbook workbook;
-            try ( FileInputStream EX = new FileInputStream(new File("Donot_Change\\Ticket.xlsx"))) {
+            try (FileInputStream EX = new FileInputStream(new File("Donot_Change\\Ticket.xlsx"))) {
                 workbook = new XSSFWorkbook(EX);
                 EX.close();
             }
@@ -3362,7 +3370,7 @@ public class mainform extends javax.swing.JFrame {
             cell = sheet.getRow(6).getCell(0);
             cell.setCellValue(values.get(6));
 
-            try ( FileOutputStream fileOut = new FileOutputStream(System.getProperty("user.dir") + "\\Temp\\myFile.xlsx")) {
+            try (FileOutputStream fileOut = new FileOutputStream(System.getProperty("user.dir") + "\\Temp\\myFile.xlsx")) {
                 workbook.write(fileOut);
                 fileOut.close();
             }
@@ -3619,7 +3627,7 @@ public class mainform extends javax.swing.JFrame {
         String num = "";
         int i;
         Files.createDirectories(Paths.get(System.getProperty("user.dir") + "\\Temp"));
-        try ( FileReader fr = new FileReader(System.getProperty("user.dir") + "\\Temp\\" + filename)) {
+        try (FileReader fr = new FileReader(System.getProperty("user.dir") + "\\Temp\\" + filename)) {
             num = "";
             while ((i = fr.read()) != -1) {
                 num += Character.digit(i, 10) + "";
@@ -3631,7 +3639,7 @@ public class mainform extends javax.swing.JFrame {
     }
 
     int saveTicknum(String filename, short nums) throws FileNotFoundException, IOException {
-        try ( FileWriter fw = new FileWriter(System.getProperty("user.dir") + "\\Temp\\" + filename)) {
+        try (FileWriter fw = new FileWriter(System.getProperty("user.dir") + "\\Temp\\" + filename)) {
             fw.write(nums + "");
         }
         return nums;

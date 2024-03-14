@@ -136,7 +136,7 @@ public class login_form extends javax.swing.JFrame {
 
     private void jPasswordField1FocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jPasswordField1FocusGained
         // TODO add your handling code here:
-        jPasswordField1.selectAll();
+        //jPasswordField1.selectAll();
     }//GEN-LAST:event_jPasswordField1FocusGained
 
     private void jComboBox1ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jComboBox1ItemStateChanged
