@@ -10,7 +10,7 @@ import java.util.logging.Logger;
 
 public class sqlcon {
 
-    private final String url = "jdbc:sqlserver://localhost:1433;databaseName=mizan;username=sa;password=111;";
+    private final String url = "jdbc:sqlserver://localhost:1433;databaseName=mizan;username=sa;password=111;encrypt=true;trustServerCertificate=true";
     Statement st;
     Connection conn;
 

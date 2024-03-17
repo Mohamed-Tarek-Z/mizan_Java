@@ -182,6 +182,7 @@ public class login_form extends javax.swing.JFrame {
                 new login_form().setVisible(true);
             } catch (SQLException ex) {
                 JOptionPane.showMessageDialog(null, ex.getMessage().substring(0, 67), "إنتبه", JOptionPane.PLAIN_MESSAGE);
+                java.util.logging.Logger.getLogger(login_form.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
                 System.exit(NORMAL);
             }
         });
