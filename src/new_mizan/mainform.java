@@ -134,7 +134,7 @@ public class mainform extends javax.swing.JFrame {
         jTextField_E_lot = new javax.swing.JTextField();
         jTextField_E_ConNum = new javax.swing.JTextField();
         jTextField_E_PaltNum = new javax.swing.JTextField();
-        jTextField_E_Weight = new javax.swing.JTextField();
+        jTextField_E_Wight = new javax.swing.JTextField();
         jComboBox_E_proName = new javax.swing.JComboBox<>();
         jLabel31 = new javax.swing.JLabel();
         jLabel32 = new javax.swing.JLabel();
@@ -154,6 +154,7 @@ public class mainform extends javax.swing.JFrame {
         jLabel44 = new javax.swing.JLabel();
         jTextField_E_O_TotWight = new javax.swing.JTextField();
         jLabel39 = new javax.swing.JLabel();
+        jLabel13 = new javax.swing.JLabel();
         MultiEdit = new javax.swing.JFrame();
         jTextField_ME_lot = new javax.swing.JTextField();
         jTextField_ME_PaltNum = new javax.swing.JTextField();
@@ -523,14 +524,14 @@ public class mainform extends javax.swing.JFrame {
             });
             SingleEdit.getContentPane().add(jTextField_E_PaltNum, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 220, 90, -1));
 
-            jTextField_E_Weight.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-            jTextField_E_Weight.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-            jTextField_E_Weight.addKeyListener(new java.awt.event.KeyAdapter() {
+            jTextField_E_Wight.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+            jTextField_E_Wight.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+            jTextField_E_Wight.addKeyListener(new java.awt.event.KeyAdapter() {
                 public void keyTyped(java.awt.event.KeyEvent evt) {
-                    jTextField_E_WeightKeyTyped(evt);
+                    jTextField_E_WightKeyTyped(evt);
                 }
             });
-            SingleEdit.getContentPane().add(jTextField_E_Weight, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 220, 90, -1));
+            SingleEdit.getContentPane().add(jTextField_E_Wight, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 220, 90, -1));
 
             jComboBox_E_proName.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
             SingleEdit.getContentPane().add(jComboBox_E_proName, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 220, 143, -1));
@@ -548,6 +549,7 @@ public class mainform extends javax.swing.JFrame {
             SingleEdit.getContentPane().add(jLabel33, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 180, -1, 20));
 
             jLabel34.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+            jLabel34.setForeground(new java.awt.Color(255, 51, 51));
             jLabel34.setText("عدد الكون");
             SingleEdit.getContentPane().add(jLabel34, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 180, -1, -1));
 
@@ -595,6 +597,7 @@ public class mainform extends javax.swing.JFrame {
             SingleEdit.getContentPane().add(jTextField_E_TotWight, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 220, 90, -1));
 
             jLabel43.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+            jLabel43.setForeground(new java.awt.Color(255, 0, 0));
             jLabel43.setText("الوزن قائم");
             SingleEdit.getContentPane().add(jLabel43, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 180, 80, 20));
 
@@ -625,6 +628,10 @@ public class mainform extends javax.swing.JFrame {
             jLabel39.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
             jLabel39.setText("قائم");
             SingleEdit.getContentPane().add(jLabel39, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 10, -1, -1));
+
+            jLabel13.setForeground(new java.awt.Color(255, 0, 0));
+            jLabel13.setText("الأماكن الحمراء لايمكن تعديلها في نفس العملية*");
+            SingleEdit.getContentPane().add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 120, 280, 20));
 
             MultiEdit.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
             MultiEdit.setTitle("Multi Edit");
@@ -2678,7 +2685,7 @@ public class mainform extends javax.swing.JFrame {
     }//GEN-LAST:event_SingleEditWindowClosing
 
     private void jButton_E_EditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_E_EditActionPerformed
-        if (!jTextField_E_Weight.getText().isBlank() && !jTextField_E_PaltNum.getText().isBlank() && !jTextField_E_ConNum.getText().isBlank() && !jTextField_E_lot.getText().isBlank()) {
+        if (!jTextField_E_Wight.getText().isBlank() && !jTextField_E_PaltNum.getText().isBlank() && !jTextField_E_ConNum.getText().isBlank() && !jTextField_E_lot.getText().isBlank()) {
             ResultSet st = opj.dataRead("count(*)", "storage", "lot=N'" + ToStringEnglish(jTextField_E_lot.getText()) + "' and pallet_numb=" + ToStringEnglish(jTextField_E_PaltNum.getText()) + " and pro_id=(select pro_id from products where pro_name=N'" + jComboBox_E_proName.getSelectedItem().toString() + "') ");
             int num_of_shikra1 = 0;
             try {
@@ -2692,7 +2699,7 @@ public class mainform extends javax.swing.JFrame {
             if (num_of_shikra1 < 20) {
 
                 opj.update("storage",
-                        "weight_= " + ToStringEnglish(jTextField_E_Weight.getText()) + ","
+                        "weight_= " + ToStringEnglish(jTextField_E_Wight.getText()) + ","
                         + "tot_wight= " + ToStringEnglish(jTextField_E_TotWight.getText()) + ","
                         + "num_of_con= " + ToStringEnglish(jTextField_E_ConNum.getText()) + " ,"
                         + " lot= N'" + ToStringEnglish(jTextField_E_lot.getText()) + "',"
@@ -2712,9 +2719,9 @@ public class mainform extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jButton_E_EditActionPerformed
 
-    private void jTextField_E_WeightKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_E_WeightKeyTyped
-        textbox_number_weight(evt, jTextField_E_Weight, 999);
-    }//GEN-LAST:event_jTextField_E_WeightKeyTyped
+    private void jTextField_E_WightKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_E_WightKeyTyped
+        textbox_number_weight(evt, jTextField_E_Wight, 999);
+    }//GEN-LAST:event_jTextField_E_WightKeyTyped
 
     private void jTextField_E_PaltNumKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_E_PaltNumKeyTyped
         textbox_number(evt, jTextField_E_PaltNum, 999);
@@ -2722,6 +2729,11 @@ public class mainform extends javax.swing.JFrame {
 
     private void jTextField_E_ConNumKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_E_ConNumKeyTyped
         textbox_number(evt, jTextField_E_ConNum, 999);
+        jTextField_E_Wight.setText(ToDoubleArabic(
+                (((ToDoubleEnglish(jTextField_E_O_ConNum.getText()) - ToDoubleEnglish(jTextField_E_ConNum.getText()))
+                * (ToDoubleEnglish(jTextField_weight_of_con.getText()) / 1000))
+                + ToDoubleEnglish(jTextField_E_O_Wight.getText())) + ""
+        ));
     }//GEN-LAST:event_jTextField_E_ConNumKeyTyped
 
     private void jTextField_E_lotKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_E_lotKeyTyped
@@ -2763,6 +2775,7 @@ public class mainform extends javax.swing.JFrame {
                     st.next();
                     jTextField_E_O_TotWight.setText(ToDoubleArabic(st.getString(1)));
                     jTextField_E_TotWight.setText(ToDoubleArabic(st.getString(1)));
+                    //jTextField_E_TotWight.setText(ToDoubleArabic(st.getString(1)).substring(0, ToDoubleArabic(st.getString(1)).length() - 1));
                 } catch (SQLException ex) {
                     Logger.getLogger(mainform.class.getName()).log(Level.SEVERE, null, ex);
                     JOptionPane.showMessageDialog(this, ex.getMessage(), "exception", JOptionPane.PLAIN_MESSAGE);
@@ -2776,7 +2789,7 @@ public class mainform extends javax.swing.JFrame {
                 jTextField_E_O_Wight.setText(jTable_storage.getModel().getValueAt(jTable_storage.getSelectedRow(), 0).toString());
                 jTextField_E_ConNum.setText(jTable_storage.getModel().getValueAt(jTable_storage.getSelectedRow(), 1).toString());
                 jTextField_E_PaltNum.setText(jTable_storage.getModel().getValueAt(jTable_storage.getSelectedRow(), 3).toString());
-                jTextField_E_Weight.setText(jTable_storage.getModel().getValueAt(jTable_storage.getSelectedRow(), 0).toString());
+                jTextField_E_Wight.setText(jTable_storage.getModel().getValueAt(jTable_storage.getSelectedRow(), 0).toString());
                 jTextField_E_Color.setText(jTextField_Color.getText());
 
             } else if (jTable_storage.getSelectedRowCount() > 1) {
@@ -2815,7 +2828,7 @@ public class mainform extends javax.swing.JFrame {
                     jComboBox_E_proName.getSelectedItem().toString(),
                     jTextField_E_lot.getText(),
                     jTextField_E_ConNum.getText(),
-                    jTextField_E_TotWight.getText(), jTextField_E_Weight.getText())),
+                    jTextField_E_TotWight.getText(), jTextField_E_Wight.getText())),
                     jCheckBox_E_P.isSelected(), jCheckBox_E_QR.isSelected());
         } catch (WriterException | IOException | PrinterException ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage(), "exception", JOptionPane.PLAIN_MESSAGE);
@@ -2834,6 +2847,15 @@ public class mainform extends javax.swing.JFrame {
     private void jTextField_E_TotWightKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_E_TotWightKeyTyped
         // TODO add your handling code here:
         textbox_number_weight(evt, jTextField_E_TotWight, 999);
+        try {
+            jTextField_E_Wight.setText(ToDoubleArabic(
+                    ((ToDoubleEnglish(jTextField_E_O_TotWight.getText()) - ToDoubleEnglish(jTextField_E_TotWight.getText()))
+                    + ToDoubleEnglish(jTextField_E_O_Wight.getText())) + ""
+            ));
+        } catch (Exception e) {
+            System.out.println("exp");
+        }
+
     }//GEN-LAST:event_jTextField_E_TotWightKeyTyped
 
     private void jButton_set_Rest2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_set_Rest2ActionPerformed
@@ -3714,6 +3736,7 @@ public class mainform extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
@@ -3800,7 +3823,7 @@ public class mainform extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField_E_O_lot;
     private javax.swing.JTextField jTextField_E_PaltNum;
     private javax.swing.JTextField jTextField_E_TotWight;
-    private javax.swing.JTextField jTextField_E_Weight;
+    private javax.swing.JTextField jTextField_E_Wight;
     private javax.swing.JTextField jTextField_E_lot;
     private javax.swing.JTextField jTextField_ME_PaltNum;
     private javax.swing.JTextField jTextField_ME_lot;
