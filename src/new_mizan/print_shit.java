@@ -27,11 +27,12 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JTable;
-import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
+import static new_mizan.mainform.ToDoubleArabic;
+import static new_mizan.mainform.ToDoubleEnglish;
+import static new_mizan.mainform.ToStringEnglish;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -42,37 +43,37 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
  */
 public class print_shit {
 
-    void excel_120(int serial, List<String> order_ids, JTextField total_weight, JTextField jTextField6, JComboBox jComboBox_pro_in_reports, JTable jTable3, sqlcon opj, JFileChooser jFileChooser1) {
+    boolean excel_120(int serial, List<String> orderIds, String totalWeight, String ClientName, String productName, JTable BagsTable, sqlcon opj, JFileChooser jFileChooser1) {
 
         try {
             Locale arabicLocale = Locale.forLanguageTag("ar");
             DateTimeFormatter arabicDateFormatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT).withLocale(arabicLocale).withDecimalStyle(DecimalStyle.of(arabicLocale));
             LocalDate date_now = LocalDate.now();
             XSSFWorkbook workbook;
-            try ( FileInputStream file = new FileInputStream(new File("Donot_Change\\120.xlsx"))) {
+            try (FileInputStream file = new FileInputStream(new File("Donot_Change\\120.xlsx"))) {
                 workbook = new XSSFWorkbook(file);
                 XSSFSheet sheet = workbook.getSheetAt(0);
                 Cell cell;
 
                 String _1 = "                                                  إذن تـسليم بضاعة\n";
-                String _2 = "السيد :" + jTextField6.getText() + "";
+                String _2 = "السيد :" + ClientName + "";
                 String _3 = "التاريـــخ :" + date_now.format(arabicDateFormatter) + "";
-                String _4 = "صنف :" + jComboBox_pro_in_reports.getSelectedItem() + "";
-                String _5 = "رقم اللـــوط :" + mainform.ToDoubleArabic(mainform.ToStringEnglish(jTable3.getValueAt(0, 2) + ""));
+                String _4 = "صنف :" + productName;
+                String _5 = "رقم اللـــوط :" + ToDoubleArabic(ToStringEnglish(BagsTable.getValueAt(0, 2) + ""));
 
-                for (int i = 0; i < 70 - jTextField6.getText().length(); i++) {
+                for (int i = 0; i < 70 - ClientName.length(); i++) {
                     _2 += " ";
                 }
-                for (int i = 0; i < 65 - jComboBox_pro_in_reports.getSelectedItem().toString().length(); i++) {
+                for (int i = 0; i < 65 - productName.length(); i++) {
                     _4 += " ";
 
                 }
                 cell = sheet.getRow(0).getCell(0);
                 cell.setCellValue(_1 + _2 + _3 + "\n" + "\n" + _4 + _5);
                 String __1 = (_4.contains("ليكرا") ? "عدد الصناديق :          " : "عدد الشكاير :          ")
-                        + mainform.ToDoubleArabic(jTable3.getRowCount() + "")
+                        + ToDoubleArabic(BagsTable.getRowCount() + "")
                         + (_4.contains("ليكرا") ? " صندوق" : "  شيكاره");
-                String __2 = "الــــــــــــــــــــــــــــــــوزن :       " + mainform.ToDoubleArabic(total_weight.getText()) + "";
+                String __2 = "الــــــــــــــــــــــــــــــــوزن :       " + ToDoubleArabic(totalWeight) + "";
                 cell = sheet.getRow(23).getCell(11);
                 cell.setCellValue(__1 + "\n" + __2);
 
@@ -91,59 +92,58 @@ public class print_shit {
 
                 int f = 1;
                 for (int t = 0; t < 121; t += 20) {
-
-                    for (int i = 2 + t; i <= 21 + t && i - 1 <= jTable3.getRowCount(); i++) {
-                        if (jTable3.getRowCount() == i - 2) {
+                    for (int i = 2 + t; i <= 21 + t && i - 1 <= BagsTable.getRowCount(); i++) {
+                        if (BagsTable.getRowCount() == i - 2) {
                             break;
                         }
                         cell = sheet.getRow(i - t).getCell(f);
-                        cell.setCellValue(((1000 * mainform.ToDoubleEnglish(jTable3.getValueAt(i - 2, 1).toString()) - (int) mainform.ToDoubleEnglish(jTable3.getValueAt(i - 2, 1).toString()) * 1000)));
+                        cell.setCellValue(((1000 * ToDoubleEnglish(BagsTable.getValueAt(i - 2, 1).toString()) - (int) ToDoubleEnglish(BagsTable.getValueAt(i - 2, 1).toString()) * 1000)));
                         cell = sheet.getRow(i - t).getCell(f + 1);
-                        cell.setCellValue((int) mainform.ToDoubleEnglish(jTable3.getValueAt(i - 2, 1).toString()));
+                        cell.setCellValue((int) ToDoubleEnglish(BagsTable.getValueAt(i - 2, 1).toString()));
                     }
                     f += 3;
                 }
-
             }
-            create_excel_in_path(serial, order_ids, total_weight, jTable3, jTextField6, date_now, workbook, opj, jFileChooser1, jComboBox_pro_in_reports);
+            return create_excel_in_path(serial, orderIds, totalWeight, BagsTable, ClientName, date_now, workbook, opj, jFileChooser1, productName);
         } catch (FileNotFoundException ex) {
             Logger.getLogger(mainform.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
         } catch (IOException ex) {
             Logger.getLogger(mainform.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
         }
-
     }
 
-    void excel_160(int serial, List<String> order_ids, JTextField total_weight, JTextField jTextField6, JComboBox jComboBox_pro_in_reports, JTable jTable3, sqlcon opj, JFileChooser jFileChooser1) {
+    boolean excel_160(int serial, List<String> orderIds, String totalWeight, String ClientName, String productName, JTable BagsTable, sqlcon opj, JFileChooser jFileChooser1) {
         try {
             Locale arabicLocale = Locale.forLanguageTag("ar");
             DateTimeFormatter arabicDateFormatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT).withLocale(arabicLocale).withDecimalStyle(DecimalStyle.of(arabicLocale));
             LocalDate date_now = LocalDate.now();
             XSSFWorkbook workbook;
-            try ( FileInputStream file = new FileInputStream(new File("Donot_Change\\160.xlsx"))) {
+            try (FileInputStream file = new FileInputStream(new File("Donot_Change\\160.xlsx"))) {
                 workbook = new XSSFWorkbook(file);
                 XSSFSheet sheet = workbook.getSheetAt(0);
                 Cell cell;
 
                 String _1 = "                  إذن تـسليم بضاعة\n";
-                String _2 = "السيد :" + jTextField6.getText() + "";
+                String _2 = "السيد :" + ClientName + "";
                 String _3 = "التاريـــخ :" + date_now.format(arabicDateFormatter) + "";
-                String _4 = "صنف :" + jComboBox_pro_in_reports.getSelectedItem() + "";
-                String _5 = "رقم اللـــوط :" + mainform.ToDoubleArabic(mainform.ToStringEnglish(jTable3.getValueAt(0, 2) + ""));
+                String _4 = "صنف :" + productName + "";
+                String _5 = "رقم اللـــوط :" + ToDoubleArabic(ToStringEnglish(BagsTable.getValueAt(0, 2) + ""));
 
-                for (int i = 0; i < 70 - jTextField6.getText().length(); i++) {
+                for (int i = 0; i < 70 - ClientName.length(); i++) {
                     _2 += " ";
                 }
-                for (int i = 0; i < 65 - jComboBox_pro_in_reports.getSelectedItem().toString().length(); i++) {
+                for (int i = 0; i < 65 - productName.length(); i++) {
                     _4 += " ";
 
                 }
                 cell = sheet.getRow(0).getCell(0);
                 cell.setCellValue(_1 + _2 + _3 + "\n" + "\n" + _4 + _5);
                 String __1 = (_4.contains("ليكرا") ? "عدد الصناديق :          " : "عدد الشكاير :          ")
-                        + mainform.ToDoubleArabic(jTable3.getRowCount() + "")
+                        + ToDoubleArabic(BagsTable.getRowCount() + "")
                         + (_4.contains("ليكرا") ? " صندوق" : "  شيكاره");
-                String __2 = "الــــــــــــــــــــــــــــــــوزن :       " + mainform.ToDoubleArabic(total_weight.getText()) + "";
+                String __2 = "الــــــــــــــــــــــــــــــــوزن :       " + ToDoubleArabic(totalWeight) + "";
                 cell = sheet.getRow(23).getCell(16);
                 cell.setCellValue(__1 + "\n" + __2);
 
@@ -180,54 +180,59 @@ public class print_shit {
                 int f = 1;
                 for (int t = 0; t < 161; t += 20) {
 
-                    for (int i = 2 + t; i <= 21 + t && i - 1 <= jTable3.getRowCount(); i++) {
-                        if (jTable3.getRowCount() == i - 2) {
+                    for (int i = 2 + t; i <= 21 + t && i - 1 <= BagsTable.getRowCount(); i++) {
+                        if (BagsTable.getRowCount() == i - 2) {
                             break;
                         }
                         cell = sheet.getRow(i - t).getCell(f);
-                        cell.setCellValue(((1000 * mainform.ToDoubleEnglish(jTable3.getValueAt(i - 2, 1).toString()) - (int) mainform.ToDoubleEnglish(jTable3.getValueAt(i - 2, 1).toString()) * 1000)));
+                        cell.setCellValue(((1000 * ToDoubleEnglish(BagsTable.getValueAt(i - 2, 1).toString()) - (int) ToDoubleEnglish(BagsTable.getValueAt(i - 2, 1).toString()) * 1000)));
                         cell = sheet.getRow(i - t).getCell(f + 1);
-                        cell.setCellValue((int) mainform.ToDoubleEnglish(jTable3.getValueAt(i - 2, 1).toString()));
+                        cell.setCellValue((int) ToDoubleEnglish(BagsTable.getValueAt(i - 2, 1).toString()));
                     }
                     f += 3;
                 }
 
             }
-            create_excel_in_path(serial, order_ids, total_weight, jTable3, jTextField6, date_now, workbook, opj, jFileChooser1, jComboBox_pro_in_reports);
+            return create_excel_in_path(serial, orderIds, totalWeight, BagsTable, ClientName, date_now, workbook, opj, jFileChooser1, productName);
         } catch (FileNotFoundException ex) {
             Logger.getLogger(mainform.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
         } catch (IOException ex) {
             Logger.getLogger(mainform.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
         }
     }
 
-    void excel_60_60(int serial, List<String> order_ids, List<String> ne, JTextField total_weight, JTextField jTextField6, JComboBox jComboBox_pro_in_reports, JTable jTable3, JTable first_table, String num_of_shikra, String wieght, String name_of_type, sqlcon opj, JFileChooser jFileChooser1) {
+    boolean excel_60_60(int serial, List<String> sOrderIds, List<String> fOrderIds,
+            String wieghtSOrder, String ClientName, String typeSOrder,
+            JTable tableSOrder, JTable tableFOrder, String bagCountFOrder, String wieghtFOrder, String typeFOrder, sqlcon opj,
+            JFileChooser jFileChooser1) {
         try {
             Locale arabicLocale = Locale.forLanguageTag("ar");
             DateTimeFormatter arabicDateFormatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT).withLocale(arabicLocale).withDecimalStyle(DecimalStyle.of(arabicLocale));
             LocalDate date_now = LocalDate.now();
             XSSFWorkbook workbook;
-            try ( FileInputStream file = new FileInputStream(new File("Donot_Change\\60-60.xlsx"))) {
+            try (FileInputStream file = new FileInputStream(new File("Donot_Change\\60-60.xlsx"))) {
                 workbook = new XSSFWorkbook(file);
                 XSSFSheet sheet = workbook.getSheetAt(0);
                 Cell cell;
 
                 String _1 = "                                                  إذن تـسليم بضاعة\n";
-                String _2 = "السيد :" + jTextField6.getText() + "";
+                String _2 = "السيد :" + ClientName + "";
                 String _3 = "التاريـــخ :" + date_now.format(arabicDateFormatter) + "";
-                String _4 = "صنف :" + name_of_type + "";
-                String _5 = "رقم اللـــوط :" + mainform.ToDoubleArabic(mainform.ToStringEnglish(first_table.getValueAt(0, 2) + ""));
-                String _6 = "صنف :" + jComboBox_pro_in_reports.getSelectedItem() + "";
-                String _7 = "رقم اللـــوط :" + mainform.ToDoubleArabic(mainform.ToStringEnglish(jTable3.getValueAt(0, 2) + ""));
+                String _4 = "صنف :" + typeFOrder + "";
+                String _5 = "رقم اللـــوط :" + ToDoubleArabic(ToStringEnglish(tableFOrder.getValueAt(0, 2) + ""));
+                String _6 = "صنف :" + typeSOrder + "";
+                String _7 = "رقم اللـــوط :" + ToDoubleArabic(ToStringEnglish(tableSOrder.getValueAt(0, 2) + ""));
 
-                for (int i = 0; i < 66 - jTextField6.getText().length(); i++) {
+                for (int i = 0; i < 66 - ClientName.length(); i++) {
                     _2 += " ";
                 }
-                for (int i = 0; i < 60 - jComboBox_pro_in_reports.getSelectedItem().toString().length(); i++) {
+                for (int i = 0; i < 60 - typeSOrder.length(); i++) {
                     _4 += " ";
 
                 }
-                for (int i = 0; i < 65 - name_of_type.length(); i++) {
+                for (int i = 0; i < 65 - typeFOrder.length(); i++) {
                     _5 += " ";
 
                 }
@@ -236,13 +241,13 @@ public class print_shit {
                 cell.setCellValue(_1 + _2 + _3 + "\n" + _4 + _6 + "\n" + _5 + _7);
 
                 String __1 = (_4.contains("ليكرا") ? "عدد الصناديق : " : "عدد الشكاير : ")
-                        + mainform.ToDoubleArabic((int) mainform.ToDoubleEnglish(num_of_shikra) + "")
+                        + ToDoubleArabic((int) ToDoubleEnglish(bagCountFOrder) + "")
                         + (_4.contains("ليكرا") ? " صندوق" : "  شيكاره");
-                String __2 = "الـــــــوزن :  " + mainform.ToDoubleArabic(wieght) + "";
+                String __2 = "الـــــــوزن :  " + ToDoubleArabic(wieghtFOrder) + "";
                 String __3 = (_6.contains("ليكرا") ? "عدد الصناديق : " : "عدد الشكاير : ")
-                        + mainform.ToDoubleArabic(jTable3.getRowCount()  + "")
+                        + ToDoubleArabic(tableSOrder.getRowCount() + "")
                         + (_6.contains("ليكرا") ? " صندوق" : "  شيكاره");
-                String __4 = "الـــــــوزن :  " + mainform.ToDoubleArabic(total_weight.getText()) + "";
+                String __4 = "الـــــــوزن :  " + ToDoubleArabic(wieghtSOrder) + "";
                 cell = sheet.getRow(23).getCell(11);
                 cell.setCellValue(__1 + "  " + __2 + "\n" + __3 + " " + __4);
 
@@ -279,14 +284,14 @@ public class print_shit {
                 int f = 1;
                 for (int t = 0; t < 61; t += 20) {
 
-                    for (int i = 2 + t; i <= 21 + t && i - 1 <= mainform.ToDoubleEnglish(num_of_shikra); i++) {
-                        if (first_table.getRowCount() == i - 2) {
+                    for (int i = 2 + t; i <= 21 + t && i - 1 <= ToDoubleEnglish(bagCountFOrder); i++) {
+                        if (tableFOrder.getRowCount() == i - 2) {
                             break;
                         }
                         cell = sheet.getRow(i - t).getCell(f);
-                        cell.setCellValue(((1000 * mainform.ToDoubleEnglish(first_table.getValueAt(i - 2, 1).toString()) - (int) mainform.ToDoubleEnglish(first_table.getValueAt(i - 2, 1).toString()) * 1000)));
+                        cell.setCellValue(((1000 * ToDoubleEnglish(tableFOrder.getValueAt(i - 2, 1).toString()) - (int) ToDoubleEnglish(tableFOrder.getValueAt(i - 2, 1).toString()) * 1000)));
                         cell = sheet.getRow(i - t).getCell(f + 1);
-                        cell.setCellValue((int) mainform.ToDoubleEnglish(first_table.getValueAt(i - 2, 1).toString()));
+                        cell.setCellValue((int) ToDoubleEnglish(tableFOrder.getValueAt(i - 2, 1).toString()));
                     }
                     f += 3;
                 }
@@ -294,41 +299,41 @@ public class print_shit {
                 f = 10;
                 for (int t = 60; t < 121; t += 20) {
 
-                    for (int i = 2 + t; i <= 21 + t && i - 60 - 1 <= jTable3.getRowCount() ; i++) {
-                        if (jTable3.getRowCount() == i + 60 - 2) {
+                    for (int i = 2 + t; i <= 21 + t && i - 60 - 1 <= tableSOrder.getRowCount(); i++) {
+                        if (tableSOrder.getRowCount() == i + 60 - 2) {
                             break;
                         }
                         cell = sheet.getRow(i - t).getCell(f);
-                        cell.setCellValue(((1000 * mainform.ToDoubleEnglish(jTable3.getValueAt(i - 62, 1).toString()) - (int) mainform.ToDoubleEnglish(jTable3.getValueAt(i - 62, 1).toString()) * 1000)));
+                        cell.setCellValue(((1000 * ToDoubleEnglish(tableSOrder.getValueAt(i - 62, 1).toString()) - (int) ToDoubleEnglish(tableSOrder.getValueAt(i - 62, 1).toString()) * 1000)));
                         cell = sheet.getRow(i - t).getCell(f + 1);
-                        cell.setCellValue((int) mainform.ToDoubleEnglish(jTable3.getValueAt(i - 62, 1).toString()));
+                        cell.setCellValue((int) ToDoubleEnglish(tableSOrder.getValueAt(i - 62, 1).toString()));
                     }
                     f += 3;
                 }
 
             }
             Files.createDirectories(Paths.get(System.getProperty("user.dir") + "\\querys"));
-            File file = print_shit.NewName(System.getProperty("user.dir") + "\\querys\\" + jTextField6.getText() + "~" + date_now + ".xlsx");
-            try ( FileOutputStream outFile = new FileOutputStream(file)) {
+            File file = print_shit.NewName(System.getProperty("user.dir") + "\\querys\\" + ClientName + "~" + date_now + ".xlsx");
+            try (FileOutputStream outFile = new FileOutputStream(file)) {
                 workbook.write(outFile);
                 Desktop desktop = Desktop.getDesktop();
-                jFileChooser1.showSaveDialog(jTable3);
+                jFileChooser1.showSaveDialog(tableSOrder);
                 if (jFileChooser1.getSelectedFile() != null) {
-                    File file1 = print_shit.NewName(jFileChooser1.getSelectedFile().getAbsolutePath() + "\\" + jTextField6.getText() + "~" + date_now + ".xlsx");
+                    File file1 = print_shit.NewName(jFileChooser1.getSelectedFile().getAbsolutePath() + "\\" + ClientName + "~" + date_now + ".xlsx");
                     FileOutputStream outFile1 = new FileOutputStream(file1);
                     workbook.write(outFile1);
                 }
                 desktop.open(file);
                 serial = 0;
 
-                if (!opj.dataRead("*", "clients", "cli_name=N'" + jTextField6.getText() + "'").next()) {
-                    opj.inData("clients", "cli_name", "N'" + jTextField6.getText() + "'");
+                if (!opj.dataRead("*", "clients", "cli_name=N'" + ClientName + "'").next()) {
+                    opj.inData("clients", "cli_name", "N'" + ClientName + "'");
                 }
-                opj.inData("orders", "ord_wight,ord_date", mainform.ToDoubleEnglish(total_weight.getText()) + ",GETDATE()");
-                order_ids.forEach(order_id -> {
+                opj.inData("orders", "ord_wight,ord_date", ToDoubleEnglish(wieghtSOrder) + ",GETDATE()");
+                sOrderIds.forEach(order_id -> {
                     opj.inData("export", "pro_id,cli_id,tot_wight,weight_,lot,inserted_date,exported_date,num_of_con,pallet_numb,used,ord_id",
-                            "(select pro_id from products where pro_name=N'" + jComboBox_pro_in_reports.getSelectedItem() + "')"
-                            + ",(select top(1) cli_id from clients where cli_name=N'" + jTextField6.getText() + "')"
+                            "(select pro_id from products where pro_name=N'" + typeSOrder + "')"
+                            + ",(select top(1) cli_id from clients where cli_name=N'" + ClientName + "')"
                             + ",(select tot_wight from storage where storage_id=" + order_id + ")"
                             + ",(select weight_ from storage where storage_id=" + order_id + ")"
                             + ",(select lot from storage where storage_id= " + order_id + " )"
@@ -337,43 +342,44 @@ public class print_shit {
                             + ",(select num_of_con from storage where storage_id= " + order_id + " ) "
                             + ",(select pallet_numb from storage where storage_id= " + order_id + " )"
                             + ",(select used from storage where storage_id= " + order_id + " )"
-                            + ",(SELECT TOP 1 ord_id FROM orders where ord_wight=" + mainform.ToDoubleEnglish(total_weight.getText()) + " ORDER BY ord_id DESC)"
+                            + ",(SELECT TOP 1 ord_id FROM orders where ord_wight=" + ToDoubleEnglish(wieghtSOrder) + " ORDER BY ord_id DESC)"
                     );
 
                     opj.delData("storage", "storage_id=" + order_id + "");
                 });
-                opj.inData("orders", "ord_wight,ord_date", mainform.ToDoubleEnglish(wieght) + ",GETDATE()");
-                ne.forEach(nes -> {
+                opj.inData("orders", "ord_wight,ord_date", ToDoubleEnglish(wieghtFOrder) + ",GETDATE()");
+                fOrderIds.forEach(StoreID -> {
                     opj.inData("export", "pro_id,cli_id,tot_wight,weight_,lot,inserted_date,exported_date,num_of_con,pallet_numb,used,ord_id",
-                            "(select pro_id from products where pro_name=N'" + name_of_type + "')"
-                            + ",(select top(1) cli_id from clients where cli_name=N'" + jTextField6.getText() + "')"
-                            + ",(select tot_wight from storage where storage_id=" + nes + ")"
-                            + ",(select weight_ from storage where storage_id=" + nes + ")"
-                            + ",(select lot from storage where storage_id= " + nes + " )"
-                            + ",(select date_ from storage where storage_id= " + nes + " )"
+                            "(select pro_id from products where pro_name=N'" + typeFOrder + "')"
+                            + ",(select top(1) cli_id from clients where cli_name=N'" + ClientName + "')"
+                            + ",(select tot_wight from storage where storage_id=" + StoreID + ")"
+                            + ",(select weight_ from storage where storage_id=" + StoreID + ")"
+                            + ",(select lot from storage where storage_id= " + StoreID + " )"
+                            + ",(select date_ from storage where storage_id= " + StoreID + " )"
                             + ",GETDATE()  "
-                            + ",(select num_of_con from storage where storage_id= " + nes + " ) "
-                            + ",(select pallet_numb from storage where storage_id= " + nes + " )"
-                            + ",(select used from storage where storage_id= " + nes + " )"
-                            + ",(SELECT TOP 1 ord_id FROM orders where ord_wight=" + mainform.ToDoubleEnglish(wieght) + " ORDER BY ord_id DESC)"
+                            + ",(select num_of_con from storage where storage_id= " + StoreID + " ) "
+                            + ",(select pallet_numb from storage where storage_id= " + StoreID + " )"
+                            + ",(select used from storage where storage_id= " + StoreID + " )"
+                            + ",(SELECT TOP 1 ord_id FROM orders where ord_wight=" + ToDoubleEnglish(wieghtFOrder) + " ORDER BY ord_id DESC)"
                     );
-                    opj.delData("storage", "storage_id=" + nes + "");
+                    opj.delData("storage", "storage_id=" + StoreID + "");
                 });
-                ((DefaultTableModel) jTable3.getModel()).setRowCount(0);
-                ((DefaultTableModel) first_table.getModel()).setRowCount(0);
-                ne.clear();
-                order_ids.clear();
-                total_weight.setText("");
-                jTextField6.setText("");
+                ((DefaultTableModel) tableSOrder.getModel()).setRowCount(0);
+                ((DefaultTableModel) tableFOrder.getModel()).setRowCount(0);
+                fOrderIds.clear();
+                sOrderIds.clear();
 
             } catch (SQLException ex) {
                 Logger.getLogger(print_shit.class.getName()).log(Level.SEVERE, null, ex);
             }
-
+            workbook.close();
+            return true;
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(mainform.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(print_shit.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
         } catch (IOException ex) {
-            Logger.getLogger(mainform.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(print_shit.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
         }
     }
 
@@ -427,52 +433,52 @@ public class print_shit {
         cell.setCellFormula(strFormula);
     }
 
-    void create_excel_in_path(int serial, List<String> order_ids, JTextField total_weight, JTable jTable3, JTextField jTextField6, LocalDate date_now, XSSFWorkbook workbook, sqlcon opj, JFileChooser jFileChooser1, JComboBox combox_product) throws FileNotFoundException, IOException {
+    boolean create_excel_in_path(int serial, List<String> orderIds, String totalWeight, JTable BagsTable, String ClientName, LocalDate date_now, XSSFWorkbook workbook, sqlcon opj, JFileChooser jFileChooser1, String productName) throws FileNotFoundException, IOException {
         Files.createDirectories(Paths.get(System.getProperty("user.dir") + "\\querys"));
-        File file = print_shit.NewName(System.getProperty("user.dir") + "\\querys\\" + jTextField6.getText() + "~" + date_now + ".xlsx");
-        try ( FileOutputStream outFile = new FileOutputStream(file)) {
-            workbook.write(outFile);
-            Desktop desktop = Desktop.getDesktop();
-            jFileChooser1.showSaveDialog(jTable3);
-            if (jFileChooser1.getSelectedFile() != null) {
-                File file1 = print_shit.NewName(jFileChooser1.getSelectedFile().getAbsolutePath() + "\\" + jTextField6.getText() + "~" + date_now + ".xlsx");
-                FileOutputStream outFile1 = new FileOutputStream(file1);
-                workbook.write(outFile1);
+        File file = print_shit.NewName(System.getProperty("user.dir") + "\\querys\\" + ClientName + "~" + date_now + ".xlsx");
+        try (FileOutputStream outFile = new FileOutputStream(file)) {
+            try (workbook) {
+                workbook.write(outFile);
+                Desktop desktop = Desktop.getDesktop();
+                jFileChooser1.showSaveDialog(BagsTable);
+                if (jFileChooser1.getSelectedFile() != null) {
+                    File file1 = print_shit.NewName(jFileChooser1.getSelectedFile().getAbsolutePath() + "\\" + ClientName + "~" + date_now + ".xlsx");
+                    FileOutputStream outFile1 = new FileOutputStream(file1);
+                    workbook.write(outFile1);
+                }
+                
+                desktop.open(file);
+                serial = 0;
+                if (!opj.dataRead("*", "clients", "cli_name=N'" + ClientName + "'").next()) {
+                    opj.inData("clients", "cli_name", "N'" + ClientName + "'");
+                }
+                opj.inData("orders", "ord_wight,ord_date", ToDoubleEnglish(totalWeight) + ",GETDATE()");
+                orderIds.forEach(order_id -> {
+                    
+                    opj.inData("export", "pro_id,cli_id,tot_wight,weight_,lot,inserted_date,exported_date,num_of_con,pallet_numb,used,ord_id",
+                            "(select pro_id from products where pro_name=N'" + productName + "')"
+                                    + ",(select  top(1) cli_id from clients where cli_name=N'" + ClientName + "')"
+                                            + ",(select tot_wight from storage where storage_id=" + order_id + ")"
+                                                    + ",(select weight_ from storage where storage_id=" + order_id + ")"
+                                                            + ",(select lot from storage where storage_id= " + order_id + " )"
+                                                                    + ",(select date_ from storage where storage_id= " + order_id + " )"
+                                                                            + ",GETDATE() "
+                                                                            + ",(select num_of_con from storage where storage_id= " + order_id + " )"
+                                                                                    + ",(select pallet_numb from storage where storage_id= " + order_id + " )"
+                                                                                            + ",(select used from storage where storage_id= " + order_id + " )"
+                                                                                                    + ",(SELECT TOP 1 ord_id FROM orders where ord_wight=" + ToDoubleEnglish(totalWeight) + " ORDER BY ord_id DESC)"
+                    );
+                    
+                    opj.delData("storage", "storage_id=" + order_id + "");
+                });
+                ((DefaultTableModel) BagsTable.getModel()).setRowCount(0);
+                orderIds.clear();
             }
-
-            desktop.open(file);
-            serial = 0;
-            if (!opj.dataRead("*", "clients", "cli_name=N'" + jTextField6.getText() + "'").next()) {
-                opj.inData("clients", "cli_name", "N'" + jTextField6.getText() + "'");
-            }
-            opj.inData("orders", "ord_wight,ord_date", mainform.ToDoubleEnglish(total_weight.getText()) + ",GETDATE()");
-            order_ids.forEach(order_id -> {
-
-                opj.inData("export", "pro_id,cli_id,tot_wight,weight_,lot,inserted_date,exported_date,num_of_con,pallet_numb,used,ord_id",
-                        "(select pro_id from products where pro_name=N'" + combox_product.getSelectedItem() + "')"
-                        + ",(select  top(1) cli_id from clients where cli_name=N'" + jTextField6.getText() + "')"
-                        + ",(select tot_wight from storage where storage_id=" + order_id + ")"
-                        + ",(select weight_ from storage where storage_id=" + order_id + ")"
-                        + ",(select lot from storage where storage_id= " + order_id + " )"
-                        + ",(select date_ from storage where storage_id= " + order_id + " )"
-                        + ",GETDATE() "
-                        + ",(select num_of_con from storage where storage_id= " + order_id + " )"
-                        + ",(select pallet_numb from storage where storage_id= " + order_id + " )"
-                        + ",(select used from storage where storage_id= " + order_id + " )"
-                        + ",(SELECT TOP 1 ord_id FROM orders where ord_wight=" + mainform.ToDoubleEnglish(total_weight.getText()) + " ORDER BY ord_id DESC)"
-                );
-
-                opj.delData("storage", "storage_id=" + order_id + "");
-            });
-            ((DefaultTableModel) jTable3.getModel()).setRowCount(0);
-            order_ids.clear();
-            total_weight.setText("");
-            jTextField6.setText("");
-
+            return true;
         } catch (SQLException ex) {
             Logger.getLogger(print_shit.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
         }
-
     }
 
     public static File NewName(String fileName) {
