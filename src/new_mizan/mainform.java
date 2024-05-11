@@ -70,7 +70,7 @@ public class mainform extends javax.swing.JFrame {
     private int BagMax = 2, repDiff = 15;
     private float Xx = 0, Yy = 0, width = 19, hight = 19;
     private final JButton jButton_Settings = new javax.swing.JButton();
-    String Version = "V 61.0.H";
+    String Version = "V 61.1.H";
 
     public mainform(sqlcon ops) throws IOException {
         initComponents();
@@ -3139,7 +3139,7 @@ public class mainform extends javax.swing.JFrame {
                         .setText(jTable_storage.getModel().getValueAt(jTable_storage.getSelectedRow(), 3).toString());
                 jTextField_ME_lot
                         .setText(jTable_storage.getModel().getValueAt(jTable_storage.getSelectedRow(), 2).toString());
-                jCheckBox_ME_MarkBag.setSelected(jTable_storage.getModel()
+                jCheckBox_ME_MarkBag.setSelected(!jTable_storage.getModel()
                         .getValueAt(jTable_storage.getSelectedRow(), 6).toString().equals("0"));
             }
         }
