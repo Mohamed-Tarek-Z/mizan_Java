@@ -2002,7 +2002,11 @@ public class mainform extends javax.swing.JFrame {
         textbox_number_weight(evt, jTextField_weight, 8);
         calc_net_weight();
         if (evt.getKeyChar() == KeyEvent.VK_ENTER && !jTextField_weight.getText().isBlank()) {
-            jTextField_net_weight.requestFocusInWindow();
+            if (jTextField_bag_weight.getText().isBlank() && jCheckBox_rev_order.isSelected()) {
+                jTextField_bag_weight.requestFocusInWindow();
+            } else {
+                jTextField_net_weight.requestFocusInWindow();
+            }
         }
         calc_net_weight();
     }
@@ -2029,33 +2033,33 @@ public class mainform extends javax.swing.JFrame {
 
                     ResultSet st = opj.dataRead("count(storage_id) ", "storage",
                             "pallet_numb=" + ToDoubleEnglish(jTextField_pallet_num.getText()) + " and lot=N'"
-                                    + ToStringEnglish(jTextField_lot.getText())
-                                    + "' and pro_id=(select pro_id from products where pro_name=N'"
-                                    + jComboBox_pro_in_storage.getSelectedItem() + "') ");
+                            + ToStringEnglish(jTextField_lot.getText())
+                            + "' and pro_id=(select pro_id from products where pro_name=N'"
+                            + jComboBox_pro_in_storage.getSelectedItem() + "') ");
                     st.next();
                     do {
                         int a = (int) ToDoubleEnglish(jTextField_pallet_num.getText());
                         jTextField_pallet_num.setText(ToDoubleArabic((st.getInt(1) >= 20) ? ++a + "" : a + ""));
                         st = opj.dataRead("count(storage_id) ", "storage",
                                 "pallet_numb=" + ToDoubleEnglish(jTextField_pallet_num.getText()) + " and lot=N'"
-                                        + ToStringEnglish(jTextField_lot.getText())
-                                        + "' and pro_id=(select pro_id from products where pro_name=N'"
-                                        + jComboBox_pro_in_storage.getSelectedItem() + "') ");
+                                + ToStringEnglish(jTextField_lot.getText())
+                                + "' and pro_id=(select pro_id from products where pro_name=N'"
+                                + jComboBox_pro_in_storage.getSelectedItem() + "') ");
                         st.next();
                     } while (st.getInt(1) >= 20);
 
                     st = opj.dataRead("count (used)", "storage",
                             "pallet_numb=" + ToDoubleEnglish(jTextField_pallet_num.getText()) + " and  lot=N'"
-                                    + ToStringEnglish(jTextField_lot.getText())
-                                    + "' and pro_id=(select pro_id from products where pro_name=N'"
-                                    + jComboBox_pro_in_storage.getSelectedItem() + "') and used =" + 1 + " ");
+                            + ToStringEnglish(jTextField_lot.getText())
+                            + "' and pro_id=(select pro_id from products where pro_name=N'"
+                            + jComboBox_pro_in_storage.getSelectedItem() + "') and used =" + 1 + " ");
                     st.next();
                     int UC = st.getInt(1);
                     st = opj.dataRead("count (used)", "storage",
                             "pallet_numb=" + ToDoubleEnglish(jTextField_pallet_num.getText()) + " and  lot=N'"
-                                    + ToStringEnglish(jTextField_lot.getText())
-                                    + "' and pro_id=(select pro_id from products where pro_name=N'"
-                                    + jComboBox_pro_in_storage.getSelectedItem() + "') and used =" + 0 + " ");
+                            + ToStringEnglish(jTextField_lot.getText())
+                            + "' and pro_id=(select pro_id from products where pro_name=N'"
+                            + jComboBox_pro_in_storage.getSelectedItem() + "') and used =" + 0 + " ");
                     st.next();
                     int NUC = st.getInt(1);
                     if (UC > 0 && NUC > 0) {
@@ -2074,27 +2078,27 @@ public class mainform extends javax.swing.JFrame {
 
                     opj.inData("storage", "pro_id,tot_wight,weight_,lot,pallet_numb,date_,num_of_con,used",
                             " (select pro_id from products where pro_name=N'"
-                                    + jComboBox_pro_in_storage.getSelectedItem()
-                                    + "')" + "," + ToDoubleEnglish(jTextField_weight.getText()) + ","
-                                    + ToDoubleEnglish(jTextField_net_weight.getText()) + ",N'"
-                                    + ToStringEnglish(jTextField_lot.getText()) + "',"
-                                    + ToDoubleEnglish(jTextField_pallet_num.getText()) + ",GETDATE(),"
-                                    + ToDoubleEnglish(jTextField_num_of_con.getText()) + ","
-                                    + (jCheckBox_M_Markpage.isSelected() ? 1 : 0) + " ");
+                            + jComboBox_pro_in_storage.getSelectedItem()
+                            + "')" + "," + ToDoubleEnglish(jTextField_weight.getText()) + ","
+                            + ToDoubleEnglish(jTextField_net_weight.getText()) + ",N'"
+                            + ToStringEnglish(jTextField_lot.getText()) + "',"
+                            + ToDoubleEnglish(jTextField_pallet_num.getText()) + ",GETDATE(),"
+                            + ToDoubleEnglish(jTextField_num_of_con.getText()) + ","
+                            + (jCheckBox_M_Markpage.isSelected() ? 1 : 0) + " ");
                     st = opj.dataRead("TOP 1 used", "storage",
                             "pallet_numb=" + ToDoubleEnglish(jTextField_pallet_num.getText()) + " and  lot=N'"
-                                    + ToStringEnglish(jTextField_lot.getText())
-                                    + "' and pro_id=(select pro_id from products where pro_name=N'"
-                                    + jComboBox_pro_in_storage.getSelectedItem() + "')");
+                            + ToStringEnglish(jTextField_lot.getText())
+                            + "' and pro_id=(select pro_id from products where pro_name=N'"
+                            + jComboBox_pro_in_storage.getSelectedItem() + "')");
                     st.next();
                     jCheckBox_M_Markpage.setSelected(st.getBoolean(1));
 
                     calc_pallet_weight();
                     st = opj.dataRead("count(storage_id) ", "storage",
                             "pallet_numb=" + ToDoubleEnglish(jTextField_pallet_num.getText()) + " and lot=N'"
-                                    + ToStringEnglish(jTextField_lot.getText())
-                                    + "' and pro_id=(select pro_id from products where pro_name=N'"
-                                    + jComboBox_pro_in_storage.getSelectedItem() + "') ");
+                            + ToStringEnglish(jTextField_lot.getText())
+                            + "' and pro_id=(select pro_id from products where pro_name=N'"
+                            + jComboBox_pro_in_storage.getSelectedItem() + "') ");
                     st.next();
                     int count = st.getInt(1);
                     jProgressBar_pallet.setValue(count);
@@ -2147,7 +2151,7 @@ public class mainform extends javax.swing.JFrame {
                 opj.delData("storage",
                         "storage_id=" + Integer.valueOf(
                                 jTable_storage.getModel().getValueAt(jTable_storage.getSelectedRow(), 4).toString())
-                                + " ");
+                        + " ");
                 JOptionPane.showMessageDialog(this, addStyle(" تم حذف البيان بنجاح "), "ناجح",
                         JOptionPane.PLAIN_MESSAGE);
                 fill_storage_table();
@@ -2179,8 +2183,8 @@ public class mainform extends javax.swing.JFrame {
                     } else {
                         opj.inData("products", "pro_name,weight_of_con,Color",
                                 "N'" + jTextField_pro_name.getText() + "',N'"
-                                        + ToStringEnglish(jTextField_Pros_conWight.getText()) + "',N'"
-                                        + jTextField_Pros_color.getText() + "'");
+                                + ToStringEnglish(jTextField_Pros_conWight.getText()) + "',N'"
+                                + jTextField_Pros_color.getText() + "'");
                         jTextField_pro_name.setText("");
                         jTextField_Pros_conWight.setText("");
                         jTextField_Pros_color.setText("");
@@ -2202,8 +2206,8 @@ public class mainform extends javax.swing.JFrame {
             } else {
                 opj.update("products",
                         "pro_name=N'" + jTextField_pro_name.getText() + "' ,weight_of_con=N'"
-                                + ToStringEnglish(jTextField_Pros_conWight.getText()) + "' ,Color=N'"
-                                + jTextField_Pros_color.getText() + "' ",
+                        + ToStringEnglish(jTextField_Pros_conWight.getText()) + "' ,Color=N'"
+                        + jTextField_Pros_color.getText() + "' ",
                         "pro_id=" + pro_Table_SelectedID + " ");
                 pro_Table_SelectedID = 0;
                 jTextField_pro_name.setText("");
@@ -2293,14 +2297,14 @@ public class mainform extends javax.swing.JFrame {
             ((DefaultTableModel) jTable_rep_select.getModel()).setRowCount(0);
             ResultSet st = opj.dataRead("count(*),sum(weight_),lot,pallet_numb,used", "storage",
                     "pro_id=(select pro_id from products where pro_name=N'"
-                            + jComboBox_rep_Pros.getSelectedItem().toString() + "' )  GROUP BY lot,pallet_numb,used");
+                    + jComboBox_rep_Pros.getSelectedItem().toString() + "' )  GROUP BY lot,pallet_numb,used");
             try {
                 while (st.next()) {
 
                     ((DefaultTableModel) jTable_rep_select.getModel())
-                            .addRow(new Object[] { ToDoubleArabic(st.getString(1)), ToDoubleArabic(st.getString(2)),
-                                    ToDoubleArabic(st.getString(3)), ToDoubleArabic(st.getString(4)),
-                                    ToDoubleArabic(st.getString(5)) });
+                            .addRow(new Object[]{ToDoubleArabic(st.getString(1)), ToDoubleArabic(st.getString(2)),
+                        ToDoubleArabic(st.getString(3)), ToDoubleArabic(st.getString(4)),
+                        ToDoubleArabic(st.getString(5))});
                 }
             } catch (SQLException ex) {
                 Logger.getLogger(mainform.class.getName()).log(Level.SEVERE, null, ex);
@@ -2326,7 +2330,7 @@ public class mainform extends javax.swing.JFrame {
                 : ToDoubleEnglish(jTextField_rep_totweight.getText());
         if (jTable_rep_preview.getRowCount() >= 0 && !jTextField_rep_clientName.getText().isBlank()
                 && (jTable_rep_preview.getRowCount() == (int) ToDoubleEnglish(jTextField_rep_numOfBag.getText())
-                        || !(ToDoubleEnglish(jTextField_rep_numOfBag.getText()) >= ss + repDiff))) {
+                || !(ToDoubleEnglish(jTextField_rep_numOfBag.getText()) >= ss + repDiff))) {
 
             if (JOptionPane.showConfirmDialog(this, addStyle("سيتم التصدير للأكسل "), "تنبيه",
                     JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
@@ -2340,13 +2344,13 @@ public class mainform extends javax.swing.JFrame {
                         fOrderIds = new ArrayList<>(orderIds);
 
                         tableFOrder = new JTable();
-                        String[] columnNames = { "مسلسل", "وزن", "لوط", "رقم البالتة" };
+                        String[] columnNames = {"مسلسل", "وزن", "لوط", "رقم البالتة"};
                         DefaultTableModel d = new DefaultTableModel(columnNames, 0);
                         for (int i = 0; i < jTable_rep_preview.getRowCount(); i++) {
-                            Object[] row = { ToDoubleEnglish(jTable_rep_preview.getValueAt(i, 0) + ""),
-                                    ToDoubleEnglish(jTable_rep_preview.getValueAt(i, 1) + ""),
-                                    ToStringEnglish(jTable_rep_preview.getValueAt(i, 2) + ""),
-                                    ToDoubleEnglish(jTable_rep_preview.getValueAt(i, 3) + "") };
+                            Object[] row = {ToDoubleEnglish(jTable_rep_preview.getValueAt(i, 0) + ""),
+                                ToDoubleEnglish(jTable_rep_preview.getValueAt(i, 1) + ""),
+                                ToStringEnglish(jTable_rep_preview.getValueAt(i, 2) + ""),
+                                ToDoubleEnglish(jTable_rep_preview.getValueAt(i, 3) + "")};
                             d.addRow(row);
                         }
                         tableFOrder.setModel(d);
@@ -2426,13 +2430,13 @@ public class mainform extends javax.swing.JFrame {
             ((DefaultTableModel) jTable_rep_select.getModel()).setRowCount(0);
             ResultSet st = opj.dataRead("count(*),sum(weight_),lot,pallet_numb,used", "storage",
                     "pro_id=(select pro_id from products where pro_name=N'"
-                            + jComboBox_rep_Pros.getSelectedItem().toString() + "' )  GROUP BY lot,pallet_numb,used");
+                    + jComboBox_rep_Pros.getSelectedItem().toString() + "' )  GROUP BY lot,pallet_numb,used");
             try {
                 while (st.next()) {
                     ((DefaultTableModel) jTable_rep_select.getModel())
-                            .addRow(new Object[] { ToDoubleArabic(st.getString(1)), ToDoubleArabic(st.getString(2)),
-                                    ToDoubleArabic(st.getString(3)), ToDoubleArabic(st.getString(4)),
-                                    ToDoubleArabic(st.getString(5)) });
+                            .addRow(new Object[]{ToDoubleArabic(st.getString(1)), ToDoubleArabic(st.getString(2)),
+                        ToDoubleArabic(st.getString(3)), ToDoubleArabic(st.getString(4)),
+                        ToDoubleArabic(st.getString(5))});
                 }
             } catch (SQLException ex) {
                 Logger.getLogger(mainform.class.getName()).log(Level.SEVERE, null, ex);
@@ -2478,21 +2482,21 @@ public class mainform extends javax.swing.JFrame {
                         if (loot) {
                             if (JOptionPane.showConfirmDialog(this,
                                     "هل تريد إضافه البالته رقم  "
-                                            + jTable_rep_select.getValueAt(jTable_rep_select.getSelectedRow(), 3) + "",
+                                    + jTable_rep_select.getValueAt(jTable_rep_select.getSelectedRow(), 3) + "",
                                     "تنبيه",
                                     JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
 
                                 ResultSet st = opj.dataRead("weight_,lot,pallet_numb,storage_id", "storage",
                                         " pro_id=(select pro_id from products where pro_name=N'"
-                                                + jComboBox_rep_Pros.getSelectedItem().toString() + "' ) and "
-                                                + "pallet_numb="
-                                                + ToDoubleEnglish(jTable_rep_select.getModel()
-                                                        .getValueAt(jTable_rep_select.getSelectedRow(), 3).toString())
-                                                + " "
-                                                + "and lot=N'"
-                                                + ToStringEnglish(jTable_rep_select.getModel()
-                                                        .getValueAt(jTable_rep_select.getSelectedRow(), 2).toString())
-                                                + "'  order by pallet_numb ,storage_id DESC ");
+                                        + jComboBox_rep_Pros.getSelectedItem().toString() + "' ) and "
+                                        + "pallet_numb="
+                                        + ToDoubleEnglish(jTable_rep_select.getModel()
+                                                .getValueAt(jTable_rep_select.getSelectedRow(), 3).toString())
+                                        + " "
+                                        + "and lot=N'"
+                                        + ToStringEnglish(jTable_rep_select.getModel()
+                                                .getValueAt(jTable_rep_select.getSelectedRow(), 2).toString())
+                                        + "'  order by pallet_numb ,storage_id DESC ");
 
                                 try {
                                     boolean bagOutOfOrder = false;
@@ -2502,10 +2506,10 @@ public class mainform extends javax.swing.JFrame {
                                                 + Double.parseDouble(st.getString(1))) {
                                             pcount++;
                                             weight_sum += Double.parseDouble(st.getString(1));
-                                            ((DefaultTableModel) jTable_rep_preview.getModel()).addRow(new Object[] {
-                                                    ToDoubleArabic((jTable_rep_preview.getRowCount() + 1) + ""),
-                                                    ToDoubleArabic(st.getString(1)), ToDoubleArabic(st.getString(2)),
-                                                    ToDoubleArabic(st.getString(3)) });
+                                            ((DefaultTableModel) jTable_rep_preview.getModel()).addRow(new Object[]{
+                                                ToDoubleArabic((jTable_rep_preview.getRowCount() + 1) + ""),
+                                                ToDoubleArabic(st.getString(1)), ToDoubleArabic(st.getString(2)),
+                                                ToDoubleArabic(st.getString(3))});
                                             orderIds.add(st.getString(4));
                                             if (((DefaultComboBoxModel) jComboBox_rep_palletsNrep.getModel())
                                                     .getIndexOf(ToDoubleArabic(st.getString(3))) == -1) {
@@ -2596,7 +2600,7 @@ public class mainform extends javax.swing.JFrame {
                         if (loot) {
                             if (JOptionPane.showConfirmDialog(this,
                                     "هل تريد إضافه البالته رقم  "
-                                            + jTable_rep_select.getValueAt(jTable_rep_select.getSelectedRow(), 3) + "",
+                                    + jTable_rep_select.getValueAt(jTable_rep_select.getSelectedRow(), 3) + "",
                                     "تنبيه",
                                     JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
                                 int num_of_order = (int) ToDoubleEnglish(jTextField_rep_numOfBag.getText());
@@ -2605,24 +2609,24 @@ public class mainform extends javax.swing.JFrame {
                                             " TOP (" + (num_of_order - serial) + ") weight_,lot,pallet_numb,storage_id",
                                             "storage",
                                             " pro_id=(select pro_id from products where pro_name=N'"
-                                                    + jComboBox_rep_Pros.getSelectedItem().toString() + "' ) and "
-                                                    + "pallet_numb="
-                                                    + ToDoubleEnglish(jTable_rep_select.getModel()
-                                                            .getValueAt(jTable_rep_select.getSelectedRow(), 3)
-                                                            .toString())
-                                                    + " "
-                                                    + "and lot=N'"
-                                                    + ToStringEnglish(jTable_rep_select.getModel()
-                                                            .getValueAt(jTable_rep_select.getSelectedRow(), 2)
-                                                            .toString())
-                                                    + "'  order by pallet_numb ,storage_id DESC ");
+                                            + jComboBox_rep_Pros.getSelectedItem().toString() + "' ) and "
+                                            + "pallet_numb="
+                                            + ToDoubleEnglish(jTable_rep_select.getModel()
+                                                    .getValueAt(jTable_rep_select.getSelectedRow(), 3)
+                                                    .toString())
+                                            + " "
+                                            + "and lot=N'"
+                                            + ToStringEnglish(jTable_rep_select.getModel()
+                                                    .getValueAt(jTable_rep_select.getSelectedRow(), 2)
+                                                    .toString())
+                                            + "'  order by pallet_numb ,storage_id DESC ");
                                     int numm = serial;
                                     try {
                                         while (st.next()) {
                                             weight_sum += Double.parseDouble(st.getString(1));
-                                            ((DefaultTableModel) jTable_rep_preview.getModel()).addRow(new Object[] {
-                                                    ToDoubleArabic(++serial + ""), ToDoubleArabic(st.getString(1)),
-                                                    ToDoubleArabic(st.getString(2)), ToDoubleArabic(st.getString(3)) });
+                                            ((DefaultTableModel) jTable_rep_preview.getModel()).addRow(new Object[]{
+                                                ToDoubleArabic(++serial + ""), ToDoubleArabic(st.getString(1)),
+                                                ToDoubleArabic(st.getString(2)), ToDoubleArabic(st.getString(3))});
                                             orderIds.add(st.getString(4));
                                             if (((DefaultComboBoxModel) jComboBox_rep_palletsNrep.getModel())
                                                     .getIndexOf(ToDoubleArabic(st.getString(3))) == -1) {
@@ -2648,21 +2652,21 @@ public class mainform extends javax.swing.JFrame {
                                         DecimalFormat df = new DecimalFormat("#.###");
                                         st = opj.dataRead("TOP (" + (num_of_order - numm) + ") weight_ ", "storage",
                                                 " pro_id=(select pro_id from products where pro_name=N'"
-                                                        + jComboBox_rep_Pros.getSelectedItem().toString() + "' ) and "
-                                                        + "pallet_numb="
-                                                        + ToDoubleEnglish(
-                                                                jTable_rep_select.getModel()
-                                                                        .getValueAt(jTable_rep_select.getSelectedRow(),
-                                                                                3)
-                                                                        .toString())
-                                                        + " "
-                                                        + "and lot=N'"
-                                                        + ToStringEnglish(
-                                                                jTable_rep_select.getModel()
-                                                                        .getValueAt(jTable_rep_select.getSelectedRow(),
-                                                                                2)
-                                                                        .toString())
-                                                        + "'   order by pallet_numb ,storage_id DESC ");
+                                                + jComboBox_rep_Pros.getSelectedItem().toString() + "' ) and "
+                                                + "pallet_numb="
+                                                + ToDoubleEnglish(
+                                                        jTable_rep_select.getModel()
+                                                                .getValueAt(jTable_rep_select.getSelectedRow(),
+                                                                        3)
+                                                                .toString())
+                                                + " "
+                                                + "and lot=N'"
+                                                + ToStringEnglish(
+                                                        jTable_rep_select.getModel()
+                                                                .getValueAt(jTable_rep_select.getSelectedRow(),
+                                                                        2)
+                                                                .toString())
+                                                + "'   order by pallet_numb ,storage_id DESC ");
                                         try {
                                             while (st.next()) {
                                                 jTable_rep_select.getModel()
@@ -2672,7 +2676,7 @@ public class mainform extends javax.swing.JFrame {
                                                                                 .getValueAt(jTable_rep_select
                                                                                         .getSelectedRow(), 1)
                                                                                 .toString())
-                                                                                - Double.parseDouble(st.getString(1)))),
+                                                                        - Double.parseDouble(st.getString(1)))),
                                                                 jTable_rep_select.getSelectedRow(), 1);
                                             }
                                         } catch (SQLException ex) {
@@ -2764,11 +2768,11 @@ public class mainform extends javax.swing.JFrame {
             model.setRowCount(0);
             ResultSet st = opj.dataRead("lot ,COUNT( distinct pallet_numb)  ,count(weight_),SUM(weight_)", "storage",
                     "pro_id=(select pro_id from products where pro_name=N'" + jComboBox_stock_Pros.getSelectedItem()
-                            + "')  group by lot");
+                    + "')  group by lot");
             try {
                 while (st.next()) {
-                    model.addRow(new Object[] { ToDoubleArabic(st.getString(1)), ToDoubleArabic(st.getString(2)),
-                            ToDoubleArabic(st.getString(3)), ToDoubleArabic(st.getString(4)) });
+                    model.addRow(new Object[]{ToDoubleArabic(st.getString(1)), ToDoubleArabic(st.getString(2)),
+                        ToDoubleArabic(st.getString(3)), ToDoubleArabic(st.getString(4))});
                 }
             } catch (SQLException ex) {
                 Logger.getLogger(mainform.class.getName()).log(Level.SEVERE, null, ex);
@@ -2815,24 +2819,24 @@ public class mainform extends javax.swing.JFrame {
                     "sum(weight_),pro_name,cli_name,lot,FORMAT (exported_date, 'yyyy-MM-dd'),count(weight_)",
                     "export inner join clients on clients.cli_id=export.cli_id inner join products on products.pro_id=export.pro_id",
                     jTable_youm_clinets.getSelectedRowCount() > 0 ? "exported_date between '" + date1 + "' and '"
-                            + date2 + "' and export.cli_id in (" + selectedCIDs + ") "
-                            + " group by products.pro_name,clients.cli_name,lot,exported_date order by exported_date ,cli_name "
-                            : "exported_date between '" + date1 + "' and '" + date2 + "' "
-                                    + " group by products.pro_name,clients.cli_name,lot,exported_date order by exported_date ,cli_name ")
+                    + date2 + "' and export.cli_id in (" + selectedCIDs + ") "
+                    + " group by products.pro_name,clients.cli_name,lot,exported_date order by exported_date ,cli_name "
+                    : "exported_date between '" + date1 + "' and '" + date2 + "' "
+                    + " group by products.pro_name,clients.cli_name,lot,exported_date order by exported_date ,cli_name ")
                     : opj.dataRead(
                             "ord_wight,pro_name,cli_name,lot,FORMAT (exported_date, 'yyyy-MM-dd'),count(weight_)",
                             "export inner join clients on clients.cli_id=export.cli_id inner join products on products.pro_id=export.pro_id inner join orders on orders.ord_id=export.ord_id",
                             jTable_youm_clinets.getSelectedRowCount() > 0 ? "exported_date between '" + date1
-                                    + "' and '" + date2 + "' and export.cli_id in (" + selectedCIDs + ") "
-                                    + " group by orders.ord_wight,products.pro_name,clients.cli_name,lot,exported_date order by exported_date ,cli_name "
-                                    : "exported_date between '" + date1 + "' and '" + date2 + "' "
-                                            + " group by orders.ord_wight,products.pro_name,clients.cli_name,lot,exported_date order by exported_date ,cli_name ");
+                            + "' and '" + date2 + "' and export.cli_id in (" + selectedCIDs + ") "
+                            + " group by orders.ord_wight,products.pro_name,clients.cli_name,lot,exported_date order by exported_date ,cli_name "
+                            : "exported_date between '" + date1 + "' and '" + date2 + "' "
+                            + " group by orders.ord_wight,products.pro_name,clients.cli_name,lot,exported_date order by exported_date ,cli_name ");
 
             try {
                 while (st.next()) {
-                    model.addRow(new Object[] { ToDoubleArabic(st.getString(3)), ToDoubleArabic(st.getString(2)),
-                            ToDoubleArabic(st.getString(4)), ToDoubleArabic(st.getString(6)),
-                            ToDoubleArabic(st.getString(1)), ToDoubleArabic(st.getString(5)) });
+                    model.addRow(new Object[]{ToDoubleArabic(st.getString(3)), ToDoubleArabic(st.getString(2)),
+                        ToDoubleArabic(st.getString(4)), ToDoubleArabic(st.getString(6)),
+                        ToDoubleArabic(st.getString(1)), ToDoubleArabic(st.getString(5))});
                 }
             } catch (SQLException ex) {
                 Logger.getLogger(mainform.class.getName()).log(Level.SEVERE, null, ex);
@@ -2852,8 +2856,8 @@ public class mainform extends javax.swing.JFrame {
     private void formWindowClosing() {
         try {
             Object[] options1 = {
-                    "<html><body><h1  style='font-family: Arial; font-size: 20pt; text-align: center; width: 80px;'>  تسجيل الخروج </h1></body></html>",
-                    "<html><body><h1  style='font-family: Arial; font-size: 20pt; text-align: center; width: 80px;'>  قفل البرنامج </h1></body></html>" };
+                "<html><body><h1  style='font-family: Arial; font-size: 20pt; text-align: center; width: 80px;'>  تسجيل الخروج </h1></body></html>",
+                "<html><body><h1  style='font-family: Arial; font-size: 20pt; text-align: center; width: 80px;'>  قفل البرنامج </h1></body></html>"};
             int result = JOptionPane.showOptionDialog(this, addStyle(" خد بالك ياجدع  "), "انتبه ",
                     JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, options1, null);
             if (result == JOptionPane.YES_OPTION) {
@@ -2879,8 +2883,8 @@ public class mainform extends javax.swing.JFrame {
             if (jTable_yumia.getSelectedRow() != -1) {
                 if (JOptionPane.showConfirmDialog(this,
                         "هل تريد استرجاع أزن " + jTable_yumia.getValueAt(jTable_yumia.getSelectedRow(), 0) + " لصنف"
-                                + jTable_yumia.getValueAt(jTable_yumia.getSelectedRow(), 1) + " في يوم"
-                                + jTable_yumia.getValueAt(jTable_yumia.getSelectedRow(), 5) + " ",
+                        + jTable_yumia.getValueAt(jTable_yumia.getSelectedRow(), 1) + " في يوم"
+                        + jTable_yumia.getValueAt(jTable_yumia.getSelectedRow(), 5) + " ",
                         "تنبيه",
                         JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
                     try {
@@ -2899,21 +2903,21 @@ public class mainform extends javax.swing.JFrame {
                                     "export",
                                     "lot=N'" + ToStringEnglish(
                                             "" + jTable_yumia.getValueAt(jTable_yumia.getSelectedRow(), 2)) + "' "
-                                            + "and pro_id=(select pro_id from products where pro_name=N'"
-                                            + jTable_yumia.getValueAt(jTable_yumia.getSelectedRow(), 1) + "') "
-                                            + "and cli_id=(select top(1) cli_id from clients where cli_name=N'"
-                                            + jTable_yumia.getValueAt(jTable_yumia.getSelectedRow(), 0) + "')"
-                                            + " and exported_date = '"
-                                            + ToStringEnglish(
-                                                    "" + jTable_yumia.getValueAt(jTable_yumia.getSelectedRow(), 5))
-                                            + "'"
-                                            + "and num_of_con is not null  and pallet_numb is not null         ");
+                                    + "and pro_id=(select pro_id from products where pro_name=N'"
+                                    + jTable_yumia.getValueAt(jTable_yumia.getSelectedRow(), 1) + "') "
+                                    + "and cli_id=(select top(1) cli_id from clients where cli_name=N'"
+                                    + jTable_yumia.getValueAt(jTable_yumia.getSelectedRow(), 0) + "')"
+                                    + " and exported_date = '"
+                                    + ToStringEnglish(
+                                            "" + jTable_yumia.getValueAt(jTable_yumia.getSelectedRow(), 5))
+                                    + "'"
+                                    + "and num_of_con is not null  and pallet_numb is not null         ");
 
                             ArrayList<String[]> outerArr = new ArrayList<>();
                             int ordTid = 0;
                             while (s.next()) {
-                                String[] myString12 = { s.getString(1), s.getString(2), s.getString(3), s.getString(4),
-                                        s.getString(5), s.getString(6), s.getString(7), s.getString(8) };
+                                String[] myString12 = {s.getString(1), s.getString(2), s.getString(3), s.getString(4),
+                                    s.getString(5), s.getString(6), s.getString(7), s.getString(8)};
                                 outerArr.add(myString12);
                                 ordTid = s.getInt(9);
                             }
@@ -2922,8 +2926,8 @@ public class mainform extends javax.swing.JFrame {
                                 myString = outerArr.get(i);
                                 opj.inData("storage", "pro_id,weight_,lot,pallet_numb,date_,num_of_con,used,tot_wight",
                                         "" + myString[0] + "," + myString[1] + ",N'" + myString[2] + "'," + myString[3]
-                                                + ",'" + myString[4] + "'," + myString[5] + "," + myString[6] + ","
-                                                + myString[7] + " ");
+                                        + ",'" + myString[4] + "'," + myString[5] + "," + myString[6] + ","
+                                        + myString[7] + " ");
                             }
 
                             if (jCheckBox_youm_old.isSelected()) {
@@ -3001,9 +3005,9 @@ public class mainform extends javax.swing.JFrame {
                 && !jTextField_E_ConNum.getText().isBlank() && !jTextField_E_lot.getText().isBlank()) {
             ResultSet st = opj.dataRead("count(*)", "storage",
                     "lot=N'" + ToStringEnglish(jTextField_E_lot.getText()) + "' and pallet_numb="
-                            + ToStringEnglish(jTextField_E_PaltNum.getText())
-                            + " and pro_id=(select pro_id from products where pro_name=N'"
-                            + jComboBox_E_proName.getSelectedItem().toString() + "') ");
+                    + ToStringEnglish(jTextField_E_PaltNum.getText())
+                    + " and pro_id=(select pro_id from products where pro_name=N'"
+                    + jComboBox_E_proName.getSelectedItem().toString() + "') ");
             int num_of_shikra1 = 0;
             try {
                 while (st.next()) {
@@ -3017,16 +3021,16 @@ public class mainform extends javax.swing.JFrame {
 
                 opj.update("storage",
                         "weight_= " + ToStringEnglish(jTextField_E_Wight.getText()) + ","
-                                + "tot_wight= " + ToStringEnglish(jTextField_E_TotWight.getText()) + ","
-                                + "num_of_con= " + ToStringEnglish(jTextField_E_ConNum.getText()) + " ,"
-                                + " lot= N'" + ToStringEnglish(jTextField_E_lot.getText()) + "',"
-                                + "pallet_numb=" + ToStringEnglish(jTextField_E_PaltNum.getText()) + ","
-                                + " pro_id=(select pro_id from products where pro_name=N'"
-                                + jComboBox_E_proName.getSelectedItem().toString() + "'),"
-                                + "used=" + (jCheckBox_E_Mark.isSelected() ? 1 : 0) + " ",
+                        + "tot_wight= " + ToStringEnglish(jTextField_E_TotWight.getText()) + ","
+                        + "num_of_con= " + ToStringEnglish(jTextField_E_ConNum.getText()) + " ,"
+                        + " lot= N'" + ToStringEnglish(jTextField_E_lot.getText()) + "',"
+                        + "pallet_numb=" + ToStringEnglish(jTextField_E_PaltNum.getText()) + ","
+                        + " pro_id=(select pro_id from products where pro_name=N'"
+                        + jComboBox_E_proName.getSelectedItem().toString() + "'),"
+                        + "used=" + (jCheckBox_E_Mark.isSelected() ? 1 : 0) + " ",
                         "storage_id="
-                                + jTable_storage.getModel().getValueAt(jTable_storage.getSelectedRow(), 4).toString()
-                                + "");
+                        + jTable_storage.getModel().getValueAt(jTable_storage.getSelectedRow(), 4).toString()
+                        + "");
                 this.setEnabled(true);
                 fill_storage_table();
                 SingleEdit.dispose();
@@ -3054,8 +3058,8 @@ public class mainform extends javax.swing.JFrame {
         textbox_number(evt, jTextField_E_ConNum, 999);
         jTextField_E_Wight.setText(ToDoubleArabic(
                 (((ToDoubleEnglish(jTextField_E_O_ConNum.getText()) - ToDoubleEnglish(jTextField_E_ConNum.getText()))
-                        * (ToDoubleEnglish(jTextField_weight_of_con.getText()) / 1000))
-                        + ToDoubleEnglish(jTextField_E_O_Wight.getText())) + ""));
+                * (ToDoubleEnglish(jTextField_weight_of_con.getText()) / 1000))
+                + ToDoubleEnglish(jTextField_E_O_Wight.getText())) + ""));
     }
 
     private void jTextField_E_lotKeyTyped(java.awt.event.KeyEvent evt) {
@@ -3192,8 +3196,8 @@ public class mainform extends javax.swing.JFrame {
         try {
             jTextField_E_Wight.setText(ToDoubleArabic(
                     ((ToDoubleEnglish(jTextField_E_O_TotWight.getText())
-                            - ToDoubleEnglish(jTextField_E_TotWight.getText()))
-                            + ToDoubleEnglish(jTextField_E_O_Wight.getText())) + ""));
+                    - ToDoubleEnglish(jTextField_E_TotWight.getText()))
+                    + ToDoubleEnglish(jTextField_E_O_Wight.getText())) + ""));
         } catch (Exception e) {
             System.out.println("exp");
         }
@@ -3285,11 +3289,11 @@ public class mainform extends javax.swing.JFrame {
             for (int i = jTable_storage.getSelectedRows().length - 1; i > -1; i--) {
                 ResultSet st = opj.dataRead("count(*)", "storage",
                         "lot=N'"
-                                + ToStringEnglish(jTextField_ME_lot.getText())
-                                + "' and pallet_numb="
-                                + ToStringEnglish(jTextField_ME_PaltNum.getText())
-                                + " and pro_id=(select pro_id from products where pro_name=N'"
-                                + jComboBox_ME_type.getSelectedItem().toString() + "') ");
+                        + ToStringEnglish(jTextField_ME_lot.getText())
+                        + "' and pallet_numb="
+                        + ToStringEnglish(jTextField_ME_PaltNum.getText())
+                        + " and pro_id=(select pro_id from products where pro_name=N'"
+                        + jComboBox_ME_type.getSelectedItem().toString() + "') ");
                 int num_of_shikra1 = 0;
                 try {
                     while (st.next()) {
@@ -3301,10 +3305,10 @@ public class mainform extends javax.swing.JFrame {
                 if (num_of_shikra1 < 20) {
                     opj.update("storage",
                             "pallet_numb=" + ToStringEnglish(jTextField_ME_PaltNum.getText())
-                                    + ",lot=N'" + ToStringEnglish(jTextField_ME_lot.getText()) + "'"
-                                    + ",used=" + (jCheckBox_ME_MarkBag.isSelected() ? 1 : 0) + " "
-                                    + ",pro_id=(select pro_id from products where pro_name=N'"
-                                    + jComboBox_ME_type.getSelectedItem().toString() + "')",
+                            + ",lot=N'" + ToStringEnglish(jTextField_ME_lot.getText()) + "'"
+                            + ",used=" + (jCheckBox_ME_MarkBag.isSelected() ? 1 : 0) + " "
+                            + ",pro_id=(select pro_id from products where pro_name=N'"
+                            + jComboBox_ME_type.getSelectedItem().toString() + "')",
                             "storage_id=" + jTable_storage.getModel().getValueAt(jTable_storage.getSelectedRows()[i], 4)
                                     .toString() + "");
                 } else {
@@ -3430,7 +3434,7 @@ public class mainform extends javax.swing.JFrame {
         try {
 
             while (st.next()) {
-                model.addRow(new Object[] { st.getString(1), st.getString(2) });
+                model.addRow(new Object[]{st.getString(1), st.getString(2)});
             }
         } catch (SQLException ex) {
             Logger.getLogger(mainform.class.getName()).log(Level.SEVERE, null, ex);
@@ -3496,15 +3500,15 @@ public class mainform extends javax.swing.JFrame {
             ResultSet st = opj.dataRead("distinct pallet_numb",
                     "export inner join orders on orders.ord_id=export.ord_id",
                     "pro_id = ( select pro_id from products where pro_name =N'"
-                            + model.getValueAt(jTable_yumia.getSelectedRow(), 1).toString() + "') and"
-                            + " cli_id IN ( select cli_id from clients where cli_name=N'"
-                            + model.getValueAt(jTable_yumia.getSelectedRow(), 0).toString() + "') and"
-                            + " lot = N'"
-                            + ToStringEnglish(model.getValueAt(jTable_yumia.getSelectedRow(), 2).toString()) + "' and"
-                            + " exported_date='"
-                            + ToStringEnglish(model.getValueAt(jTable_yumia.getSelectedRow(), 5).toString())
-                            + "'and ord_wight ="
-                            + ToDoubleEnglish(model.getValueAt(jTable_yumia.getSelectedRow(), 4).toString()));
+                    + model.getValueAt(jTable_yumia.getSelectedRow(), 1).toString() + "') and"
+                    + " cli_id IN ( select cli_id from clients where cli_name=N'"
+                    + model.getValueAt(jTable_yumia.getSelectedRow(), 0).toString() + "') and"
+                    + " lot = N'"
+                    + ToStringEnglish(model.getValueAt(jTable_yumia.getSelectedRow(), 2).toString()) + "' and"
+                    + " exported_date='"
+                    + ToStringEnglish(model.getValueAt(jTable_yumia.getSelectedRow(), 5).toString())
+                    + "'and ord_wight ="
+                    + ToDoubleEnglish(model.getValueAt(jTable_yumia.getSelectedRow(), 4).toString()));
             try {
                 while (st.next()) {
                     temp += st.getString(1) + " , ";
@@ -3548,10 +3552,10 @@ public class mainform extends javax.swing.JFrame {
             ResultSet st = opj.dataRead(
                     "(select pro_name from products where products.pro_id=s.pro_id) as TypeName, lot as Lot, sum(bags) as Bags, sum(total) as Total",
                     "( select pro_id, lot, count(weight_)as bags, sum(weight_) as total from storage where (date_ between '"
-                            + date1 + "'  and '" + date2
-                            + "') group by lot, pro_id UNION ALL select pro_id, lot, count(weight_)as bags, sum(weight_) as total from export where (inserted_date between '"
-                            + date1 + "'  and '" + date2
-                            + "') group by lot, pro_id )s group by s.lot, s.pro_id order by s.pro_id");
+                    + date1 + "'  and '" + date2
+                    + "') group by lot, pro_id UNION ALL select pro_id, lot, count(weight_)as bags, sum(weight_) as total from export where (inserted_date between '"
+                    + date1 + "'  and '" + date2
+                    + "') group by lot, pro_id )s group by s.lot, s.pro_id order by s.pro_id");
             int RowIndex = 4;
             try {
                 XSSFWorkbook workbook;
@@ -3628,13 +3632,13 @@ public class mainform extends javax.swing.JFrame {
             ((DefaultTableModel) jTable_rep_select.getModel()).setRowCount(0);
             ResultSet st = opj.dataRead("count(*),sum(weight_),lot,pallet_numb,used", "storage",
                     "pro_id=(select pro_id from products where pro_name=N'"
-                            + jComboBox_rep_Pros.getSelectedItem().toString() + "' )  GROUP BY lot,pallet_numb,used");
+                    + jComboBox_rep_Pros.getSelectedItem().toString() + "' )  GROUP BY lot,pallet_numb,used");
             try {
                 while (st.next()) {
                     ((DefaultTableModel) jTable_rep_select.getModel())
-                            .addRow(new Object[] { ToDoubleArabic(st.getString(1)), ToDoubleArabic(st.getString(2)),
-                                    ToDoubleArabic(st.getString(3)), ToDoubleArabic(st.getString(4)),
-                                    ToDoubleArabic(st.getString(5)) });
+                            .addRow(new Object[]{ToDoubleArabic(st.getString(1)), ToDoubleArabic(st.getString(2)),
+                        ToDoubleArabic(st.getString(3)), ToDoubleArabic(st.getString(4)),
+                        ToDoubleArabic(st.getString(5))});
                 }
             } catch (SQLException ex) {
                 Logger.getLogger(mainform.class.getName()).log(Level.SEVERE, null, ex);
@@ -3694,7 +3698,7 @@ public class mainform extends javax.swing.JFrame {
                     if ((textboxname.getText().contains(".")
                             && (textboxname.getText().indexOf(".") == textboxname.getText().length() - 4))
                             || (textboxname.getText().contains("٫")
-                                    && (textboxname.getText().indexOf("٫") == textboxname.getText().length() - 4))) {
+                            && (textboxname.getText().indexOf("٫") == textboxname.getText().length() - 4))) {
                         event.consume();
                     } else {
                         event.setKeyChar(ToNumArab(event.getKeyChar()));
@@ -3922,8 +3926,8 @@ public class mainform extends javax.swing.JFrame {
         ResultSet st = opj.dataRead("*", "products");
         try {
             while (st.next()) {
-                model.addRow(new Object[] { st.getString(1), st.getString(2), ToDoubleArabic(st.getString(3)),
-                        st.getString(4) });
+                model.addRow(new Object[]{st.getString(1), st.getString(2), ToDoubleArabic(st.getString(3)),
+                    st.getString(4)});
 
             }
         } catch (SQLException ex) {
@@ -3937,7 +3941,7 @@ public class mainform extends javax.swing.JFrame {
         if (!jTextField_num_of_con.getText().isBlank() && !jTextField_weight_of_con.getText().isBlank()
                 && !jTextField_bag_weight.getText().isBlank()
                 && ((jTextField_weight.getText().contains("٫") && jTextField_weight.getText().length() >= 2)
-                        || (!jTextField_weight.getText().contains("٫") && !jTextField_weight.getText().isBlank()))) {
+                || (!jTextField_weight.getText().contains("٫") && !jTextField_weight.getText().isBlank()))) {
             DecimalFormat df2 = new DecimalFormat("#.##");
             df2.setRoundingMode(RoundingMode.UP);
             double num_of_con = ToDoubleEnglish(jTextField_num_of_con.getText()),
@@ -3956,13 +3960,13 @@ public class mainform extends javax.swing.JFrame {
                 "weight_,num_of_con,lot,pallet_numb,storage_id,used, (CASE WHEN ISNUMERIC(lot) = 1 THEN 0 ELSE 1 END) IsNum",
                 "storage ",
                 "storage.pro_id=(select pro_id from products where pro_name=N'"
-                        + jComboBox_pro_in_storage.getSelectedItem()
-                        + "') order by IsNum,lot DESC, pallet_numb DESC, storage_id DESC, used ");
+                + jComboBox_pro_in_storage.getSelectedItem()
+                + "') order by IsNum,lot DESC, pallet_numb DESC, storage_id DESC, used ");
         try {
             while (st.next()) {
-                model.addRow(new Object[] { ToDoubleArabic(st.getString(1)), ToDoubleArabic(st.getString(2)),
-                        ToDoubleArabic(st.getString(3)), ToDoubleArabic(st.getString(4)), st.getString(5), "",
-                        st.getString(6) });
+                model.addRow(new Object[]{ToDoubleArabic(st.getString(1)), ToDoubleArabic(st.getString(2)),
+                    ToDoubleArabic(st.getString(3)), ToDoubleArabic(st.getString(4)), st.getString(5), "",
+                    st.getString(6)});
             }
             st = opj.dataRead("weight_of_con", "products",
                     "pro_name=N'" + jComboBox_pro_in_storage.getSelectedItem() + "' ");
@@ -4001,9 +4005,9 @@ public class mainform extends javax.swing.JFrame {
                 && jComboBox_pro_in_storage.getSelectedIndex() != -1) {
             ResultSet st = opj.dataRead("sum(weight_)", "storage",
                     "lot=N'" + ToStringEnglish(jTextField_lot.getText()) + "' and pallet_numb="
-                            + ToDoubleEnglish(jTextField_pallet_num.getText())
-                            + " and pro_id=(select pro_id from products where pro_name=N'"
-                            + jComboBox_pro_in_storage.getSelectedItem() + "')");
+                    + ToDoubleEnglish(jTextField_pallet_num.getText())
+                    + " and pro_id=(select pro_id from products where pro_name=N'"
+                    + jComboBox_pro_in_storage.getSelectedItem() + "')");
             try {
                 while (st.next()) {
                     if (st.getString(1) != null) {
@@ -4029,14 +4033,14 @@ public class mainform extends javax.swing.JFrame {
             ResultSet st = opj.dataRead(
                     "(select pro_name from products where products.pro_id=s.pro_id) as TypeName, lot as Lot, sum(bags) as Bags, sum(total) as Total",
                     "( select pro_id, lot, count(weight_)as bags, sum(weight_) as total from storage where (date_ between '"
-                            + date1 + "'  and '" + date2
-                            + "') group by lot, pro_id UNION ALL select pro_id, lot, count(weight_)as bags, sum(weight_) as total from export where (inserted_date between '"
-                            + date1 + "'  and '" + date2
-                            + "') group by lot, pro_id )s group by s.lot, s.pro_id order by s.pro_id");
+                    + date1 + "'  and '" + date2
+                    + "') group by lot, pro_id UNION ALL select pro_id, lot, count(weight_)as bags, sum(weight_) as total from export where (inserted_date between '"
+                    + date1 + "'  and '" + date2
+                    + "') group by lot, pro_id )s group by s.lot, s.pro_id order by s.pro_id");
             try {
                 while (st.next()) {
-                    model.addRow(new Object[] { st.getString(1), ToDoubleArabic(st.getString(2)),
-                            ToDoubleArabic(st.getString(3)), ToDoubleArabic(st.getString(4)) });
+                    model.addRow(new Object[]{st.getString(1), ToDoubleArabic(st.getString(2)),
+                        ToDoubleArabic(st.getString(3)), ToDoubleArabic(st.getString(4))});
 
                 }
                 double tot = 0.0;
