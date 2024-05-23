@@ -43,7 +43,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
  */
 public class print_shit {
 
-    boolean excel_120(int serial, List<String> orderIds, String totalWeight, String ClientName, String productName, JTable BagsTable, sqlcon opj, JFileChooser jFileChooser1) {
+    boolean excel_120(int serial, List<String> orderIds, String totalWeight, String ClientName, String productName, JTable BagsTable, sqlcon opj, JFileChooser jFileChooser1, boolean isBoxes) {
 
         try {
             Locale arabicLocale = Locale.forLanguageTag("ar");
@@ -70,9 +70,9 @@ public class print_shit {
                 }
                 cell = sheet.getRow(0).getCell(0);
                 cell.setCellValue(_1 + _2 + _3 + "\n" + "\n" + _4 + _5);
-                String __1 = (_4.contains("ليكرا") ? "عدد الصناديق :          " : "عدد الشكاير :          ")
+                String __1 = (isBoxes ? "عدد الصناديق :          " : "عدد الشكاير :          ")
                         + ToDoubleArabic(BagsTable.getRowCount() + "")
-                        + (_4.contains("ليكرا") ? " صندوق" : "  شيكاره");
+                        + (isBoxes ? " صندوق" : "  شيكاره");
                 String __2 = "الــــــــــــــــــــــــــــــــوزن :       " + ToDoubleArabic(totalWeight) + "";
                 cell = sheet.getRow(23).getCell(11);
                 cell.setCellValue(__1 + "\n" + __2);
@@ -114,7 +114,7 @@ public class print_shit {
         }
     }
 
-    boolean excel_160(int serial, List<String> orderIds, String totalWeight, String ClientName, String productName, JTable BagsTable, sqlcon opj, JFileChooser jFileChooser1) {
+    boolean excel_160(int serial, List<String> orderIds, String totalWeight, String ClientName, String productName, JTable BagsTable, sqlcon opj, JFileChooser jFileChooser1, boolean isBoxes) {
         try {
             Locale arabicLocale = Locale.forLanguageTag("ar");
             DateTimeFormatter arabicDateFormatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT).withLocale(arabicLocale).withDecimalStyle(DecimalStyle.of(arabicLocale));
@@ -140,9 +140,9 @@ public class print_shit {
                 }
                 cell = sheet.getRow(0).getCell(0);
                 cell.setCellValue(_1 + _2 + _3 + "\n" + "\n" + _4 + _5);
-                String __1 = (_4.contains("ليكرا") ? "عدد الصناديق :          " : "عدد الشكاير :          ")
+                String __1 = (isBoxes ? "عدد الصناديق :          " : "عدد الشكاير :          ")
                         + ToDoubleArabic(BagsTable.getRowCount() + "")
-                        + (_4.contains("ليكرا") ? " صندوق" : "  شيكاره");
+                        + (isBoxes ? " صندوق" : "  شيكاره");
                 String __2 = "الــــــــــــــــــــــــــــــــوزن :       " + ToDoubleArabic(totalWeight) + "";
                 cell = sheet.getRow(23).getCell(16);
                 cell.setCellValue(__1 + "\n" + __2);
@@ -206,7 +206,7 @@ public class print_shit {
     boolean excel_60_60(int serial, List<String> sOrderIds, List<String> fOrderIds,
             String wieghtSOrder, String ClientName, String typeSOrder,
             JTable tableSOrder, JTable tableFOrder, String bagCountFOrder, String wieghtFOrder, String typeFOrder, sqlcon opj,
-            JFileChooser jFileChooser1) {
+            JFileChooser jFileChooser1, boolean FIsBoxes, boolean SIsBoxes) {
         try {
             Locale arabicLocale = Locale.forLanguageTag("ar");
             DateTimeFormatter arabicDateFormatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT).withLocale(arabicLocale).withDecimalStyle(DecimalStyle.of(arabicLocale));
@@ -240,13 +240,13 @@ public class print_shit {
                 cell = sheet.getRow(0).getCell(0);
                 cell.setCellValue(_1 + _2 + _3 + "\n" + _4 + _6 + "\n" + _5 + _7);
 
-                String __1 = (_4.contains("ليكرا") ? "عدد الصناديق : " : "عدد الشكاير : ")
+                String __1 = (FIsBoxes ? "عدد الصناديق : " : "عدد الشكاير : ")
                         + ToDoubleArabic((int) ToDoubleEnglish(bagCountFOrder) + "")
-                        + (_4.contains("ليكرا") ? " صندوق" : "  شيكاره");
+                        + (FIsBoxes ? " صندوق" : "  شيكاره");
                 String __2 = "الـــــــوزن :  " + ToDoubleArabic(wieghtFOrder) + "";
-                String __3 = (_6.contains("ليكرا") ? "عدد الصناديق : " : "عدد الشكاير : ")
+                String __3 = (SIsBoxes ? "عدد الصناديق : " : "عدد الشكاير : ")
                         + ToDoubleArabic(tableSOrder.getRowCount() + "")
-                        + (_6.contains("ليكرا") ? " صندوق" : "  شيكاره");
+                        + (SIsBoxes ? " صندوق" : "  شيكاره");
                 String __4 = "الـــــــوزن :  " + ToDoubleArabic(wieghtSOrder) + "";
                 cell = sheet.getRow(23).getCell(11);
                 cell.setCellValue(__1 + "  " + __2 + "\n" + __3 + " " + __4);
@@ -325,15 +325,15 @@ public class print_shit {
                 }
                 desktop.open(file);
                 serial = 0;
-
-                if (!opj.dataRead("*", "clients", "cli_name=N'" + ClientName + "'").next()) {
-                    opj.inData("clients", "cli_name", "N'" + ClientName + "'");
+                String name = ClientName.split("تسليم")[0].strip();
+                if (!opj.dataRead("*", "clients", "cli_name=N'" + name + "'").next()) {
+                    opj.inData("clients", "cli_name", "N'" + name + "'");
                 }
                 opj.inData("orders", "ord_wight,ord_date", ToDoubleEnglish(wieghtSOrder) + ",GETDATE()");
                 sOrderIds.forEach(order_id -> {
                     opj.inData("export", "pro_id,cli_id,tot_wight,weight_,lot,inserted_date,exported_date,num_of_con,pallet_numb,used,ord_id",
                             "(select pro_id from products where pro_name=N'" + typeSOrder + "')"
-                            + ",(select top(1) cli_id from clients where cli_name=N'" + ClientName + "')"
+                            + ",(select top(1) cli_id from clients where cli_name=N'" + name + "')"
                             + ",(select tot_wight from storage where storage_id=" + order_id + ")"
                             + ",(select weight_ from storage where storage_id=" + order_id + ")"
                             + ",(select lot from storage where storage_id= " + order_id + " )"
@@ -351,7 +351,7 @@ public class print_shit {
                 fOrderIds.forEach(StoreID -> {
                     opj.inData("export", "pro_id,cli_id,tot_wight,weight_,lot,inserted_date,exported_date,num_of_con,pallet_numb,used,ord_id",
                             "(select pro_id from products where pro_name=N'" + typeFOrder + "')"
-                            + ",(select top(1) cli_id from clients where cli_name=N'" + ClientName + "')"
+                            + ",(select top(1) cli_id from clients where cli_name=N'" + name + "')"
                             + ",(select tot_wight from storage where storage_id=" + StoreID + ")"
                             + ",(select weight_ from storage where storage_id=" + StoreID + ")"
                             + ",(select lot from storage where storage_id= " + StoreID + " )"
@@ -434,6 +434,7 @@ public class print_shit {
     }
 
     boolean create_excel_in_path(int serial, List<String> orderIds, String totalWeight, JTable BagsTable, String ClientName, LocalDate date_now, XSSFWorkbook workbook, sqlcon opj, JFileChooser jFileChooser1, String productName) throws FileNotFoundException, IOException {
+        String name = ClientName.split("تسليم")[0].strip();
         Files.createDirectories(Paths.get(System.getProperty("user.dir") + "\\querys"));
         File file = print_shit.NewName(System.getProperty("user.dir") + "\\querys\\" + ClientName + "~" + date_now + ".xlsx");
         try (FileOutputStream outFile = new FileOutputStream(file)) {
@@ -446,29 +447,29 @@ public class print_shit {
                     FileOutputStream outFile1 = new FileOutputStream(file1);
                     workbook.write(outFile1);
                 }
-                
+
                 desktop.open(file);
                 serial = 0;
-                if (!opj.dataRead("*", "clients", "cli_name=N'" + ClientName + "'").next()) {
-                    opj.inData("clients", "cli_name", "N'" + ClientName + "'");
+                if (!opj.dataRead("*", "clients", "cli_name=N'" + name + "'").next()) {
+                    opj.inData("clients", "cli_name", "N'" + name + "'");
                 }
                 opj.inData("orders", "ord_wight,ord_date", ToDoubleEnglish(totalWeight) + ",GETDATE()");
                 orderIds.forEach(order_id -> {
-                    
+
                     opj.inData("export", "pro_id,cli_id,tot_wight,weight_,lot,inserted_date,exported_date,num_of_con,pallet_numb,used,ord_id",
                             "(select pro_id from products where pro_name=N'" + productName + "')"
-                                    + ",(select  top(1) cli_id from clients where cli_name=N'" + ClientName + "')"
-                                            + ",(select tot_wight from storage where storage_id=" + order_id + ")"
-                                                    + ",(select weight_ from storage where storage_id=" + order_id + ")"
-                                                            + ",(select lot from storage where storage_id= " + order_id + " )"
-                                                                    + ",(select date_ from storage where storage_id= " + order_id + " )"
-                                                                            + ",GETDATE() "
-                                                                            + ",(select num_of_con from storage where storage_id= " + order_id + " )"
-                                                                                    + ",(select pallet_numb from storage where storage_id= " + order_id + " )"
-                                                                                            + ",(select used from storage where storage_id= " + order_id + " )"
-                                                                                                    + ",(SELECT TOP 1 ord_id FROM orders where ord_wight=" + ToDoubleEnglish(totalWeight) + " ORDER BY ord_id DESC)"
+                            + ",(select  top(1) cli_id from clients where cli_name=N'" + name + "')"
+                            + ",(select tot_wight from storage where storage_id=" + order_id + ")"
+                            + ",(select weight_ from storage where storage_id=" + order_id + ")"
+                            + ",(select lot from storage where storage_id= " + order_id + " )"
+                            + ",(select date_ from storage where storage_id= " + order_id + " )"
+                            + ",GETDATE() "
+                            + ",(select num_of_con from storage where storage_id= " + order_id + " )"
+                            + ",(select pallet_numb from storage where storage_id= " + order_id + " )"
+                            + ",(select used from storage where storage_id= " + order_id + " )"
+                            + ",(SELECT TOP 1 ord_id FROM orders where ord_wight=" + ToDoubleEnglish(totalWeight) + " ORDER BY ord_id DESC)"
                     );
-                    
+
                     opj.delData("storage", "storage_id=" + order_id + "");
                 });
                 ((DefaultTableModel) BagsTable.getModel()).setRowCount(0);
