@@ -70,7 +70,7 @@ public class mainform extends javax.swing.JFrame {
     private int BagMax = 2, repDiff = 15;
     private float Xx = 0, Yy = 0, width = 19, hight = 19;
     private final JButton jButton_Settings = new javax.swing.JButton();
-    String Version = "V 62.0.H";
+    String Version = "V 62.2.H";
 
     public mainform(sqlcon ops) throws IOException {
         initComponents();
@@ -410,6 +410,7 @@ public class mainform extends javax.swing.JFrame {
         jCheckBox_leave_wight = new javax.swing.JCheckBox();
         jCheckBox_rev_order = new javax.swing.JCheckBox();
         jCheckBox_ignore_limits = new javax.swing.JCheckBox();
+        jCheckBox_ConeWeightChange = new javax.swing.JCheckBox();
         jTab_set_print = new javax.swing.JPanel();
         jLabel_set_x = new javax.swing.JLabel();
         jLabel_set_y = new javax.swing.JLabel();
@@ -1729,6 +1730,9 @@ public class mainform extends javax.swing.JFrame {
             jCheckBox_ignore_limits.setText("ignore limits in Wzn");
             jTab_set_Indata.add(jCheckBox_ignore_limits, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 200, 180, 40));
 
+            jCheckBox_ConeWeightChange.setText("Cone weight Change");
+            jTab_set_Indata.add(jCheckBox_ConeWeightChange, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 210, -1, -1));
+
             jTabbedPane_settings.addTab("إعدادات الوزن", jTab_set_Indata);
 
             jTab_set_print.setMaximumSize(new java.awt.Dimension(830, 635));
@@ -1930,7 +1934,7 @@ public class mainform extends javax.swing.JFrame {
 
     private void jTextField_num_of_conKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_num_of_conKeyTyped
         evt.getID();
-        textbox_number(evt, jTextField_num_of_con, 3);
+        textbox_number(evt, jTextField_num_of_con, 3, false);
         calc_net_weight();
         if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
             jTextField_bag_weight.requestFocusInWindow();
@@ -1939,7 +1943,7 @@ public class mainform extends javax.swing.JFrame {
 
     private void jTextField_pallet_numKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_pallet_numKeyTyped
         evt.getID();
-        textbox_number(evt, jTextField_pallet_num, 5);
+        textbox_number(evt, jTextField_pallet_num, 5, false);
         calc_pallet_weight();
         jCheckBox_M_Markpage.setSelected(false);
         calc_net_weight();
@@ -1983,7 +1987,7 @@ public class mainform extends javax.swing.JFrame {
 
     private void jTextField_bag_weightKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_bag_weightKeyTyped
         evt.getID();
-        textbox_number(evt, jTextField_bag_weight, BagMax);
+        textbox_number(evt, jTextField_bag_weight, BagMax, true);
         calc_net_weight();
         if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
             if (jCheckBox_rev_order.isSelected()) {
@@ -2010,7 +2014,7 @@ public class mainform extends javax.swing.JFrame {
 
     private void jTextField_weight_of_conKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_weight_of_conKeyTyped
         evt.getID();
-        textbox_number(evt, jTextField_weight_of_con, 4);
+        textbox_number(evt, jTextField_weight_of_con, 4, false);
         calc_net_weight();
         if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
             jTextField_lot.requestFocusInWindow();
@@ -2284,6 +2288,7 @@ public class mainform extends javax.swing.JFrame {
         jTextField_lot.setText("");
 
         if (jComboBox_pro_in_storage.hasFocus()) {
+            jCheckBox_ConeWeightChange.setSelected(false);
             fill_storage_table();
         }
         if (jTable_storage.getRowCount() != 0) {
@@ -2346,10 +2351,7 @@ public class mainform extends javax.swing.JFrame {
             if (jTable_rep_preview.getRowCount() >= 0 && !jTextField_rep_clientName.getText().isBlank()
                     && (jTable_rep_preview.getRowCount() == (int) ToDoubleEnglish(jTextField_rep_numOfBag.getText())
                     || !(ToDoubleEnglish(jTextField_rep_numOfBag.getText()) >= ss + repDiff))) {
-                String cname = jTextField_rep_clientName.getText();
-                var arr = cname.split("تسليم");
-                JOptionPane.showMessageDialog(this, Arrays.toString(arr), "exception", JOptionPane.PLAIN_MESSAGE);
-                JOptionPane.showMessageDialog(this, arr[0].strip(), "exception", JOptionPane.PLAIN_MESSAGE);
+
                 if (JOptionPane.showConfirmDialog(this, addStyle("سيتم التصدير للأكسل "), "تنبيه",
                         JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
                     print_shit opject = new print_shit();
@@ -2467,7 +2469,7 @@ public class mainform extends javax.swing.JFrame {
 
     private void jTextField_rep_numOfBagKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_rep_numOfBagKeyTyped
         evt.getID();
-        textbox_number(evt, jTextField_rep_numOfBag, jCheckBox_rep_wzn.isSelected() ? 4 : 3);
+        textbox_number(evt, jTextField_rep_numOfBag, jCheckBox_rep_wzn.isSelected() ? 4 : 3, false);
     }//GEN-LAST:event_jTextField_rep_numOfBagKeyTyped
 
     private void jTextField_rep_numOfBagKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_rep_numOfBagKeyReleased
@@ -3118,12 +3120,12 @@ public class mainform extends javax.swing.JFrame {
 
     private void jTextField_E_PaltNumKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_E_PaltNumKeyTyped
         evt.getID();
-        textbox_number(evt, jTextField_E_PaltNum, 999);
+        textbox_number(evt, jTextField_E_PaltNum, 999, false);
     }//GEN-LAST:event_jTextField_E_PaltNumKeyTyped
 
     private void jTextField_E_ConNumKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_E_ConNumKeyTyped
         evt.getID();
-        textbox_number(evt, jTextField_E_ConNum, 999);
+        textbox_number(evt, jTextField_E_ConNum, 999, false);
         jTextField_E_Wight.setText(ToDoubleArabic(
                 (((ToDoubleEnglish(jTextField_E_O_ConNum.getText()) - ToDoubleEnglish(jTextField_E_ConNum.getText()))
                 * (ToDoubleEnglish(jTextField_weight_of_con.getText()) / 1000))
@@ -3147,7 +3149,7 @@ public class mainform extends javax.swing.JFrame {
     private void jTextField_Pros_conWightKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_Pros_conWightKeyTyped
         evt.getID();
         evt.setKeyChar(ToNumArab(evt.getKeyChar()));
-        textbox_number(evt, jTextField_Pros_conWight, 4);
+        textbox_number(evt, jTextField_Pros_conWight, 4, false);
     }//GEN-LAST:event_jTextField_Pros_conWightKeyTyped
 
     private void jButton_Emp_openerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_Emp_openerActionPerformed
@@ -3206,8 +3208,8 @@ public class mainform extends javax.swing.JFrame {
                         .setText(jTable_storage.getModel().getValueAt(jTable_storage.getSelectedRow(), 3).toString());
                 jTextField_E_Wight
                         .setText(ToDoubleArabic(jTable_storage.getModel().getValueAt(jTable_storage.getSelectedRow(), 0).toString()).substring(0,
-                            ToDoubleArabic(jTable_storage.getModel().getValueAt(jTable_storage.getSelectedRow(), 0).toString()).length() - 1));
-                        //.setText(jTable_storage.getModel().getValueAt(jTable_storage.getSelectedRow(), 0).toString());
+                                ToDoubleArabic(jTable_storage.getModel().getValueAt(jTable_storage.getSelectedRow(), 0).toString()).length() - 1));
+                //.setText(jTable_storage.getModel().getValueAt(jTable_storage.getSelectedRow(), 0).toString());
                 jTextField_E_Color.setText(jTextField_Color.getText());
 
             } else if (jTable_storage.getSelectedRowCount() > 1) {
@@ -3370,7 +3372,7 @@ public class mainform extends javax.swing.JFrame {
     private void jTextField_ME_PaltNumKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_ME_PaltNumKeyTyped
         evt.getID();
 
-        textbox_number(evt, jTextField_E_PaltNum, 999);
+        textbox_number(evt, jTextField_E_PaltNum, 999, false);
     }//GEN-LAST:event_jTextField_ME_PaltNumKeyTyped
 
     private void jButton_ME_EditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_ME_EditActionPerformed
@@ -3627,7 +3629,7 @@ public class mainform extends javax.swing.JFrame {
     private void jTextField_setting_repsDiffKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_setting_repsDiffKeyTyped
         evt.getID();
 
-        textbox_number(evt, jTextField_setting_repsDiff, 2);
+        textbox_number(evt, jTextField_setting_repsDiff, 2, false);
         if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
             repDiff = Integer.parseInt(ToStringEnglish(jTextField_setting_repsDiff.getText()));
         }
@@ -3898,7 +3900,7 @@ public class mainform extends javax.swing.JFrame {
         }
     }
 
-    void textbox_number(KeyEvent event, JTextField textboxname, int length) {
+    void textbox_number(KeyEvent event, JTextField textboxname, int length, boolean lastEven) {
 
         if (event.getKeyChar() == KeyEvent.VK_DELETE) {
             if ((event.getModifiersEx() & KeyEvent.SHIFT_DOWN_MASK) != 0) {
@@ -3913,6 +3915,10 @@ public class mainform extends javax.swing.JFrame {
             if (!Character.isDigit(event.getKeyChar())) {
                 event.consume();
             } else {
+                if (lastEven && textboxname.getText().length() == length - 1
+                        && Integer.parseInt(event.getKeyChar() + "") % 2 != 0) {
+                    event.consume();
+                }
                 event.setKeyChar(ToNumArab(event.getKeyChar()));
             }
         }
@@ -4067,7 +4073,7 @@ public class mainform extends javax.swing.JFrame {
             }
             st = opj.dataRead("weight_of_con", "products",
                     "pro_name=N'" + jComboBox_pro_in_storage.getSelectedItem() + "' ");
-            while (st.next()) {
+            while (st.next()&&!jCheckBox_ConeWeightChange.isSelected()) {
                 jTextField_weight_of_con.setText(ToDoubleArabic(st.getString(1)));
             }
             st = opj.dataRead("Color,IsBox", "products", "pro_name=N'" + jComboBox_pro_in_storage.getSelectedItem() + "' ");
@@ -4220,6 +4226,7 @@ public class mainform extends javax.swing.JFrame {
     private javax.swing.JButton jButton_youm_refund;
     private javax.swing.JButton jButton_youm_search;
     private javax.swing.JCheckBox jCheckBox_Box;
+    private javax.swing.JCheckBox jCheckBox_ConeWeightChange;
     private javax.swing.JCheckBox jCheckBox_E_Mark;
     private javax.swing.JCheckBox jCheckBox_E_O_Mark;
     private javax.swing.JCheckBox jCheckBox_E_P;

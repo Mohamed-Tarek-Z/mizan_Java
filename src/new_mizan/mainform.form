@@ -3040,6 +3040,16 @@
                         </Constraint>
                       </Constraints>
                     </Component>
+                    <Component class="javax.swing.JCheckBox" name="jCheckBox_ConeWeightChange">
+                      <Properties>
+                        <Property name="text" type="java.lang.String" value="Cone weight Change"/>
+                      </Properties>
+                      <Constraints>
+                        <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
+                          <AbsoluteConstraints x="650" y="210" width="-1" height="-1"/>
+                        </Constraint>
+                      </Constraints>
+                    </Component>
                   </SubComponents>
                 </Container>
                 <Container class="javax.swing.JPanel" name="jTab_set_print">
