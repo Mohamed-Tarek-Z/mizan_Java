@@ -70,7 +70,7 @@ public class mainform extends javax.swing.JFrame {
     private int BagMax = 2, repDiff = 15;
     private float Xx = 0, Yy = 0, width = 19, hight = 19;
     private final JButton jButton_Settings = new javax.swing.JButton();
-    String Version = "V 62.2.H";
+    String Version = "V 62.3.H";
 
     public mainform(sqlcon ops) throws IOException {
         initComponents();
@@ -3817,7 +3817,7 @@ public class mainform extends javax.swing.JFrame {
             n += " ";
         }
         if (b2) {
-            print_shit.generateQRcode("{\n \"الصنف\": " + n + " ,\n\"اللوط\": " + values.get(3)
+            print_shit.generateQRcode("{\n \"رقم البالتة\": " + values.get(0) + " ,\n  \"الصنف\": " + n + " ,\n\"اللوط\": " + values.get(3)
                     + " ,\n\"الوزن الصافي\": " + values.get(6) + "\n}", ToDoubleEnglish(values.get(6)) + "", 300, 300);
             BufferedImage image = ImageIO.read(
                     new File(System.getProperty("user.dir") + "\\Temp\\QR" + ToDoubleEnglish(values.get(6)) + ".png"));
