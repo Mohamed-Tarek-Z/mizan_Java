@@ -45,6 +45,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.imageio.ImageIO;
 import javax.print.PrintService;
 import javax.print.PrintServiceLookup;
@@ -70,7 +72,11 @@ public class mainform extends javax.swing.JFrame {
     private int BagMax = 2, repDiff = 15;
     private float Xx = 0, Yy = 0, width = 19, hight = 19;
     private final JButton jButton_Settings = new javax.swing.JButton();
-    String Version = "V 62.3.H";
+    String Version = "V 63.0.H";
+
+    private long lastInputTime;
+    private final StringBuilder mizanInputBuilder = new StringBuilder();
+    private String savedText = "";
 
     public mainform(sqlcon ops) throws IOException {
         initComponents();
@@ -1934,6 +1940,7 @@ public class mainform extends javax.swing.JFrame {
 
     private void jTextField_num_of_conKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_num_of_conKeyTyped
         evt.getID();
+        sendToWight(jTextField_num_of_con, evt);
         textbox_number(evt, jTextField_num_of_con, 3, false);
         calc_net_weight();
         if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
@@ -1987,6 +1994,7 @@ public class mainform extends javax.swing.JFrame {
 
     private void jTextField_bag_weightKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_bag_weightKeyTyped
         evt.getID();
+        sendToWight(jTextField_bag_weight, evt);
         textbox_number(evt, jTextField_bag_weight, BagMax, true);
         calc_net_weight();
         if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
@@ -4073,7 +4081,7 @@ public class mainform extends javax.swing.JFrame {
             }
             st = opj.dataRead("weight_of_con", "products",
                     "pro_name=N'" + jComboBox_pro_in_storage.getSelectedItem() + "' ");
-            while (st.next()&&!jCheckBox_ConeWeightChange.isSelected()) {
+            while (st.next() && !jCheckBox_ConeWeightChange.isSelected()) {
                 jTextField_weight_of_con.setText(ToDoubleArabic(st.getString(1)));
             }
             st = opj.dataRead("Color,IsBox", "products", "pro_name=N'" + jComboBox_pro_in_storage.getSelectedItem() + "' ");
@@ -4189,6 +4197,41 @@ public class mainform extends javax.swing.JFrame {
     String addStyle(String text) {
         return "<html><body><h1 style='font-family: Arial; font-size: 20pt; text-align: right; width: 150px;'>"
                 + text.strip() + "</h1></body></html>";
+    }
+
+    void sendToWight(JTextField textField, KeyEvent evt) {
+
+        long currentTime = System.currentTimeMillis();
+        if (currentTime - lastInputTime < 50) {
+            char keyChar = evt.getKeyChar();
+            if (mizanInputBuilder.length() == 0) {
+                savedText = textField.getText();
+                mizanInputBuilder.append(savedText.substring(savedText.length() - 1));
+            }
+            mizanInputBuilder.append(keyChar);
+            if (keyChar == '\n') {
+                String barcodeInput = mizanInputBuilder.toString().trim();
+                if (isMizanPatternValid(barcodeInput)) {
+                    jTextField_weight.setText(ToDoubleArabic(barcodeInput));
+                    textField.setText(savedText.substring(0, savedText.length() - 1));
+                    savedText = "";
+                }
+                // Clear the input builder for the next scan
+                mizanInputBuilder.setLength(0);
+            }
+        } else {
+            // Reset if input is too slow (probably user input)
+            mizanInputBuilder.setLength(0);
+        }
+        lastInputTime = currentTime;
+    }
+
+    private boolean isMizanPatternValid(String input) {
+        // Pattern for two or three digits, followed by a comma, followed by exactly three digits
+        String barcodePattern = "\\d{2,3},\\d{3}";
+        Pattern pattern = Pattern.compile(barcodePattern);
+        Matcher matcher = pattern.matcher(input);
+        return matcher.matches();
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
