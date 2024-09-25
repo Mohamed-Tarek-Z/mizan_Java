@@ -72,7 +72,7 @@ public class mainform extends javax.swing.JFrame {
     private int BagMax = 2, repDiff = 15;
     private float Xx = 0, Yy = 0, width = 19, hight = 19;
     private final JButton jButton_Settings = new javax.swing.JButton();
-    String Version = "V 63.0.H";
+    String Version = "V 63.1.H";
 
     private long lastInputTime;
     private final StringBuilder mizanInputBuilder = new StringBuilder();
@@ -4198,6 +4198,7 @@ public class mainform extends javax.swing.JFrame {
         return "<html><body><h1 style='font-family: Arial; font-size: 20pt; text-align: right; width: 150px;'>"
                 + text.strip() + "</h1></body></html>";
     }
+    char firstChar;
 
     void sendToWight(JTextField textField, KeyEvent evt) {
 
@@ -4206,14 +4207,17 @@ public class mainform extends javax.swing.JFrame {
             char keyChar = evt.getKeyChar();
             if (mizanInputBuilder.length() == 0) {
                 savedText = textField.getText();
-                mizanInputBuilder.append(savedText.substring(savedText.length() - 1));
+                mizanInputBuilder.append(firstChar);
             }
             mizanInputBuilder.append(keyChar);
             if (keyChar == '\n') {
                 String barcodeInput = mizanInputBuilder.toString().trim();
                 if (isMizanPatternValid(barcodeInput)) {
                     jTextField_weight.setText(ToDoubleArabic(barcodeInput));
-                    textField.setText(savedText.substring(0, savedText.length() - 1));
+                    textField.setText(
+                            savedText.lastIndexOf(ToNumArab(firstChar)) > -1
+                            ? savedText.substring(0, savedText.length() - 1) : savedText
+                    );
                     savedText = "";
                 }
                 // Clear the input builder for the next scan
@@ -4221,6 +4225,7 @@ public class mainform extends javax.swing.JFrame {
             }
         } else {
             // Reset if input is too slow (probably user input)
+            firstChar = evt.getKeyChar();
             mizanInputBuilder.setLength(0);
         }
         lastInputTime = currentTime;
@@ -4228,7 +4233,7 @@ public class mainform extends javax.swing.JFrame {
 
     private boolean isMizanPatternValid(String input) {
         // Pattern for two or three digits, followed by a comma, followed by exactly three digits
-        String barcodePattern = "\\d{2,3},\\d{3}";
+        String barcodePattern = "[0-9\u0660-\u0669]{1,3}[.,\u060C,\u0632][0-9\u0660-\u0669]{2}";
         Pattern pattern = Pattern.compile(barcodePattern);
         Matcher matcher = pattern.matcher(input);
         return matcher.matches();
