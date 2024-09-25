@@ -1943,7 +1943,7 @@ public class mainform extends javax.swing.JFrame {
         sendToWight(jTextField_num_of_con, evt);
         textbox_number(evt, jTextField_num_of_con, 3, false);
         calc_net_weight();
-        if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
+        if (evt.getKeyChar() == KeyEvent.VK_ENTER && !enterFromMizan) {
             jTextField_bag_weight.requestFocusInWindow();
         }
     }//GEN-LAST:event_jTextField_num_of_conKeyTyped
@@ -1997,7 +1997,7 @@ public class mainform extends javax.swing.JFrame {
         sendToWight(jTextField_bag_weight, evt);
         textbox_number(evt, jTextField_bag_weight, BagMax, true);
         calc_net_weight();
-        if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
+        if (evt.getKeyChar() == KeyEvent.VK_ENTER && !enterFromMizan) {
             if (jCheckBox_rev_order.isSelected()) {
                 jTextField_net_weight.requestFocusInWindow();
             } else {
@@ -4199,6 +4199,7 @@ public class mainform extends javax.swing.JFrame {
                 + text.strip() + "</h1></body></html>";
     }
     char firstChar;
+    boolean enterFromMizan = false;
 
     void sendToWight(JTextField textField, KeyEvent evt) {
 
@@ -4211,6 +4212,7 @@ public class mainform extends javax.swing.JFrame {
             }
             mizanInputBuilder.append(keyChar);
             if (keyChar == '\n') {
+                enterFromMizan = true;
                 String barcodeInput = mizanInputBuilder.toString().trim();
                 if (isMizanPatternValid(barcodeInput)) {
                     jTextField_weight.setText(ToDoubleArabic(barcodeInput));
@@ -4223,6 +4225,8 @@ public class mainform extends javax.swing.JFrame {
                 // Clear the input builder for the next scan
                 mizanInputBuilder.setLength(0);
             }
+            evt.consume();
+
         } else {
             // Reset if input is too slow (probably user input)
             firstChar = evt.getKeyChar();
