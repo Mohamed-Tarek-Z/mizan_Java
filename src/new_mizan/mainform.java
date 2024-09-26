@@ -3826,7 +3826,7 @@ public class mainform extends javax.swing.JFrame {
         }
         if (b2) {
             print_shit.generateQRcode("{\n \"رقم البالتة\": " + values.get(0) + " ,\n  \"الصنف\": " + n + " ,\n\"اللوط\": " + values.get(3)
-                    + " ,\n\"الوزن الصافي\": " + values.get(6) + "\n}", ToDoubleEnglish(values.get(6)) + "", 300, 300);
+                    + " ,\n\"الوزن الصافي\": " + values.get(6) + "\n}", ToDoubleEnglish(values.get(6)) + "", 400, 400);
             BufferedImage image = ImageIO.read(
                     new File(System.getProperty("user.dir") + "\\Temp\\QR" + ToDoubleEnglish(values.get(6)) + ".png"));
             PrintRequestAttributeSet attributes = new HashPrintRequestAttributeSet();
@@ -4229,6 +4229,7 @@ public class mainform extends javax.swing.JFrame {
 
         } else {
             // Reset if input is too slow (probably user input)
+            enterFromMizan = false ;
             firstChar = evt.getKeyChar();
             mizanInputBuilder.setLength(0);
         }
