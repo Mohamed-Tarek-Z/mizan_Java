@@ -72,11 +72,14 @@ public class mainform extends javax.swing.JFrame {
     private int BagMax = 2, repDiff = 15;
     private float Xx = 0, Yy = 0, width = 19, hight = 19;
     private final JButton jButton_Settings = new javax.swing.JButton();
-    String Version = "V 63.1.H";
+    private final String Version = "V 63.5.H";
 
     private long lastInputTime;
     private final StringBuilder mizanInputBuilder = new StringBuilder();
+
     private String savedText = "";
+    private char firstChar;
+    private boolean enterFromMizan = false;
 
     public mainform(sqlcon ops) throws IOException {
         initComponents();
@@ -1417,6 +1420,11 @@ public class mainform extends javax.swing.JFrame {
 
             jTextField_Pros_color.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
             jTextField_Pros_color.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+            jTextField_Pros_color.addKeyListener(new java.awt.event.KeyAdapter() {
+                public void keyTyped(java.awt.event.KeyEvent evt) {
+                    jTextField_Pros_colorKeyTyped(evt);
+                }
+            });
             add_product.add(jTextField_Pros_color, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 90, 140, 30));
 
             jLabel49.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
@@ -1940,7 +1948,7 @@ public class mainform extends javax.swing.JFrame {
 
     private void jTextField_num_of_conKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_num_of_conKeyTyped
         evt.getID();
-        sendToWight(jTextField_num_of_con, evt);
+        sendToWight(jTextField_num_of_con, jTextField_weight, evt);
         textbox_number(evt, jTextField_num_of_con, 3, false);
         calc_net_weight();
         if (evt.getKeyChar() == KeyEvent.VK_ENTER && !enterFromMizan) {
@@ -1994,7 +2002,7 @@ public class mainform extends javax.swing.JFrame {
 
     private void jTextField_bag_weightKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_bag_weightKeyTyped
         evt.getID();
-        sendToWight(jTextField_bag_weight, evt);
+        sendToWight(jTextField_bag_weight, jTextField_weight, evt);
         textbox_number(evt, jTextField_bag_weight, BagMax, true);
         calc_net_weight();
         if (evt.getKeyChar() == KeyEvent.VK_ENTER && !enterFromMizan) {
@@ -2239,6 +2247,7 @@ public class mainform extends javax.swing.JFrame {
 
     private void jTextField_pro_nameKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_pro_nameKeyTyped
         evt.getID();
+        sendToWight(jTextField_pro_name, jTextField_Pros_conWight, evt);
         textbox_length_limiter(evt, jTextField_pro_name, 35);
         char input = evt.getKeyChar();
         if (Character.isDigit(input)) {
@@ -2478,6 +2487,7 @@ public class mainform extends javax.swing.JFrame {
     private void jTextField_rep_numOfBagKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_rep_numOfBagKeyTyped
         evt.getID();
         textbox_number(evt, jTextField_rep_numOfBag, jCheckBox_rep_wzn.isSelected() ? 4 : 3, false);
+        ignorWightFromMizan(jTextField_rep_numOfBag, evt);
     }//GEN-LAST:event_jTextField_rep_numOfBagKeyTyped
 
     private void jTextField_rep_numOfBagKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_rep_numOfBagKeyReleased
@@ -2804,6 +2814,7 @@ public class mainform extends javax.swing.JFrame {
 
     private void jTextField_rep_clientNameKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_rep_clientNameKeyTyped
         evt.getID();
+        ignorWightFromMizan(jTextField_rep_clientName, evt);
         if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
             jButton_rep_printRep.doClick();
         }
@@ -3761,6 +3772,12 @@ public class mainform extends javax.swing.JFrame {
         jLabel_Order_num.setText(!jCheckBox_rep_wzn.isSelected() ? "عدد الشكاير" : "الوزن المطلوب");
     }//GEN-LAST:event_jCheckBox_rep_wznActionPerformed
 
+    private void jTextField_Pros_colorKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_Pros_colorKeyTyped
+        // TODO add your handling code here:
+        evt.getID();
+        sendToWight(jTextField_Pros_color, jTextField_Pros_conWight, evt);
+    }//GEN-LAST:event_jTextField_Pros_colorKeyTyped
+
     private void jButton_SettingsActionPerformed() throws IOException {
         open_panel(jTabbedPane_settings);
         jTextField_set_x.setText("" + Xx);
@@ -4198,16 +4215,14 @@ public class mainform extends javax.swing.JFrame {
         return "<html><body><h1 style='font-family: Arial; font-size: 20pt; text-align: right; width: 150px;'>"
                 + text.strip() + "</h1></body></html>";
     }
-    char firstChar;
-    boolean enterFromMizan = false;
 
-    void sendToWight(JTextField textField, KeyEvent evt) {
+    void sendToWight(JTextField fromTextField, JTextField toTextField, KeyEvent evt) {
 
         long currentTime = System.currentTimeMillis();
         if (currentTime - lastInputTime < 50) {
             char keyChar = evt.getKeyChar();
             if (mizanInputBuilder.length() == 0) {
-                savedText = textField.getText();
+                savedText = fromTextField.getText();
                 mizanInputBuilder.append(firstChar);
             }
             mizanInputBuilder.append(keyChar);
@@ -4215,8 +4230,8 @@ public class mainform extends javax.swing.JFrame {
                 enterFromMizan = true;
                 String barcodeInput = mizanInputBuilder.toString().trim();
                 if (isMizanPatternValid(barcodeInput)) {
-                    jTextField_weight.setText(ToDoubleArabic(barcodeInput));
-                    textField.setText(
+                    toTextField.setText(ToDoubleArabic(barcodeInput));
+                    fromTextField.setText(
                             savedText.lastIndexOf(ToNumArab(firstChar)) > -1
                             ? savedText.substring(0, savedText.length() - 1) : savedText
                     );
@@ -4229,7 +4244,40 @@ public class mainform extends javax.swing.JFrame {
 
         } else {
             // Reset if input is too slow (probably user input)
-            enterFromMizan = false ;
+            enterFromMizan = false;
+            firstChar = evt.getKeyChar();
+            mizanInputBuilder.setLength(0);
+        }
+        lastInputTime = currentTime;
+    }
+
+    void ignorWightFromMizan(JTextField fromTextField, KeyEvent evt) {
+        long currentTime = System.currentTimeMillis();
+        if (currentTime - lastInputTime < 50) {
+            char keyChar = evt.getKeyChar();
+            if (mizanInputBuilder.length() == 0) {
+                savedText = fromTextField.getText();
+                mizanInputBuilder.append(firstChar);
+            }
+            mizanInputBuilder.append(keyChar);
+            if (keyChar == '\n') {
+                enterFromMizan = true;
+                String barcodeInput = mizanInputBuilder.toString().trim();
+                if (isMizanPatternValid(barcodeInput)) {
+                    fromTextField.setText(
+                            savedText.lastIndexOf(ToNumArab(firstChar)) > -1
+                            ? savedText.substring(0, savedText.length() - 1) : savedText
+                    );
+                    savedText = "";
+                }
+                // Clear the input builder for the next scan
+                mizanInputBuilder.setLength(0);
+            }
+            evt.consume();
+
+        } else {
+            // Reset if input is too slow (probably user input)
+            enterFromMizan = false;
             firstChar = evt.getKeyChar();
             mizanInputBuilder.setLength(0);
         }
