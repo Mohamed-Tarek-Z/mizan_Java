@@ -72,7 +72,7 @@ public class mainform extends javax.swing.JFrame {
     private int BagMax = 2, repDiff = 15;
     private float Xx = 0, Yy = 0, width = 19, hight = 19;
     private final JButton jButton_Settings = new javax.swing.JButton();
-    private final String Version = "V 63.5.H";
+    private final String Version = "V 63.5.1H";
 
     private long lastInputTime;
     private final StringBuilder mizanInputBuilder = new StringBuilder();
@@ -2815,9 +2815,6 @@ public class mainform extends javax.swing.JFrame {
     private void jTextField_rep_clientNameKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_rep_clientNameKeyTyped
         evt.getID();
         ignorWightFromMizan(jTextField_rep_clientName, evt);
-        if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
-            jButton_rep_printRep.doClick();
-        }
     }//GEN-LAST:event_jTextField_rep_clientNameKeyTyped
 
     private void jTextField_rep_clientNameFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextField_rep_clientNameFocusGained
@@ -4265,7 +4262,7 @@ public class mainform extends javax.swing.JFrame {
                 String barcodeInput = mizanInputBuilder.toString().trim();
                 if (isMizanPatternValid(barcodeInput)) {
                     fromTextField.setText(
-                            savedText.lastIndexOf(ToNumArab(firstChar)) > -1
+                            savedText.lastIndexOf(ToNumArab(firstChar)) > -1 || savedText.lastIndexOf(firstChar) > -1
                             ? savedText.substring(0, savedText.length() - 1) : savedText
                     );
                     savedText = "";
