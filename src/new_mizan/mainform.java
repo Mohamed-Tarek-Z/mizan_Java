@@ -1,5 +1,7 @@
 package new_mizan;
 
+import org.vosk.Model;
+import org.vosk.Recognizer;
 import com.google.zxing.WriterException;
 import java.awt.Color;
 import java.awt.Component;
@@ -54,6 +56,11 @@ import javax.print.attribute.HashPrintRequestAttributeSet;
 import javax.print.attribute.PrintRequestAttributeSet;
 import javax.print.attribute.standard.MediaPrintableArea;
 import javax.print.attribute.standard.PrinterResolution;
+import javax.sound.sampled.AudioFormat;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.DataLine;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.TargetDataLine;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JTable;
@@ -63,6 +70,8 @@ import org.apache.poi.ss.usermodel.CellCopyPolicy;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.vosk.LibVosk;
+import org.vosk.LogLevel;
 
 public class mainform extends javax.swing.JFrame {
 
@@ -72,7 +81,7 @@ public class mainform extends javax.swing.JFrame {
     private int BagMax = 2, repDiff = 15;
     private float Xx = 0, Yy = 0, width = 19, hight = 19;
     private final JButton jButton_Settings = new javax.swing.JButton();
-    private final String Version = "V 63.5.1H";
+    private final String Version = "V 64.0H";
 
     private long lastInputTime;
     private final StringBuilder mizanInputBuilder = new StringBuilder();
@@ -81,7 +90,7 @@ public class mainform extends javax.swing.JFrame {
     private char firstChar;
     private boolean enterFromMizan = false;
 
-    public mainform(sqlcon ops) throws IOException {
+    public mainform(sqlcon ops) throws IOException, LineUnavailableException {
         initComponents();
         this.setDefaultCloseOperation(mainform.DO_NOTHING_ON_CLOSE);
         if (!login_form.admin) {
@@ -118,6 +127,9 @@ public class mainform extends javax.swing.JFrame {
         tick1num = loadTicknum("TicketNumber1.txt");
         tick2num = loadTicknum("TicketNumber2.txt");
         this.setAlwaysOnTop(true);
+
+        LibVosk.setLogLevel(LogLevel.WARNINGS);
+//        startRecognition();
     }
 
     int pro_Table_SelectedID = 0;
@@ -1702,11 +1714,12 @@ public class mainform extends javax.swing.JFrame {
             pause.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
             pause.setMaximumSize(new java.awt.Dimension(835, 640));
             pause.setMinimumSize(new java.awt.Dimension(835, 640));
+            pause.setName("emp"); // NOI18N
             pause.setPreferredSize(new java.awt.Dimension(835, 640));
             pause.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
             jTextArea_emp.setColumns(20);
-            jTextArea_emp.setFont(new java.awt.Font("Tahoma", 1, 36)); // NOI18N
+            jTextArea_emp.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
             jTextArea_emp.setRows(5);
             jTextArea_emp.addKeyListener(new java.awt.event.KeyAdapter() {
                 public void keyTyped(java.awt.event.KeyEvent evt) {
@@ -4288,6 +4301,38 @@ public class mainform extends javax.swing.JFrame {
         Matcher matcher = pattern.matcher(input);
         return matcher.matches();
     }
+
+    private void startRecognition() throws IOException, LineUnavailableException {
+
+        // Load Arabic speech model (make sure you have the correct path to the downloaded model)
+        // Model model = new Model("models/vosk-model-small-ar");
+        Model model = new Model("models/vosk-model-ar");
+        // Model model = new Model("models/vosk-model-small-en-us-0.15");
+
+        // Set up microphone
+        AudioFormat format = new AudioFormat(16000, 16, 1, true, false);
+        DataLine.Info info = new DataLine.Info(TargetDataLine.class, format);
+        TargetDataLine microphone = (TargetDataLine) AudioSystem.getLine(info);
+        microphone.open(format);
+        microphone.start();
+
+        // Create a recognizer with the model and microphone audio stream
+        Recognizer recognizer = new Recognizer(model, 16000);
+
+        byte[] buffer = new byte[4096];
+
+        // Continuously listen to the microphone and recognize speech
+        new Thread(() -> {
+            while (true) {
+
+                int bytesRead = microphone.read(buffer, 0, buffer.length);
+                if (recognizer.acceptWaveForm(buffer, bytesRead)) {
+                    jTextArea_emp.append(recognizer.getResult() + "\n");
+                }
+            }
+        }).start();
+    }
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JFrame MultiEdit;

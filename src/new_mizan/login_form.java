@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.sound.sampled.LineUnavailableException;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
@@ -22,6 +23,7 @@ public class login_form extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+
         jPasswordField1 = new javax.swing.JPasswordField();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
@@ -41,7 +43,6 @@ public class login_form extends javax.swing.JFrame {
         jPasswordField1.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 jPasswordField1KeyTyped(evt);
-                evt.getID();
             }
         });
         getContentPane().add(jPasswordField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(78, 261, 244, 40));
@@ -59,7 +60,6 @@ public class login_form extends javax.swing.JFrame {
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
-                evt.getID();
             }
         });
         getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 390, -1, -1));
@@ -69,13 +69,11 @@ public class login_form extends javax.swing.JFrame {
         jComboBox1.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 jComboBox1ItemStateChanged(evt);
-                evt.getID();
             }
         });
         jComboBox1.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 jComboBox1KeyTyped(evt);
-                evt.getID();
             }
         });
         getContentPane().add(jComboBox1, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 110, 240, 50));
@@ -114,6 +112,8 @@ public class login_form extends javax.swing.JFrame {
         } catch (SQLException | IOException ex) {
             Logger.getLogger(login_form.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(null, ex.getMessage(), "إنتبه", JOptionPane.ERROR_MESSAGE);
+        } catch (LineUnavailableException ex) {
+            Logger.getLogger(login_form.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 
