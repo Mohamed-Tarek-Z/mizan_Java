@@ -2008,7 +2008,11 @@ public class mainform extends javax.swing.JFrame {
         }
         if (evt.getKeyChar() == KeyEvent.VK_DELETE) {
             if ((evt.getModifiersEx() & KeyEvent.SHIFT_DOWN_MASK) != 0) {
-                jButton_clear.doClick();
+                if (!jCheckBox_leave_wight.isSelected()) {
+                    jButton_clear.doClick();
+                } else {
+                    jTextField_num_of_con.setText("");
+                }
             }
         }
     }//GEN-LAST:event_jTextField_net_weightKeyTyped
@@ -3815,7 +3819,11 @@ public class mainform extends javax.swing.JFrame {
 
         if (event.getKeyChar() == KeyEvent.VK_DELETE) {
             if ((event.getModifiersEx() & KeyEvent.SHIFT_DOWN_MASK) != 0) {
-                jButton_clear.doClick();
+                if (!jCheckBox_leave_wight.isSelected()) {
+                    jButton_clear.doClick();
+                } else {
+                    jTextField_num_of_con.setText("");
+                }
             }
             textboxname.setText("");
         }
@@ -3929,7 +3937,11 @@ public class mainform extends javax.swing.JFrame {
         }
         if (event.getKeyChar() == KeyEvent.VK_DELETE) {
             if ((event.getModifiersEx() & KeyEvent.SHIFT_DOWN_MASK) != 0) {
-                jButton_clear.doClick();
+                if (!jCheckBox_leave_wight.isSelected()) {
+                    jButton_clear.doClick();
+                } else {
+                    jTextField_num_of_con.setText("");
+                }
             }
             textboxname.setText("");
         }
@@ -3939,7 +3951,11 @@ public class mainform extends javax.swing.JFrame {
 
         if (event.getKeyChar() == KeyEvent.VK_DELETE) {
             if ((event.getModifiersEx() & KeyEvent.SHIFT_DOWN_MASK) != 0) {
-                jButton_clear.doClick();
+                if (!jCheckBox_leave_wight.isSelected()) {
+                    jButton_clear.doClick();
+                } else {
+                    jTextField_num_of_con.setText("");
+                }
             }
             textboxname.setText("");
         }
