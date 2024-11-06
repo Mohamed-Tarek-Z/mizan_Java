@@ -81,7 +81,7 @@ public class mainform extends javax.swing.JFrame {
     private int BagMax = 2, repDiff = 15;
     private float Xx = 0, Yy = 0, width = 19, hight = 19;
     private final JButton jButton_Settings = new javax.swing.JButton();
-    private final String Version = "V 64.0H";
+    private final String Version = "V 64.0.1H";
 
     private long lastInputTime;
     private final StringBuilder mizanInputBuilder = new StringBuilder();
@@ -1719,7 +1719,7 @@ public class mainform extends javax.swing.JFrame {
             pause.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
             jTextArea_emp.setColumns(20);
-            jTextArea_emp.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+            jTextArea_emp.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
             jTextArea_emp.setRows(5);
             jTextArea_emp.addKeyListener(new java.awt.event.KeyAdapter() {
                 public void keyTyped(java.awt.event.KeyEvent evt) {
@@ -3823,6 +3823,7 @@ public class mainform extends javax.swing.JFrame {
                     jButton_clear.doClick();
                 } else {
                     jTextField_num_of_con.setText("");
+                    jTextField_num_of_con.requestFocusInWindow();
                 }
             }
             textboxname.setText("");
