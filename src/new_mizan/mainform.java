@@ -1,7 +1,5 @@
 package new_mizan;
 
-import org.vosk.Model;
-import org.vosk.Recognizer;
 import com.google.zxing.WriterException;
 import java.awt.Color;
 import java.awt.Component;
@@ -56,11 +54,7 @@ import javax.print.attribute.HashPrintRequestAttributeSet;
 import javax.print.attribute.PrintRequestAttributeSet;
 import javax.print.attribute.standard.MediaPrintableArea;
 import javax.print.attribute.standard.PrinterResolution;
-import javax.sound.sampled.AudioFormat;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.DataLine;
 import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.TargetDataLine;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JTable;
@@ -81,7 +75,7 @@ public class mainform extends javax.swing.JFrame {
     private int BagMax = 2, repDiff = 15;
     private float Xx = 0, Yy = 0, width = 19, hight = 19;
     private final JButton jButton_Settings = new javax.swing.JButton();
-    private final String Version = "V 64.0.1H";
+    private final String Version = "V 64.1.0H";
 
     private long lastInputTime;
     private final StringBuilder mizanInputBuilder = new StringBuilder();
@@ -300,6 +294,10 @@ public class mainform extends javax.swing.JFrame {
         jSeparator6 = new javax.swing.JSeparator();
         jButton5 = new javax.swing.JButton();
         jProgressBar_pallet = new javax.swing.JProgressBar();
+        jCheckBox_freeze_cone = new javax.swing.JCheckBox();
+        jCheckBox_freeze_wight = new javax.swing.JCheckBox();
+        jCheckBox_ConeWeightChange = new javax.swing.JCheckBox();
+        jCheckBox_ignore_limits = new javax.swing.JCheckBox();
         reports = new javax.swing.JPanel();
         jComboBox_rep_Pros = new javax.swing.JComboBox<>();
         jLabel1 = new javax.swing.JLabel();
@@ -427,11 +425,6 @@ public class mainform extends javax.swing.JFrame {
         jTextArea_emp = new javax.swing.JTextArea();
         jLabel38 = new javax.swing.JLabel();
         jTabbedPane_settings = new javax.swing.JTabbedPane();
-        jTab_set_Indata = new javax.swing.JPanel();
-        jCheckBox_leave_wight = new javax.swing.JCheckBox();
-        jCheckBox_rev_order = new javax.swing.JCheckBox();
-        jCheckBox_ignore_limits = new javax.swing.JCheckBox();
-        jCheckBox_ConeWeightChange = new javax.swing.JCheckBox();
         jTab_set_print = new javax.swing.JPanel();
         jLabel_set_x = new javax.swing.JLabel();
         jLabel_set_y = new javax.swing.JLabel();
@@ -450,6 +443,7 @@ public class mainform extends javax.swing.JFrame {
         jButton_set_Rest1 = new javax.swing.JButton();
         jLabel_set_tick1 = new javax.swing.JLabel();
         jLabel_set_tick2 = new javax.swing.JLabel();
+        jLabel17 = new javax.swing.JLabel();
         jTab_set_about = new javax.swing.JPanel();
         jLabel40 = new javax.swing.JLabel();
 
@@ -1020,7 +1014,7 @@ public class mainform extends javax.swing.JFrame {
             jLabel10.setMaximumSize(new java.awt.Dimension(82, 24));
             jLabel10.setMinimumSize(new java.awt.Dimension(82, 24));
             jLabel10.setPreferredSize(new java.awt.Dimension(82, 24));
-            in_data.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 440, -1, 30));
+            in_data.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(740, 440, -1, 30));
 
             jTextField_pallet_num.setFont(new java.awt.Font("sansserif", 0, 24)); // NOI18N
             jTextField_pallet_num.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
@@ -1158,6 +1152,12 @@ public class mainform extends javax.swing.JFrame {
             jProgressBar_pallet.setMaximumSize(new java.awt.Dimension(10, 14));
             jProgressBar_pallet.setRequestFocusEnabled(false);
             in_data.add(jProgressBar_pallet, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 2, 590, -1));
+            in_data.add(jCheckBox_freeze_cone, new org.netbeans.lib.awtextra.AbsoluteConstraints(815, 250, -1, -1));
+            in_data.add(jCheckBox_freeze_wight, new org.netbeans.lib.awtextra.AbsoluteConstraints(815, 300, -1, -1));
+            in_data.add(jCheckBox_ConeWeightChange, new org.netbeans.lib.awtextra.AbsoluteConstraints(815, 450, -1, -1));
+
+            jCheckBox_ignore_limits.setText("سماح الوزن");
+            in_data.add(jCheckBox_ignore_limits, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 10, -1, -1));
 
             left_panel.add(in_data, "Mizan");
 
@@ -1743,25 +1743,6 @@ public class mainform extends javax.swing.JFrame {
             jTabbedPane_settings.setMinimumSize(new java.awt.Dimension(835, 640));
             jTabbedPane_settings.setPreferredSize(new java.awt.Dimension(835, 640));
 
-            jTab_set_Indata.setMaximumSize(new java.awt.Dimension(830, 635));
-            jTab_set_Indata.setMinimumSize(new java.awt.Dimension(830, 635));
-            jTab_set_Indata.setPreferredSize(new java.awt.Dimension(830, 635));
-            jTab_set_Indata.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-            jCheckBox_leave_wight.setText("Leave Wight");
-            jTab_set_Indata.add(jCheckBox_leave_wight, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 210, -1, -1));
-
-            jCheckBox_rev_order.setText("Rev order");
-            jTab_set_Indata.add(jCheckBox_rev_order, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 210, -1, -1));
-
-            jCheckBox_ignore_limits.setText("ignore limits in Wzn");
-            jTab_set_Indata.add(jCheckBox_ignore_limits, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 200, 180, 40));
-
-            jCheckBox_ConeWeightChange.setText("Cone weight Change");
-            jTab_set_Indata.add(jCheckBox_ConeWeightChange, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 210, -1, -1));
-
-            jTabbedPane_settings.addTab("إعدادات الوزن", jTab_set_Indata);
-
             jTab_set_print.setMaximumSize(new java.awt.Dimension(830, 635));
             jTab_set_print.setMinimumSize(new java.awt.Dimension(830, 635));
             jTab_set_print.setPreferredSize(new java.awt.Dimension(830, 635));
@@ -1845,7 +1826,7 @@ public class mainform extends javax.swing.JFrame {
             jTab_set_Counter.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
             jButton_set_Rest2.setFont(new java.awt.Font("Tahoma", 3, 18)); // NOI18N
-            jButton_set_Rest2.setText("Reset 2");
+            jButton_set_Rest2.setText("2 X 2");
             jButton_set_Rest2.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent evt) {
                     jButton_set_Rest2ActionPerformed(evt);
@@ -1854,7 +1835,7 @@ public class mainform extends javax.swing.JFrame {
             jTab_set_Counter.add(jButton_set_Rest2, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 230, 110, 60));
 
             jButton_set_Rest1.setFont(new java.awt.Font("Tahoma", 3, 18)); // NOI18N
-            jButton_set_Rest1.setText("Reset");
+            jButton_set_Rest1.setText("10 X 10");
             jButton_set_Rest1.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent evt) {
                     jButton_set_Rest1ActionPerformed(evt);
@@ -1863,6 +1844,10 @@ public class mainform extends javax.swing.JFrame {
             jTab_set_Counter.add(jButton_set_Rest1, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 230, 110, 60));
             jTab_set_Counter.add(jLabel_set_tick1, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 300, 70, 50));
             jTab_set_Counter.add(jLabel_set_tick2, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 300, 70, 50));
+
+            jLabel17.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+            jLabel17.setText("Reset ");
+            jTab_set_Counter.add(jLabel17, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 230, 130, 60));
 
             jTabbedPane_settings.addTab("إعدادات عدد اللزق", jTab_set_Counter);
 
@@ -1884,8 +1869,6 @@ public class mainform extends javax.swing.JFrame {
             jLabel40.getAccessibleContext().setAccessibleDescription("Setting page Version");
 
             jTabbedPane_settings.addTab("About", jTab_set_about);
-
-            jTabbedPane_settings.setSelectedIndex(4);
 
             left_panel.add(jTabbedPane_settings, "Settings");
 
@@ -1997,22 +1980,15 @@ public class mainform extends javax.swing.JFrame {
         }
         if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
             calc_net_weight();
-            if (jCheckBox_rev_order.isSelected() || jCheckBox_leave_wight.isSelected()) {
-                jTextField_weight.requestFocusInWindow();
-            } else {
-                jTextField_num_of_con.requestFocusInWindow();
-            }
+            jTextField_num_of_con.requestFocusInWindow();
+
             if (!jTextField_net_weight.getText().isBlank()) {
                 jButton_add_data.doClick();
             }
         }
         if (evt.getKeyChar() == KeyEvent.VK_DELETE) {
             if ((evt.getModifiersEx() & KeyEvent.SHIFT_DOWN_MASK) != 0) {
-                if (!jCheckBox_leave_wight.isSelected()) {
-                    jButton_clear.doClick();
-                } else {
-                    jTextField_num_of_con.setText("");
-                }
+                jButton_clear.doClick();
             }
         }
     }//GEN-LAST:event_jTextField_net_weightKeyTyped
@@ -2023,11 +1999,7 @@ public class mainform extends javax.swing.JFrame {
         textbox_number(evt, jTextField_bag_weight, BagMax, true);
         calc_net_weight();
         if (evt.getKeyChar() == KeyEvent.VK_ENTER && !enterFromMizan) {
-            if (jCheckBox_rev_order.isSelected()) {
-                jTextField_net_weight.requestFocusInWindow();
-            } else {
-                jTextField_weight.requestFocusInWindow();
-            }
+            jTextField_weight.requestFocusInWindow();
         }
     }//GEN-LAST:event_jTextField_bag_weightKeyTyped
 
@@ -2036,11 +2008,14 @@ public class mainform extends javax.swing.JFrame {
         textbox_number_weight(evt, jTextField_weight, 8);
         calc_net_weight();
         if (evt.getKeyChar() == KeyEvent.VK_ENTER && !jTextField_weight.getText().isBlank()) {
-            if (jTextField_bag_weight.getText().isBlank() && jCheckBox_rev_order.isSelected()) {
-                jTextField_bag_weight.requestFocusInWindow();
-            } else {
-                jTextField_net_weight.requestFocusInWindow();
+            jTextField_net_weight.requestFocusInWindow();
+        }
+        if (evt.getKeyChar() == KeyEvent.VK_DELETE) {
+            if ((evt.getModifiersEx() & KeyEvent.CTRL_DOWN_MASK) != 0) {
+                jCheckBox_freeze_cone.setSelected(false);
+                jButton_clear.doClick();
             }
+
         }
         calc_net_weight();
     }//GEN-LAST:event_jTextField_weightKeyTyped
@@ -2145,22 +2120,14 @@ public class mainform extends javax.swing.JFrame {
                                 jTextField_lot.getText(), jTextField_num_of_con.getText(),
                                 jTextField_weight.getText(), jTextField_net_weight.getText())),
                                 jCheckBox_print.isSelected(), jCheckBox_QR.isSelected())) {
-                            jTextField_net_weight.setText("");
-                            jTextField_weight.setText("");
-                            if (!jCheckBox_leave_wight.isSelected()) {
-                                jTextField_bag_weight.setText("");
-                            }
+                            jButton_clear.doClick();
                             fill_storage_table();
                         } else {
                             JOptionPane.showMessageDialog(this, addStyle("printing faild"), "إنتبه",
                                     JOptionPane.PLAIN_MESSAGE);
                         }
                     } else {
-                        jTextField_net_weight.setText("");
-                        jTextField_weight.setText("");
-                        if (!jCheckBox_leave_wight.isSelected()) {
-                            jTextField_bag_weight.setText("");
-                        }
+                        jButton_clear.doClick();
                         fill_storage_table();
                     }
                 } else {
@@ -2874,7 +2841,10 @@ public class mainform extends javax.swing.JFrame {
 
     private void jTextField_num_of_conFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextField_num_of_conFocusGained
         evt.getID();
-        jTextField_num_of_con.selectAll();
+        if (jCheckBox_freeze_cone.isSelected())
+            jTextField_bag_weight.requestFocusInWindow();
+        else
+            jTextField_num_of_con.selectAll();
     }//GEN-LAST:event_jTextField_num_of_conFocusGained
 
     private void jButton_Statics_openerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_Statics_openerActionPerformed
@@ -3261,16 +3231,23 @@ public class mainform extends javax.swing.JFrame {
 
     private void jButton_clearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_clearActionPerformed
         evt.getID();
-        jTextField_bag_weight.setText("");
+        if (!jCheckBox_freeze_wight.isSelected()) {
+            jTextField_bag_weight.setText("");
+        }
+        if (!jCheckBox_freeze_cone.isSelected()) {
+            jTextField_num_of_con.setText("");
+        }
         jTextField_weight.setText("");
         jTextField_net_weight.setText("");
-        jTextField_num_of_con.setText("");
         jTextField_num_of_con.requestFocus();
     }//GEN-LAST:event_jButton_clearActionPerformed
 
     private void jTextField_bag_weightFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextField_bag_weightFocusGained
         evt.getID();
-        jTextField_bag_weight.selectAll();
+        if (jCheckBox_freeze_wight.isSelected())
+            jTextField_weight.requestFocusInWindow();
+        else
+            jTextField_bag_weight.selectAll();
     }//GEN-LAST:event_jTextField_bag_weightFocusGained
 
     private void jTextField_weightFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextField_weightFocusGained
@@ -3819,12 +3796,7 @@ public class mainform extends javax.swing.JFrame {
 
         if (event.getKeyChar() == KeyEvent.VK_DELETE) {
             if ((event.getModifiersEx() & KeyEvent.SHIFT_DOWN_MASK) != 0) {
-                if (!jCheckBox_leave_wight.isSelected()) {
-                    jButton_clear.doClick();
-                } else {
-                    jTextField_num_of_con.setText("");
-                    jTextField_num_of_con.requestFocusInWindow();
-                }
+                jButton_clear.doClick();
             }
             textboxname.setText("");
         }
@@ -3938,11 +3910,7 @@ public class mainform extends javax.swing.JFrame {
         }
         if (event.getKeyChar() == KeyEvent.VK_DELETE) {
             if ((event.getModifiersEx() & KeyEvent.SHIFT_DOWN_MASK) != 0) {
-                if (!jCheckBox_leave_wight.isSelected()) {
-                    jButton_clear.doClick();
-                } else {
-                    jTextField_num_of_con.setText("");
-                }
+                jButton_clear.doClick();
             }
             textboxname.setText("");
         }
@@ -3952,11 +3920,7 @@ public class mainform extends javax.swing.JFrame {
 
         if (event.getKeyChar() == KeyEvent.VK_DELETE) {
             if ((event.getModifiersEx() & KeyEvent.SHIFT_DOWN_MASK) != 0) {
-                if (!jCheckBox_leave_wight.isSelected()) {
-                    jButton_clear.doClick();
-                } else {
-                    jTextField_num_of_con.setText("");
-                }
+                jButton_clear.doClick();
             }
             textboxname.setText("");
         }
@@ -4319,37 +4283,36 @@ public class mainform extends javax.swing.JFrame {
         return matcher.matches();
     }
 
-    private void startRecognition() throws IOException, LineUnavailableException {
-
-        // Load Arabic speech model (make sure you have the correct path to the downloaded model)
-        // Model model = new Model("models/vosk-model-small-ar");
-        Model model = new Model("models/vosk-model-ar");
-        // Model model = new Model("models/vosk-model-small-en-us-0.15");
-
-        // Set up microphone
-        AudioFormat format = new AudioFormat(16000, 16, 1, true, false);
-        DataLine.Info info = new DataLine.Info(TargetDataLine.class, format);
-        TargetDataLine microphone = (TargetDataLine) AudioSystem.getLine(info);
-        microphone.open(format);
-        microphone.start();
-
-        // Create a recognizer with the model and microphone audio stream
-        Recognizer recognizer = new Recognizer(model, 16000);
-
-        byte[] buffer = new byte[4096];
-
-        // Continuously listen to the microphone and recognize speech
-        new Thread(() -> {
-            while (true) {
-
-                int bytesRead = microphone.read(buffer, 0, buffer.length);
-                if (recognizer.acceptWaveForm(buffer, bytesRead)) {
-                    jTextArea_emp.append(recognizer.getResult() + "\n");
-                }
-            }
-        }).start();
-    }
-
+//    private void startRecognition() throws IOException, LineUnavailableException {
+//
+//        // Load Arabic speech model (make sure you have the correct path to the downloaded model)
+//        // Model model = new Model("models/vosk-model-small-ar");
+//        Model model = new Model("models/vosk-model-ar");
+//        // Model model = new Model("models/vosk-model-small-en-us-0.15");
+//
+//        // Set up microphone
+//        AudioFormat format = new AudioFormat(16000, 16, 1, true, false);
+//        DataLine.Info info = new DataLine.Info(TargetDataLine.class, format);
+//        TargetDataLine microphone = (TargetDataLine) AudioSystem.getLine(info);
+//        microphone.open(format);
+//        microphone.start();
+//
+//        // Create a recognizer with the model and microphone audio stream
+//        Recognizer recognizer = new Recognizer(model, 16000);
+//
+//        byte[] buffer = new byte[4096];
+//
+//        // Continuously listen to the microphone and recognize speech
+//        new Thread(() -> {
+//            while (true) {
+//
+//                int bytesRead = microphone.read(buffer, 0, buffer.length);
+//                if (recognizer.acceptWaveForm(buffer, bytesRead)) {
+//                    jTextArea_emp.append(recognizer.getResult() + "\n");
+//                }
+//            }
+//        }).start();
+//    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JFrame MultiEdit;
@@ -4395,12 +4358,12 @@ public class mainform extends javax.swing.JFrame {
     private javax.swing.JCheckBox jCheckBox_M_Markpage;
     private javax.swing.JCheckBox jCheckBox_Pros_IsBox;
     private javax.swing.JCheckBox jCheckBox_QR;
+    private javax.swing.JCheckBox jCheckBox_freeze_cone;
+    private javax.swing.JCheckBox jCheckBox_freeze_wight;
     private javax.swing.JCheckBox jCheckBox_ignore_limits;
-    private javax.swing.JCheckBox jCheckBox_leave_wight;
     private javax.swing.JCheckBox jCheckBox_print;
     private javax.swing.JCheckBox jCheckBox_rep_2n1;
     private javax.swing.JCheckBox jCheckBox_rep_wzn;
-    private javax.swing.JCheckBox jCheckBox_rev_order;
     private javax.swing.JCheckBox jCheckBox_youm_old;
     private javax.swing.JComboBox<String> jComboBox_E_O_proName;
     private javax.swing.JComboBox<String> jComboBox_E_proName;
@@ -4422,6 +4385,7 @@ public class mainform extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
+    private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
@@ -4485,7 +4449,6 @@ public class mainform extends javax.swing.JFrame {
     private javax.swing.JSeparator jSeparator6;
     private javax.swing.JSplitPane jSplitPane1;
     private javax.swing.JPanel jTab_set_Counter;
-    private javax.swing.JPanel jTab_set_Indata;
     private javax.swing.JPanel jTab_set_about;
     private javax.swing.JPanel jTab_set_order;
     private javax.swing.JPanel jTab_set_print;
