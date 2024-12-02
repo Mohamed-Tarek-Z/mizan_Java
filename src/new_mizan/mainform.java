@@ -75,7 +75,7 @@ public class mainform extends javax.swing.JFrame {
     private int BagMax = 2, repDiff = 15;
     private float Xx = 0, Yy = 0, width = 19, hight = 19;
     private final JButton jButton_Settings = new javax.swing.JButton();
-    private final String Version = "V 64.1.0H";
+    private final String Version = "V 64.1.1H";
 
     private long lastInputTime;
     private final StringBuilder mizanInputBuilder = new StringBuilder();
@@ -425,6 +425,12 @@ public class mainform extends javax.swing.JFrame {
         jTextArea_emp = new javax.swing.JTextArea();
         jLabel38 = new javax.swing.JLabel();
         jTabbedPane_settings = new javax.swing.JTabbedPane();
+        jTab_set_Counter = new javax.swing.JPanel();
+        jButton_set_Rest2 = new javax.swing.JButton();
+        jButton_set_Rest1 = new javax.swing.JButton();
+        jLabel_set_tick1 = new javax.swing.JLabel();
+        jLabel_set_tick2 = new javax.swing.JLabel();
+        jLabel17 = new javax.swing.JLabel();
         jTab_set_print = new javax.swing.JPanel();
         jLabel_set_x = new javax.swing.JLabel();
         jLabel_set_y = new javax.swing.JLabel();
@@ -438,12 +444,6 @@ public class mainform extends javax.swing.JFrame {
         jTab_set_order = new javax.swing.JPanel();
         jLabel45 = new javax.swing.JLabel();
         jTextField_setting_repsDiff = new javax.swing.JTextField();
-        jTab_set_Counter = new javax.swing.JPanel();
-        jButton_set_Rest2 = new javax.swing.JButton();
-        jButton_set_Rest1 = new javax.swing.JButton();
-        jLabel_set_tick1 = new javax.swing.JLabel();
-        jLabel_set_tick2 = new javax.swing.JLabel();
-        jLabel17 = new javax.swing.JLabel();
         jTab_set_about = new javax.swing.JPanel();
         jLabel40 = new javax.swing.JLabel();
 
@@ -1081,6 +1081,7 @@ public class mainform extends javax.swing.JFrame {
 
             jCheckBox_M_Markpage.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
             jCheckBox_M_Markpage.setText("تعليم البالته");
+            jCheckBox_M_Markpage.setFocusable(false);
             jCheckBox_M_Markpage.addKeyListener(new java.awt.event.KeyAdapter() {
                 public void keyPressed(java.awt.event.KeyEvent evt) {
                     jCheckBox_M_MarkpageKeyPressed(evt);
@@ -1125,6 +1126,7 @@ public class mainform extends javax.swing.JFrame {
 
             jCheckBox_QR.setSelected(true);
             jCheckBox_QR.setText("QR");
+            jCheckBox_QR.setFocusable(false);
             in_data.add(jCheckBox_QR, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 80, -1, -1));
 
             jCheckBox_Box.setText("صندوق");
@@ -1139,6 +1141,7 @@ public class mainform extends javax.swing.JFrame {
             jButton5.setText("Print");
             jButton5.setToolTipText("Re-Print ticket");
             jButton5.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+            jButton5.setFocusable(false);
             jButton5.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent evt) {
                     jButton5ActionPerformed(evt);
@@ -1152,11 +1155,18 @@ public class mainform extends javax.swing.JFrame {
             jProgressBar_pallet.setMaximumSize(new java.awt.Dimension(10, 14));
             jProgressBar_pallet.setRequestFocusEnabled(false);
             in_data.add(jProgressBar_pallet, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 2, 590, -1));
+
+            jCheckBox_freeze_cone.setFocusable(false);
             in_data.add(jCheckBox_freeze_cone, new org.netbeans.lib.awtextra.AbsoluteConstraints(815, 250, -1, -1));
+
+            jCheckBox_freeze_wight.setFocusable(false);
             in_data.add(jCheckBox_freeze_wight, new org.netbeans.lib.awtextra.AbsoluteConstraints(815, 300, -1, -1));
+
+            jCheckBox_ConeWeightChange.setFocusable(false);
             in_data.add(jCheckBox_ConeWeightChange, new org.netbeans.lib.awtextra.AbsoluteConstraints(815, 450, -1, -1));
 
             jCheckBox_ignore_limits.setText("سماح الوزن");
+            jCheckBox_ignore_limits.setFocusable(false);
             in_data.add(jCheckBox_ignore_limits, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 10, -1, -1));
 
             left_panel.add(in_data, "Mizan");
@@ -1743,6 +1753,37 @@ public class mainform extends javax.swing.JFrame {
             jTabbedPane_settings.setMinimumSize(new java.awt.Dimension(835, 640));
             jTabbedPane_settings.setPreferredSize(new java.awt.Dimension(835, 640));
 
+            jTab_set_Counter.setMaximumSize(new java.awt.Dimension(830, 635));
+            jTab_set_Counter.setMinimumSize(new java.awt.Dimension(830, 635));
+            jTab_set_Counter.setPreferredSize(new java.awt.Dimension(830, 635));
+            jTab_set_Counter.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+            jButton_set_Rest2.setFont(new java.awt.Font("Tahoma", 3, 18)); // NOI18N
+            jButton_set_Rest2.setText("2 X 2");
+            jButton_set_Rest2.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    jButton_set_Rest2ActionPerformed(evt);
+                }
+            });
+            jTab_set_Counter.add(jButton_set_Rest2, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 230, 110, 60));
+
+            jButton_set_Rest1.setFont(new java.awt.Font("Tahoma", 3, 18)); // NOI18N
+            jButton_set_Rest1.setText("10 X 10");
+            jButton_set_Rest1.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    jButton_set_Rest1ActionPerformed(evt);
+                }
+            });
+            jTab_set_Counter.add(jButton_set_Rest1, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 230, 110, 60));
+            jTab_set_Counter.add(jLabel_set_tick1, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 300, 70, 50));
+            jTab_set_Counter.add(jLabel_set_tick2, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 300, 70, 50));
+
+            jLabel17.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+            jLabel17.setText("Reset ");
+            jTab_set_Counter.add(jLabel17, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 230, 130, 60));
+
+            jTabbedPane_settings.addTab("إعدادات عدد اللزق", jTab_set_Counter);
+
             jTab_set_print.setMaximumSize(new java.awt.Dimension(830, 635));
             jTab_set_print.setMinimumSize(new java.awt.Dimension(830, 635));
             jTab_set_print.setPreferredSize(new java.awt.Dimension(830, 635));
@@ -1819,37 +1860,6 @@ public class mainform extends javax.swing.JFrame {
             jTab_set_order.add(jTextField_setting_repsDiff, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 220, 160, 70));
 
             jTabbedPane_settings.addTab("إعدادات الأذن", jTab_set_order);
-
-            jTab_set_Counter.setMaximumSize(new java.awt.Dimension(830, 635));
-            jTab_set_Counter.setMinimumSize(new java.awt.Dimension(830, 635));
-            jTab_set_Counter.setPreferredSize(new java.awt.Dimension(830, 635));
-            jTab_set_Counter.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-            jButton_set_Rest2.setFont(new java.awt.Font("Tahoma", 3, 18)); // NOI18N
-            jButton_set_Rest2.setText("2 X 2");
-            jButton_set_Rest2.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent evt) {
-                    jButton_set_Rest2ActionPerformed(evt);
-                }
-            });
-            jTab_set_Counter.add(jButton_set_Rest2, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 230, 110, 60));
-
-            jButton_set_Rest1.setFont(new java.awt.Font("Tahoma", 3, 18)); // NOI18N
-            jButton_set_Rest1.setText("10 X 10");
-            jButton_set_Rest1.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent evt) {
-                    jButton_set_Rest1ActionPerformed(evt);
-                }
-            });
-            jTab_set_Counter.add(jButton_set_Rest1, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 230, 110, 60));
-            jTab_set_Counter.add(jLabel_set_tick1, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 300, 70, 50));
-            jTab_set_Counter.add(jLabel_set_tick2, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 300, 70, 50));
-
-            jLabel17.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
-            jLabel17.setText("Reset ");
-            jTab_set_Counter.add(jLabel17, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 230, 130, 60));
-
-            jTabbedPane_settings.addTab("إعدادات عدد اللزق", jTab_set_Counter);
 
             jTab_set_about.setMaximumSize(new java.awt.Dimension(830, 635));
             jTab_set_about.setMinimumSize(new java.awt.Dimension(830, 635));
