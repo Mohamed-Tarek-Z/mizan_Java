@@ -1971,7 +1971,7 @@ public class mainform extends javax.swing.JFrame {
         sendToWight(jTextField_num_of_con, jTextField_weight, evt);
         textbox_number(evt, jTextField_num_of_con, 3, false);
         calc_net_weight();
-        if (evt.getKeyChar() == KeyEvent.VK_ENTER && !enterFromMizan) {
+        if (evt.getKeyChar() == KeyEvent.VK_ENTER && !enterFromMizan && !jTextField_num_of_con.getText().isEmpty()) {
             jTextField_bag_weight.requestFocusInWindow();
         }
     }//GEN-LAST:event_jTextField_num_of_conKeyTyped
@@ -2022,7 +2022,7 @@ public class mainform extends javax.swing.JFrame {
         sendToWight(jTextField_bag_weight, jTextField_weight, evt);
         textbox_number(evt, jTextField_bag_weight, BagMax, true);
         calc_net_weight();
-        if (evt.getKeyChar() == KeyEvent.VK_ENTER && !enterFromMizan) {
+        if (evt.getKeyChar() == KeyEvent.VK_ENTER && !enterFromMizan && !jTextField_bag_weight.getText().isEmpty()) {
             jTextField_weight.requestFocusInWindow();
         }
     }//GEN-LAST:event_jTextField_bag_weightKeyTyped
