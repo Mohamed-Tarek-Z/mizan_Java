@@ -1181,6 +1181,12 @@ public class mainform extends javax.swing.JFrame {
             jSeparator7.setMinimumSize(new java.awt.Dimension(37, 3));
             jSeparator7.setPreferredSize(new java.awt.Dimension(37, 55));
             in_data.add(jSeparator7, new org.netbeans.lib.awtextra.AbsoluteConstraints(605, 10, 110, 20));
+
+            jTextField_Search_pros.addKeyListener(new java.awt.event.KeyAdapter() {
+                public void keyTyped(java.awt.event.KeyEvent evt) {
+                    jTextField_Search_prosKeyTyped(evt);
+                }
+            });
             in_data.add(jTextField_Search_pros, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 40, 150, 20));
 
             left_panel.add(in_data, "Mizan");
@@ -3792,6 +3798,12 @@ public class mainform extends javax.swing.JFrame {
         evt.getID();
         sendToWight(jTextField_Pros_color, jTextField_Pros_conWight, evt);
     }//GEN-LAST:event_jTextField_Pros_colorKeyTyped
+
+    private void jTextField_Search_prosKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_Search_prosKeyTyped
+        // TODO add your handling code here:
+        evt.getID();
+        evt.setKeyChar(ToNumArab(evt.getKeyChar()));
+    }//GEN-LAST:event_jTextField_Search_prosKeyTyped
 
     private void jButton_SettingsActionPerformed() throws IOException {
         open_panel(jTabbedPane_settings);
