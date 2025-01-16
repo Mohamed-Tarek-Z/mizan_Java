@@ -2412,8 +2412,8 @@ public class mainform extends javax.swing.JFrame {
                             tableFOrder.setModel(d);
                             ((DefaultTableModel) jTable_rep_preview.getModel()).setRowCount(0);
                             jTextField_rep_numOfBag.setText("");
-
                             jTextField_rep_totweight.setText("");
+                            jCheckBox_rep_wzn.setSelected(false);
                             jComboBox_rep_palletsNrep.removeAllItems();
 
                             JOptionPane.showMessageDialog(this, addStyle(" ادخل الأذن الثاني  "), "إنتبه",
@@ -2438,6 +2438,7 @@ public class mainform extends javax.swing.JFrame {
                                         bagCountFOrder, wieghtFOrder, typeFOrder, opj, jFileChooser1,
                                         isBoxesFirst, isBoxesSecond)) {
                                     jCheckBox_rep_2n1.setSelected(false);
+                                    jCheckBox_rep_wzn.setSelected(false);
                                     jTextField_rep_clientName.setText("");
                                     jTextField_rep_numOfBag.setText("");
                                     jTextField_rep_totweight.setText("");
@@ -2461,6 +2462,7 @@ public class mainform extends javax.swing.JFrame {
                             jTextField_rep_clientName.setText("");
                             jTextField_rep_numOfBag.setText("");
                             jTextField_rep_totweight.setText("");
+                            jCheckBox_rep_wzn.setSelected(false);
                         } else {
                             JOptionPane.showMessageDialog(this, addStyle(" حدث خطأ في عمل الاذن"), "إنتبه",
                                     JOptionPane.PLAIN_MESSAGE);
@@ -2480,6 +2482,7 @@ public class mainform extends javax.swing.JFrame {
                             jTextField_rep_clientName.setText("");
                             jTextField_rep_numOfBag.setText("");
                             jTextField_rep_totweight.setText("");
+                            jCheckBox_rep_wzn.setSelected(false);
                         } else {
                             JOptionPane.showMessageDialog(this, addStyle(" حدث خطأ في عمل الاذن"), "إنتبه",
                                     JOptionPane.PLAIN_MESSAGE);
@@ -2672,6 +2675,11 @@ public class mainform extends javax.swing.JFrame {
                     }
 
                 } else {
+                    if ((int) ToDoubleEnglish(jTextField_rep_numOfBag.getText()) > 160) {
+                        JOptionPane.showMessageDialog(this, addStyle("رجاء ادخل  عدد أقل من  ١٦٠"), "إنتبه",
+                                JOptionPane.PLAIN_MESSAGE);
+                        return;
+                    }
                     if ((int) ToDoubleEnglish(jTextField_rep_numOfBag.getText()) != jTable_rep_preview.getRowCount()) {
                         boolean loot = true;
                         if (jTable_rep_preview.getRowCount() > 0) {
