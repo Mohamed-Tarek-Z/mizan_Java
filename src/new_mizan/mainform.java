@@ -2487,6 +2487,25 @@ public class mainform extends javax.swing.JFrame {
                             JOptionPane.showMessageDialog(this, addStyle(" حدث خطأ في عمل الاذن"), "إنتبه",
                                     JOptionPane.PLAIN_MESSAGE);
                         }
+                    } else if (jTable_rep_preview.getRowCount() <= 200) {
+
+                        st = opj.dataRead("IsBox", "products", "pro_name=N'" + jComboBox_rep_Pros.getSelectedItem().toString() + "'");
+                        st.next();
+                        isBoxesSecond = st.getBoolean(1);
+
+                        if (opject.excel_200(serial, orderIds, jTextField_rep_totweight.getText(),
+                                jTextField_rep_clientName.getText(),
+                                jComboBox_rep_Pros.getSelectedItem().toString(),
+                                jTable_rep_preview, opj, jFileChooser1, isBoxesSecond
+                        )) {
+                            jTextField_rep_clientName.setText("");
+                            jTextField_rep_numOfBag.setText("");
+                            jTextField_rep_totweight.setText("");
+                            jCheckBox_rep_wzn.setSelected(false);
+                        } else {
+                            JOptionPane.showMessageDialog(this, addStyle(" حدث خطأ في عمل الاذن"), "إنتبه",
+                                    JOptionPane.PLAIN_MESSAGE);
+                        }
                     }
                     jComboBox_rep_palletsNrep.removeAllItems();
                 }
@@ -2675,7 +2694,7 @@ public class mainform extends javax.swing.JFrame {
                     }
 
                 } else {
-                    if ((int) ToDoubleEnglish(jTextField_rep_numOfBag.getText()) > 160) {
+                    if ((int) ToDoubleEnglish(jTextField_rep_numOfBag.getText()) > 200) {
                         JOptionPane.showMessageDialog(this, addStyle("رجاء ادخل  عدد أقل من  ١٦٠"), "إنتبه",
                                 JOptionPane.PLAIN_MESSAGE);
                         return;

@@ -202,6 +202,118 @@ public class print_shit {
             return false;
         }
     }
+    
+    boolean excel_200(int serial, List<String> orderIds, String totalWeight, String ClientName, String productName, JTable BagsTable, sqlcon opj, JFileChooser jFileChooser1, boolean isBoxes) {
+        try {
+            Locale arabicLocale = Locale.forLanguageTag("ar");
+            DateTimeFormatter arabicDateFormatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT).withLocale(arabicLocale).withDecimalStyle(DecimalStyle.of(arabicLocale));
+            LocalDate date_now = LocalDate.now();
+            XSSFWorkbook workbook;
+            try (FileInputStream file = new FileInputStream(new File("Donot_Change\\200.xlsx"))) {
+                workbook = new XSSFWorkbook(file);
+                XSSFSheet sheet = workbook.getSheetAt(0);
+                Cell cell;
+
+                String _1 = "                  إذن تـسليم بضاعة\n";
+                String _2 = "السيد :" + ClientName + "";
+                String _3 = "التاريـــخ :" + date_now.format(arabicDateFormatter) + "";
+                String _4 = "صنف :" + productName + "";
+                String _5 = "رقم اللـــوط :" + ToDoubleArabic(ToStringEnglish(BagsTable.getValueAt(0, 2) + ""));
+
+                for (int i = 0; i < 70 - ClientName.length(); i++) {
+                    _2 += " ";
+                }
+                for (int i = 0; i < 65 - productName.length(); i++) {
+                    _4 += " ";
+
+                }
+                cell = sheet.getRow(0).getCell(0);
+                cell.setCellValue(_1 + _2 + _3 + "\n" + "\n" + _4 + _5);
+                String __1 = (isBoxes ? "عدد الصناديق :          " : "عدد الشكاير :          ")
+                        + ToDoubleArabic(BagsTable.getRowCount() + "")
+                        + (isBoxes ? " صندوق" : "  شيكاره");
+                String __2 = "الــــــــــــــــــــــــــــــــوزن :       " + ToDoubleArabic(totalWeight) + "";
+                cell = sheet.getRow(23).getCell(21);
+                cell.setCellValue(__1 + "\n" + __2);
+
+                this.cell_functions(cell, sheet);
+
+                cell = sheet.getRow(22).getCell(19);
+                String strFormula1 = "IF(MOD(SUM(T3:T22),1000)>0,MOD(SUM(T3:T22),1000),IF(COUNTBLANK(T3:T22)=20,\" \",0))";
+                cell.setCellFormula(strFormula1);
+
+                cell = sheet.getRow(22).getCell(20);
+                strFormula1 = "IF(OR(SUM(U3:U22)>0,SUM(T3:T22)>0),(SUM(U3:U22))+(QUOTIENT(SUM(T3:T22),1000)),\" \")";
+                cell.setCellFormula(strFormula1);
+
+                cell = sheet.getRow(22).getCell(22);
+                strFormula1 = "IF(MOD(SUM(W3:W22),1000)>0,MOD(SUM(W3:W22),1000),IF(COUNTBLANK(W3:W22)=20,\" \",0))";
+                cell.setCellFormula(strFormula1);
+
+                cell = sheet.getRow(22).getCell(23);
+                strFormula1 = "IF(OR(SUM(X3:X22)>0,SUM(W3:W22)>0),(SUM(X3:X22))+(QUOTIENT(SUM(W3:W22),1000)),\" \")";
+                cell.setCellFormula(strFormula1);
+                
+                
+                ///
+                
+                
+                cell = sheet.getRow(22).getCell(25);
+                strFormula1 = "IF(MOD(SUM(Z3:Z22),1000)>0,MOD(SUM(Z3:Z22),1000),IF(COUNTBLANK(Z3:Z22)=20,\" \",0))";
+                cell.setCellFormula(strFormula1);
+
+                cell = sheet.getRow(22).getCell(26);
+                strFormula1 = "IF(OR(SUM(AA3:AA22)>0,SUM(Z3:Z22)>0),(SUM(AA3:AA22))+(QUOTIENT(SUM(Z3:Z22),1000)),\" \")";
+                cell.setCellFormula(strFormula1);
+
+                cell = sheet.getRow(22).getCell(28);
+                strFormula1 = "IF(MOD(SUM(AC3:AC22),1000)>0,MOD(SUM(AC3:AC22),1000),IF(COUNTBLANK(AC3:AC22)=20,\" \",0))";
+                cell.setCellFormula(strFormula1);
+
+                cell = sheet.getRow(22).getCell(29);
+                strFormula1 = "IF(OR(SUM(AD3:AD22)>0,SUM(AC3:AC22)>0),(SUM(AD3:AD22))+(QUOTIENT(SUM(AC3:AC22),1000)),\" \")";
+                cell.setCellFormula(strFormula1);
+                
+                
+                ///
+
+                cell = sheet.getRow(26).getCell(21);
+                strFormula1 = "MOD((SUM(A23,E23,H23,K23,N23,Q23,T23,W23,Z23,AC23)),1000)";
+                cell.setCellFormula(strFormula1);
+
+                cell = sheet.getRow(26).getCell(24);
+                strFormula1 = "MOD((SUM(C23,F23,I23,L23,O23,R23,U23,X23,AA23,AD23)+((SUM(A23,E23,H23,K23,N23,Q23,T23,W23,Z23,AC23)/1000))-MOD(SUM(A23,E23,H23,K23,N23,Q23,T23,W23,Z23,AC23)/1000,1)),1000)";
+                cell.setCellFormula(strFormula1);
+
+                cell = sheet.getRow(26).getCell(27);
+                strFormula1 = "(SUM(C23,F23,I23,L23,O23,R23,U23,X23,AA23,AD23)+(SUM(A23,E23,H23,K23,N23,Q23,T23,W23,Z23,AC23)/1000)-MOD((SUM(C23,F23,I23,L23,O23,R23,U23,X23,AA23,AD23)+(SUM(A23,E23,H23,K23,N23,Q23,T23,W23,Z23,AC23)/1000)),1000))/1000";
+                cell.setCellFormula(strFormula1);
+
+                int f = 1;
+                for (int t = 0; t < 201; t += 20) {
+
+                    for (int i = 2 + t; i <= 21 + t && i - 1 <= BagsTable.getRowCount(); i++) {
+                        if (BagsTable.getRowCount() == i - 2) {
+                            break;
+                        }
+                        cell = sheet.getRow(i - t).getCell(f);
+                        cell.setCellValue(((1000 * ToDoubleEnglish(BagsTable.getValueAt(i - 2, 1).toString()) - (int) ToDoubleEnglish(BagsTable.getValueAt(i - 2, 1).toString()) * 1000)));
+                        cell = sheet.getRow(i - t).getCell(f + 1);
+                        cell.setCellValue((int) ToDoubleEnglish(BagsTable.getValueAt(i - 2, 1).toString()));
+                    }
+                    f += 3;
+                }
+
+            }
+            return create_excel_in_path(serial, orderIds, totalWeight, BagsTable, ClientName, date_now, workbook, opj, jFileChooser1, productName);
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(mainform.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        } catch (IOException ex) {
+            Logger.getLogger(mainform.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        }
+    }
 
     boolean excel_60_60(int serial, List<String> sOrderIds, List<String> fOrderIds,
             String wieghtSOrder, String ClientName, String typeSOrder,
