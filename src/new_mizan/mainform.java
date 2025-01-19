@@ -75,7 +75,7 @@ public class mainform extends javax.swing.JFrame {
     private int BagMax = 2, repDiff = 15;
     private float Xx = 0, Yy = 0, width = 19, hight = 19;
     private final JButton jButton_Settings = new javax.swing.JButton();
-    private final String Version = "V 64.1.1H";
+    private final String Version = "V 64.2H";
 
     private long lastInputTime;
     private final StringBuilder mizanInputBuilder = new StringBuilder();
@@ -1126,7 +1126,6 @@ public class mainform extends javax.swing.JFrame {
             jLabel41.setText("اللون");
             in_data.add(jLabel41, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 540, 70, 40));
 
-            jCheckBox_QR.setSelected(true);
             jCheckBox_QR.setText("QR");
             jCheckBox_QR.setFocusable(false);
             in_data.add(jCheckBox_QR, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 10, -1, -1));
@@ -2320,16 +2319,17 @@ public class mainform extends javax.swing.JFrame {
 
         if (jComboBox_pro_in_storage.hasFocus()) {
             jCheckBox_ConeWeightChange.setSelected(false);
+            jCheckBox_ignore_limits.setSelected(false);
+            jCheckBox_freeze_cone.setSelected(false);
+            jCheckBox_freeze_wight.setSelected(false);
+            jCheckBox_M_Markpage.setSelected(false);
             fill_storage_table();
         }
         if (jTable_storage.getRowCount() != 0) {
             jTextField_lot.setText(jTable_storage.getValueAt(0, 2) + "");
-        }
-        if (jTable_storage.getRowCount() != 0) {
             if (!jTable_storage.getValueAt(0, 5).equals("٢٠")) {
                 jTextField_pallet_num.setText(jTable_storage.getValueAt(0, 3) + "");
             } else {
-
                 jTextField_pallet_num.setText(ToDoubleArabic(
                         (Integer.parseInt(ToStringEnglish(jTable_storage.getValueAt(0, 3) + "")) + 1) + ""));
             }

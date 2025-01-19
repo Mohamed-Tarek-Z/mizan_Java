@@ -1604,7 +1604,6 @@
                 </Component>
                 <Component class="javax.swing.JCheckBox" name="jCheckBox_QR">
                   <Properties>
-                    <Property name="selected" type="boolean" value="true"/>
                     <Property name="text" type="java.lang.String" value="QR"/>
                     <Property name="focusable" type="boolean" value="false"/>
                   </Properties>
