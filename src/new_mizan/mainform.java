@@ -75,7 +75,7 @@ public class mainform extends javax.swing.JFrame {
     private int BagMax = 2, repDiff = 15;
     private float Xx = 0, Yy = 0, width = 19, hight = 19;
     private final JButton jButton_Settings = new javax.swing.JButton();
-    private final String Version = "V 64.2H";
+    private final String Version = "V 64.2.1H";
 
     private long lastInputTime;
     private final StringBuilder mizanInputBuilder = new StringBuilder();
@@ -3830,6 +3830,12 @@ public class mainform extends javax.swing.JFrame {
         // TODO add your handling code here:
         evt.getID();
         evt.setKeyChar(ToNumArab(evt.getKeyChar()));
+
+        if (evt.getKeyChar() == KeyEvent.VK_DELETE) {
+            jTextField_Search_pros.setText("");
+        }
+        combox_fill(this.jComboBox_pro_in_storage, opj.dataRead("pro_name", "products",
+                "pro_name like N'%" + jTextField_Search_pros.getText().strip() + "%' "), true);
     }//GEN-LAST:event_jTextField_Search_prosKeyTyped
 
     private void jButton_SettingsActionPerformed() throws IOException {
