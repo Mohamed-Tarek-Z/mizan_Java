@@ -14,7 +14,7 @@ public class login_form extends javax.swing.JFrame {
 
     sqlcon opj;
 
-    public login_form() throws SQLException {
+    public login_form() throws SQLException, Exception {
         initComponents();
         opj = new sqlcon();
     }
@@ -166,6 +166,11 @@ public class login_form extends javax.swing.JFrame {
                 java.util.logging.Logger.getLogger(login_form.class.getName()).log(java.util.logging.Level.SEVERE, null,
                         ex);
                 System.exit(NORMAL);
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(null, ex.getMessage(), "إنتبه",
+                        JOptionPane.PLAIN_MESSAGE);
+
+                Logger.getLogger(login_form.class.getName()).log(Level.SEVERE, null, ex);
             }
         });
     }

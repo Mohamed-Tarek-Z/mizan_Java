@@ -7,16 +7,38 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.Properties;
 
 public class sqlcon {
 
-    private final String url = "jdbc:sqlserver://localhost:1433;databaseName=mizan;username=sa;password=111;encrypt=true;trustServerCertificate=true";
+    String ip;
+    private String url;
     Statement st;
     Connection conn;
 
-    public sqlcon() throws SQLException {
-        conn = DriverManager.getConnection(url);
-        st = conn.createStatement();
+    public sqlcon() throws Exception {
+        Properties properties = new Properties();
+        try (FileInputStream input = new FileInputStream(System.getProperty("user.dir") + "\\Temp\\config.properties")) {
+            properties.load(input);
+
+            // Access configuration values
+            ip = properties.getProperty("ip","localhost");
+            System.out.println(ip);
+            url = "jdbc:sqlserver://" + ip + ":1433;databaseName=mizan;username=sa;password=111;encrypt=true;trustServerCertificate=true";
+            conn = DriverManager.getConnection(url);
+            st = conn.createStatement();
+        } catch (IOException e) {
+            ip = "localhost";
+            System.out.println(ip);
+
+            url = "jdbc:sqlserver://" + ip + ":1433;databaseName=mizan;username=sa;password=111;encrypt=true;trustServerCertificate=true";
+            conn = DriverManager.getConnection(url);
+            st = conn.createStatement();
+
+            e.printStackTrace();
+        }
     }
 
     public void inData(String tableName, String colName, String values) {

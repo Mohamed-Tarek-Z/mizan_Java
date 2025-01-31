@@ -26,12 +26,9 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.math.RoundingMode;
 import java.nio.file.Files;
@@ -66,16 +63,18 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.vosk.LibVosk;
 import org.vosk.LogLevel;
+import java.io.File;
+import java.util.Properties;
 
 public class mainform extends javax.swing.JFrame {
 
     sqlcon opj;
 
-    public short tick1num = 0, tick2num = 0;
+    public short tick10x10 = 0, tick2x2 = 0;
     private int BagMax = 2, repDiff = 15;
-    private float Xx = 0, Yy = 0, width = 19, hight = 19;
+    private float width = 19, hight = 19;
+    private final String Version = "V 64.3H";
     private final JButton jButton_Settings = new javax.swing.JButton();
-    private final String Version = "V 64.2.1H";
 
     private long lastInputTime;
     private final StringBuilder mizanInputBuilder = new StringBuilder();
@@ -118,8 +117,7 @@ public class mainform extends javax.swing.JFrame {
         combox_fill(this.jComboBox_E_O_proName, opj.dataRead("pro_name", "products"), true);
         combox_fill(this.jComboBox_E_proName, opj.dataRead("pro_name", "products"), true);
         combox_fill(this.jComboBox_ME_type, opj.dataRead("pro_name", "products"), true);
-        tick1num = loadTicknum("TicketNumber1.txt");
-        tick2num = loadTicknum("TicketNumber2.txt");
+        readConfig();
         this.setAlwaysOnTop(true);
 
         LibVosk.setLogLevel(LogLevel.WARNINGS);
@@ -434,13 +432,9 @@ public class mainform extends javax.swing.JFrame {
         jLabel_set_tick2 = new javax.swing.JLabel();
         jLabel17 = new javax.swing.JLabel();
         jTab_set_print = new javax.swing.JPanel();
-        jLabel_set_x = new javax.swing.JLabel();
-        jLabel_set_y = new javax.swing.JLabel();
         jLabel_set_width = new javax.swing.JLabel();
         jLabel_set_hight = new javax.swing.JLabel();
         jTextField_set_hight = new javax.swing.JTextField();
-        jTextField_set_x = new javax.swing.JTextField();
-        jTextField_set_y = new javax.swing.JTextField();
         jTextField_set_width = new javax.swing.JTextField();
         jButton_set_changearea = new javax.swing.JButton();
         jTab_set_order = new javax.swing.JPanel();
@@ -1808,47 +1802,25 @@ public class mainform extends javax.swing.JFrame {
             jTab_set_print.setPreferredSize(new java.awt.Dimension(830, 635));
             jTab_set_print.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-            jLabel_set_x.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-            jLabel_set_x.setText("X");
-            jTab_set_print.add(jLabel_set_x, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 250, 20, 20));
-
-            jLabel_set_y.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-            jLabel_set_y.setText("Y");
-            jTab_set_print.add(jLabel_set_y, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 250, -1, -1));
-
             jLabel_set_width.setText("Width");
-            jTab_set_print.add(jLabel_set_width, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 250, -1, -1));
+            jTab_set_print.add(jLabel_set_width, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 200, -1, -1));
 
             jLabel_set_hight.setText("hight");
-            jTab_set_print.add(jLabel_set_hight, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 250, -1, -1));
+            jTab_set_print.add(jLabel_set_hight, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 200, -1, -1));
 
             jTextField_set_hight.addKeyListener(new java.awt.event.KeyAdapter() {
                 public void keyTyped(java.awt.event.KeyEvent evt) {
                     jTextField_set_hightKeyTyped(evt);
                 }
             });
-            jTab_set_print.add(jTextField_set_hight, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 270, 70, -1));
-
-            jTextField_set_x.addKeyListener(new java.awt.event.KeyAdapter() {
-                public void keyTyped(java.awt.event.KeyEvent evt) {
-                    jTextField_set_xKeyTyped(evt);
-                }
-            });
-            jTab_set_print.add(jTextField_set_x, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 270, 70, -1));
-
-            jTextField_set_y.addKeyListener(new java.awt.event.KeyAdapter() {
-                public void keyTyped(java.awt.event.KeyEvent evt) {
-                    jTextField_set_yKeyTyped(evt);
-                }
-            });
-            jTab_set_print.add(jTextField_set_y, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 270, 70, -1));
+            jTab_set_print.add(jTextField_set_hight, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 220, 70, -1));
 
             jTextField_set_width.addKeyListener(new java.awt.event.KeyAdapter() {
                 public void keyTyped(java.awt.event.KeyEvent evt) {
                     jTextField_set_widthKeyTyped(evt);
                 }
             });
-            jTab_set_print.add(jTextField_set_width, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 270, 70, -1));
+            jTab_set_print.add(jTextField_set_width, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 220, 70, -1));
 
             jButton_set_changearea.setFont(new java.awt.Font("Tahoma", 3, 14)); // NOI18N
             jButton_set_changearea.setText("Sett");
@@ -1857,7 +1829,7 @@ public class mainform extends javax.swing.JFrame {
                     jButton_set_changeareaActionPerformed(evt);
                 }
             });
-            jTab_set_print.add(jButton_set_changearea, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 340, 80, 40));
+            jTab_set_print.add(jButton_set_changearea, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 300, 80, 40));
 
             jTabbedPane_settings.addTab("إعدادات الطباعة", jTab_set_print);
 
@@ -2985,18 +2957,21 @@ public class mainform extends javax.swing.JFrame {
             int result = JOptionPane.showOptionDialog(this, addStyle(" خد بالك ياجدع  "), "انتبه ",
                     JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, options1, null);
             if (result == JOptionPane.YES_OPTION) {
-                saveTicknum("TicketNumber1.txt", tick1num);
-                saveTicknum("TicketNumber2.txt", tick2num);
+                saveConfig();
+                readConfig();
                 login_form opj11 = new login_form();
                 opj11.setVisible(true);
                 this.dispose();
             }
             if (result == JOptionPane.NO_OPTION) {
-                saveTicknum("TicketNumber1.txt", tick1num);
-                saveTicknum("TicketNumber2.txt", tick2num);
+                saveConfig();
+                readConfig();
                 System.exit(NORMAL);
             }
         } catch (SQLException | IOException ex) {
+            Logger.getLogger(mainform.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "exception", JOptionPane.PLAIN_MESSAGE);
+        } catch (Exception ex) {
             Logger.getLogger(mainform.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(this, ex.getMessage(), "exception", JOptionPane.PLAIN_MESSAGE);
         }
@@ -3357,11 +3332,10 @@ public class mainform extends javax.swing.JFrame {
     private void jButton_set_Rest2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_set_Rest2ActionPerformed
         evt.getID();
         try {
-
-            tick2num = 0;
-            saveTicknum("TicketNumber2.txt", tick2num);
-            tick2num = loadTicknum("TicketNumber2.txt");
-            jLabel_set_tick2.setText("" + tick2num);
+            tick2x2 = 0;
+            saveConfig();
+            readConfig();
+            jLabel_set_tick2.setText("" + tick2x2);
         } catch (IOException ex) {
             Logger.getLogger(mainform.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -3371,11 +3345,10 @@ public class mainform extends javax.swing.JFrame {
     private void jButton_set_Rest1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_set_Rest1ActionPerformed
         evt.getID();
         try {
-
-            tick1num = 0;
-            saveTicknum("TicketNumber1.txt", tick1num);
-            tick1num = loadTicknum("TicketNumber1.txt");
-            jLabel_set_tick1.setText("" + tick1num);
+            tick10x10 = 0;
+            saveConfig();
+            readConfig();
+            jLabel_set_tick1.setText("" + tick10x10);
         } catch (IOException ex) {
             Logger.getLogger(mainform.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -3384,30 +3357,12 @@ public class mainform extends javax.swing.JFrame {
     private void jButton_set_changeareaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_set_changeareaActionPerformed
         evt.getID();
 
-        Xx = Float.parseFloat(ToStringEnglish(jTextField_set_x.getText()));
-        jTextField_set_x.setText("" + Xx);
-
-        Yy = Float.parseFloat(ToStringEnglish(jTextField_set_y.getText()));
-        jTextField_set_y.setText("" + Yy);
-
         width = Float.parseFloat(ToStringEnglish(jTextField_set_width.getText()));
         jTextField_set_width.setText("" + width);
 
         hight = Float.parseFloat(ToStringEnglish(jTextField_set_hight.getText()));
         jTextField_set_hight.setText("" + hight);
     }//GEN-LAST:event_jButton_set_changeareaActionPerformed
-
-    private void jTextField_set_xKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_set_xKeyTyped
-        evt.getID();
-
-        textbox_number_weight(evt, jTextField_set_x, 1);
-    }//GEN-LAST:event_jTextField_set_xKeyTyped
-
-    private void jTextField_set_yKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_set_yKeyTyped
-        evt.getID();
-
-        textbox_number_weight(evt, jTextField_set_y, 1);
-    }//GEN-LAST:event_jTextField_set_yKeyTyped
 
     private void jTextField_set_widthKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_set_widthKeyTyped
         evt.getID();
@@ -3575,7 +3530,7 @@ public class mainform extends javax.swing.JFrame {
         try {
 
             Desktop.getDesktop().print(new File(System.getProperty("user.dir") + "\\Temp\\myFile.xlsx"));
-            tick1num++;
+            tick10x10++;
             this.jTextField_num_of_con.requestFocusInWindow();
         } catch (IOException ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage(), "exception", JOptionPane.PLAIN_MESSAGE);
@@ -3840,17 +3795,8 @@ public class mainform extends javax.swing.JFrame {
 
     private void jButton_SettingsActionPerformed() throws IOException {
         open_panel(jTabbedPane_settings);
-        jTextField_set_x.setText("" + Xx);
-        jTextField_set_y.setText("" + Yy);
-        jTextField_set_width.setText("" + width);
-        jTextField_set_hight.setText("" + hight);
-        jTextField_setting_repsDiff.setText(ToDoubleArabic(repDiff + ""));
-        saveTicknum("TicketNumber1.txt", tick1num);
-        saveTicknum("TicketNumber2.txt", tick2num);
-        tick1num = loadTicknum("TicketNumber1.txt");
-        tick2num = loadTicknum("TicketNumber2.txt");
-        jLabel_set_tick1.setText("" + tick1num);
-        jLabel_set_tick2.setText("" + tick2num);
+        saveConfig();
+        readConfig();
     }
 
     void open_panel(Component comp) {
@@ -3908,8 +3854,8 @@ public class mainform extends javax.swing.JFrame {
                     new File(System.getProperty("user.dir") + "\\Temp\\QR" + ToDoubleEnglish(values.get(6)) + ".png"));
             PrintRequestAttributeSet attributes = new HashPrintRequestAttributeSet();
             attributes.add(new PrinterResolution(300, 300, PrinterResolution.DPI));
-            attributes.add(new MediaPrintableArea(Xx, Yy, width, hight, MediaPrintableArea.MM));
-
+            attributes.add(new MediaPrintableArea(0, 0, width, hight, MediaPrintableArea.MM));
+            // TODO: add printer select option
             PrinterJob job = PrinterJob.getPrinterJob();
             job.setJobName("Print QR");
             for (PrintService printer : PrintServiceLookup.lookupPrintServices(null, null)) {
@@ -3928,7 +3874,7 @@ public class mainform extends javax.swing.JFrame {
                 return Printable.PAGE_EXISTS;
             });
             job.print(attributes);
-            tick2num++;
+            tick2x2++;
             new File(System.getProperty("user.dir") + "\\Temp\\QR" + ToDoubleEnglish(values.get(6)) + ".png").delete();
         }
         if (b1) {
@@ -3966,7 +3912,7 @@ public class mainform extends javax.swing.JFrame {
                 fileOut.close();
             }
             Desktop.getDesktop().print(new File(System.getProperty("user.dir") + "\\Temp\\myFile.xlsx"));
-            tick1num++;
+            tick10x10++;
         }
 
         return b1 || b2;
@@ -4249,34 +4195,71 @@ public class mainform extends javax.swing.JFrame {
         }
     }
 
-    private short loadTicknum(String filename) throws FileNotFoundException, IOException {
-        String num = "";
-        int i;
+    private void readConfig() throws FileNotFoundException, IOException {
+        Properties properties = new Properties();
+
+        //"config.properties"
         Files.createDirectories(Paths.get(System.getProperty("user.dir") + "\\Temp"));
-        try (FileReader fr = new FileReader(System.getProperty("user.dir") + "\\Temp\\" + filename)) {
-            num = "";
-            while ((i = fr.read()) != -1) {
-                num += Character.digit(i, 10) + "";
-            }
-        } catch (Exception e) {
-            print_shit.NewName(System.getProperty("user.dir") + filename);
+        try (FileInputStream input = new FileInputStream(System.getProperty("user.dir") + "\\Temp\\config.properties")) {
+            // Load the properties file
+            properties.load(input);
+
+            // Access configuration values
+            tick10x10 = Short.parseShort(properties.getProperty("ticket10x10"));
+            tick2x2 = Short.parseShort(properties.getProperty("ticket2x2"));
+            repDiff = Integer.parseInt(properties.getProperty("repdiff")) | 15;
+            width = Float.parseFloat(properties.getProperty("width"));
+            hight = Float.parseFloat(properties.getProperty("hight"));
+
+            boolean print10x10 = Boolean.parseBoolean(properties.getProperty("print10x10"));
+            boolean print2x2 = Boolean.parseBoolean(properties.getProperty("print2x2"));
+
+            //set in gui after read
+            jLabel_set_tick1.setText("" + tick10x10);
+            jLabel_set_tick2.setText("" + tick2x2);
+            jTextField_setting_repsDiff.setText(ToDoubleArabic(repDiff + ""));
+            jTextField_set_width.setText("" + width);
+            jTextField_set_hight.setText("" + hight);
+            jCheckBox_print.setSelected(print10x10);
+            jCheckBox_QR.setSelected(print2x2);
+        } catch (IOException ex) {
+            print_shit.NewName(System.getProperty("user.dir") + "config.properties");
+            saveConfig();
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "exception", JOptionPane.PLAIN_MESSAGE);
         }
-        return Short.parseShort((num.isBlank() ? "0" : num));
     }
 
-    int saveTicknum(String filename, short nums) throws FileNotFoundException, IOException {
-        try (FileWriter fw = new FileWriter(System.getProperty("user.dir") + "\\Temp\\" + filename)) {
-            fw.write(nums + "");
+    void saveConfig() throws FileNotFoundException, IOException {
+        Properties properties = new Properties();
+
+        // Set properties (key-value pairs)
+        properties.setProperty("ip", opj.ip);
+        properties.setProperty("ticket10x10", "" + tick10x10);
+        properties.setProperty("ticket2x2", "" + tick2x2);
+        properties.setProperty("repdiff", "" + repDiff);
+        properties.setProperty("width", "" + width);
+        properties.setProperty("hight", "" + hight);
+        properties.setProperty("print10x10", jCheckBox_print.isSelected() ? "True" : "False");
+        properties.setProperty("print2x2", jCheckBox_QR.isSelected() ? "True" : "False");
+
+        // Save the properties to a file
+        try (FileOutputStream output = new FileOutputStream(System.getProperty("user.dir") + "\\Temp\\config.properties")) {
+            // Save the properties with a comment header
+            properties.store(output, "Application Configuration");
+        } catch (IOException ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "exception", JOptionPane.PLAIN_MESSAGE);
         }
-        return nums;
     }
 
-    String addStyle(String text) {
+    String addStyle(String text
+    ) {
         return "<html><body><h1 style='font-family: Arial; font-size: 20pt; text-align: right; width: 150px;'>"
                 + text.strip() + "</h1></body></html>";
     }
 
-    void sendToWight(JTextField fromTextField, JTextField toTextField, KeyEvent evt) {
+    void sendToWight(JTextField fromTextField, JTextField toTextField,
+            KeyEvent evt
+    ) {
 
         long currentTime = System.currentTimeMillis();
         if (currentTime - lastInputTime < 50) {
@@ -4311,7 +4294,8 @@ public class mainform extends javax.swing.JFrame {
         lastInputTime = currentTime;
     }
 
-    void ignorWightFromMizan(JTextField fromTextField, KeyEvent evt) {
+    void ignorWightFromMizan(JTextField fromTextField, KeyEvent evt
+    ) {
         long currentTime = System.currentTimeMillis();
         if (currentTime - lastInputTime < 50) {
             char keyChar = evt.getKeyChar();
@@ -4500,8 +4484,6 @@ public class mainform extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel_set_tick1;
     private javax.swing.JLabel jLabel_set_tick2;
     private javax.swing.JLabel jLabel_set_width;
-    private javax.swing.JLabel jLabel_set_x;
-    private javax.swing.JLabel jLabel_set_y;
     private javax.swing.JLabel jLabel_version;
     private javax.swing.JProgressBar jProgressBar_pallet;
     private javax.swing.JScrollPane jScrollPane1;
@@ -4560,8 +4542,6 @@ public class mainform extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField_rep_totweight;
     private javax.swing.JTextField jTextField_set_hight;
     private javax.swing.JTextField jTextField_set_width;
-    private javax.swing.JTextField jTextField_set_x;
-    private javax.swing.JTextField jTextField_set_y;
     private javax.swing.JTextField jTextField_setting_repsDiff;
     private javax.swing.JTextField jTextField_statis_tot;
     private javax.swing.JTextField jTextField_weight;
