@@ -1,5 +1,8 @@
+.idea
 querys
 Temp
 dist/lib
 test
 models
+/build/
+/dist/

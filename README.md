@@ -1,10 +1,8 @@
 # mizan_Java
 
-a nightmare , not organized code java app that uses SQL Server.it was developed by mahmoud and heavily edited and included more features by Me To El msn3.
+A java app that uses SQL Server.it was developed by mahmoud, heavily edited, reorganized into mvc architecture and included more features by Me To Small Client.
 
 ### there are some folders and files that should exist:
 
-<li>Donot_Change
-<li>Temp
-<li>querys
-<li>models
+<li>Lib, a folder contain used libs.
+<li>Donot_Change, a folder contain templates files
