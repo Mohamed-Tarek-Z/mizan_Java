@@ -19,6 +19,7 @@ import java.util.logging.Logger;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.DecimalFormat;
 import java.util.EnumMap;
 import java.util.Map;
 import java.util.Properties;
@@ -108,10 +109,30 @@ public class utils {
         return eng;
     }
 
-    public String ToDoubleArabic(String EnglishNum) {
+    public String ToStringArabic(String EnglishNum) {
         if (EnglishNum == null) {
             return "";
         }
+        String Arab = "";
+        for (char c : EnglishNum.toCharArray()) {
+            Arab += ToNumArab(c);
+        }
+        return Arab;
+    }
+
+    public String ToDoubleArabi(String EnglishNum) {
+        if (EnglishNum == null) {
+            return "";
+        }
+        String Arab = "";
+        for (char c : EnglishNum.toCharArray()) {
+            Arab += ToNumArab(c);
+        }
+        return Arab;
+    }
+
+    public String ToDoubleArabic(double English) {
+        String EnglishNum = new DecimalFormat("0.000").format(English);
         String Arab = "";
         for (char c : EnglishNum.toCharArray()) {
             Arab += ToNumArab(c);

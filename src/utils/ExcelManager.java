@@ -10,7 +10,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DecimalStyle;
@@ -40,7 +39,7 @@ public class ExcelManager {
         String _2 = "السيد :" + ClientName + "";
         String _3 = "التاريـــخ :" + date_now.format(arabicDateFormatter) + "";
         String _4 = "صنف :" + productName;
-        String _5 = "رقم اللـــوط :" + util.ToDoubleArabic(util.ToStringEnglish(lotNum));
+        String _5 = "رقم اللـــوط :" + lotNum;
 
         for (int i = 0; i < 70 - ClientName.length(); i++) {
             _2 += " ";
@@ -63,8 +62,8 @@ public class ExcelManager {
 
             cell = sheet.getRow(23).getCell(11);
             cell.setCellValue((isBoxes ? "عدد الصناديق :          " : "عدد الشكاير :          ")
-                    + util.ToDoubleArabic(orderIds.size() + "")
-                    + (isBoxes ? " صندوق" : "  شيكاره") + "\n" + "الــــــــــــــــــــــــــــــــوزن :       " + util.ToDoubleArabic(totalWeight) + "");
+                    + util.ToStringArabic(orderIds.size() + "")
+                    + (isBoxes ? " صندوق" : "  شيكاره") + "\n" + "الــــــــــــــــــــــــــــــــوزن :       " + totalWeight + "");
 
             this.cell_functions(cell, sheet);
             cell = sheet.getRow(26).getCell(11);
@@ -112,8 +111,8 @@ public class ExcelManager {
 
             cell = sheet.getRow(23).getCell(16);
             cell.setCellValue((isBoxes ? "عدد الصناديق :          " : "عدد الشكاير :          ")
-                    + util.ToDoubleArabic(orderIds.size() + "")
-                    + (isBoxes ? " صندوق" : "  شيكاره") + "\n" + "الــــــــــــــــــــــــــــــــوزن :       " + util.ToDoubleArabic(totalWeight) + "");
+                    + util.ToStringArabic(orderIds.size() + "")
+                    + (isBoxes ? " صندوق" : "  شيكاره") + "\n" + "الــــــــــــــــــــــــــــــــوزن :       " + totalWeight + "");
 
             this.cell_functions(cell, sheet);
 
@@ -179,8 +178,8 @@ public class ExcelManager {
 
             cell = sheet.getRow(23).getCell(21);
             cell.setCellValue((isBoxes ? "عدد الصناديق :          " : "عدد الشكاير :          ")
-                    + util.ToDoubleArabic(orderIds.size() + "")
-                    + (isBoxes ? " صندوق" : "  شيكاره") + "\n" + "الــــــــــــــــــــــــــــــــوزن :       " + util.ToDoubleArabic(totalWeight) + "");
+                    + util.ToStringArabic(orderIds.size() + "")
+                    + (isBoxes ? " صندوق" : "  شيكاره") + "\n" + "الــــــــــــــــــــــــــــــــوزن :       " + totalWeight + "");
 
             this.cell_functions(cell, sheet);
 
@@ -271,9 +270,9 @@ public class ExcelManager {
                 String _2 = "السيد :" + ClientName + "";
                 String _3 = "التاريـــخ :" + date_now.format(arabicDateFormatter) + "";
                 String _4 = "صنف :" + typeFOrder + "";
-                String _5 = "رقم اللـــوط :" + util.ToDoubleArabic(util.ToStringEnglish(tableFOrder.getValueAt(0, 2) + ""));
+                String _5 = "رقم اللـــوط :" + tableFOrder.getValueAt(0, 2) + "";
                 String _6 = "صنف :" + typeSOrder + "";
-                String _7 = "رقم اللـــوط :" + util.ToDoubleArabic(util.ToStringEnglish(tableSOrder.getValueAt(0, 2) + ""));
+                String _7 = "رقم اللـــوط :" + tableSOrder.getValueAt(0, 2) + "";
                 for (int i = 0; i < 66 - ClientName.length(); i++) {
                     _2 += " ";
                 }
@@ -289,13 +288,13 @@ public class ExcelManager {
                 cell = sheet.getRow(0).getCell(0);
                 cell.setCellValue(_1 + _2 + _3 + "\n" + _4 + _6 + "\n" + _5 + _7);
                 String __1 = (FIsBoxes ? "عدد الصناديق : " : "عدد الشكاير : ")
-                        + util.ToDoubleArabic(fOrderIds.size() + "")
+                        + util.ToStringArabic(fOrderIds.size() + "")
                         + (FIsBoxes ? " صندوق" : "  شيكاره");
-                String __2 = "الـــــــوزن :  " + util.ToDoubleArabic(wieghtFOrder) + "";
+                String __2 = "الـــــــوزن :  " + wieghtFOrder + "";
                 String __3 = (SIsBoxes ? "عدد الصناديق : " : "عدد الشكاير : ")
-                        + util.ToDoubleArabic(sOrderIds.size() + "")
+                        + util.ToStringArabic(sOrderIds.size() + "")
                         + (SIsBoxes ? " صندوق" : "  شيكاره");
-                String __4 = "الـــــــوزن :  " + util.ToDoubleArabic(wieghtSOrder) + "";
+                String __4 = "الـــــــوزن :  " + wieghtSOrder + "";
                 cell = sheet.getRow(23).getCell(11);
                 cell.setCellValue(__1 + "  " + __2 + "\n" + __3 + " " + __4);
                 this.cell_functions(cell, sheet);
@@ -394,13 +393,13 @@ public class ExcelManager {
                     }
 
                     cell = sheet.getRow(RowIndex).getCell(2);
-                    cell.setCellValue(util.ToDoubleArabic(row[1]));
+                    cell.setCellValue(util.ToStringArabic(row[1]));
 
                     cell = sheet.getRow(RowIndex).getCell(3);
-                    cell.setCellValue(util.ToDoubleArabic(row[2]));
+                    cell.setCellValue(util.ToStringArabic(row[2]));
 
                     cell = sheet.getRow(RowIndex).getCell(4);
-                    cell.setCellValue(util.ToDoubleArabic(row[3]));
+                    cell.setCellValue(util.ToStringArabic(row[3]));
 
                     RowIndex++;
                 }
@@ -430,7 +429,7 @@ public class ExcelManager {
                 XSSFSheet sheet = workbook.getSheetAt(0);
                 Cell cell = sheet.getRow(1).getCell(1);
                 cell.setCellValue(
-                        "التاريـــخ من :   " + util.ToDoubleArabic(date1) + "  إلى : " + util.ToDoubleArabic(date2));
+                        "التاريـــخ من :   " + util.ToStringArabic(date1) + "  إلى : " + util.ToStringArabic(date2));
                 double prevTot = 0.0;
                 String prevName = "";
                 ArrayList<Integer> reg = new ArrayList<>();
@@ -450,7 +449,7 @@ public class ExcelManager {
                             sheet.addMergedRegion(new CellRangeAddress(reg.get(0), reg.get(reg.size() - 1), 1, 1));
                             sheet.addMergedRegion(new CellRangeAddress(reg.get(0), reg.get(reg.size() - 1), 5, 5));
                             cell = sheet.getRow(reg.get(0)).getCell(5);
-                            cell.setCellValue(util.ToDoubleArabic(new DecimalFormat("#.###").format(prevTot)));
+                            cell.setCellValue(util.ToDoubleArabic(prevTot));
                         }
                         reg.clear();
                         reg.add(RowIndex);
@@ -463,13 +462,13 @@ public class ExcelManager {
                     }
 
                     cell = sheet.getRow(RowIndex).getCell(2);
-                    cell.setCellValue(util.ToDoubleArabic(row[1]));
+                    cell.setCellValue(util.ToStringArabic(row[1]));
 
                     cell = sheet.getRow(RowIndex).getCell(3);
-                    cell.setCellValue(util.ToDoubleArabic(row[2]));
+                    cell.setCellValue(util.ToStringArabic(row[2]));
 
                     cell = sheet.getRow(RowIndex).getCell(4);
-                    cell.setCellValue(util.ToDoubleArabic(row[3]));
+                    cell.setCellValue(util.ToStringArabic(row[3]));
 
                     RowIndex++;
                 }
