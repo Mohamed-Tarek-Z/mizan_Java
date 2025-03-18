@@ -1,13 +1,11 @@
 package view;
 
-import utils.utils;
 import controller.*;
 import dao.*;
 import model.*;
 import utils.*;
+import exceptions.*;
 
-import exceptions.BusinessException;
-import exceptions.DatabaseException;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.ComponentOrientation;
@@ -22,9 +20,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.math.RoundingMode;
 import java.sql.SQLException;
-import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -35,7 +31,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import javax.sound.sampled.LineUnavailableException;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -62,6 +57,7 @@ public class mainform extends javax.swing.JFrame {
     private final ExportController exportController;
     private final ClientController clientController;
     private final OrderController orderController;
+    private final MachineController machineController;
 
     private utils util;
     private final ExcelManager excelManager;
@@ -71,7 +67,7 @@ public class mainform extends javax.swing.JFrame {
 
     private short tick10x10, tick2x2;
     private int BagMax = 2, repDiff;
-    private final String Version = "V 1.0 MVCP";
+    private final String Version = "V 1.1 MVC";
     private String ticketPrinterName, qrPrinterName;
 
     private final JButton jButton_Settings = new javax.swing.JButton();
@@ -82,7 +78,7 @@ public class mainform extends javax.swing.JFrame {
     private char firstChar;
     private boolean enterFromMizan = false;
 
-    public mainform(boolean admin, sqlcon dbConnection) throws LineUnavailableException, DatabaseException, IOException, BusinessException {
+    public mainform(boolean admin, sqlcon dbConnection) throws DatabaseException, BusinessException {
         initComponents();
         this.opj = dbConnection;
         this.util = new utils();
@@ -93,6 +89,7 @@ public class mainform extends javax.swing.JFrame {
         this.exportController = new ExportController(new ExportDAO(dbConnection), new StorageDAO(dbConnection), new OrderDAO(dbConnection));
         this.clientController = new ClientController(new ClientDAO(dbConnection));
         this.orderController = new OrderController(new OrderDAO(dbConnection));
+        this.machineController = new MachineController(new MachineDAO(dbConnection), new ProductDAO(dbConnection));
 
         this.setDefaultCloseOperation(mainform.DO_NOTHING_ON_CLOSE);
         if (!admin) {
@@ -388,16 +385,24 @@ public class mainform extends javax.swing.JFrame {
         jSeparator14 = new javax.swing.JSeparator();
         jLabel46 = new javax.swing.JLabel();
         jLabel50 = new javax.swing.JLabel();
-        jButton_set_CenterPrintPanel = new javax.swing.JButton();
+        jButton_set_printValueToCenter = new javax.swing.JButton();
         jTab_set_order = new javax.swing.JPanel();
         jLabel45 = new javax.swing.JLabel();
         jTextField_setting_repsDiff = new javax.swing.JTextField();
-        jTab_set_about = new javax.swing.JPanel();
-        jLabel40 = new javax.swing.JLabel();
-        jLabel_ip = new javax.swing.JLabel();
         jPanel_Machines = new javax.swing.JPanel();
         jScrollPane5 = new javax.swing.JScrollPane();
         jTable_machines = new javax.swing.JTable();
+        jTextField_mach_MName = new javax.swing.JTextField();
+        jComboBox_mach_pros = new javax.swing.JComboBox<>();
+        jTextField_mach_lot = new javax.swing.JTextField();
+        jLabel51 = new javax.swing.JLabel();
+        jLabel52 = new javax.swing.JLabel();
+        jLabel54 = new javax.swing.JLabel();
+        jButton_mach_addMach = new javax.swing.JButton();
+        jTab_set_about = new javax.swing.JPanel();
+        jLabel40 = new javax.swing.JLabel();
+        jLabel_ip = new javax.swing.JLabel();
+        jButton_set_reloadSettingFile = new javax.swing.JButton();
         jPanel_print = new javax.swing.JPanel();
         jLabel_print_header = new javax.swing.JLabel();
         jLabel_print_ValPallet = new javax.swing.JLabel()
@@ -2036,6 +2041,11 @@ public class mainform extends javax.swing.JFrame {
             jTabbedPane_settings.setMaximumSize(new java.awt.Dimension(835, 640));
             jTabbedPane_settings.setMinimumSize(new java.awt.Dimension(835, 640));
             jTabbedPane_settings.setPreferredSize(new java.awt.Dimension(835, 640));
+            jTabbedPane_settings.addMouseListener(new java.awt.event.MouseAdapter() {
+                public void mouseClicked(java.awt.event.MouseEvent evt) {
+                    jTabbedPane_settingsMouseClicked(evt);
+                }
+            });
 
             jTab_set_Counter.setMaximumSize(new java.awt.Dimension(830, 635));
             jTab_set_Counter.setMinimumSize(new java.awt.Dimension(830, 635));
@@ -2104,14 +2114,14 @@ public class mainform extends javax.swing.JFrame {
             jLabel50.setText("لا تنس تغير الطابعة الافتراضية ألي الطابة المرغومة");
             jTab_set_Printing.add(jLabel50, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 430, 270, 30));
 
-            jButton_set_CenterPrintPanel.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-            jButton_set_CenterPrintPanel.setText("تغيير أماكن القيم في الطابعة إلي المنتصف");
-            jButton_set_CenterPrintPanel.addActionListener(new java.awt.event.ActionListener() {
+            jButton_set_printValueToCenter.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+            jButton_set_printValueToCenter.setText("تغيير أماكن القيم في الطابعة إلي المنتصف");
+            jButton_set_printValueToCenter.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent evt) {
-                    jButton_set_CenterPrintPanelActionPerformed(evt);
+                    jButton_set_printValueToCenterActionPerformed(evt);
                 }
             });
-            jTab_set_Printing.add(jButton_set_CenterPrintPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 40, 370, 70));
+            jTab_set_Printing.add(jButton_set_printValueToCenter, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 40, 370, 70));
 
             jTabbedPane_settings.addTab("Printing Options", jTab_set_Printing);
 
@@ -2134,6 +2144,69 @@ public class mainform extends javax.swing.JFrame {
 
             jTabbedPane_settings.addTab("إعدادات الأذن", jTab_set_order);
 
+            jPanel_Machines.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+            jTable_machines.setModel(new javax.swing.table.DefaultTableModel(
+                new Object [][] {
+
+                },
+                new String [] {
+                    "Name", "Type", "Lot", "Date"
+                }
+            ) {
+                Class[] types = new Class [] {
+                    java.lang.String.class, java.lang.Object.class, java.lang.String.class, java.lang.String.class
+                };
+                boolean[] canEdit = new boolean [] {
+                    false, false, false, false
+                };
+
+                public Class getColumnClass(int columnIndex) {
+                    return types [columnIndex];
+                }
+
+                public boolean isCellEditable(int rowIndex, int columnIndex) {
+                    return canEdit [columnIndex];
+                }
+            });
+            jTable_machines.setColumnSelectionAllowed(true);
+            jScrollPane5.setViewportView(jTable_machines);
+            jTable_machines.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+
+            jPanel_Machines.add(jScrollPane5, new org.netbeans.lib.awtextra.AbsoluteConstraints(6, 285, 814, 302));
+
+            jTextField_mach_MName.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+            jPanel_Machines.add(jTextField_mach_MName, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 70, 230, 50));
+
+            jComboBox_mach_pros.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+            jPanel_Machines.add(jComboBox_mach_pros, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 70, 230, 50));
+
+            jTextField_mach_lot.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+            jPanel_Machines.add(jTextField_mach_lot, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 70, 230, 50));
+
+            jLabel51.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+            jLabel51.setText("أسم الماكينة");
+            jPanel_Machines.add(jLabel51, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 20, 100, 40));
+
+            jLabel52.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+            jLabel52.setText("صنف التشغيل");
+            jPanel_Machines.add(jLabel52, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 20, 100, 40));
+
+            jLabel54.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+            jLabel54.setText("اللوط");
+            jPanel_Machines.add(jLabel54, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 20, 100, 40));
+
+            jButton_mach_addMach.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+            jButton_mach_addMach.setText("Add");
+            jButton_mach_addMach.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    jButton_mach_addMachActionPerformed(evt);
+                }
+            });
+            jPanel_Machines.add(jButton_mach_addMach, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 150, 170, 70));
+
+            jTabbedPane_settings.addTab("Machine", jPanel_Machines);
+
             jTab_set_about.setMaximumSize(new java.awt.Dimension(830, 635));
             jTab_set_about.setMinimumSize(new java.awt.Dimension(830, 635));
             jTab_set_about.setPreferredSize(new java.awt.Dimension(830, 635));
@@ -2154,62 +2227,25 @@ public class mainform extends javax.swing.JFrame {
             jLabel_ip.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
             jTab_set_about.add(jLabel_ip, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 370, 560, 90));
 
-            jTabbedPane_settings.addTab("About", jTab_set_about);
-
-            jTable_machines.setModel(new javax.swing.table.DefaultTableModel(
-                new Object [][] {
-
-                },
-                new String [] {
-                    "Name", "Type", "Lot", "Added/Update At"
-                }
-            ) {
-                Class[] types = new Class [] {
-                    java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
-                };
-                boolean[] canEdit = new boolean [] {
-                    false, false, false, false
-                };
-
-                public Class getColumnClass(int columnIndex) {
-                    return types [columnIndex];
-                }
-
-                public boolean isCellEditable(int rowIndex, int columnIndex) {
-                    return canEdit [columnIndex];
+            jButton_set_reloadSettingFile.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+            jButton_set_reloadSettingFile.setText("reload Setting File");
+            jButton_set_reloadSettingFile.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    jButton_set_reloadSettingFileActionPerformed(evt);
                 }
             });
-            jTable_machines.setColumnSelectionAllowed(true);
-            jScrollPane5.setViewportView(jTable_machines);
-            jTable_machines.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+            jTab_set_about.add(jButton_set_reloadSettingFile, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 460, 240, 90));
 
-            javax.swing.GroupLayout jPanel_MachinesLayout = new javax.swing.GroupLayout(jPanel_Machines);
-            jPanel_Machines.setLayout(jPanel_MachinesLayout);
-            jPanel_MachinesLayout.setHorizontalGroup(
-                jPanel_MachinesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jPanel_MachinesLayout.createSequentialGroup()
-                    .addContainerGap()
-                    .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 814, Short.MAX_VALUE)
-                    .addContainerGap())
-            );
-            jPanel_MachinesLayout.setVerticalGroup(
-                jPanel_MachinesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jPanel_MachinesLayout.createSequentialGroup()
-                    .addContainerGap()
-                    .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 581, Short.MAX_VALUE)
-                    .addContainerGap())
-            );
-
-            jTabbedPane_settings.addTab("Machine", jPanel_Machines);
+            jTabbedPane_settings.addTab("About", jTab_set_about);
 
             jPanel_print.setBackground(new java.awt.Color(255, 255, 255));
             jPanel_print.setEnabled(false);
             jPanel_print.setFocusable(false);
             jPanel_print.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
-            jPanel_print.setMaximumSize(new java.awt.Dimension(100, 100));
-            jPanel_print.setMinimumSize(new java.awt.Dimension(100, 100));
+            jPanel_print.setMaximumSize(new java.awt.Dimension(300, 350));
+            jPanel_print.setMinimumSize(new java.awt.Dimension(300, 350));
             jPanel_print.setName("printingPanel"); // NOI18N
-            jPanel_print.setPreferredSize(new java.awt.Dimension(100, 100));
+            jPanel_print.setPreferredSize(new java.awt.Dimension(300, 350));
             jPanel_print.setRequestFocusEnabled(false);
             jPanel_print.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
@@ -2323,12 +2359,12 @@ public class mainform extends javax.swing.JFrame {
             jLabel_print_footer.setAutoscrolls(true);
             jLabel_print_footer.setFocusable(false);
             jLabel_print_footer.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-            jPanel_print.add(jLabel_print_footer, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 300, 160, 20));
+            jPanel_print.add(jLabel_print_footer, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 300, 100, 20));
 
             jLabel_print_number.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
             jLabel_print_number.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
             jLabel_print_number.setText("٠١١٤٨٠٥٥٥٥٨");
-            jPanel_print.add(jLabel_print_number, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 320, 170, -1));
+            jPanel_print.add(jLabel_print_number, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 320, 110, -1));
 
             jSeparator2.setForeground(new java.awt.Color(204, 204, 204));
             jSeparator2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2));
@@ -2350,42 +2386,42 @@ public class mainform extends javax.swing.JFrame {
             jPanel_print.add(jSeparator13, new org.netbeans.lib.awtextra.AbsoluteConstraints(205, 20, 10, 280));
 
             jSeparator3.setForeground(new java.awt.Color(204, 204, 204));
-            jSeparator3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2));
+            jSeparator3.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, new java.awt.Color(0, 0, 0)));
             jSeparator3.setMaximumSize(new java.awt.Dimension(50, 100));
             jSeparator3.setMinimumSize(new java.awt.Dimension(50, 100));
             jSeparator3.setPreferredSize(new java.awt.Dimension(50, 100));
             jPanel_print.add(jSeparator3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 20, 280, 30));
 
             jSeparator11.setForeground(new java.awt.Color(204, 204, 204));
-            jSeparator11.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2));
+            jSeparator11.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, new java.awt.Color(0, 0, 0)));
             jSeparator11.setMaximumSize(new java.awt.Dimension(50, 100));
             jSeparator11.setMinimumSize(new java.awt.Dimension(50, 100));
             jSeparator11.setPreferredSize(new java.awt.Dimension(50, 100));
             jPanel_print.add(jSeparator11, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 20, 280, 60));
 
             jSeparator8.setForeground(new java.awt.Color(204, 204, 204));
-            jSeparator8.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2));
+            jSeparator8.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, new java.awt.Color(0, 0, 0)));
             jSeparator8.setMaximumSize(new java.awt.Dimension(50, 100));
             jSeparator8.setMinimumSize(new java.awt.Dimension(50, 100));
             jSeparator8.setPreferredSize(new java.awt.Dimension(50, 100));
             jPanel_print.add(jSeparator8, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 20, 280, 100));
 
             jSeparator9.setForeground(new java.awt.Color(204, 204, 204));
-            jSeparator9.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2));
+            jSeparator9.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, new java.awt.Color(0, 0, 0)));
             jSeparator9.setMaximumSize(new java.awt.Dimension(50, 100));
             jSeparator9.setMinimumSize(new java.awt.Dimension(50, 100));
             jSeparator9.setPreferredSize(new java.awt.Dimension(50, 100));
             jPanel_print.add(jSeparator9, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 20, 280, 135));
 
             jSeparator10.setForeground(new java.awt.Color(204, 204, 204));
-            jSeparator10.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2));
+            jSeparator10.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, new java.awt.Color(0, 0, 0)));
             jSeparator10.setMaximumSize(new java.awt.Dimension(50, 100));
             jSeparator10.setMinimumSize(new java.awt.Dimension(50, 100));
             jSeparator10.setPreferredSize(new java.awt.Dimension(50, 100));
             jPanel_print.add(jSeparator10, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 20, 280, 170));
 
             jSeparator12.setForeground(new java.awt.Color(204, 204, 204));
-            jSeparator12.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2));
+            jSeparator12.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, new java.awt.Color(0, 0, 0)));
             jSeparator12.setMaximumSize(new java.awt.Dimension(50, 100));
             jSeparator12.setMinimumSize(new java.awt.Dimension(50, 100));
             jSeparator12.setPreferredSize(new java.awt.Dimension(50, 100));
@@ -2611,8 +2647,8 @@ public class mainform extends javax.swing.JFrame {
                                 jTextField_weight.getText(), jTextField_net_weight.getText())),
                                 jPanel_print,
                                 jCheckBox_print.isSelected(), jCheckBox_QR.isSelected(),
-                                jCheckBox_set_printExcel.isSelected()
-                        );
+                                jCheckBox_set_printExcel.isSelected());
+                        incTicketCounters(jCheckBox_print.isSelected(), jCheckBox_QR.isSelected());
                     }
                     jButton_clear.doClick();
                     fill_storage_table();
@@ -2791,7 +2827,7 @@ public class mainform extends javax.swing.JFrame {
                     jTextField_pallet_num.setText(jTable_storage.getValueAt(0, 3) + "");
                 } else {
                     jTextField_pallet_num.setText(util.ToStringArabic(
-                            (Integer.parseInt(util.ToStringEnglish((String) jTable_storage.getValueAt(0, 3))) + 1) + ""));
+                            (int) (util.ToDoubleEnglish((String) jTable_storage.getValueAt(0, 3)) + 1) + ""));
                 }
                 calc_pallet_weight();
             }
@@ -3037,8 +3073,8 @@ public class mainform extends javax.swing.JFrame {
                         }
                         if (isSameLot) {
                             if (JOptionPane.showConfirmDialog(this,
-                                    "هل تريد إضافه البالته رقم  "
-                                    + jTable_rep_select.getValueAt(jTable_rep_select.getSelectedRow(), 3) + "",
+                                    util.addStyle("هل تريد إضافه البالته رقم  "
+                                            + jTable_rep_select.getValueAt(jTable_rep_select.getSelectedRow(), 3) + ""),
                                     "تنبيه",
                                     JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
 
@@ -3136,8 +3172,8 @@ public class mainform extends javax.swing.JFrame {
                         }
                         if (isSameLot) {
                             if (JOptionPane.showConfirmDialog(this,
-                                    "هل تريد إضافه البالته رقم  "
-                                    + jTable_rep_select.getValueAt(jTable_rep_select.getSelectedRow(), 3) + "",
+                                    util.addStyle("هل تريد إضافه البالته رقم  "
+                                            + jTable_rep_select.getValueAt(jTable_rep_select.getSelectedRow(), 3) + ""),
                                     "تنبيه",
                                     JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
                                 int wantedOrderQuantity = (int) util.ToDoubleEnglish(jTextField_rep_numOfBag.getText());
@@ -3367,10 +3403,10 @@ public class mainform extends javax.swing.JFrame {
         try {
             if (jButton_Ezn_opener.isEnabled() && jButton_addPro_opener.isEnabled()) {
                 if (jTable_yumia.getSelectedRow() != -1) {
-                    if (JOptionPane.showConfirmDialog(this,
+                    if (JOptionPane.showConfirmDialog(this, util.addStyle(
                             "هل تريد استرجاع أزن " + jTable_yumia.getValueAt(jTable_yumia.getSelectedRow(), 0) + " لصنف"
                             + jTable_yumia.getValueAt(jTable_yumia.getSelectedRow(), 1) + " في يوم"
-                            + jTable_yumia.getValueAt(jTable_yumia.getSelectedRow(), 5) + " ",
+                            + jTable_yumia.getValueAt(jTable_yumia.getSelectedRow(), 5) + " "),
                             "تنبيه",
                             JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
                         exportController.moveBagFromExportToStorage(jCheckBox_youm_old.isSelected(), jTable_yumia.getValueAt(jTable_yumia.getSelectedRow(), 2) + "",
@@ -3575,11 +3611,10 @@ public class mainform extends javax.swing.JFrame {
                     jTextField_E_ConNum.getText(),
                     jTextField_E_TotWight.getText(),
                     jTextField_E_Wight.getText())),
-                    //System.getProperty("user.dir") + "\\Temp\\myFile.xlsx",
                     jPanel_print,
                     jCheckBox_E_P.isSelected(), jCheckBox_E_QR.isSelected(),
-                    jCheckBox_set_printExcel.isSelected()
-            );
+                    jCheckBox_set_printExcel.isSelected());
+            incTicketCounters(jCheckBox_E_P.isSelected(), jCheckBox_E_QR.isSelected());
         } catch (BusinessException ex) {
             JOptionPane.showMessageDialog(SingleEdit, util.addStyle(ex.getLocalizedMessage()), "exception", JOptionPane.INFORMATION_MESSAGE);
         }
@@ -3715,7 +3750,7 @@ public class mainform extends javax.swing.JFrame {
             } else {
                 printerManager.printPanelToImage(jPanel_print);
             }
-            tick10x10++;
+            incTicketCounters(true, false);
             this.jTextField_num_of_con.requestFocusInWindow();
         } catch (BusinessException ex) {
             JOptionPane.showMessageDialog(this, util.addStyle(ex.getLocalizedMessage()), "exception", JOptionPane.INFORMATION_MESSAGE);
@@ -3934,12 +3969,48 @@ public class mainform extends javax.swing.JFrame {
         jButton_set_changePos.setEnabled(!jCheckBox_set_printExcel.isSelected());
     }//GEN-LAST:event_jCheckBox_set_printExcelActionPerformed
 
-    private void jButton_set_CenterPrintPanelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_set_CenterPrintPanelActionPerformed
+    private void jButton_set_printValueToCenterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_set_printValueToCenterActionPerformed
         // TODO add your handling code here:
         jLabel_print_ValPallet.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel_print_ValNetWeight.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel_print_ValLot.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-    }//GEN-LAST:event_jButton_set_CenterPrintPanelActionPerformed
+    }//GEN-LAST:event_jButton_set_printValueToCenterActionPerformed
+
+    private void jTabbedPane_settingsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTabbedPane_settingsMouseClicked
+        try {
+            // TODO add your handling code here:
+            if (jTabbedPane_settings.getSelectedIndex() == 3) {
+                fill_machine();
+            }
+        } catch (DatabaseException ex) {
+            Logger.getLogger(mainform.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(this, util.addStyle(ex.getLocalizedMessage()), "exception", JOptionPane.INFORMATION_MESSAGE);
+        }
+    }//GEN-LAST:event_jTabbedPane_settingsMouseClicked
+
+    private void jButton_set_reloadSettingFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_set_reloadSettingFileActionPerformed
+        try {
+            // TODO add your handling code here:
+            readConfig();
+        } catch (BusinessException ex) {
+            Logger.getLogger(mainform.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(this, util.addStyle(ex.getLocalizedMessage()), "exception", JOptionPane.INFORMATION_MESSAGE);
+        }
+    }//GEN-LAST:event_jButton_set_reloadSettingFileActionPerformed
+
+    private void jButton_mach_addMachActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_mach_addMachActionPerformed
+        // TODO add your handling code here:
+        if (!jTextField_mach_MName.getText().isBlank() && !jTextField_mach_lot.getText().isBlank()
+                && jComboBox_mach_pros.getSelectedIndex() != -1) {
+            try {
+                machineController.addMachine(jTextField_mach_MName.getText(), jComboBox_mach_pros.getSelectedItem().toString(),
+                        jTextField_mach_lot.getText());
+            } catch (DatabaseException | BusinessException ex) {
+                Logger.getLogger(mainform.class.getName()).log(Level.SEVERE, null, ex);
+                JOptionPane.showMessageDialog(this, util.addStyle(ex.getLocalizedMessage()), "exception", JOptionPane.INFORMATION_MESSAGE);
+            }
+        }
+    }//GEN-LAST:event_jButton_mach_addMachActionPerformed
 
     private void jButton_SettingsActionPerformed() throws IOException, BusinessException {
         open_panel(jTabbedPane_settings);
@@ -4041,6 +4112,7 @@ public class mainform extends javax.swing.JFrame {
         this.combox_fill(jComboBox_E_proName, true);
         this.combox_fill(jComboBox_ME_type, true);
         this.combox_fill(jComboBox_stock_Pros, true);
+        this.combox_fill(jComboBox_mach_pros, true);
     }
 
     private void fill_pro_table() throws DatabaseException {
@@ -4050,6 +4122,17 @@ public class mainform extends javax.swing.JFrame {
         for (Product pro : pros) {
             model.addRow(new Object[]{pro.getId(), pro.getName(), util.ToStringArabic(pro.getWeight_of_con()),
                 pro.getColor(), pro.isIsBox()});
+        }
+
+    }
+
+    private void fill_machine() throws DatabaseException {
+        DefaultTableModel model = (DefaultTableModel) jTable_machines.getModel();
+        model.setRowCount(0);
+        List<Machine> machs = machineController.getMachines();
+        for (Machine mach : machs) {
+            model.addRow(new Object[]{mach.getMachName(), mach.getProId(), mach.getLot(),
+                mach.getUpdatedAt()});
         }
 
     }
@@ -4310,6 +4393,16 @@ public class mainform extends javax.swing.JFrame {
         }
     }
 
+    private void incTicketCounters(boolean t10x10, boolean t2x2) throws BusinessException {
+        if (t10x10) {
+            tick10x10++;
+        }
+        if (t2x2) {
+            tick2x2++;
+        }
+        saveConfig();
+        readConfig();
+    }
 //    private void startRecognition() throws IOException, LineUnavailableException {
 //
 //        // Load Arabic speech model (make sure you have the correct path to the downloaded model)
@@ -4362,11 +4455,13 @@ public class mainform extends javax.swing.JFrame {
     private javax.swing.JButton jButton_clear;
     private javax.swing.JButton jButton_del_data;
     private javax.swing.JButton jButton_del_pro;
+    private javax.swing.JButton jButton_mach_addMach;
     private javax.swing.JButton jButton_rep_printRep;
     private javax.swing.JButton jButton_reprintLastTicket;
     private javax.swing.JButton jButton_reps_clear;
-    private javax.swing.JButton jButton_set_CenterPrintPanel;
     private javax.swing.JButton jButton_set_changePos;
+    private javax.swing.JButton jButton_set_printValueToCenter;
+    private javax.swing.JButton jButton_set_reloadSettingFile;
     private javax.swing.JButton jButton_statis_createExcl;
     private javax.swing.JButton jButton_statistics_search;
     private javax.swing.JButton jButton_stock_createExcl;
@@ -4395,6 +4490,7 @@ public class mainform extends javax.swing.JFrame {
     private javax.swing.JComboBox<Product> jComboBox_E_O_proName;
     private javax.swing.JComboBox<Product> jComboBox_E_proName;
     private javax.swing.JComboBox<Product> jComboBox_ME_type;
+    private javax.swing.JComboBox<Product> jComboBox_mach_pros;
     private javax.swing.JComboBox<Product> jComboBox_pro_in_storage;
     private javax.swing.JComboBox<Product> jComboBox_rep_Pros;
     private javax.swing.JComboBox<String> jComboBox_rep_palletsNrep;
@@ -4450,7 +4546,10 @@ public class mainform extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel49;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel50;
+    private javax.swing.JLabel jLabel51;
+    private javax.swing.JLabel jLabel52;
     private javax.swing.JLabel jLabel53;
+    private javax.swing.JLabel jLabel54;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
@@ -4539,6 +4638,8 @@ public class mainform extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField_Search_pros;
     private javax.swing.JTextField jTextField_bag_weight;
     private javax.swing.JTextField jTextField_lot;
+    private javax.swing.JTextField jTextField_mach_MName;
+    private javax.swing.JTextField jTextField_mach_lot;
     private javax.swing.JTextField jTextField_net_weight;
     private javax.swing.JTextField jTextField_num_of_con;
     private javax.swing.JTextField jTextField_pallet_num;

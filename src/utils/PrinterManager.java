@@ -95,10 +95,10 @@ public class PrinterManager {
                 // Print Image
                 Graphics2D g2d = (Graphics2D) graphics;
                 g2d.translate(pageFormat.getImageableX(), pageFormat.getImageableY());
-                int dpiForPrint = 203;
-                double pixelsPerCm = dpiForPrint / 2.54;
-                int widthPrint = (int) (10 * pixelsPerCm);
-                int heightPrint = (int) (7 * pixelsPerCm);
+//                int dpiForPrint = 203;
+//                double pixelsPerCm = dpiForPrint / 2.54;
+                int widthPrint = (int) 760;//(10 * pixelsPerCm);
+                int heightPrint = (int) 486;//(10 * pixelsPerCm);
 
                 g2d.drawImage(panelImage, 0, 1, widthPrint, heightPrint, Color.WHITE, null);
 

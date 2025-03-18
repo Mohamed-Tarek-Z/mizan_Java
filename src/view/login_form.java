@@ -5,12 +5,10 @@ import dao.UserDAO;
 import exceptions.BusinessException;
 import exceptions.DatabaseException;
 import java.awt.event.KeyEvent;
-import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.sound.sampled.LineUnavailableException;
 import javax.swing.JOptionPane;
 import model.sqlcon;
 import utils.utils;
@@ -111,11 +109,9 @@ public class login_form extends javax.swing.JFrame {
             } else {
                 JOptionPane.showMessageDialog(this, "كلمه المرور غير صحيحه", "انتبه", JOptionPane.INFORMATION_MESSAGE);
             }
-        } catch (IOException | DatabaseException | BusinessException ex) {
+        } catch (DatabaseException | BusinessException ex) {
             Logger.getLogger(login_form.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(this, ex.getLocalizedMessage(), "إنتبه", JOptionPane.ERROR_MESSAGE);
-        } catch (LineUnavailableException ex) {
-            Logger.getLogger(login_form.class.getName()).log(Level.SEVERE, null, ex);
         }
 
 

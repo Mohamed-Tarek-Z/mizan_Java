@@ -93,7 +93,15 @@ public class utils {
         }
         String eng = "";
         for (char c : ArabNum.toCharArray()) {
-            eng += ToNumEng(c);
+
+            if (c == '-' || c == '+') {
+                eng = c + eng;
+            } else {
+                if (Character.isDigit(c) || c == '.' || c == '٫') {
+                    eng += ToNumEng(c);
+                }
+            }
+
         }
         return Double.parseDouble(eng);
     }
@@ -110,17 +118,6 @@ public class utils {
     }
 
     public String ToStringArabic(String EnglishNum) {
-        if (EnglishNum == null) {
-            return "";
-        }
-        String Arab = "";
-        for (char c : EnglishNum.toCharArray()) {
-            Arab += ToNumArab(c);
-        }
-        return Arab;
-    }
-
-    public String ToDoubleArabi(String EnglishNum) {
         if (EnglishNum == null) {
             return "";
         }

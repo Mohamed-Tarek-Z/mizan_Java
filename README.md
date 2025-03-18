@@ -6,3 +6,4 @@ A java app that uses SQL Server.it was developed by mahmoud, heavily edited, reo
 
 <li>Lib, a folder contain used libs.
 <li>Donot_Change, a folder contain templates files
+<li>SQL Server Up and running with database

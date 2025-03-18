@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="new_mizan">
-    <CLASSES>
-      <root url="jar://$PROJECT_DIR$/dist/new_mizan.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>
