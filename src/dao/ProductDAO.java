@@ -85,7 +85,7 @@ public class ProductDAO {
                 dbConnection.delData("products", "pro_id=" + proId + " ");
                 return true;
             }
-            throw new BusinessException("لا يوجد صنف بمسلسل:" + proId);
+            throw new BusinessException("رجاء مسح الشكائر أولا");
         } catch (SQLException ex) {
             Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
             throw new DatabaseException("حدث خطأ أثناء حذف البيانات", ex);
@@ -112,7 +112,7 @@ public class ProductDAO {
             if (rs.next()) {
                 return new Product(rs.getInt("pro_id"), rs.getString("pro_name"), rs.getString("weight_of_con"), rs.getString("Color"), rs.getBoolean("IsBox"));
             }
-            throw new BusinessException("لايوجد صنف بأسم: " + id);
+            throw new BusinessException("لايوجد صنف بمسلسل : " + id);
         } catch (SQLException ex) {
             Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
             throw new DatabaseException("حدث خطأ أثناء طلب بيانات صنف بأسم : " + id, ex);

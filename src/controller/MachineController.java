@@ -31,4 +31,8 @@ public class MachineController {
         Product product = productDAO.getProductByName(productName);
         machineDAO.addMachine(new Machine(0, machineName, product.getId(), lot, new Date()));
     }
+
+    public boolean removeMachine(int machId) throws DatabaseException {
+        return machineDAO.deleteMachine(machId);
+    }
 }

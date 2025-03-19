@@ -25,6 +25,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 import java.util.logging.Level;
@@ -399,6 +400,7 @@ public class mainform extends javax.swing.JFrame {
         jLabel52 = new javax.swing.JLabel();
         jLabel54 = new javax.swing.JLabel();
         jButton_mach_addMach = new javax.swing.JButton();
+        jButton_mach_Delete = new javax.swing.JButton();
         jTab_set_about = new javax.swing.JPanel();
         jLabel40 = new javax.swing.JLabel();
         jLabel_ip = new javax.swing.JLabel();
@@ -1675,6 +1677,7 @@ public class mainform extends javax.swing.JFrame {
                     return canEdit [columnIndex];
                 }
             });
+            jTable_pro.setColumnSelectionAllowed(true);
             jTable_pro.setGridColor(new java.awt.Color(0, 0, 0));
             jTable_pro.setRowHeight(25);
             jTable_pro.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -1683,6 +1686,7 @@ public class mainform extends javax.swing.JFrame {
                 }
             });
             jScrollPane2.setViewportView(jTable_pro);
+            jTable_pro.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION);
             if (jTable_pro.getColumnModel().getColumnCount() > 0) {
                 jTable_pro.getColumnModel().getColumn(0).setMinWidth(100);
                 jTable_pro.getColumnModel().getColumn(0).setPreferredWidth(100);
@@ -1776,13 +1780,11 @@ public class mainform extends javax.swing.JFrame {
                     return canEdit [columnIndex];
                 }
             });
-            jTable_stock.setColumnSelectionAllowed(true);
             jTable_stock.setRowHeight(25);
             jTable_stock.setShowGrid(true);
             jTable_stock.getTableHeader().setResizingAllowed(false);
             jTable_stock.getTableHeader().setReorderingAllowed(false);
             jScrollPane6.setViewportView(jTable_stock);
-            jTable_stock.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
 
             stock_panel.add(jScrollPane6, new org.netbeans.lib.awtextra.AbsoluteConstraints(39, 109, 712, 477));
 
@@ -1975,7 +1977,7 @@ public class mainform extends javax.swing.JFrame {
             });
             jTable_youm_clinets.setColumnSelectionAllowed(true);
             jScrollPane10.setViewportView(jTable_youm_clinets);
-            jTable_youm_clinets.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+            jTable_youm_clinets.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
             if (jTable_youm_clinets.getColumnModel().getColumnCount() > 0) {
                 jTable_youm_clinets.getColumnModel().getColumn(0).setPreferredWidth(50);
                 jTable_youm_clinets.getColumnModel().getColumn(1).setPreferredWidth(300);
@@ -2151,14 +2153,14 @@ public class mainform extends javax.swing.JFrame {
 
                 },
                 new String [] {
-                    "Name", "Type", "Lot", "Date"
+                    "id", "Name", "Type", "Lot", "Date"
                 }
             ) {
                 Class[] types = new Class [] {
-                    java.lang.String.class, java.lang.Object.class, java.lang.String.class, java.lang.String.class
+                    java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
                 };
                 boolean[] canEdit = new boolean [] {
-                    false, false, false, false
+                    false, false, false, false, false
                 };
 
                 public Class getColumnClass(int columnIndex) {
@@ -2170,18 +2172,40 @@ public class mainform extends javax.swing.JFrame {
                 }
             });
             jTable_machines.setColumnSelectionAllowed(true);
+            jTable_machines.addMouseListener(new java.awt.event.MouseAdapter() {
+                public void mouseClicked(java.awt.event.MouseEvent evt) {
+                    jTable_machinesMouseClicked(evt);
+                }
+            });
             jScrollPane5.setViewportView(jTable_machines);
             jTable_machines.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+            if (jTable_machines.getColumnModel().getColumnCount() > 0) {
+                jTable_machines.getColumnModel().getColumn(0).setMinWidth(0);
+                jTable_machines.getColumnModel().getColumn(0).setPreferredWidth(0);
+                jTable_machines.getColumnModel().getColumn(0).setMaxWidth(0);
+                jTable_machines.getColumnModel().getColumn(3).setResizable(false);
+                jTable_machines.getColumnModel().getColumn(4).setResizable(false);
+            }
 
             jPanel_Machines.add(jScrollPane5, new org.netbeans.lib.awtextra.AbsoluteConstraints(6, 285, 814, 302));
 
             jTextField_mach_MName.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+            jTextField_mach_MName.addKeyListener(new java.awt.event.KeyAdapter() {
+                public void keyTyped(java.awt.event.KeyEvent evt) {
+                    jTextField_mach_MNameKeyTyped(evt);
+                }
+            });
             jPanel_Machines.add(jTextField_mach_MName, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 70, 230, 50));
 
             jComboBox_mach_pros.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
             jPanel_Machines.add(jComboBox_mach_pros, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 70, 230, 50));
 
             jTextField_mach_lot.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+            jTextField_mach_lot.addKeyListener(new java.awt.event.KeyAdapter() {
+                public void keyTyped(java.awt.event.KeyEvent evt) {
+                    jTextField_mach_lotKeyTyped(evt);
+                }
+            });
             jPanel_Machines.add(jTextField_mach_lot, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 70, 230, 50));
 
             jLabel51.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -2197,13 +2221,24 @@ public class mainform extends javax.swing.JFrame {
             jPanel_Machines.add(jLabel54, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 20, 100, 40));
 
             jButton_mach_addMach.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-            jButton_mach_addMach.setText("Add");
+            jButton_mach_addMach.setText("Add / Edit");
             jButton_mach_addMach.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent evt) {
                     jButton_mach_addMachActionPerformed(evt);
                 }
             });
             jPanel_Machines.add(jButton_mach_addMach, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 150, 170, 70));
+
+            jButton_mach_Delete.setBackground(new java.awt.Color(255, 0, 0));
+            jButton_mach_Delete.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+            jButton_mach_Delete.setForeground(new java.awt.Color(255, 255, 255));
+            jButton_mach_Delete.setText("Delete");
+            jButton_mach_Delete.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    jButton_mach_DeleteActionPerformed(evt);
+                }
+            });
+            jPanel_Machines.add(jButton_mach_Delete, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 170, 80, 40));
 
             jTabbedPane_settings.addTab("Machine", jPanel_Machines);
 
@@ -4000,17 +4035,92 @@ public class mainform extends javax.swing.JFrame {
 
     private void jButton_mach_addMachActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_mach_addMachActionPerformed
         // TODO add your handling code here:
-        if (!jTextField_mach_MName.getText().isBlank() && !jTextField_mach_lot.getText().isBlank()
-                && jComboBox_mach_pros.getSelectedIndex() != -1) {
+        try {
+            if (!jTextField_mach_MName.getText().isBlank() && !jTextField_mach_lot.getText().isBlank()
+                    && jComboBox_mach_pros.getSelectedIndex() != -1) {
+                if (jTable_machines.getSelectedRow() > 0) {
+                    machineController.editMachine(new Machine(
+                            (int) jTable_machines.getModel().getValueAt(jTable_machines.getSelectedRow(), 0),
+                            jTextField_mach_MName.getText(),
+                            productController.getProduct(jComboBox_mach_pros.getSelectedItem().toString()).getId(),
+                            jTextField_mach_lot.getText(), new Date()));
+                } else {
+                    machineController.addMachine(jTextField_mach_MName.getText(), jComboBox_mach_pros.getSelectedItem().toString(),
+                            jTextField_mach_lot.getText());
+                }
+                fill_machine();
+                jTextField_mach_MName.setText("");
+                jTextField_mach_lot.setText("");
+                jComboBox_mach_pros.setSelectedIndex(-1);
+            }
+        } catch (DatabaseException | BusinessException ex) {
+            Logger.getLogger(mainform.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(this, util.addStyle(ex.getLocalizedMessage()), "exception", JOptionPane.INFORMATION_MESSAGE);
+        }
+    }//GEN-LAST:event_jButton_mach_addMachActionPerformed
+
+    private void jTextField_mach_MNameKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_mach_MNameKeyTyped
+        // TODO add your handling code here:
+        evt.setKeyChar(util.ToNumArab(evt.getKeyChar()));
+    }//GEN-LAST:event_jTextField_mach_MNameKeyTyped
+
+    private void jTextField_mach_lotKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_mach_lotKeyTyped
+        // TODO add your handling code here:
+        textbox_length_limiter(evt, jTextField_mach_lot, 5);
+        char input = evt.getKeyChar();
+        if (Character.isDigit(input)) {
+            evt.setKeyChar(util.ToNumArab(input));
+        }
+        if ((!Character.isDigit(input)) && input != 'أ' && input != 'س' && input != 'و' && input != 'د' && input != 'ط'
+                && input != 'ب' && input != 'ا' && input != 'ع' && input != 'ه' && input != 'م' && input != 'ن'
+                && input != 'ي' && input != 'ض') {
+            evt.consume();
+        }
+    }//GEN-LAST:event_jTextField_mach_lotKeyTyped
+
+    private void jButton_mach_DeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_mach_DeleteActionPerformed
+        // TODO add your handling code here:
+        if (jTable_machines.getSelectedRow() > 0) {
             try {
-                machineController.addMachine(jTextField_mach_MName.getText(), jComboBox_mach_pros.getSelectedItem().toString(),
-                        jTextField_mach_lot.getText());
-            } catch (DatabaseException | BusinessException ex) {
+                if (machineController.removeMachine((int) jTable_machines.getModel().getValueAt(jTable_machines.getSelectedRow(), 0))) {
+
+                    JOptionPane.showMessageDialog(this, util.addStyle("تم الحذف  بنجاح "), "ناجح",
+                            JOptionPane.INFORMATION_MESSAGE);
+                    fill_machine();
+                    jTextField_mach_MName.setText("");
+                    jTextField_mach_lot.setText("");
+                    jComboBox_mach_pros.setSelectedIndex(-1);
+                } else {
+                    JOptionPane.showMessageDialog(this, util.addStyle("لا يمكن حذف هذا الصنف "), "إنتبه",
+                            JOptionPane.INFORMATION_MESSAGE);
+                }
+            } catch (DatabaseException ex) {
                 Logger.getLogger(mainform.class.getName()).log(Level.SEVERE, null, ex);
                 JOptionPane.showMessageDialog(this, util.addStyle(ex.getLocalizedMessage()), "exception", JOptionPane.INFORMATION_MESSAGE);
             }
+        } else {
+            JOptionPane.showMessageDialog(this, util.addStyle(" برجاء أختيار من الجدول أولا"), "إنتبه",
+                    JOptionPane.INFORMATION_MESSAGE);
         }
-    }//GEN-LAST:event_jButton_mach_addMachActionPerformed
+    }//GEN-LAST:event_jButton_mach_DeleteActionPerformed
+
+    private void jTable_machinesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable_machinesMouseClicked
+        // TODO add your handling code here:
+        try {
+
+            TableModel model = jTable_machines.getModel();
+            jTextField_mach_MName.setText((String) model.getValueAt(jTable_machines.getSelectedRow(), 1));
+            jTextField_mach_lot.setText((String) model.getValueAt(jTable_machines.getSelectedRow(), 3));
+            try {
+                jComboBox_mach_pros.setSelectedItem(productController.getProduct(
+                        (String) jTable_machines.getModel().getValueAt(jTable_machines.getSelectedRow(), 2)));
+            } catch (BusinessException ex) {
+                jComboBox_mach_pros.setSelectedIndex(-1);
+            }
+        } catch (DatabaseException ex) {
+            JOptionPane.showMessageDialog(this, util.addStyle(ex.getLocalizedMessage()), "exception", JOptionPane.INFORMATION_MESSAGE);
+        }
+    }//GEN-LAST:event_jTable_machinesMouseClicked
 
     private void jButton_SettingsActionPerformed() throws IOException, BusinessException {
         open_panel(jTabbedPane_settings);
@@ -4131,8 +4241,15 @@ public class mainform extends javax.swing.JFrame {
         model.setRowCount(0);
         List<Machine> machs = machineController.getMachines();
         for (Machine mach : machs) {
-            model.addRow(new Object[]{mach.getMachName(), mach.getProId(), mach.getLot(),
-                mach.getUpdatedAt()});
+            Product p;
+            try {
+                p = productController.getProduct(mach.getProId());
+                model.addRow(new Object[]{mach.getMachId(), mach.getMachName(), p.getName(), mach.getLot(),
+                    mach.getUpdatedAt()});
+            } catch (BusinessException ex) {
+                model.addRow(new Object[]{mach.getMachId(), mach.getMachName(), "ممسوح", mach.getLot(),
+                    mach.getUpdatedAt()});
+            }
         }
 
     }
@@ -4455,6 +4572,7 @@ public class mainform extends javax.swing.JFrame {
     private javax.swing.JButton jButton_clear;
     private javax.swing.JButton jButton_del_data;
     private javax.swing.JButton jButton_del_pro;
+    private javax.swing.JButton jButton_mach_Delete;
     private javax.swing.JButton jButton_mach_addMach;
     private javax.swing.JButton jButton_rep_printRep;
     private javax.swing.JButton jButton_reprintLastTicket;

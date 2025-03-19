@@ -1,5 +1,6 @@
 package dao;
 
+import exceptions.BusinessException;
 import model.sqlcon;
 
 import exceptions.DatabaseException;
@@ -56,6 +57,19 @@ public class MachineDAO {
             Logger.getLogger(MachineDAO.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
             throw new DatabaseException("حدث خطأ أثناء إضافة البيانات", ex);
         }
+    }
+
+    public boolean deleteMachine(int MachId) throws DatabaseException {
+        try {
+
+            dbConnection.delData("machine", "MachID=" + MachId + " ");
+            return true;
+
+        } catch (SQLException ex) {
+            Logger.getLogger(MachineDAO.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
+            throw new DatabaseException("حدث خطأ أثناء حذف البيانات", ex);
+        }
+
     }
 
 }

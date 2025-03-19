@@ -21,8 +21,8 @@ public class sqlcon {
         conn = DriverManager.getConnection(url);
         st = conn.createStatement();
     }
-    
 
+    
     public String getIp() {
         return ip;
     }
