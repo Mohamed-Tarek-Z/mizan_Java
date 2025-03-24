@@ -2146,6 +2146,9 @@ public class mainform extends javax.swing.JFrame {
 
             jTabbedPane_settings.addTab("إعدادات الأذن", jTab_set_order);
 
+            jPanel_Machines.setMaximumSize(new java.awt.Dimension(830, 635));
+            jPanel_Machines.setMinimumSize(new java.awt.Dimension(830, 635));
+            jPanel_Machines.setPreferredSize(new java.awt.Dimension(830, 635));
             jPanel_Machines.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
             jTable_machines.setModel(new javax.swing.table.DefaultTableModel(
@@ -2187,38 +2190,40 @@ public class mainform extends javax.swing.JFrame {
                 jTable_machines.getColumnModel().getColumn(4).setResizable(false);
             }
 
-            jPanel_Machines.add(jScrollPane5, new org.netbeans.lib.awtextra.AbsoluteConstraints(6, 285, 814, 302));
+            jPanel_Machines.add(jScrollPane5, new org.netbeans.lib.awtextra.AbsoluteConstraints(6, 285, 760, 302));
 
             jTextField_mach_MName.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+            jTextField_mach_MName.setHorizontalAlignment(javax.swing.JTextField.CENTER);
             jTextField_mach_MName.addKeyListener(new java.awt.event.KeyAdapter() {
                 public void keyTyped(java.awt.event.KeyEvent evt) {
                     jTextField_mach_MNameKeyTyped(evt);
                 }
             });
-            jPanel_Machines.add(jTextField_mach_MName, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 70, 230, 50));
+            jPanel_Machines.add(jTextField_mach_MName, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 70, 190, 50));
 
             jComboBox_mach_pros.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-            jPanel_Machines.add(jComboBox_mach_pros, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 70, 230, 50));
+            jPanel_Machines.add(jComboBox_mach_pros, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 70, 210, 50));
 
             jTextField_mach_lot.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+            jTextField_mach_lot.setHorizontalAlignment(javax.swing.JTextField.CENTER);
             jTextField_mach_lot.addKeyListener(new java.awt.event.KeyAdapter() {
                 public void keyTyped(java.awt.event.KeyEvent evt) {
                     jTextField_mach_lotKeyTyped(evt);
                 }
             });
-            jPanel_Machines.add(jTextField_mach_lot, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 70, 230, 50));
+            jPanel_Machines.add(jTextField_mach_lot, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 70, 190, 50));
 
             jLabel51.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
             jLabel51.setText("أسم الماكينة");
-            jPanel_Machines.add(jLabel51, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 20, 100, 40));
+            jPanel_Machines.add(jLabel51, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 20, 100, 40));
 
             jLabel52.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
             jLabel52.setText("صنف التشغيل");
-            jPanel_Machines.add(jLabel52, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 20, 100, 40));
+            jPanel_Machines.add(jLabel52, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 20, 100, 40));
 
             jLabel54.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
             jLabel54.setText("اللوط");
-            jPanel_Machines.add(jLabel54, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 20, 100, 40));
+            jPanel_Machines.add(jLabel54, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 20, 100, 40));
 
             jButton_mach_addMach.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
             jButton_mach_addMach.setText("Add / Edit");
@@ -2227,7 +2232,7 @@ public class mainform extends javax.swing.JFrame {
                     jButton_mach_addMachActionPerformed(evt);
                 }
             });
-            jPanel_Machines.add(jButton_mach_addMach, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 150, 170, 70));
+            jPanel_Machines.add(jButton_mach_addMach, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 180, 170, 70));
 
             jButton_mach_Delete.setBackground(new java.awt.Color(255, 0, 0));
             jButton_mach_Delete.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
@@ -2238,7 +2243,7 @@ public class mainform extends javax.swing.JFrame {
                     jButton_mach_DeleteActionPerformed(evt);
                 }
             });
-            jPanel_Machines.add(jButton_mach_Delete, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 170, 80, 40));
+            jPanel_Machines.add(jButton_mach_Delete, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 200, 80, 40));
 
             jTabbedPane_settings.addTab("Machine", jPanel_Machines);
 
@@ -4107,15 +4112,27 @@ public class mainform extends javax.swing.JFrame {
     private void jTable_machinesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable_machinesMouseClicked
         // TODO add your handling code here:
         try {
-
             TableModel model = jTable_machines.getModel();
-            jTextField_mach_MName.setText((String) model.getValueAt(jTable_machines.getSelectedRow(), 1));
-            jTextField_mach_lot.setText((String) model.getValueAt(jTable_machines.getSelectedRow(), 3));
-            try {
-                jComboBox_mach_pros.setSelectedItem(productController.getProduct(
-                        (String) jTable_machines.getModel().getValueAt(jTable_machines.getSelectedRow(), 2)));
-            } catch (BusinessException ex) {
-                jComboBox_mach_pros.setSelectedIndex(-1);
+            if (evt.getClickCount() < 3) {
+                jTextField_mach_MName.setText(((String) model.getValueAt(jTable_machines.getSelectedRow(), 1)).strip());
+                jTextField_mach_lot.setText(((String) model.getValueAt(jTable_machines.getSelectedRow(), 3)).strip());
+                try {
+                    jComboBox_mach_pros.setSelectedItem(productController.getProduct(
+                            (String) jTable_machines.getModel().getValueAt(jTable_machines.getSelectedRow(), 2)));
+                } catch (BusinessException ex) {
+                    jComboBox_mach_pros.setSelectedIndex(-1);
+                }
+            } else {
+                try {
+                    jComboBox_pro_in_storage.setSelectedItem(productController.getProduct(
+                            (String) jTable_machines.getModel().getValueAt(jTable_machines.getSelectedRow(), 2)));
+                    fill_storage_table();
+                } catch (BusinessException ex) {
+                    jComboBox_pro_in_storage.setSelectedIndex(-1);
+                }
+
+                jTextField_lot.setText(((String) model.getValueAt(jTable_machines.getSelectedRow(), 3)).strip());
+                jButton_Mizan_opener.doClick();
             }
         } catch (DatabaseException ex) {
             JOptionPane.showMessageDialog(this, util.addStyle(ex.getLocalizedMessage()), "exception", JOptionPane.INFORMATION_MESSAGE);
