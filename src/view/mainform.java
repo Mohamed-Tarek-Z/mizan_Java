@@ -32,13 +32,18 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javax.swing.AbstractAction;
+import javax.swing.ActionMap;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.InputMap;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.KeyStroke;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
@@ -122,7 +127,7 @@ public class mainform extends javax.swing.JFrame {
 
         populateCombos();
         readConfig();
-
+        setupKeyBindings();
 //        LibVosk.setLogLevel(LogLevel.WARNINGS);
 //        startRecognition();
     }
@@ -4043,7 +4048,7 @@ public class mainform extends javax.swing.JFrame {
         try {
             if (!jTextField_mach_MName.getText().isBlank() && !jTextField_mach_lot.getText().isBlank()
                     && jComboBox_mach_pros.getSelectedIndex() != -1) {
-                if (jTable_machines.getSelectedRow() > 0) {
+                if (jTable_machines.getSelectedRow() > -1) {
                     machineController.editMachine(new Machine(
                             (int) jTable_machines.getModel().getValueAt(jTable_machines.getSelectedRow(), 0),
                             jTextField_mach_MName.getText(),
@@ -4085,7 +4090,7 @@ public class mainform extends javax.swing.JFrame {
 
     private void jButton_mach_DeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_mach_DeleteActionPerformed
         // TODO add your handling code here:
-        if (jTable_machines.getSelectedRow() > 0) {
+        if (jTable_machines.getSelectedRow() > -1) {
             try {
                 if (machineController.removeMachine((int) jTable_machines.getModel().getValueAt(jTable_machines.getSelectedRow(), 0))) {
 
@@ -4143,6 +4148,51 @@ public class mainform extends javax.swing.JFrame {
         open_panel(jTabbedPane_settings);
         saveConfig();
         readConfig();
+    }
+
+    private void setupKeyBindings() {
+        InputMap inputMap = rootPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+        ActionMap actionMap = rootPane.getActionMap();
+
+        inputMap.put(KeyStroke.getKeyStroke("F1"), "openWznPanel");
+        actionMap.put("openWznPanel", new AbstractAction() {
+            @Override
+            public void actionPerformed(java.awt.event.ActionEvent e) {
+                jButton_Mizan_opener.doClick();
+            }
+        });
+
+        inputMap.put(KeyStroke.getKeyStroke("F2"), "OpenReportPanel");
+        actionMap.put("OpenReportPanel", new AbstractAction() {
+            @Override
+            public void actionPerformed(java.awt.event.ActionEvent e) {
+                jButton_Ezn_opener.doClick();
+            }
+        });
+
+        inputMap.put(KeyStroke.getKeyStroke("F3"), "OpenAddProPanel");
+        actionMap.put("OpenAddProPanel", new AbstractAction() {
+            @Override
+            public void actionPerformed(java.awt.event.ActionEvent e) {
+                jButton_addPro_opener.doClick();
+            }
+        });
+
+        inputMap.put(KeyStroke.getKeyStroke("F4"), "OpenEmptyPanel");
+        actionMap.put("OpenEmptyPanel", new AbstractAction() {
+            @Override
+            public void actionPerformed(java.awt.event.ActionEvent e) {
+                jButton_Emp_opener.doClick();
+            }
+        });
+
+        inputMap.put(KeyStroke.getKeyStroke("F5"), "OpenStockPanel");
+        actionMap.put("OpenStockPanel", new AbstractAction() {
+            @Override
+            public void actionPerformed(java.awt.event.ActionEvent e) {
+                jButton_Stock_opener.doClick();
+            }
+        });
     }
 
     private void open_panel(Component comp) {
