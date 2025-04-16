@@ -24,7 +24,10 @@ public class StorageDAO {
             ResultSet rs = dbConnection.dataRead("storage_id,pro_id,tot_wight,weight_,lot,num_of_con,pallet_numb,used,date_",
                     "storage ",
                     "storage.pro_id=(select pro_id from products where pro_name=N'"
-                    + proName + "') order by lot DESC, pallet_numb DESC, storage_id DESC, used ");
+                    + proName + "') order by "
+                    + "CASE WHEN ISNUMERIC(lot) = 1 AND lot NOT LIKE '%[^0-9]%' THEN 0 ELSE 1 END, CASE WHEN "
+                    + "ISNUMERIC(lot) = 1 AND lot NOT LIKE '%[^0-9]%' THEN CAST(lot AS bigint) ELSE NULL END DESC, lot"
+                    + ", used, pallet_numb DESC, storage_id DESC");
             while (rs.next()) {
                 Bags.add(new Bag(rs.getInt("storage_id"), rs.getInt("pro_id"), rs.getDouble("tot_wight"), rs.getDouble("weight_"), rs.getString("lot"),
                         rs.getInt("num_of_con"), rs.getInt("pallet_numb"), rs.getBoolean("used"), rs.getDate("date_")));
@@ -65,7 +68,7 @@ public class StorageDAO {
             while (st.next()) {
                 pallets.add(new String[]{st.getString(1), st.getString(2),
                     st.getString(3), st.getString(4),
-                    st.getBoolean(5)+""});
+                    st.getBoolean(5) + ""});
             }
 
             return pallets;

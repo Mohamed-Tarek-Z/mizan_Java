@@ -63,7 +63,7 @@ public class ExcelManager {
             cell = sheet.getRow(23).getCell(11);
             cell.setCellValue((isBoxes ? "عدد الصناديق :          " : "عدد الشكاير :          ")
                     + util.ToStringArabic(orderIds.size() + "")
-                    + (isBoxes ? " صندوق" : "  شيكاره") + "\n" + "الــــــــــــــــــــــــــــــــوزن :       " + totalWeight + "");
+                    + (isBoxes ? " صندوق" : "  شيكاره") + "\n" + "الــــــــــــــــــــــوزن :       " + totalWeight + "");
 
             this.cell_functions(cell, sheet);
             cell = sheet.getRow(26).getCell(11);
@@ -112,7 +112,7 @@ public class ExcelManager {
             cell = sheet.getRow(23).getCell(16);
             cell.setCellValue((isBoxes ? "عدد الصناديق :          " : "عدد الشكاير :          ")
                     + util.ToStringArabic(orderIds.size() + "")
-                    + (isBoxes ? " صندوق" : "  شيكاره") + "\n" + "الــــــــــــــــــــــــــــــــوزن :       " + totalWeight + "");
+                    + (isBoxes ? " صندوق" : "  شيكاره") + "\n" + "الــــــــــــــــــــــوزن :       " + totalWeight + "");
 
             this.cell_functions(cell, sheet);
 
@@ -179,7 +179,7 @@ public class ExcelManager {
             cell = sheet.getRow(23).getCell(21);
             cell.setCellValue((isBoxes ? "عدد الصناديق :          " : "عدد الشكاير :          ")
                     + util.ToStringArabic(orderIds.size() + "")
-                    + (isBoxes ? " صندوق" : "  شيكاره") + "\n" + "الــــــــــــــــــــــــــــــــوزن :       " + totalWeight + "");
+                    + (isBoxes ? " صندوق" : "  شيكاره") + "\n" + "الــــــــــــــــــــــوزن :       " + totalWeight + "");
 
             this.cell_functions(cell, sheet);
 
@@ -290,11 +290,11 @@ public class ExcelManager {
                 String __1 = (FIsBoxes ? "عدد الصناديق : " : "عدد الشكاير : ")
                         + util.ToStringArabic(fOrderIds.size() + "")
                         + (FIsBoxes ? " صندوق" : "  شيكاره");
-                String __2 = "الـــــــوزن :  " + wieghtFOrder + "";
+                String __2 = "الــوزن :  " + wieghtFOrder + "";
                 String __3 = (SIsBoxes ? "عدد الصناديق : " : "عدد الشكاير : ")
                         + util.ToStringArabic(sOrderIds.size() + "")
                         + (SIsBoxes ? " صندوق" : "  شيكاره");
-                String __4 = "الـــــــوزن :  " + wieghtSOrder + "";
+                String __4 = "الــوزن :  " + wieghtSOrder + "";
                 cell = sheet.getRow(23).getCell(11);
                 cell.setCellValue(__1 + "  " + __2 + "\n" + __3 + " " + __4);
                 this.cell_functions(cell, sheet);

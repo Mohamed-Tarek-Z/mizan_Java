@@ -73,7 +73,7 @@ public class mainform extends javax.swing.JFrame {
 
     private short tick10x10, tick2x2;
     private int BagMax = 2, repDiff;
-    private final String Version = "V 1.1 MVC";
+    private final String Version = "V 1.2 MVC";
     private String ticketPrinterName, qrPrinterName;
 
     private final JButton jButton_Settings = new javax.swing.JButton();
@@ -451,6 +451,7 @@ public class mainform extends javax.swing.JFrame {
             }
         };
         jLabel_print_pallet = new javax.swing.JLabel();
+        jSeparator_print_pallet = new javax.swing.JSeparator();
         jLabel_print_ValColor = new javax.swing.JLabel()
         {
             @Override
@@ -490,6 +491,7 @@ public class mainform extends javax.swing.JFrame {
             }
         };
         jLabel_print_color = new javax.swing.JLabel();
+        jSeparator_print_color = new javax.swing.JSeparator();
         jLabel_print_ValType = new javax.swing.JLabel()
         {
             @Override
@@ -529,6 +531,7 @@ public class mainform extends javax.swing.JFrame {
             }
         };
         jLabel_print_type = new javax.swing.JLabel();
+        jSeparator_print_type = new javax.swing.JSeparator();
         jLabel_print_ValLot = new javax.swing.JLabel()
         {
             @Override
@@ -568,6 +571,7 @@ public class mainform extends javax.swing.JFrame {
             }
         };
         jLabel_print_lot = new javax.swing.JLabel();
+        jSeparator_print_lot = new javax.swing.JSeparator();
         jLabel_print_ValNCone = new javax.swing.JLabel()
         {
             @Override
@@ -607,6 +611,7 @@ public class mainform extends javax.swing.JFrame {
             }
         };
         jLabel_print_NCone = new javax.swing.JLabel();
+        jSeparator_print_nCone = new javax.swing.JSeparator();
         jLabel_print_ValTotalWeight = new javax.swing.JLabel()
         {
             @Override
@@ -646,6 +651,7 @@ public class mainform extends javax.swing.JFrame {
             }
         };
         jLabel_print_TotalWeight = new javax.swing.JLabel();
+        jSeparator_print_totWeight = new javax.swing.JSeparator();
         jLabel_print_ValNetWeight = new javax.swing.JLabel()
         {
             @Override
@@ -687,15 +693,9 @@ public class mainform extends javax.swing.JFrame {
         jLabel_print_NetWeight = new javax.swing.JLabel();
         jLabel_print_footer = new javax.swing.JLabel();
         jLabel_print_number = new javax.swing.JLabel();
-        jSeparator2 = new javax.swing.JSeparator();
-        jSeparator1 = new javax.swing.JSeparator();
-        jSeparator13 = new javax.swing.JSeparator();
-        jSeparator3 = new javax.swing.JSeparator();
-        jSeparator11 = new javax.swing.JSeparator();
-        jSeparator8 = new javax.swing.JSeparator();
-        jSeparator9 = new javax.swing.JSeparator();
-        jSeparator10 = new javax.swing.JSeparator();
-        jSeparator12 = new javax.swing.JSeparator();
+        jSeparator_print_main = new javax.swing.JSeparator();
+        jSeparator_print_valBox = new javax.swing.JSeparator();
+        jSeparator_print_Double = new javax.swing.JSeparator();
 
         jFileChooser1.setDialogType(javax.swing.JFileChooser.SAVE_DIALOG);
         jFileChooser1.setCurrentDirectory(new java.io.File("F:\\"));
@@ -1008,6 +1008,7 @@ public class mainform extends javax.swing.JFrame {
 
             jButton_Mizan_opener.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
             jButton_Mizan_opener.setText("ميزان");
+            jButton_Mizan_opener.setToolTipText("اضغط على F1 لفتح اللوحة");
             jButton_Mizan_opener.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent evt) {
                     jButton_Mizan_openerActionPerformed(evt);
@@ -1017,6 +1018,7 @@ public class mainform extends javax.swing.JFrame {
 
             jButton_addPro_opener.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
             jButton_addPro_opener.setText("إضافه صنف");
+            jButton_addPro_opener.setToolTipText("اضغط على F3 لفتح اللوحة");
             jButton_addPro_opener.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent evt) {
                     jButton_addPro_openerActionPerformed(evt);
@@ -1026,6 +1028,7 @@ public class mainform extends javax.swing.JFrame {
 
             jButton_Ezn_opener.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
             jButton_Ezn_opener.setText("إذن غزل");
+            jButton_Ezn_opener.setToolTipText("اضغط على F2 لفتح اللوحة");
             jButton_Ezn_opener.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent evt) {
                     jButton_Ezn_openerActionPerformed(evt);
@@ -1044,6 +1047,7 @@ public class mainform extends javax.swing.JFrame {
 
             jButton_Stock_opener.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
             jButton_Stock_opener.setText("رصيد");
+            jButton_Stock_opener.setToolTipText("اضغط على F5 لفتح اللوحة");
             jButton_Stock_opener.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent evt) {
                     jButton_Stock_openerActionPerformed(evt);
@@ -1071,6 +1075,7 @@ public class mainform extends javax.swing.JFrame {
 
             jButton_Emp_opener.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
             jButton_Emp_opener.setText("أي");
+            jButton_Emp_opener.setToolTipText("اضغط على F4 لفتح اللوحة");
             jButton_Emp_opener.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent evt) {
                     jButton_Emp_openerActionPerformed(evt);
@@ -2314,7 +2319,14 @@ public class mainform extends javax.swing.JFrame {
             jLabel_print_pallet.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
             jPanel_print.add(jLabel_print_pallet, new org.netbeans.lib.awtextra.AbsoluteConstraints(212, 25, 75, 20));
 
-            jLabel_print_ValColor.setFont(new java.awt.Font("Arial", 0, 28)); // NOI18N
+            jSeparator_print_pallet.setForeground(new java.awt.Color(204, 204, 204));
+            jSeparator_print_pallet.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, new java.awt.Color(0, 0, 0)));
+            jSeparator_print_pallet.setMaximumSize(new java.awt.Dimension(50, 100));
+            jSeparator_print_pallet.setMinimumSize(new java.awt.Dimension(50, 100));
+            jSeparator_print_pallet.setPreferredSize(new java.awt.Dimension(50, 100));
+            jPanel_print.add(jSeparator_print_pallet, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 20, 280, 30));
+
+            jLabel_print_ValColor.setFont(new java.awt.Font("Arial", 0, 26)); // NOI18N
             jLabel_print_ValColor.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
             jLabel_print_ValColor.setText("Label");
             jLabel_print_ValColor.setFocusable(false);
@@ -2328,47 +2340,75 @@ public class mainform extends javax.swing.JFrame {
             jLabel_print_color.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
             jPanel_print.add(jLabel_print_color, new org.netbeans.lib.awtextra.AbsoluteConstraints(212, 55, 75, 20));
 
+            jSeparator_print_color.setForeground(new java.awt.Color(204, 204, 204));
+            jSeparator_print_color.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, new java.awt.Color(0, 0, 0)));
+            jSeparator_print_color.setMaximumSize(new java.awt.Dimension(50, 100));
+            jSeparator_print_color.setMinimumSize(new java.awt.Dimension(50, 100));
+            jSeparator_print_color.setPreferredSize(new java.awt.Dimension(50, 100));
+            jPanel_print.add(jSeparator_print_color, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 50, 280, 30));
+
             jLabel_print_ValType.setFont(new java.awt.Font("Arial", 0, 40)); // NOI18N
             jLabel_print_ValType.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
             jLabel_print_ValType.setText("Label");
             jLabel_print_ValType.setFocusable(false);
             jLabel_print_ValType.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-            jPanel_print.add(jLabel_print_ValType, new org.netbeans.lib.awtextra.AbsoluteConstraints(15, 80, 190, 35));
+            jPanel_print.add(jLabel_print_ValType, new org.netbeans.lib.awtextra.AbsoluteConstraints(15, 120, 190, 35));
 
             jLabel_print_type.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
             jLabel_print_type.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
             jLabel_print_type.setText("الصنف");
             jLabel_print_type.setFocusable(false);
             jLabel_print_type.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-            jPanel_print.add(jLabel_print_type, new org.netbeans.lib.awtextra.AbsoluteConstraints(212, 85, 75, 30));
+            jPanel_print.add(jLabel_print_type, new org.netbeans.lib.awtextra.AbsoluteConstraints(212, 125, 75, 30));
+
+            jSeparator_print_type.setForeground(new java.awt.Color(204, 204, 204));
+            jSeparator_print_type.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, new java.awt.Color(0, 0, 0)));
+            jSeparator_print_type.setMaximumSize(new java.awt.Dimension(50, 100));
+            jSeparator_print_type.setMinimumSize(new java.awt.Dimension(50, 100));
+            jSeparator_print_type.setPreferredSize(new java.awt.Dimension(50, 100));
+            jPanel_print.add(jSeparator_print_type, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 120, 280, 40));
 
             jLabel_print_ValLot.setFont(new java.awt.Font("Arial", 0, 40)); // NOI18N
             jLabel_print_ValLot.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
             jLabel_print_ValLot.setText("Label");
             jLabel_print_ValLot.setFocusable(false);
             jLabel_print_ValLot.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-            jPanel_print.add(jLabel_print_ValLot, new org.netbeans.lib.awtextra.AbsoluteConstraints(15, 122, 190, 30));
+            jPanel_print.add(jLabel_print_ValLot, new org.netbeans.lib.awtextra.AbsoluteConstraints(15, 162, 190, 30));
 
             jLabel_print_lot.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
             jLabel_print_lot.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
             jLabel_print_lot.setText("اللوط");
             jLabel_print_lot.setFocusable(false);
             jLabel_print_lot.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-            jPanel_print.add(jLabel_print_lot, new org.netbeans.lib.awtextra.AbsoluteConstraints(212, 125, 75, 25));
+            jPanel_print.add(jLabel_print_lot, new org.netbeans.lib.awtextra.AbsoluteConstraints(212, 165, 75, 25));
+
+            jSeparator_print_lot.setForeground(new java.awt.Color(204, 204, 204));
+            jSeparator_print_lot.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, new java.awt.Color(0, 0, 0)));
+            jSeparator_print_lot.setMaximumSize(new java.awt.Dimension(50, 100));
+            jSeparator_print_lot.setMinimumSize(new java.awt.Dimension(50, 100));
+            jSeparator_print_lot.setPreferredSize(new java.awt.Dimension(50, 100));
+            jPanel_print.add(jSeparator_print_lot, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 155, 280, 40));
 
             jLabel_print_ValNCone.setFont(new java.awt.Font("Arial", 0, 28)); // NOI18N
             jLabel_print_ValNCone.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
             jLabel_print_ValNCone.setText("Label");
             jLabel_print_ValNCone.setFocusable(false);
             jLabel_print_ValNCone.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-            jPanel_print.add(jLabel_print_ValNCone, new org.netbeans.lib.awtextra.AbsoluteConstraints(15, 160, 190, 25));
+            jPanel_print.add(jLabel_print_ValNCone, new org.netbeans.lib.awtextra.AbsoluteConstraints(15, 86, 190, 25));
 
             jLabel_print_NCone.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
             jLabel_print_NCone.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
             jLabel_print_NCone.setText("عدد الكون");
             jLabel_print_NCone.setFocusable(false);
             jLabel_print_NCone.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-            jPanel_print.add(jLabel_print_NCone, new org.netbeans.lib.awtextra.AbsoluteConstraints(212, 160, 75, 25));
+            jPanel_print.add(jLabel_print_NCone, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 86, 75, 25));
+
+            jSeparator_print_nCone.setForeground(new java.awt.Color(204, 204, 204));
+            jSeparator_print_nCone.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, new java.awt.Color(0, 0, 0)));
+            jSeparator_print_nCone.setMaximumSize(new java.awt.Dimension(50, 100));
+            jSeparator_print_nCone.setMinimumSize(new java.awt.Dimension(50, 100));
+            jSeparator_print_nCone.setPreferredSize(new java.awt.Dimension(50, 100));
+            jPanel_print.add(jSeparator_print_nCone, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 80, 280, 40));
 
             jLabel_print_ValTotalWeight.setFont(new java.awt.Font("Arial", 0, 36)); // NOI18N
             jLabel_print_ValTotalWeight.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -2383,6 +2423,13 @@ public class mainform extends javax.swing.JFrame {
             jLabel_print_TotalWeight.setFocusable(false);
             jLabel_print_TotalWeight.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
             jPanel_print.add(jLabel_print_TotalWeight, new org.netbeans.lib.awtextra.AbsoluteConstraints(212, 195, 75, 40));
+
+            jSeparator_print_totWeight.setForeground(new java.awt.Color(204, 204, 204));
+            jSeparator_print_totWeight.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, new java.awt.Color(0, 0, 0)));
+            jSeparator_print_totWeight.setMaximumSize(new java.awt.Dimension(50, 100));
+            jSeparator_print_totWeight.setMinimumSize(new java.awt.Dimension(50, 100));
+            jSeparator_print_totWeight.setPreferredSize(new java.awt.Dimension(50, 100));
+            jPanel_print.add(jSeparator_print_totWeight, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 190, 280, 50));
 
             jLabel_print_ValNetWeight.setFont(new java.awt.Font("Arial", 0, 48)); // NOI18N
             jLabel_print_ValNetWeight.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -2411,70 +2458,26 @@ public class mainform extends javax.swing.JFrame {
             jLabel_print_number.setText("٠١١٤٨٠٥٥٥٥٨");
             jPanel_print.add(jLabel_print_number, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 320, 110, -1));
 
-            jSeparator2.setForeground(new java.awt.Color(204, 204, 204));
-            jSeparator2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2));
-            jSeparator2.setMaximumSize(new java.awt.Dimension(50, 100));
-            jSeparator2.setMinimumSize(new java.awt.Dimension(50, 100));
-            jSeparator2.setPreferredSize(new java.awt.Dimension(50, 100));
-            jPanel_print.add(jSeparator2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 20, 280, 280));
+            jSeparator_print_main.setForeground(new java.awt.Color(204, 204, 204));
+            jSeparator_print_main.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2));
+            jSeparator_print_main.setMaximumSize(new java.awt.Dimension(50, 100));
+            jSeparator_print_main.setMinimumSize(new java.awt.Dimension(50, 100));
+            jSeparator_print_main.setPreferredSize(new java.awt.Dimension(50, 100));
+            jPanel_print.add(jSeparator_print_main, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 20, 280, 280));
 
-            jSeparator1.setForeground(new java.awt.Color(204, 204, 204));
-            jSeparator1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2));
-            jSeparator1.setMaximumSize(new java.awt.Dimension(50, 100));
-            jSeparator1.setMinimumSize(new java.awt.Dimension(50, 100));
-            jSeparator1.setPreferredSize(new java.awt.Dimension(50, 100));
-            jPanel_print.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 20, 200, 280));
+            jSeparator_print_valBox.setForeground(new java.awt.Color(204, 204, 204));
+            jSeparator_print_valBox.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2));
+            jSeparator_print_valBox.setMaximumSize(new java.awt.Dimension(50, 100));
+            jSeparator_print_valBox.setMinimumSize(new java.awt.Dimension(50, 100));
+            jSeparator_print_valBox.setPreferredSize(new java.awt.Dimension(50, 100));
+            jPanel_print.add(jSeparator_print_valBox, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 20, 200, 280));
 
-            jSeparator13.setForeground(new java.awt.Color(204, 204, 204));
-            jSeparator13.setOrientation(javax.swing.SwingConstants.VERTICAL);
-            jSeparator13.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 1, 0, 0, new java.awt.Color(0, 0, 0)));
-            jPanel_print.add(jSeparator13, new org.netbeans.lib.awtextra.AbsoluteConstraints(205, 20, 10, 280));
+            jSeparator_print_Double.setForeground(new java.awt.Color(204, 204, 204));
+            jSeparator_print_Double.setOrientation(javax.swing.SwingConstants.VERTICAL);
+            jSeparator_print_Double.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 1, 0, 0, new java.awt.Color(0, 0, 0)));
+            jPanel_print.add(jSeparator_print_Double, new org.netbeans.lib.awtextra.AbsoluteConstraints(205, 20, 10, 280));
 
-            jSeparator3.setForeground(new java.awt.Color(204, 204, 204));
-            jSeparator3.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, new java.awt.Color(0, 0, 0)));
-            jSeparator3.setMaximumSize(new java.awt.Dimension(50, 100));
-            jSeparator3.setMinimumSize(new java.awt.Dimension(50, 100));
-            jSeparator3.setPreferredSize(new java.awt.Dimension(50, 100));
-            jPanel_print.add(jSeparator3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 20, 280, 30));
-
-            jSeparator11.setForeground(new java.awt.Color(204, 204, 204));
-            jSeparator11.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, new java.awt.Color(0, 0, 0)));
-            jSeparator11.setMaximumSize(new java.awt.Dimension(50, 100));
-            jSeparator11.setMinimumSize(new java.awt.Dimension(50, 100));
-            jSeparator11.setPreferredSize(new java.awt.Dimension(50, 100));
-            jPanel_print.add(jSeparator11, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 20, 280, 60));
-
-            jSeparator8.setForeground(new java.awt.Color(204, 204, 204));
-            jSeparator8.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, new java.awt.Color(0, 0, 0)));
-            jSeparator8.setMaximumSize(new java.awt.Dimension(50, 100));
-            jSeparator8.setMinimumSize(new java.awt.Dimension(50, 100));
-            jSeparator8.setPreferredSize(new java.awt.Dimension(50, 100));
-            jPanel_print.add(jSeparator8, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 20, 280, 100));
-
-            jSeparator9.setForeground(new java.awt.Color(204, 204, 204));
-            jSeparator9.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, new java.awt.Color(0, 0, 0)));
-            jSeparator9.setMaximumSize(new java.awt.Dimension(50, 100));
-            jSeparator9.setMinimumSize(new java.awt.Dimension(50, 100));
-            jSeparator9.setPreferredSize(new java.awt.Dimension(50, 100));
-            jPanel_print.add(jSeparator9, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 20, 280, 135));
-
-            jSeparator10.setForeground(new java.awt.Color(204, 204, 204));
-            jSeparator10.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, new java.awt.Color(0, 0, 0)));
-            jSeparator10.setMaximumSize(new java.awt.Dimension(50, 100));
-            jSeparator10.setMinimumSize(new java.awt.Dimension(50, 100));
-            jSeparator10.setPreferredSize(new java.awt.Dimension(50, 100));
-            jPanel_print.add(jSeparator10, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 20, 280, 170));
-
-            jSeparator12.setForeground(new java.awt.Color(204, 204, 204));
-            jSeparator12.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, new java.awt.Color(0, 0, 0)));
-            jSeparator12.setMaximumSize(new java.awt.Dimension(50, 100));
-            jSeparator12.setMinimumSize(new java.awt.Dimension(50, 100));
-            jSeparator12.setPreferredSize(new java.awt.Dimension(50, 100));
-            jPanel_print.add(jSeparator12, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 20, 280, 220));
-
-            jTabbedPane_settings.addTab("Print Panel", jPanel_print);
-            jPanel_print.getAccessibleContext().setAccessibleName("printer_Panel");
-            jPanel_print.getAccessibleContext().setAccessibleDescription("Panel_used_for_printing");
+            jTabbedPane_settings.addTab("print", jPanel_print);
 
             left_panel.add(jTabbedPane_settings, "Settings");
 
@@ -3326,7 +3329,7 @@ public class mainform extends javax.swing.JFrame {
         try {
             open_panel(stock_panel);
             ((DefaultTableModel) jTable_stock.getModel()).setRowCount(0);
-            combox_fill(jComboBox_stock_Pros, true);
+            combox_fill(jComboBox_stock_Pros);
         } catch (DatabaseException ex) {
             Logger.getLogger(mainform.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(this, util.addStyle(ex.getLocalizedMessage()), "exception", JOptionPane.INFORMATION_MESSAGE);
@@ -3965,7 +3968,7 @@ public class mainform extends javax.swing.JFrame {
             if (evt.getKeyChar() == KeyEvent.VK_DELETE) {
                 jTextField_Search_pros.setText("");
             }
-            combox_fill(jComboBox_pro_in_storage, false);
+            combox_fill_with(jComboBox_pro_in_storage, jTextField_Search_pros.getText());
         } catch (DatabaseException ex) {
             Logger.getLogger(mainform.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(this, util.addStyle(ex.getLocalizedMessage()), "exception", JOptionPane.INFORMATION_MESSAGE);
@@ -4138,6 +4141,7 @@ public class mainform extends javax.swing.JFrame {
 
                 jTextField_lot.setText(((String) model.getValueAt(jTable_machines.getSelectedRow(), 3)).strip());
                 jButton_Mizan_opener.doClick();
+                jTextField_pallet_num.setText("");
             }
         } catch (DatabaseException ex) {
             JOptionPane.showMessageDialog(this, util.addStyle(ex.getLocalizedMessage()), "exception", JOptionPane.INFORMATION_MESSAGE);
@@ -4273,23 +4277,27 @@ public class mainform extends javax.swing.JFrame {
         }
     }
 
-    private void combox_fill(JComboBox<Product> Combo, boolean resetToNone) throws DatabaseException {
-
+    private void combox_fill(JComboBox<Product> Combo) throws DatabaseException {
         Combo.removeAllItems();
         Combo.setModel(new DefaultComboBoxModel<>(productController.getAvailableProducts().toArray(Product[]::new)));
-        if (resetToNone) {
-            Combo.setSelectedIndex(-1);
-        }
+        Combo.setSelectedIndex(-1);
+    }
+
+    private void combox_fill_with(JComboBox<Product> Combo, String term) throws DatabaseException {
+
+        Combo.removeAllItems();
+        Combo.setModel(new DefaultComboBoxModel<>(productController.getAvailableProductsLike(term).toArray(Product[]::new)));
+        Combo.setSelectedIndex(-1);
     }
 
     private void populateCombos() throws DatabaseException {
-        this.combox_fill(jComboBox_pro_in_storage, true);
-        this.combox_fill(jComboBox_rep_Pros, true);
-        this.combox_fill(jComboBox_E_O_proName, true);
-        this.combox_fill(jComboBox_E_proName, true);
-        this.combox_fill(jComboBox_ME_type, true);
-        this.combox_fill(jComboBox_stock_Pros, true);
-        this.combox_fill(jComboBox_mach_pros, true);
+        this.combox_fill(jComboBox_pro_in_storage);
+        this.combox_fill(jComboBox_rep_Pros);
+        this.combox_fill(jComboBox_E_O_proName);
+        this.combox_fill(jComboBox_E_proName);
+        this.combox_fill(jComboBox_ME_type);
+        this.combox_fill(jComboBox_stock_Pros);
+        this.combox_fill(jComboBox_mach_pros);
     }
 
     private void fill_pro_table() throws DatabaseException {
@@ -4774,20 +4782,20 @@ public class mainform extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane7;
     private javax.swing.JScrollPane jScrollPane8;
     private javax.swing.JScrollPane jScrollPane9;
-    private javax.swing.JSeparator jSeparator1;
-    private javax.swing.JSeparator jSeparator10;
-    private javax.swing.JSeparator jSeparator11;
-    private javax.swing.JSeparator jSeparator12;
-    private javax.swing.JSeparator jSeparator13;
     private javax.swing.JSeparator jSeparator14;
-    private javax.swing.JSeparator jSeparator2;
-    private javax.swing.JSeparator jSeparator3;
     private javax.swing.JSeparator jSeparator4;
     private javax.swing.JSeparator jSeparator5;
     private javax.swing.JSeparator jSeparator6;
     private javax.swing.JSeparator jSeparator7;
-    private javax.swing.JSeparator jSeparator8;
-    private javax.swing.JSeparator jSeparator9;
+    private javax.swing.JSeparator jSeparator_print_Double;
+    private javax.swing.JSeparator jSeparator_print_color;
+    private javax.swing.JSeparator jSeparator_print_lot;
+    private javax.swing.JSeparator jSeparator_print_main;
+    private javax.swing.JSeparator jSeparator_print_nCone;
+    private javax.swing.JSeparator jSeparator_print_pallet;
+    private javax.swing.JSeparator jSeparator_print_totWeight;
+    private javax.swing.JSeparator jSeparator_print_type;
+    private javax.swing.JSeparator jSeparator_print_valBox;
     private javax.swing.JSplitPane jSplitPane1;
     private javax.swing.JPanel jTab_set_Counter;
     private javax.swing.JPanel jTab_set_Printing;
