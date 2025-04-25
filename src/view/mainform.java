@@ -2762,6 +2762,7 @@ public class mainform extends javax.swing.JFrame {
                         JOptionPane.showMessageDialog(this, util.addStyle("هذا الصنف موجود بالفعل "), "إنتبه",
                                 JOptionPane.INFORMATION_MESSAGE);
                     } else {
+
                         productController.addNewProduct(jTextField_pro_name.getText(), jTextField_Pros_conWight.getText(),
                                 jTextField_Pros_color.getText(), jCheckBox_Pros_IsBox.isSelected());
                         jTextField_pro_name.setText("");
@@ -2772,9 +2773,12 @@ public class mainform extends javax.swing.JFrame {
                         populateCombos();
                         JOptionPane.showMessageDialog(this, util.addStyle(" تم إدخال الصنف بنجاح  "), "ناجح",
                                 JOptionPane.INFORMATION_MESSAGE);
+
                     }
+
                 }
             } else {
+
                 if (jTextField_pro_name.getText().isBlank()) {
                     JOptionPane.showMessageDialog(this, util.addStyle(" برجاء أدخال اسم الصنف  "), "إنتبه",
                             JOptionPane.INFORMATION_MESSAGE);
@@ -4124,26 +4128,22 @@ public class mainform extends javax.swing.JFrame {
             if (evt.getClickCount() < 3) {
                 jTextField_mach_MName.setText(((String) model.getValueAt(jTable_machines.getSelectedRow(), 1)).strip());
                 jTextField_mach_lot.setText(((String) model.getValueAt(jTable_machines.getSelectedRow(), 3)).strip());
-                try {
-                    jComboBox_mach_pros.setSelectedItem(productController.getProduct(
-                            (String) jTable_machines.getModel().getValueAt(jTable_machines.getSelectedRow(), 2)));
-                } catch (BusinessException ex) {
-                    jComboBox_mach_pros.setSelectedIndex(-1);
-                }
+
+                Product temp = productController.getProduct(
+                        (String) jTable_machines.getModel().getValueAt(jTable_machines.getSelectedRow(), 2));
+                jComboBox_mach_pros.setSelectedItem(temp == null ? -1 : temp);
+
             } else {
-                try {
-                    jComboBox_pro_in_storage.setSelectedItem(productController.getProduct(
-                            (String) jTable_machines.getModel().getValueAt(jTable_machines.getSelectedRow(), 2)));
-                    fill_storage_table();
-                } catch (BusinessException ex) {
-                    jComboBox_pro_in_storage.setSelectedIndex(-1);
-                }
+                Product temp = productController.getProduct(
+                        (String) jTable_machines.getModel().getValueAt(jTable_machines.getSelectedRow(), 2));
+                jComboBox_mach_pros.setSelectedItem(temp == null ? -1 : temp);
+                fill_storage_table();
 
                 jTextField_lot.setText(((String) model.getValueAt(jTable_machines.getSelectedRow(), 3)).strip());
                 jButton_Mizan_opener.doClick();
                 jTextField_pallet_num.setText("");
             }
-        } catch (DatabaseException ex) {
+        } catch (DatabaseException | BusinessException ex) {
             JOptionPane.showMessageDialog(this, util.addStyle(ex.getLocalizedMessage()), "exception", JOptionPane.INFORMATION_MESSAGE);
         }
     }//GEN-LAST:event_jTable_machinesMouseClicked
