@@ -93,13 +93,13 @@ public class ProductDAO {
 
     }
 
-    public Product getProductByName(String productName) throws DatabaseException {
+    public Product getProductByName(String productName) throws DatabaseException, BusinessException {
         try {
             ResultSet rs = dbConnection.dataRead("pro_id, pro_name, weight_of_con, Color, IsBox", "products", "pro_name=N'" + productName + "'");
             if (rs.next()) {
                 return new Product(rs.getInt("pro_id"), rs.getString("pro_name"), rs.getString("weight_of_con"), rs.getString("Color"), rs.getBoolean("IsBox"));
             }
-            return null;
+            throw new BusinessException("لايوجد صنف بأسم: " + productName);
         } catch (SQLException ex) {
             Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
             throw new DatabaseException("حدث خطأ أثناء طلب بيانات صنف بأسم : " + productName, ex);
