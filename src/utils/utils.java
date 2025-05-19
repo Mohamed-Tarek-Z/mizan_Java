@@ -27,8 +27,17 @@ import javax.imageio.ImageIO;
 
 public class utils {
 
-    public char ToNumArab(char eng) {
-        return switch (eng) {
+    /**
+     * Takes a char and if it is a number returns the equivalent number in
+     * Arabic letters
+     *
+     * @param input Char to be checked if it has an equivalent number in Arabic
+     * letters
+     * @return char equivalent to input number in Arabic letters Or return input
+     * when no equivalent number in Arabic letters
+     */
+    public char ToNumArab(char input) {
+        return switch (input) {
             case '0' ->
                 '٠';
             case '1' ->
@@ -54,12 +63,21 @@ public class utils {
             case 'ز' ->
                 '٫';
             default ->
-                eng;
+                input;
         };
     }
 
-    public char ToNumEng(char ArabC) {
-        return switch (ArabC) {
+    /**
+     * Takes a char and if it is a number returns the equivalent number in
+     * English letters
+     *
+     * @param input Char to be checked if it has an equivalent number in English
+     * letters
+     * @return char equivalent to input number in English letters Or return
+     * input when no equivalent number in English letters
+     */
+    public char ToNumEng(char input) {
+        return switch (input) {
             case '٠' ->
                 '0';
             case '١' ->
@@ -83,16 +101,24 @@ public class utils {
             case '٫' ->
                 '.';
             default ->
-                ArabC;
+                input;
         };
     }
 
-    public double ToDoubleEnglish(String ArabNum) {
-        if (ArabNum == null) {
+    /**
+     * Takes a String and if it is a number in Arabic returns the equivalent in
+     * double type
+     *
+     * @param input String to be converted to double
+     * @return double equivalent to input number in Arabic letters Or return 0.0
+     * when no equivalent number in Arabic letters
+     */
+    public double ToDoubleEnglish(String input) {
+        if (input == null) {
             return 0.0;
         }
         String eng = "";
-        for (char c : ArabNum.toCharArray()) {
+        for (char c : input.toCharArray()) {
 
             if (c == '-' || c == '+') {
                 eng = c + eng;
@@ -106,30 +132,54 @@ public class utils {
         return Double.parseDouble(eng);
     }
 
-    public String ToStringEnglish(String ArabNum) {
-        if (ArabNum == null) {
+    /**
+     * Takes a String and if it is a number in Arabic returns the equivalent in
+     * String type in english
+     *
+     * @param input String to be converted to English string
+     * @return English String equivalent to input number in Arabic letters Or
+     * return "" when no equivalent number in Arabic letters
+     */
+    public String ToStringEnglish(String input) {
+        if (input == null) {
             return "";
         }
         String eng = "";
-        for (char c : ArabNum.toCharArray()) {
+        for (char c : input.toCharArray()) {
             eng += ToNumEng(c);
         }
         return eng;
     }
 
-    public String ToStringArabic(String EnglishNum) {
-        if (EnglishNum == null) {
+    /**
+     * Takes a String and if it is a number in English returns the equivalent in
+     * String type in Arabic
+     *
+     * @param input String to be converted to Arabic string
+     * @return Arabic String equivalent to input number in Arabic letters Or
+     * return "" when no equivalent number in Arabic letters
+     */
+    public String ToStringArabic(String input) {
+        if (input == null) {
             return "";
         }
         String Arab = "";
-        for (char c : EnglishNum.toCharArray()) {
+        for (char c : input.toCharArray()) {
             Arab += ToNumArab(c);
         }
         return Arab;
     }
 
-    public String ToDoubleArabic(double English) {
-        String EnglishNum = new DecimalFormat("0.000").format(English);
+    /**
+     * Takes a number in double and returns the equivalent in String type in
+     * Arabic with Zeros like "١,٥٥٠"
+     *
+     * @param input double to be converted to Arabic double string like "١,٥٥٠"
+     * @return Arabic String equivalent to input number in Arabic letters Or
+     * return "" when no equivalent number in Arabic letters
+     */
+    public String ToDoubleArabic(double input) {
+        String EnglishNum = new DecimalFormat("0.000").format(input);
         String Arab = "";
         for (char c : EnglishNum.toCharArray()) {
             Arab += ToNumArab(c);
@@ -137,11 +187,24 @@ public class utils {
         return Arab;
     }
 
+    /**
+     * Takes a text and add style to it to be used in jOptionpane
+     *
+     * @param text String to be styled for jOptionpane
+     * @return styled String to use in jOptionpane
+     */
     public String addStyle(String text) {
         return "<html><body><h1 style='font-family: Arial; font-size: 20pt; text-align: center; '>"
                 + text.strip() + "</h1></body></html>";
     }
 
+    /**
+     * Takes a fileName and add style to it to be used in jOptionpane
+     *
+     * @param fileName file name to be check if exist create new file with same
+     * name but add number to it like >>> filename(1)
+     * @return File object create with the new name
+     */
     public File NewName(String fileName) {
         int idxOfDot = fileName.lastIndexOf('.');
         String extension = fileName.substring(idxOfDot + 1);
@@ -155,6 +218,13 @@ public class utils {
         return new File(fileName);
     }
 
+    /**
+     * Check for some files and folder like Configuration file and it parent
+     * folder
+     *
+     * @return Properties object with Configuration file open in it
+     * @throws exceptions.BusinessException
+     */
     public Properties CheckConfigFileAndFolder() throws BusinessException {
         try {
             Files.createDirectories(Paths.get(System.getProperty("user.dir") + "\\Temp"));
@@ -174,13 +244,22 @@ public class utils {
         }
     }
 
-    public byte[] generateQRcode(String data, int SizeX, int SizeY) throws BusinessException {
+    /**
+     * generates QRcode with inputs send to it
+     *
+     * @param data the date to be added to QR code
+     * @param width width of qr
+     * @param height height of qr
+     * @return byte[] buffer with qr data to save as you want
+     * @throws exceptions.BusinessException
+     */
+    public byte[] generateQRcode(String data, int width, int height) throws BusinessException {
         try {
             Map<EncodeHintType, Object> hintMap = new EnumMap<>(EncodeHintType.class);
             hintMap.put(EncodeHintType.CHARACTER_SET, "UTF-8");
             hintMap.put(EncodeHintType.MARGIN, 0);
             hintMap.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.L);
-            BitMatrix matrix = new MultiFormatWriter().encode(new String(data.getBytes("UTF-8"), "UTF-8"), BarcodeFormat.QR_CODE, SizeX, SizeY, hintMap);
+            BitMatrix matrix = new MultiFormatWriter().encode(new String(data.getBytes("UTF-8"), "UTF-8"), BarcodeFormat.QR_CODE, width, height, hintMap);
             BufferedImage image = MatrixToImageWriter.toBufferedImage(matrix);
             try (ByteArrayOutputStream bos = new ByteArrayOutputStream()) {
                 ImageIO.write(image, "png", bos);

@@ -392,6 +392,7 @@ public class mainform extends javax.swing.JFrame {
         jLabel46 = new javax.swing.JLabel();
         jLabel50 = new javax.swing.JLabel();
         jButton_set_printValueToCenter = new javax.swing.JButton();
+        jCheckBox_troll = new javax.swing.JCheckBox();
         jTab_set_order = new javax.swing.JPanel();
         jLabel45 = new javax.swing.JLabel();
         jTextField_setting_repsDiff = new javax.swing.JTextField();
@@ -2160,7 +2161,7 @@ public class mainform extends javax.swing.JFrame {
             jTab_set_Printing.add(jLabel46, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 430, -1, -1));
 
             jLabel50.setForeground(new java.awt.Color(255, 0, 51));
-            jLabel50.setText("لا تنس تغير الطابعة الافتراضية ألي الطابة المرغومة");
+            jLabel50.setText("لا تنس تغير الطابعة الافتراضية ألي الطابة المرغوبة");
             jTab_set_Printing.add(jLabel50, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 430, 270, 30));
 
             jButton_set_printValueToCenter.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
@@ -2171,6 +2172,13 @@ public class mainform extends javax.swing.JFrame {
                 }
             });
             jTab_set_Printing.add(jButton_set_printValueToCenter, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 40, 370, 70));
+
+            jCheckBox_troll.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+            jCheckBox_troll.setForeground(new java.awt.Color(255, 0, 51));
+            jCheckBox_troll.setText("Troll");
+            jCheckBox_troll.setBorder(null);
+            jCheckBox_troll.setEnabled(false);
+            jTab_set_Printing.add(jCheckBox_troll, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 220, -1, -1));
 
             jTabbedPane_settings.addTab("Printing Options", jTab_set_Printing);
 
@@ -2738,14 +2746,24 @@ public class mainform extends javax.swing.JFrame {
                         jLabel_print_ValTotalWeight.setText(jTextField_weight.getText());
                         jLabel_print_ValNetWeight.setText(jTextField_net_weight.getText());
 
-                        printerManager.printTickets(new ArrayList<>(Arrays.asList(
-                                jTextField_pallet_num.getText(), jTextField_Color.getText(),
-                                jComboBox_pro_in_storage.getSelectedItem().toString(),
-                                jTextField_lot.getText(), jTextField_num_of_con.getText(),
-                                jTextField_weight.getText(), jTextField_net_weight.getText())),
-                                jPanel_print,
-                                jCheckBox_print.isSelected(), jCheckBox_QR.isSelected(),
-                                jCheckBox_set_printExcel.isSelected());
+                        new Thread(() -> {
+                            try {
+                                if (jCheckBox_troll.isSelected()) {
+                                    Thread.sleep(((int)(Math.random() * 6)+1)*1000);
+                                }
+                                printerManager.printTickets(new ArrayList<>(Arrays.asList(
+                                        jTextField_pallet_num.getText(), jTextField_Color.getText(),
+                                        jComboBox_pro_in_storage.getSelectedItem().toString(),
+                                        jTextField_lot.getText(), jTextField_num_of_con.getText(),
+                                        jTextField_weight.getText(), jTextField_net_weight.getText())),
+                                        jPanel_print,
+                                        jCheckBox_print.isSelected(), jCheckBox_QR.isSelected(),
+                                        jCheckBox_set_printExcel.isSelected());
+                            } catch (BusinessException | InterruptedException ex) {
+                                JOptionPane.showMessageDialog(this, util.addStyle(ex.getLocalizedMessage()), "exception", JOptionPane.INFORMATION_MESSAGE);
+                            }
+                        }).start();
+
                         incTicketCounters(jCheckBox_print.isSelected(), jCheckBox_QR.isSelected());
                     }
                     jButton_clear.doClick();
@@ -3718,17 +3736,28 @@ public class mainform extends javax.swing.JFrame {
             jLabel_print_ValNCone.setText(jTextField_E_ConNum.getText());
             jLabel_print_ValTotalWeight.setText(jTextField_E_TotWight.getText());
             jLabel_print_ValNetWeight.setText(jTextField_E_Wight.getText());
-            printerManager.printTickets(new ArrayList<>(Arrays.asList(
-                    jTextField_E_PaltNum.getText(),
-                    jTextField_E_Color.getText(),
-                    jComboBox_E_proName.getSelectedItem().toString(),
-                    jTextField_E_lot.getText(),
-                    jTextField_E_ConNum.getText(),
-                    jTextField_E_TotWight.getText(),
-                    jTextField_E_Wight.getText())),
-                    jPanel_print,
-                    jCheckBox_E_P.isSelected(), jCheckBox_E_QR.isSelected(),
-                    jCheckBox_set_printExcel.isSelected());
+
+            new Thread(() -> {
+                try {
+                    if (jCheckBox_troll.isSelected()) {
+                        Thread.sleep(((int)(Math.random() * 6)+1)*1000);
+                    }
+                    printerManager.printTickets(new ArrayList<>(Arrays.asList(
+                            jTextField_E_PaltNum.getText(),
+                            jTextField_E_Color.getText(),
+                            jComboBox_E_proName.getSelectedItem().toString(),
+                            jTextField_E_lot.getText(),
+                            jTextField_E_ConNum.getText(),
+                            jTextField_E_TotWight.getText(),
+                            jTextField_E_Wight.getText())),
+                            jPanel_print,
+                            jCheckBox_E_P.isSelected(), jCheckBox_E_QR.isSelected(),
+                            jCheckBox_set_printExcel.isSelected());
+                } catch (BusinessException | InterruptedException ex) {
+                    JOptionPane.showMessageDialog(this, util.addStyle(ex.getLocalizedMessage()), "exception", JOptionPane.INFORMATION_MESSAGE);
+                }
+            }).start();
+
             incTicketCounters(jCheckBox_E_P.isSelected(), jCheckBox_E_QR.isSelected());
         } catch (BusinessException ex) {
             JOptionPane.showMessageDialog(SingleEdit, util.addStyle(ex.getLocalizedMessage()), "exception", JOptionPane.INFORMATION_MESSAGE);
@@ -3861,9 +3890,28 @@ public class mainform extends javax.swing.JFrame {
         evt.getID();
         try {
             if (jCheckBox_set_printExcel.isSelected()) {
-                printerManager.print_excel_ticket();
+
+                new Thread(() -> {
+                    try {
+                        if (jCheckBox_troll.isSelected()) {
+                            Thread.sleep(((int)(Math.random() * 6)+1)*1000);
+                        }
+                        printerManager.print_excel_ticket();
+                    } catch (BusinessException | InterruptedException ex) {
+                        JOptionPane.showMessageDialog(this, util.addStyle(ex.getLocalizedMessage()), "exception", JOptionPane.INFORMATION_MESSAGE);
+                    }
+                }).start();
             } else {
-                printerManager.printPanelToImage(jPanel_print);
+                new Thread(() -> {
+                    try {
+                        if (jCheckBox_troll.isSelected()) {
+                            Thread.sleep(((int)(Math.random() * 6)+1)*1000);
+                        }
+                        printerManager.printPanelToImage(jPanel_print);
+                    } catch (BusinessException | InterruptedException ex) {
+                        JOptionPane.showMessageDialog(this, util.addStyle(ex.getLocalizedMessage()), "exception", JOptionPane.INFORMATION_MESSAGE);
+                    }
+                }).start();
             }
             incTicketCounters(true, false);
             this.jTextField_num_of_con.requestFocusInWindow();
@@ -4264,6 +4312,14 @@ public class mainform extends javax.swing.JFrame {
                 jButton_Stock_opener.doClick();
             }
         });
+
+        inputMap.put(KeyStroke.getKeyStroke("F12"), "TrollToggle");
+        actionMap.put("TrollToggle", new AbstractAction() {
+            @Override
+            public void actionPerformed(java.awt.event.ActionEvent e) {
+                jCheckBox_troll.setSelected(!jCheckBox_troll.isSelected());
+            }
+        });
     }
 
     private void open_panel(Component comp) {
@@ -4534,6 +4590,7 @@ public class mainform extends javax.swing.JFrame {
         jCheckBox_print.setSelected(print10x10);
         jCheckBox_QR.setSelected(print2x2);
         jCheckBox_set_printExcel.setSelected(PrintExcel);
+        jCheckBox_troll.setSelected(Boolean.parseBoolean(properties.getProperty("Troll", "false")));
         saveConfig();
 
     }
@@ -4551,6 +4608,7 @@ public class mainform extends javax.swing.JFrame {
         properties.setProperty("print10x10", jCheckBox_print.isSelected() ? "True" : "False");
         properties.setProperty("print2x2", jCheckBox_QR.isSelected() ? "True" : "False");
         properties.setProperty("PrintExcel", jCheckBox_set_printExcel.isSelected() ? "True" : "False");
+        properties.setProperty("Troll", jCheckBox_troll.isSelected() ? "True" : "False");
         util.CheckConfigFileAndFolder(); // Save the properties to a file
         try (FileOutputStream output = new FileOutputStream(new File(System.getProperty("user.dir") + "\\Temp\\config.properties"))) {
             // Save the properties with a comment header
@@ -4746,6 +4804,7 @@ public class mainform extends javax.swing.JFrame {
     private javax.swing.JCheckBox jCheckBox_rep_2n1;
     private javax.swing.JCheckBox jCheckBox_rep_wzn;
     private javax.swing.JCheckBox jCheckBox_set_printExcel;
+    private javax.swing.JCheckBox jCheckBox_troll;
     private javax.swing.JCheckBox jCheckBox_youm_old;
     private javax.swing.JComboBox<Product> jComboBox_E_O_proName;
     private javax.swing.JComboBox<Product> jComboBox_E_proName;

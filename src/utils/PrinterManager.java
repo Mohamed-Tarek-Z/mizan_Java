@@ -22,6 +22,13 @@ import javax.swing.JPanel;
 
 public class PrinterManager {
 
+    /**
+     * enumerate all printers queues installed on computer and search for
+     * printerName that is being passed
+     *
+     * @param printerName name of printer queue to search for
+     * @return PrintService if found
+     */
     private PrintService getPrinterByName(String printerName) {
         return Arrays.stream(PrintServiceLookup.lookupPrintServices(null, null))
                 .filter(p -> p.getName().contains(printerName))
@@ -29,6 +36,13 @@ public class PrinterManager {
                 .orElse(null);
     }
 
+    /**
+     * takes the data buffer and send it to printer
+     *
+     * @param data buffer contain QR image data to send to printer queue printer
+     * can be changed from Configuration file
+     * @throws exceptions.BusinessException
+     */
     private void QRPrint(byte[] data) throws BusinessException {
         try {
             PrintService xPrinter = getPrinterByName(new utils().CheckConfigFileAndFolder().getProperty("qrPrinterName", "Xprinter"));
@@ -47,6 +61,13 @@ public class PrinterManager {
         }
     }
 
+    /**
+     * print the ticket from printer panel
+     *
+     * @param panel swing panel to be printed printer can be changed from
+     * Configuration file
+     * @throws exceptions.BusinessException
+     */
     public void printPanelToImage(JPanel panel) throws BusinessException {
         try {
             PrinterJob job = PrinterJob.getPrinterJob();
@@ -89,7 +110,7 @@ public class PrinterManager {
                 // Paint the panel onto the BufferedImage
                 panel.paint(g2dImage);
                 g2dImage.dispose();
-                
+
                 // Save image for debugging (optional)
                 //ImageIO.write(panelImage, "PNG", new File(System.getProperty("user.dir") + "\\Temp\\debug_print.png"));
                 // Print Image
@@ -111,6 +132,12 @@ public class PrinterManager {
         }
     }
 
+    /**
+     * print the ticket from excel file print panel should be faster because it
+     * does not rely on other programs
+     *
+     * @throws exceptions.BusinessException
+     */
     public void print_excel_ticket() throws BusinessException {
         try {
             Desktop.getDesktop().print(new File(System.getProperty("user.dir") + "\\Temp\\myFile.xlsx"));
@@ -119,6 +146,16 @@ public class PrinterManager {
         }
     }
 
+    /**
+     * print and creates the tickets from send to it
+     *
+     * @param values this is data to create tickets with
+     * @param panel this is the swing panel to print
+     * @param printTicket a Boolean to check if you want to print the big ticket or not
+     * @param printQr a Boolean to check if you want to print the QR ticket or not
+     * @param printingByExcelWay a Boolean to check if you want to by Excel or panel
+     * @throws exceptions.BusinessException
+     */
     public void printTickets(ArrayList<String> values, JPanel panel, boolean printTicket, boolean printQr, boolean printingByExcelWay) throws BusinessException {
         try {
             Files.createDirectories(Paths.get(System.getProperty("user.dir") + "\\Temp"));

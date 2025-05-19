@@ -195,7 +195,7 @@ public class StorageDAO {
         try {
             List<String[]> Stock = new ArrayList<>();
             ResultSet st = dbConnection.dataRead("pro_name, lot, COUNT(weight_), SUM(weight_)", "storage ,products",
-                    "storage.pro_id = products.pro_id group by lot, pro_name");
+                    "storage.pro_id = products.pro_id group by pro_name, lot order by pro_name ");
 
             while (st.next()) {
                 Stock.add(new String[]{st.getString(1), st.getString(2),

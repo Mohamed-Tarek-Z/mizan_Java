@@ -33,6 +33,15 @@ public class ExcelManager {
 
     private final String EXCEL_PATH = System.getProperty("user.dir") + "\\Temp\\myFile.xlsx";
 
+    /**
+     * this method it used in creating the header for the excels
+     *
+     * @param ClientName String that contain Client name
+     * @param productName String that contain product name
+     * @param lotNum String that contain Lot number
+     *
+     * @return String that contain the right formatted header for excel file
+     */
     private String contactForHeader(String ClientName, String productName, String lotNum) {
         date_now = LocalDate.now();
         String _1 = "                                                  إذن تـسليم بضاعة\n";
@@ -51,6 +60,21 @@ public class ExcelManager {
         return (_1 + _2 + _3 + "\n" + "\n" + _4 + _5);
     }
 
+    /**
+     * this method it used to creating a permit with 120 unit space
+     *
+     * @param orderIds list< string > ID of units in table
+     * @param totalWeight String the total weight of order
+     * @param ClientName String that contain Client name
+     * @param productName String that contain product name
+     * @param BagsTable Swing table with data of product units
+     * @param excelBackupPath String the shows the path for backup location
+     * @param isBoxes Boolean indicates products is packed in boxes or bags
+     *
+     * @return Boolean that indicates whether the file created or not
+     * @throws exceptions.DatabaseException
+     * @throws exceptions.BusinessException
+     */
     public boolean excel_120(List<String> orderIds, String totalWeight, String ClientName, String productName,
             JTable BagsTable, String excelBackupPath, boolean isBoxes) throws DatabaseException, BusinessException {
         try (FileInputStream file = new FileInputStream(new File("Donot_Change\\120.xlsx"))) {
@@ -100,6 +124,21 @@ public class ExcelManager {
         }
     }
 
+    /**
+     * this method it used to creating a permit with 160 unit space
+     *
+     * @param orderIds list< string > ID of units in table
+     * @param totalWeight String the total weight of order
+     * @param ClientName String that contain Client name
+     * @param productName String that contain product name
+     * @param BagsTable Swing table with data of product units
+     * @param excelBackupPath String the shows the path for backup location
+     * @param isBoxes Boolean indicates products is packed in boxes or bags
+     *
+     * @return Boolean that indicates whether the file created or not
+     * @throws exceptions.DatabaseException
+     * @throws exceptions.BusinessException
+     */
     public boolean excel_160(List<String> orderIds, String totalWeight, String ClientName,
             String productName, JTable BagsTable, String excelBackupPath, boolean isBoxes) throws BusinessException, DatabaseException {
         try (FileInputStream file = new FileInputStream(new File("Donot_Change\\160.xlsx"))) {
@@ -168,6 +207,21 @@ public class ExcelManager {
         }
     }
 
+    /**
+     * this method it used to creating a permit with 200 unit space
+     *
+     * @param orderIds list< string > ID of units in table
+     * @param totalWeight String the total weight of order
+     * @param ClientName String that contain Client name
+     * @param productName String that contain product name
+     * @param BagsTable Swing table with data of product units
+     * @param excelBackupPath String the shows the path for backup location
+     * @param isBoxes Boolean indicates products is packed in boxes or bags
+     *
+     * @return Boolean that indicates whether the file created or not
+     * @throws exceptions.DatabaseException
+     * @throws exceptions.BusinessException
+     */
     public boolean excel_200(List<String> orderIds, String totalWeight, String ClientName, String productName,
             JTable BagsTable, String excelBackupPath, boolean isBoxes) throws BusinessException, DatabaseException {
         try (FileInputStream file = new FileInputStream(new File("Donot_Change\\200.xlsx"))) {
@@ -253,6 +307,28 @@ public class ExcelManager {
 
     }
 
+    /**
+     * this method it used to creating a permit with 60-60 unit space
+     *
+     * @param sOrderIds list< string > ID of units in second order table
+     * @param fOrderIds list< string > ID of units in first order table
+     * @param wieghtSOrder String the total weight of second order
+     * @param wieghtFOrder String the total weight of first order
+     * @param typeSOrder String that contain second order product name
+     * @param typeFOrder String that contain first order product name
+     * @param ClientName String that contain Client name
+     * @param SIsBoxes Boolean indicates products in second order are packed in
+     * boxes or bags
+     * @param tableFOrder Swing table with data of first order product units
+     * @param tableSOrder Swing table with data of second order product units
+     * @param FIsBoxes Boolean indicates product units in first order are packed
+     * in boxes or bags
+     * @param excelBackupPath String the shows the path for backup location
+     *
+     * @return Boolean that indicates whether the file created or not
+     * @throws exceptions.DatabaseException
+     * @throws exceptions.BusinessException
+     */
     public boolean excel_60_60(List<String> sOrderIds, List<String> fOrderIds,
             String wieghtSOrder, String wieghtFOrder,
             String ClientName, String typeSOrder, String typeFOrder,
@@ -359,6 +435,13 @@ public class ExcelManager {
 
     }
 
+    /**
+     * this method it used to creating a Excel with stock
+     *
+     * @param stock list< string[] > result of query from SQL
+     * @return Boolean that indicates whether the file created or not
+     * @throws exceptions.BusinessException
+     */
     public boolean stockExcel(List<String[]> stock) throws BusinessException {
         try {
             int RowIndex = 4;
@@ -420,6 +503,15 @@ public class ExcelManager {
         }
     }
 
+    /**
+     * this method it used to creating a Excel with stock
+     *
+     * @param statstic list< string[] > result of query from SQL
+     * @param date1 starting date
+     * @param date2 ending date
+     * @return Boolean that indicates whether the file created or not
+     * @throws exceptions.BusinessException
+     */
     public boolean staticsticsExcel(List<String[]> statstic, String date1, String date2) throws BusinessException {
         try {
             int RowIndex = 4;
@@ -490,6 +582,13 @@ public class ExcelManager {
         }
     }
 
+    /**
+     * this method it used to creating a permits and it setts formulas to the
+     * last cell in column to calculate sum of the cells above
+     *
+     * @param cell Cell object
+     * @param sheet XSSFSheet object
+     */
     private void cell_functions(Cell cell, XSSFSheet sheet) {
         cell = sheet.getRow(22).getCell(0);
         String strFormula = "IF(MOD(SUM(B3:B22),1000)>0,MOD(SUM(B3:B22),1000),IF(COUNTBLANK(B3:B22)=20,\" \",0))";
@@ -540,6 +639,16 @@ public class ExcelManager {
         cell.setCellFormula(strFormula);
     }
 
+    /**
+     * this method it used to create excel in path with client and date
+     *
+     * @param ClientName String with client name
+     * @param workbook XSSFWorkbook object
+     * @param excelBackupPath String with backup path
+     *
+     * @throws exceptions.DatabaseException
+     * @throws exceptions.BusinessException
+     */
     private void create_excel_in_path(String ClientName, XSSFWorkbook workbook, String excelBackupPath) throws DatabaseException, BusinessException {
         try {
             date_now = LocalDate.now();
@@ -566,6 +675,12 @@ public class ExcelManager {
         }
     }
 
+    /**
+     * this method it used in creating ticket excel if used
+     *
+     * @param values the values to create excel with
+     * @throws exceptions.BusinessException
+     */
     public void excel_Ticket(ArrayList<String> values) throws BusinessException {
         try {
 
