@@ -73,7 +73,7 @@ public class mainform extends javax.swing.JFrame {
 
     private short tick10x10, tick2x2;
     private int BagMax = 2, repDiff;
-    private final String Version = "V 1.5 MVC";
+    private final String Version = "V 2.0 MVC";
     private String ticketPrinterName, qrPrinterName;
 
     private final JButton jButton_Settings = new javax.swing.JButton();
@@ -2708,7 +2708,7 @@ public class mainform extends javax.swing.JFrame {
                     int filledPallet = storageController.addStorage(jComboBox_pro_in_storage.getSelectedItem().toString(),
                             jTextField_weight.getText(), jTextField_net_weight.getText(), jTextField_lot.getText(),
                             jTextField_num_of_con.getText(), jTextField_pallet_num.getText(),
-                            jCheckBox_M_Markpage.isSelected()
+                            jCheckBox_M_Markpage.isSelected(), jTextField_bag_weight.getText()
                     );
 
                     jTextField_pallet_num.setText(util.ToStringArabic(filledPallet + ""));
@@ -2749,7 +2749,7 @@ public class mainform extends javax.swing.JFrame {
                         new Thread(() -> {
                             try {
                                 if (jCheckBox_troll.isSelected()) {
-                                    Thread.sleep(((int)(Math.random() * 6)+1)*1000);
+                                    Thread.sleep(((int) (Math.random() * 6) + 1) * 1000);
                                 }
                                 printerManager.printTickets(new ArrayList<>(Arrays.asList(
                                         jTextField_pallet_num.getText(), jTextField_Color.getText(),
@@ -3563,7 +3563,7 @@ public class mainform extends javax.swing.JFrame {
                 storageController.updateStorage(Integer.parseInt(jTable_storage.getModel().getValueAt(jTable_storage.getSelectedRow(), 4).toString()),
                         jComboBox_E_proName.getSelectedItem().toString(), jTextField_E_TotWight.getText(),
                         jTextField_E_Wight.getText(), jTextField_E_lot.getText(), jTextField_E_ConNum.getText(),
-                        jTextField_E_PaltNum.getText(), jCheckBox_E_Mark.isSelected());
+                        jTextField_E_PaltNum.getText(), jCheckBox_E_Mark.isSelected(),"0.000");
                 this.setEnabled(true);
                 fill_storage_table();
                 SingleEdit.dispose();
@@ -3740,7 +3740,7 @@ public class mainform extends javax.swing.JFrame {
             new Thread(() -> {
                 try {
                     if (jCheckBox_troll.isSelected()) {
-                        Thread.sleep(((int)(Math.random() * 6)+1)*1000);
+                        Thread.sleep(((int) (Math.random() * 6) + 1) * 1000);
                     }
                     printerManager.printTickets(new ArrayList<>(Arrays.asList(
                             jTextField_E_PaltNum.getText(),
@@ -3841,7 +3841,7 @@ public class mainform extends javax.swing.JFrame {
                     Bag bag = storageController.getBagById(Integer.parseInt(jTable_storage.getModel().getValueAt(jTable_storage.getSelectedRows()[i], 4).toString()));
                     storageController.updateStorage(bag.getId(),
                             jComboBox_ME_type.getSelectedItem().toString(), bag.getTot_wight() + "", bag.getWeight() + "",
-                            jTextField_ME_lot.getText(), bag.getNum_of_con() + "", jTextField_ME_PaltNum.getText(), jCheckBox_ME_MarkBag.isSelected());
+                            jTextField_ME_lot.getText(), bag.getNum_of_con() + "", jTextField_ME_PaltNum.getText(), jCheckBox_ME_MarkBag.isSelected(),"0.000");
                 }
                 MultiEdit.dispose();
                 JOptionPane.showMessageDialog(MultiEdit, util.addStyle(" تم تعديل البيانات بنجاح  "), "إنتبه",
@@ -3894,7 +3894,7 @@ public class mainform extends javax.swing.JFrame {
                 new Thread(() -> {
                     try {
                         if (jCheckBox_troll.isSelected()) {
-                            Thread.sleep(((int)(Math.random() * 6)+1)*1000);
+                            Thread.sleep(((int) (Math.random() * 6) + 1) * 1000);
                         }
                         printerManager.print_excel_ticket();
                     } catch (BusinessException | InterruptedException ex) {
@@ -3905,7 +3905,7 @@ public class mainform extends javax.swing.JFrame {
                 new Thread(() -> {
                     try {
                         if (jCheckBox_troll.isSelected()) {
-                            Thread.sleep(((int)(Math.random() * 6)+1)*1000);
+                            Thread.sleep(((int) (Math.random() * 6) + 1) * 1000);
                         }
                         printerManager.printPanelToImage(jPanel_print);
                     } catch (BusinessException | InterruptedException ex) {

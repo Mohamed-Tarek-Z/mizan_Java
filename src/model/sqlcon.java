@@ -22,7 +22,6 @@ public class sqlcon {
         st = conn.createStatement();
     }
 
-    
     public String getIp() {
         return ip;
     }
@@ -33,6 +32,10 @@ public class sqlcon {
 
     public void inData(String tableName, String colName, String values) throws SQLException {
         st.execute("insert into " + tableName + " (" + colName + ") values (" + values + ")");
+    }
+
+    public void inDataIdentityON(String tableName, String colName, String values) throws SQLException {
+        st.execute("SET IDENTITY_INSERT " + tableName + " ON;  insert into " + tableName + " (" + colName + ") values (" + values + ");SET IDENTITY_INSERT " + tableName + " OFF;");
     }
 
     public void update(String tableName, String editData, String condition) throws SQLException {

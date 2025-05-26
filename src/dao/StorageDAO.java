@@ -21,7 +21,7 @@ public class StorageDAO {
     public List<Bag> getBags(String proName) throws DatabaseException {
         try {
             List<Bag> Bags = new ArrayList<>();
-            ResultSet rs = dbConnection.dataRead("storage_id,pro_id,tot_wight,weight_,lot,num_of_con,pallet_numb,used,date_",
+            ResultSet rs = dbConnection.dataRead("*",
                     "storage ",
                     "storage.pro_id=(select pro_id from products where pro_name=N'"
                     + proName + "') order by "
@@ -30,7 +30,7 @@ public class StorageDAO {
                     + ", used, pallet_numb DESC, storage_id DESC");
             while (rs.next()) {
                 Bags.add(new Bag(rs.getInt("storage_id"), rs.getInt("pro_id"), rs.getDouble("tot_wight"), rs.getDouble("weight_"), rs.getString("lot"),
-                        rs.getInt("num_of_con"), rs.getInt("pallet_numb"), rs.getBoolean("used"), rs.getDate("date_")));
+                        rs.getInt("num_of_con"), rs.getInt("pallet_numb"), rs.getBoolean("used"), rs.getDate("date_"), rs.getDouble("empty_pack")));
             }
 
             return Bags;
@@ -43,12 +43,12 @@ public class StorageDAO {
     public List<Bag> getBagsToReport(int topNumber, String proName, String palletNumber, String lotNumber) throws DatabaseException {
         try {
             List<Bag> Bags = new ArrayList<>();
-            ResultSet rs = dbConnection.dataRead("TOP(" + (topNumber <= 0 ? 20 : topNumber) + ") storage_id,pro_id,tot_wight,weight_,lot,num_of_con,pallet_numb,used,date_", "storage",
+            ResultSet rs = dbConnection.dataRead("TOP(" + (topNumber <= 0 ? 20 : topNumber) + ") storage_id,pro_id,tot_wight,weight_,lot,num_of_con,pallet_numb,used,date_,empty_pack", "storage",
                     " pro_id=(select pro_id from products where pro_name=N'"
                     + proName + "' ) and pallet_numb=" + palletNumber + " and lot=N'" + lotNumber + "' order by pallet_numb ,storage_id DESC ");
             while (rs.next()) {
                 Bags.add(new Bag(rs.getInt("storage_id"), rs.getInt("pro_id"), rs.getDouble("tot_wight"), rs.getDouble("weight_"), rs.getString("lot"),
-                        rs.getInt("num_of_con"), rs.getInt("pallet_numb"), rs.getBoolean("used"), rs.getDate("date_")));
+                        rs.getInt("num_of_con"), rs.getInt("pallet_numb"), rs.getBoolean("used"), rs.getDate("date_"), rs.getDouble("empty_pack")));
             }
 
             return Bags;
@@ -80,14 +80,27 @@ public class StorageDAO {
 
     public void addBag(Bag bag) throws DatabaseException {
         try {
-            dbConnection.inData("storage", "pro_id,tot_wight,weight_,lot,pallet_numb,date_,num_of_con,used",
-                    bag.getPro_id() + "," + bag.getTot_wight() + ","
-                    + bag.getWeight() + ",N'"
-                    + bag.getLot() + "',"
-                    + bag.getPallet_numb() + ",GETDATE(),"
-                    + bag.getNum_of_con() + ","
-                    + (bag.isUsed() ? 1 : 0) + " "
-            );
+            if (bag.getId() != 0) {
+                dbConnection.inDataIdentityON("storage", "storage_id,pro_id,tot_wight,weight_,lot,pallet_numb,date_,num_of_con,used,empty_pack",
+                        bag.getId() + "," + bag.getPro_id() + "," + bag.getTot_wight() + ","
+                        + bag.getWeight() + ",N'"
+                        + bag.getLot() + "',"
+                        + bag.getPallet_numb() + ",GETDATE(),"
+                        + bag.getNum_of_con() + ","
+                        + (bag.isUsed() ? 1 : 0) + ","
+                        + bag.getEmpty_pack()
+                );
+            } else {
+                dbConnection.inData("storage", "pro_id,tot_wight,weight_,lot,pallet_numb,date_,num_of_con,used,empty_pack",
+                        bag.getPro_id() + "," + bag.getTot_wight() + ","
+                        + bag.getWeight() + ",N'"
+                        + bag.getLot() + "',"
+                        + bag.getPallet_numb() + ",GETDATE(),"
+                        + bag.getNum_of_con() + ","
+                        + (bag.isUsed() ? 1 : 0) + ","
+                        + bag.getEmpty_pack()
+                );
+            }
         } catch (SQLException ex) {
             Logger.getLogger(StorageDAO.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
             throw new DatabaseException("حدث خطأ أثناء إضافة الشكارة", ex);
@@ -142,11 +155,11 @@ public class StorageDAO {
     public Bag getBagbyId(int bagId) throws DatabaseException {
         try {
             Bag bag = null;
-            ResultSet rs = dbConnection.dataRead("storage_id,pro_id,tot_wight,weight_,lot,num_of_con,pallet_numb,used,date_",
+            ResultSet rs = dbConnection.dataRead("storage_id,pro_id,tot_wight,weight_,lot,num_of_con,pallet_numb,used,date_,empty_pack",
                     "storage ", "storage_id=" + bagId + "");
             if (rs.next()) {
                 bag = new Bag(rs.getInt("storage_id"), rs.getInt("pro_id"), rs.getDouble("tot_wight"), rs.getDouble("weight_"), rs.getString("lot"),
-                        rs.getInt("num_of_con"), rs.getInt("pallet_numb"), rs.getBoolean("used"), rs.getDate("date_"));
+                        rs.getInt("num_of_con"), rs.getInt("pallet_numb"), rs.getBoolean("used"), rs.getDate("date_"), rs.getDouble("empty_pack"));
             }
             return bag;
         } catch (SQLException ex) {

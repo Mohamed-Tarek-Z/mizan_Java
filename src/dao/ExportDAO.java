@@ -46,7 +46,7 @@ public class ExportDAO {
 
     public void moveBagFromStorageToExport(String storageId, String clientName, String totalWeight) throws DatabaseException {
         try {
-            dbConnection.inData("export", "pro_id,cli_id,tot_wight,weight_,lot,inserted_date,exported_date,num_of_con,pallet_numb,used,ord_id",
+            dbConnection.inData("export", "pro_id,cli_id,tot_wight,weight_,lot,inserted_date,exported_date,num_of_con,pallet_numb,used,ord_id,empty_pack,storageID",
                     "(select pro_id from storage where storage_id=" + storageId + ")"
                     + ",(select  top(1) cli_id from clients where cli_name=N'" + clientName + "')"
                     + ",(select tot_wight from storage where storage_id=" + storageId + ")"
@@ -58,6 +58,8 @@ public class ExportDAO {
                     + ",(select pallet_numb from storage where storage_id= " + storageId + " )"
                     + ",(select used from storage where storage_id= " + storageId + " )"
                     + ",(SELECT TOP 1 ord_id FROM orders where ord_wight=" + util.ToDoubleEnglish(totalWeight) + " ORDER BY ord_id DESC)"
+                    + ",(select empty_pack from storage where storage_id= " + storageId + " ),"
+                    + storageId
             );
         } catch (SQLException ex) {
             Logger.getLogger(ExportDAO.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
@@ -146,7 +148,7 @@ public class ExportDAO {
                 exports.add(new Export(rs.getInt("exp_id"), rs.getInt("pro_id"), rs.getInt("cli_id"), rs.getInt("ord_id"), rs.getInt("num_of_con"),
                         rs.getInt("pallet_numb"), rs.getDouble("tot_wight"),
                         rs.getDouble("weight_"), rs.getString("lot"),
-                        rs.getBoolean("used"), rs.getDate("inserted_date"), rs.getDate("exported_date")));
+                        rs.getBoolean("used"), rs.getDate("inserted_date"), rs.getDate("exported_date"), rs.getDouble("empty_pack"), rs.getInt("storageID")));
             }
             return exports;
         } catch (SQLException ex) {

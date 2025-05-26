@@ -47,8 +47,8 @@ public class ExportController {
         if (!exports.isEmpty()) {
 
             for (Export exp : exports) {
-                storageDAO.addBag(new Bag(0, exp.getPro_id(), exp.getTot_wight(), exp.getWeight(),
-                        exp.getLot(), exp.getNum_of_con(), exp.getPallet_numb(), exp.isUsed(), exp.getInserted_date()));
+                storageDAO.addBag(new Bag(exp.getStorageID(), exp.getPro_id(), exp.getTot_wight(), exp.getWeight(),
+                        exp.getLot(), exp.getNum_of_con(), exp.getPallet_numb(), exp.isUsed(), exp.getInserted_date(), exp.getEmpty_pack()));
             }
 
             if (old) {
