@@ -44,6 +44,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
+import javax.swing.SwingUtilities;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
@@ -55,7 +56,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 //import org.vosk.LibVosk;
 //import org.vosk.LogLevel;
-public class mainform extends javax.swing.JFrame {
+public class mainform extends javax.swing.JFrame implements ErrorListener {
 
     private final sqlcon opj;
     private final ProductController productController;
@@ -73,7 +74,7 @@ public class mainform extends javax.swing.JFrame {
 
     private short tick10x10, tick2x2;
     private int BagMax = 2, repDiff;
-    private final String Version = "V 2.0 MVC";
+    private final String Version = "V 2.2 MVC";
     private String ticketPrinterName, qrPrinterName;
 
     private final JButton jButton_Settings = new javax.swing.JButton();
@@ -84,12 +85,20 @@ public class mainform extends javax.swing.JFrame {
     private char firstChar;
     private boolean enterFromMizan = false;
 
+    @Override
+    public void onError(Exception ex) {
+        // Safely update UI here
+        SwingUtilities.invokeLater(() -> {
+            JOptionPane.showMessageDialog(this, util.addStyle(ex.getLocalizedMessage()), "exception", JOptionPane.INFORMATION_MESSAGE);
+        });
+    }
+
     public mainform(boolean admin, sqlcon dbConnection) throws DatabaseException, BusinessException {
         initComponents();
         this.opj = dbConnection;
         this.util = new utils();
         this.excelManager = new ExcelManager();
-        this.printerManager = new PrinterManager();
+        this.printerManager = new PrinterManager(this);
         this.productController = new ProductController(new ProductDAO(dbConnection));
         this.storageController = new StorageController(new StorageDAO(dbConnection), new ProductDAO(dbConnection));
         this.exportController = new ExportController(new ExportDAO(dbConnection), new StorageDAO(dbConnection), new OrderDAO(dbConnection));
@@ -2746,23 +2755,14 @@ public class mainform extends javax.swing.JFrame {
                         jLabel_print_ValTotalWeight.setText(jTextField_weight.getText());
                         jLabel_print_ValNetWeight.setText(jTextField_net_weight.getText());
 
-                        new Thread(() -> {
-                            try {
-                                if (jCheckBox_troll.isSelected()) {
-                                    Thread.sleep(((int) (Math.random() * 6) + 1) * 1000);
-                                }
-                                printerManager.printTickets(new ArrayList<>(Arrays.asList(
-                                        jTextField_pallet_num.getText(), jTextField_Color.getText(),
-                                        jComboBox_pro_in_storage.getSelectedItem().toString(),
-                                        jTextField_lot.getText(), jTextField_num_of_con.getText(),
-                                        jTextField_weight.getText(), jTextField_net_weight.getText())),
-                                        jPanel_print,
-                                        jCheckBox_print.isSelected(), jCheckBox_QR.isSelected(),
-                                        jCheckBox_set_printExcel.isSelected());
-                            } catch (BusinessException | InterruptedException ex) {
-                                JOptionPane.showMessageDialog(this, util.addStyle(ex.getLocalizedMessage()), "exception", JOptionPane.INFORMATION_MESSAGE);
-                            }
-                        }).start();
+                        printerManager.printTickets(new ArrayList<>(Arrays.asList(
+                                jTextField_pallet_num.getText(), jTextField_Color.getText(),
+                                jComboBox_pro_in_storage.getSelectedItem().toString(),
+                                jTextField_lot.getText(), jTextField_num_of_con.getText(),
+                                jTextField_weight.getText(), jTextField_net_weight.getText())),
+                                jPanel_print,
+                                jCheckBox_print.isSelected(), jCheckBox_QR.isSelected(),
+                                jCheckBox_set_printExcel.isSelected(), jCheckBox_troll.isSelected());
 
                         incTicketCounters(jCheckBox_print.isSelected(), jCheckBox_QR.isSelected());
                     }
@@ -3563,7 +3563,7 @@ public class mainform extends javax.swing.JFrame {
                 storageController.updateStorage(Integer.parseInt(jTable_storage.getModel().getValueAt(jTable_storage.getSelectedRow(), 4).toString()),
                         jComboBox_E_proName.getSelectedItem().toString(), jTextField_E_TotWight.getText(),
                         jTextField_E_Wight.getText(), jTextField_E_lot.getText(), jTextField_E_ConNum.getText(),
-                        jTextField_E_PaltNum.getText(), jCheckBox_E_Mark.isSelected(),"0.000");
+                        jTextField_E_PaltNum.getText(), jCheckBox_E_Mark.isSelected(), "0.000");
                 this.setEnabled(true);
                 fill_storage_table();
                 SingleEdit.dispose();
@@ -3737,26 +3737,17 @@ public class mainform extends javax.swing.JFrame {
             jLabel_print_ValTotalWeight.setText(jTextField_E_TotWight.getText());
             jLabel_print_ValNetWeight.setText(jTextField_E_Wight.getText());
 
-            new Thread(() -> {
-                try {
-                    if (jCheckBox_troll.isSelected()) {
-                        Thread.sleep(((int) (Math.random() * 6) + 1) * 1000);
-                    }
-                    printerManager.printTickets(new ArrayList<>(Arrays.asList(
-                            jTextField_E_PaltNum.getText(),
-                            jTextField_E_Color.getText(),
-                            jComboBox_E_proName.getSelectedItem().toString(),
-                            jTextField_E_lot.getText(),
-                            jTextField_E_ConNum.getText(),
-                            jTextField_E_TotWight.getText(),
-                            jTextField_E_Wight.getText())),
-                            jPanel_print,
-                            jCheckBox_E_P.isSelected(), jCheckBox_E_QR.isSelected(),
-                            jCheckBox_set_printExcel.isSelected());
-                } catch (BusinessException | InterruptedException ex) {
-                    JOptionPane.showMessageDialog(this, util.addStyle(ex.getLocalizedMessage()), "exception", JOptionPane.INFORMATION_MESSAGE);
-                }
-            }).start();
+            printerManager.printTickets(new ArrayList<>(Arrays.asList(
+                    jTextField_E_PaltNum.getText(),
+                    jTextField_E_Color.getText(),
+                    jComboBox_E_proName.getSelectedItem().toString(),
+                    jTextField_E_lot.getText(),
+                    jTextField_E_ConNum.getText(),
+                    jTextField_E_TotWight.getText(),
+                    jTextField_E_Wight.getText())),
+                    jPanel_print,
+                    jCheckBox_E_P.isSelected(), jCheckBox_E_QR.isSelected(),
+                    jCheckBox_set_printExcel.isSelected(), jCheckBox_troll.isSelected());
 
             incTicketCounters(jCheckBox_E_P.isSelected(), jCheckBox_E_QR.isSelected());
         } catch (BusinessException ex) {
@@ -3841,7 +3832,7 @@ public class mainform extends javax.swing.JFrame {
                     Bag bag = storageController.getBagById(Integer.parseInt(jTable_storage.getModel().getValueAt(jTable_storage.getSelectedRows()[i], 4).toString()));
                     storageController.updateStorage(bag.getId(),
                             jComboBox_ME_type.getSelectedItem().toString(), bag.getTot_wight() + "", bag.getWeight() + "",
-                            jTextField_ME_lot.getText(), bag.getNum_of_con() + "", jTextField_ME_PaltNum.getText(), jCheckBox_ME_MarkBag.isSelected(),"0.000");
+                            jTextField_ME_lot.getText(), bag.getNum_of_con() + "", jTextField_ME_PaltNum.getText(), jCheckBox_ME_MarkBag.isSelected(), "0.000");
                 }
                 MultiEdit.dispose();
                 JOptionPane.showMessageDialog(MultiEdit, util.addStyle(" تم تعديل البيانات بنجاح  "), "إنتبه",
@@ -3902,16 +3893,7 @@ public class mainform extends javax.swing.JFrame {
                     }
                 }).start();
             } else {
-                new Thread(() -> {
-                    try {
-                        if (jCheckBox_troll.isSelected()) {
-                            Thread.sleep(((int) (Math.random() * 6) + 1) * 1000);
-                        }
-                        printerManager.printPanelToImage(jPanel_print);
-                    } catch (BusinessException | InterruptedException ex) {
-                        JOptionPane.showMessageDialog(this, util.addStyle(ex.getLocalizedMessage()), "exception", JOptionPane.INFORMATION_MESSAGE);
-                    }
-                }).start();
+                printerManager.printPanelToImage(jPanel_print, jCheckBox_troll.isSelected());
             }
             incTicketCounters(true, false);
             this.jTextField_num_of_con.requestFocusInWindow();
