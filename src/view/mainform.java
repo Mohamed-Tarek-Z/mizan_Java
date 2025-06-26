@@ -54,8 +54,6 @@ import org.apache.poi.ss.usermodel.CellCopyPolicy;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-//import org.vosk.LibVosk;
-//import org.vosk.LogLevel;
 public class mainform extends javax.swing.JFrame implements ErrorListener {
 
     private final sqlcon opj;
@@ -74,7 +72,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
 
     private short tick10x10, tick2x2;
     private int BagMax = 2, repDiff;
-    private final String Version = "V 2.2 MVC";
+    private final String Version = "V 2.4 MVC";
     private String ticketPrinterName, qrPrinterName;
 
     private final JButton jButton_Settings = new javax.swing.JButton();
@@ -138,7 +136,6 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
         readConfig();
         setupKeyBindings();
 //        LibVosk.setLogLevel(LogLevel.WARNINGS);
-//        startRecognition();
     }
 
     @SuppressWarnings("unchecked")
@@ -269,7 +266,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
         jCheckBox_ConeWeightChange = new javax.swing.JCheckBox();
         jCheckBox_ignore_limits = new javax.swing.JCheckBox();
         jSeparator7 = new javax.swing.JSeparator();
-        jTextField_Search_pros = new javax.swing.JTextField();
+        jTextField_InData_Search_pros = new javax.swing.JTextField();
         makePermit = new javax.swing.JPanel();
         jComboBox_rep_Pros = new javax.swing.JComboBox<>();
         jLabel1 = new javax.swing.JLabel();
@@ -338,6 +335,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
         jLabel16 = new javax.swing.JLabel();
         jButton_reps_clear = new javax.swing.JButton();
         jCheckBox_rep_wzn = new javax.swing.JCheckBox();
+        jTextField_Ezn_Search_pros = new javax.swing.JTextField();
         products_panel = new javax.swing.JPanel();
         jTextField_pro_name = new javax.swing.JTextField();
         jButton_add_pro = new javax.swing.JButton();
@@ -1487,12 +1485,12 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
             jSeparator7.setPreferredSize(new java.awt.Dimension(37, 55));
             storage_panel.add(jSeparator7, new org.netbeans.lib.awtextra.AbsoluteConstraints(605, 10, 110, 20));
 
-            jTextField_Search_pros.addKeyListener(new java.awt.event.KeyAdapter() {
+            jTextField_InData_Search_pros.addKeyListener(new java.awt.event.KeyAdapter() {
                 public void keyTyped(java.awt.event.KeyEvent evt) {
-                    jTextField_Search_prosKeyTyped(evt);
+                    jTextField_InData_Search_prosKeyTyped(evt);
                 }
             });
-            storage_panel.add(jTextField_Search_pros, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 40, 150, 20));
+            storage_panel.add(jTextField_InData_Search_pros, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 40, 150, 20));
 
             left_panel.add(storage_panel, "Mizan");
 
@@ -1508,7 +1506,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
                     jComboBox_rep_ProsItemStateChanged(evt);
                 }
             });
-            makePermit.add(jComboBox_rep_Pros, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 50, 300, -1));
+            makePermit.add(jComboBox_rep_Pros, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 65, 300, -1));
 
             jLabel1.setFont(new java.awt.Font("sansserif", 0, 20)); // NOI18N
             jLabel1.setText("الصنف");
@@ -1690,6 +1688,13 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
                 }
             });
             makePermit.add(jCheckBox_rep_wzn, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 130, -1, -1));
+
+            jTextField_Ezn_Search_pros.addKeyListener(new java.awt.event.KeyAdapter() {
+                public void keyTyped(java.awt.event.KeyEvent evt) {
+                    jTextField_Ezn_Search_prosKeyTyped(evt);
+                }
+            });
+            makePermit.add(jTextField_Ezn_Search_pros, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 35, 200, -1));
 
             left_panel.add(makePermit, "Ezn");
 
@@ -3429,8 +3434,14 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
         evt.getID();
         if (jCheckBox_freeze_cone.isSelected())
             jTextField_bag_weight.requestFocusInWindow();
-        else
+        else {
             jTextField_num_of_con.selectAll();
+//            try {
+//                startRecognition(jTextField_num_of_con);
+//            } catch (IOException | LineUnavailableException ex) {
+//                Logger.getLogger(mainform.class.getName()).log(Level.SEVERE, null, ex);
+//            }
+        }
     }//GEN-LAST:event_jTextField_num_of_conFocusGained
 
     private void jButton_Statics_openerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_Statics_openerActionPerformed
@@ -4056,21 +4067,21 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
         sendToWight(jTextField_Pros_color, jTextField_Pros_conWight, evt);
     }//GEN-LAST:event_jTextField_Pros_colorKeyTyped
 
-    private void jTextField_Search_prosKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_Search_prosKeyTyped
+    private void jTextField_InData_Search_prosKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_InData_Search_prosKeyTyped
         // TODO add your handling code here:
         evt.getID();
         try {
             evt.setKeyChar(util.ToNumArab(evt.getKeyChar()));
 
             if (evt.getKeyChar() == KeyEvent.VK_DELETE) {
-                jTextField_Search_pros.setText("");
+                jTextField_InData_Search_pros.setText("");
             }
-            combox_fill_with(jComboBox_pro_in_storage, jTextField_Search_pros.getText());
+            combox_fill_with(jComboBox_pro_in_storage, jTextField_InData_Search_pros.getText());
         } catch (DatabaseException ex) {
             Logger.getLogger(mainform.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(this, util.addStyle(ex.getLocalizedMessage()), "exception", JOptionPane.INFORMATION_MESSAGE);
         }
-    }//GEN-LAST:event_jTextField_Search_prosKeyTyped
+    }//GEN-LAST:event_jTextField_InData_Search_prosKeyTyped
 
     private void jButton_set_changePosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_set_changePosActionPerformed
         // TODO add your handling code here:
@@ -4244,6 +4255,22 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
             JOptionPane.showMessageDialog(this, util.addStyle(ex.getLocalizedMessage()), "exception", JOptionPane.INFORMATION_MESSAGE);
         }
     }//GEN-LAST:event_jTable_machinesMouseClicked
+
+    private void jTextField_Ezn_Search_prosKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_Ezn_Search_prosKeyTyped
+        // TODO add your handling code here:
+        evt.getID();
+        try {
+            evt.setKeyChar(util.ToNumArab(evt.getKeyChar()));
+
+            if (evt.getKeyChar() == KeyEvent.VK_DELETE) {
+                jTextField_Ezn_Search_pros.setText("");
+            }
+            combox_fill_with(jComboBox_rep_Pros, jTextField_Ezn_Search_pros.getText());
+        } catch (DatabaseException ex) {
+            Logger.getLogger(mainform.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(this, util.addStyle(ex.getLocalizedMessage()), "exception", JOptionPane.INFORMATION_MESSAGE);
+        }
+    }//GEN-LAST:event_jTextField_Ezn_Search_prosKeyTyped
 
     private void jButton_SettingsActionPerformed() throws IOException, BusinessException {
         open_panel(jTabbedPane_settings);
@@ -4702,35 +4729,37 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
         saveConfig();
         readConfig();
     }
-//    private void startRecognition() throws IOException, LineUnavailableException {
+
+//    private void startRecognition(JTextField RecognitionTo) throws IOException, LineUnavailableException {
 //
-//        // Load Arabic speech model (make sure you have the correct path to the downloaded model)
-//        // Model model = new Model("models/vosk-model-small-ar");
-//        Model model = new Model("models/vosk-model-ar");
-//        // Model model = new Model("models/vosk-model-small-en-us-0.15");
+//        try (
+//                Model model = new Model("models/vosk-model-ar")) {
+//            Recognizer recognizer = new Recognizer(model, 48000, new ArabicNumberGrammarBuilder().generateArabicNumbers());
 //
-//        // Set up microphone
-//        AudioFormat format = new AudioFormat(16000, 16, 1, true, false);
-//        DataLine.Info info = new DataLine.Info(TargetDataLine.class, format);
-//        TargetDataLine microphone = (TargetDataLine) AudioSystem.getLine(info);
-//        microphone.open(format);
-//        microphone.start();
+//            byte[] buffer = new byte[4096];
 //
-//        // Create a recognizer with the model and microphone audio stream
-//        Recognizer recognizer = new Recognizer(model, 16000);
+//            new Thread(() -> {
+//                try {
+//                    AudioFormat format = new AudioFormat(48000, 16, 1, true, false);
+//                    DataLine.Info info = new DataLine.Info(TargetDataLine.class, format);
+//                    try (TargetDataLine microphone = (TargetDataLine) AudioSystem.getLine(info)) {
+//                        microphone.open(format);
+//                        microphone.start();
+//                        while (RecognitionTo.hasFocus()) {
 //
-//        byte[] buffer = new byte[4096];
-//
-//        // Continuously listen to the microphone and recognize speech
-//        new Thread(() -> {
-//            while (true) {
-//
-//                int bytesRead = microphone.read(buffer, 0, buffer.length);
-//                if (recognizer.acceptWaveForm(buffer, bytesRead)) {
-//                    jTextArea_emp.append(recognizer.getResult() + "\n");
+//                            int bytesRead = microphone.read(buffer, 0, buffer.length);
+//                            if (recognizer.acceptWaveForm(buffer, bytesRead)) {
+//                                RecognitionTo.setText(recognizer.getFinalResult());
+//                            }
+//                        }
+//                        System.out.println("out");
+//                        microphone.stop();
+//                    }
+//                } catch (LineUnavailableException ex) {
+//                    Logger.getLogger(mainform.class.getName()).log(Level.SEVERE, null, ex);
 //                }
-//            }
-//        }).start();
+//            }).start();
+//        }
 //    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -4932,11 +4961,12 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
     private javax.swing.JTextField jTextField_E_TotWight;
     private javax.swing.JTextField jTextField_E_Wight;
     private javax.swing.JTextField jTextField_E_lot;
+    private javax.swing.JTextField jTextField_Ezn_Search_pros;
+    private javax.swing.JTextField jTextField_InData_Search_pros;
     private javax.swing.JTextField jTextField_ME_PaltNum;
     private javax.swing.JTextField jTextField_ME_lot;
     private javax.swing.JTextField jTextField_Pros_color;
     private javax.swing.JTextField jTextField_Pros_conWight;
-    private javax.swing.JTextField jTextField_Search_pros;
     private javax.swing.JTextField jTextField_bag_weight;
     private javax.swing.JTextField jTextField_lot;
     private javax.swing.JTextField jTextField_mach_MName;

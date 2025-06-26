@@ -143,13 +143,6 @@ public class PrinterManager {
      * @param troll
      */
     public void printPanelToImage(JPanel panel, boolean troll) {
-        if (troll) {
-            try {
-                Thread.sleep(((int) (Math.random() * 6) + 1) * 1000);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(PrinterManager.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
         SwingUtilities.invokeLater(() -> {
             int dpi = 300; // High DPI for sharp quality
             double scaleFactor = dpi / 72.0; // Convert from points to pixels
@@ -182,10 +175,15 @@ public class PrinterManager {
             //ImageIO.write(panelImage, "PNG", new File(System.getProperty("user.dir") + "\\Temp\\debug_print.png"));
             new Thread(() -> {
                 try {
+                    if (troll) {
+                        Thread.sleep(((int) (Math.random() * 6) + 1) * 1000);
+                    }
                     printImage(panelImage);
                 } catch (BusinessException ex) {
                     Logger.getLogger(PrinterManager.class.getName()).log(Level.SEVERE, null, ex);
                     errorListener.onError(ex);
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(PrinterManager.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }).start();
         });
