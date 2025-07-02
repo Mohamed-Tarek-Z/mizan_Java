@@ -72,7 +72,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
 
     private short tick10x10, tick2x2;
     private int BagMax = 2, repDiff;
-    private final String Version = "V 2.4 MVC";
+    private final String Version = "V 2.4.1 MVC";
     private String ticketPrinterName, qrPrinterName;
 
     private final JButton jButton_Settings = new javax.swing.JButton();
@@ -3370,13 +3370,17 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
     private void jButton_DoBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_DoBackActionPerformed
         evt.getID();
         try {
-            jFileChooser1.setFileSelectionMode(JFileChooser.FILES_ONLY);
+            jFileChooser1.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
             jFileChooser1.setFileFilter(new FileNameExtensionFilter("BAK file", "bak"));
-            jFileChooser1.showSaveDialog(this);
-            if (jFileChooser1.getSelectedFile() != null) {
-                opj.backup(jFileChooser1.getSelectedFile().getAbsolutePath() + " " + LocalDate.now() + ".bak");
-                JOptionPane.showMessageDialog(this, util.addStyle("Back up succes "), "3aaash",
-                        JOptionPane.INFORMATION_MESSAGE);
+            if (jFileChooser1.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
+                if (jFileChooser1.getSelectedFile() != null) {
+                    opj.backup(jFileChooser1.getSelectedFile().getAbsolutePath() + " " + LocalDate.now() + ".bak");
+                    JOptionPane.showMessageDialog(this, util.addStyle("Back up succes "), "succes",
+                            JOptionPane.INFORMATION_MESSAGE);
+                }
+            } else {
+                JOptionPane.showMessageDialog(this, util.addStyle("Back up faild "), "faild",
+                        JOptionPane.WARNING_MESSAGE);
             }
         } catch (SQLException ex) {
             Logger.getLogger(mainform.class.getName()).log(Level.SEVERE, null, ex);

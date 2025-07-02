@@ -662,8 +662,9 @@ public class ExcelManager {
 
                     if (!excelBackupPath.isBlank()) {
                         File file1 = util.NewName(excelBackupPath + "\\" + ClientName + "~" + date_now + ".xlsx");
-                        FileOutputStream outFile1 = new FileOutputStream(file1);
-                        workbook.write(outFile1);
+                        try (FileOutputStream outFile1 = new FileOutputStream(file1)) {
+                            workbook.write(outFile1);
+                        }                        
                     }
 
                     desktop.open(file);
