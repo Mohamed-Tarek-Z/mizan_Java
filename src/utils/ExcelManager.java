@@ -86,7 +86,7 @@ public class ExcelManager {
 
             cell = sheet.getRow(23).getCell(11);
             cell.setCellValue((isBoxes ? "عدد الصناديق :          " : "عدد الشكاير :          ")
-                    + util.ToStringArabic(orderIds.size() + "")
+                    + util.toArabicDigits(orderIds.size() + "")
                     + (isBoxes ? " صندوق" : "  شيكاره") + "\n" + "الــــــــــــــــــــــوزن :       " + totalWeight + "");
 
             this.cell_functions(cell, sheet);
@@ -150,7 +150,7 @@ public class ExcelManager {
 
             cell = sheet.getRow(23).getCell(16);
             cell.setCellValue((isBoxes ? "عدد الصناديق :          " : "عدد الشكاير :          ")
-                    + util.ToStringArabic(orderIds.size() + "")
+                    + util.toArabicDigits(orderIds.size() + "")
                     + (isBoxes ? " صندوق" : "  شيكاره") + "\n" + "الــــــــــــــــــــــوزن :       " + totalWeight + "");
 
             this.cell_functions(cell, sheet);
@@ -232,7 +232,7 @@ public class ExcelManager {
 
             cell = sheet.getRow(23).getCell(21);
             cell.setCellValue((isBoxes ? "عدد الصناديق :          " : "عدد الشكاير :          ")
-                    + util.ToStringArabic(orderIds.size() + "")
+                    + util.toArabicDigits(orderIds.size() + "")
                     + (isBoxes ? " صندوق" : "  شيكاره") + "\n" + "الــــــــــــــــــــــوزن :       " + totalWeight + "");
 
             this.cell_functions(cell, sheet);
@@ -364,11 +364,11 @@ public class ExcelManager {
                 cell = sheet.getRow(0).getCell(0);
                 cell.setCellValue(_1 + _2 + _3 + "\n" + _4 + _6 + "\n" + _5 + _7);
                 String __1 = (FIsBoxes ? "عدد الصناديق : " : "عدد الشكاير : ")
-                        + util.ToStringArabic(fOrderIds.size() + "")
+                        + util.toArabicDigits(fOrderIds.size() + "")
                         + (FIsBoxes ? " صندوق" : "  شيكاره");
                 String __2 = "الــوزن :  " + wieghtFOrder + "";
                 String __3 = (SIsBoxes ? "عدد الصناديق : " : "عدد الشكاير : ")
-                        + util.ToStringArabic(sOrderIds.size() + "")
+                        + util.toArabicDigits(sOrderIds.size() + "")
                         + (SIsBoxes ? " صندوق" : "  شيكاره");
                 String __4 = "الــوزن :  " + wieghtSOrder + "";
                 cell = sheet.getRow(23).getCell(11);
@@ -476,13 +476,13 @@ public class ExcelManager {
                     }
 
                     cell = sheet.getRow(RowIndex).getCell(2);
-                    cell.setCellValue(util.ToStringArabic(row[1]));
+                    cell.setCellValue(util.toArabicDigits(row[1]));
 
                     cell = sheet.getRow(RowIndex).getCell(3);
-                    cell.setCellValue(util.ToStringArabic(row[2]));
+                    cell.setCellValue(util.toArabicDigits(row[2]));
 
                     cell = sheet.getRow(RowIndex).getCell(4);
-                    cell.setCellValue(util.ToStringArabic(row[3]));
+                    cell.setCellValue(util.toArabicDigits(row[3]));
 
                     RowIndex++;
                 }
@@ -521,7 +521,7 @@ public class ExcelManager {
                 XSSFSheet sheet = workbook.getSheetAt(0);
                 Cell cell = sheet.getRow(1).getCell(1);
                 cell.setCellValue(
-                        "التاريـــخ من :   " + util.ToStringArabic(date1) + "  إلى : " + util.ToStringArabic(date2));
+                        "التاريـــخ من :   " + util.toArabicDigits(date1) + "  إلى : " + util.toArabicDigits(date2));
                 double prevTot = 0.0;
                 String prevName = "";
                 ArrayList<Integer> reg = new ArrayList<>();
@@ -554,13 +554,13 @@ public class ExcelManager {
                     }
 
                     cell = sheet.getRow(RowIndex).getCell(2);
-                    cell.setCellValue(util.ToStringArabic(row[1]));
+                    cell.setCellValue(util.toArabicDigits(row[1]));
 
                     cell = sheet.getRow(RowIndex).getCell(3);
-                    cell.setCellValue(util.ToStringArabic(row[2]));
+                    cell.setCellValue(util.toArabicDigits(row[2]));
 
                     cell = sheet.getRow(RowIndex).getCell(4);
-                    cell.setCellValue(util.ToStringArabic(row[3]));
+                    cell.setCellValue(util.toArabicDigits(row[3]));
 
                     RowIndex++;
                 }

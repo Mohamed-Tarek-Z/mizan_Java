@@ -92,8 +92,8 @@ public class ExportDAO {
                     "export inner join orders on orders.ord_id=export.ord_id",
                     "pro_id = ( select pro_id from products where pro_name =N'"
                     + proName + "') and" + " cli_id IN ( select cli_id from clients where cli_name=N'"
-                    + clientName + "') and" + " lot = N'" + util.ToStringEnglish(lot) + "' and"
-                    + " exported_date='" + util.ToStringEnglish(exported_date) + "'and ord_wight =" + util.ToDoubleEnglish(ord_wight));
+                    + clientName + "') and" + " lot = N'" + util.toEnglishDigits(lot) + "' and"
+                    + " exported_date='" + util.toEnglishDigits(exported_date) + "'and ord_wight =" + util.ToDoubleEnglish(ord_wight));
             while (st.next()) {
                 temp += st.getString(1) + " , ";
             }
@@ -139,11 +139,11 @@ public class ExportDAO {
         try {
             List<Export> exports = new ArrayList<>();
             ResultSet rs = dbConnection.dataRead(
-                    "*", "export", "lot=N'" + util.ToStringEnglish(lot) + "' "
+                    "*", "export", "lot=N'" + util.toEnglishDigits(lot) + "' "
                     + "and pro_id=(select pro_id from products where pro_name=N'" + proName + "') "
                     + "and cli_id=(select top(1) cli_id from clients where cli_name=N'" + clientName + "')"
                     + " and exported_date = '"
-                    + util.ToStringEnglish(exported_date) + "'" + "and num_of_con is not null  and pallet_numb is not null order by exp_id DESC");
+                    + util.toEnglishDigits(exported_date) + "'" + "and num_of_con is not null  and pallet_numb is not null order by exp_id DESC");
             while (rs.next()) {
                 exports.add(new Export(rs.getInt("exp_id"), rs.getInt("pro_id"), rs.getInt("cli_id"), rs.getInt("ord_id"), rs.getInt("num_of_con"),
                         rs.getInt("pallet_numb"), rs.getDouble("tot_wight"),
@@ -160,18 +160,18 @@ public class ExportDAO {
     public boolean deleteExportOldWay(String lot, String proName, String clientName, String exported_date) throws DatabaseException {
         try {
             dbConnection.delData("export", "lot=N'"
-                    + util.ToStringEnglish(lot) + "'and pro_id=(select pro_id from products where pro_name=N'"
+                    + util.toEnglishDigits(lot) + "'and pro_id=(select pro_id from products where pro_name=N'"
                     + proName + "') and cli_id=(select top(1) cli_id from clients where cli_name=N'"
                     + clientName + "') and exported_date = '"
-                    + util.ToStringEnglish(exported_date)
+                    + util.toEnglishDigits(exported_date)
                     + "' and num_of_con is not null  and pallet_numb is not null ");
             return !dbConnection.dataRead("*", "export", "lot=N'"
-                    + util.ToStringEnglish(lot) + "'and pro_id=(select pro_id from products where pro_name=N'"
+                    + util.toEnglishDigits(lot) + "'and pro_id=(select pro_id from products where pro_name=N'"
                     + proName + "') "
                     + "and cli_id=(select top(1) cli_id from clients where cli_name=N'"
                     + clientName + "')"
                     + " and exported_date = '"
-                    + util.ToStringEnglish(exported_date)
+                    + util.toEnglishDigits(exported_date)
                     + "'and num_of_con is not null  and pallet_numb is not null").next();
 
         } catch (SQLException ex) {

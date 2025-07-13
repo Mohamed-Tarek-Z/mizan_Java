@@ -23,87 +23,11 @@ import java.text.DecimalFormat;
 import java.util.EnumMap;
 import java.util.Map;
 import java.util.Properties;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.imageio.ImageIO;
 
 public class utils {
-
-    /**
-     * Takes a char and if it is a number returns the equivalent number in
-     * Arabic letters
-     *
-     * @param input Char to be checked if it has an equivalent number in Arabic
-     * letters
-     * @return char equivalent to input number in Arabic letters Or return input
-     * when no equivalent number in Arabic letters
-     */
-    public char ToNumArab(char input) {
-        return switch (input) {
-            case '0' ->
-                '٠';
-            case '1' ->
-                '١';
-            case '2' ->
-                '٢';
-            case '3' ->
-                '٣';
-            case '4' ->
-                '٤';
-            case '5' ->
-                '٥';
-            case '6' ->
-                '٦';
-            case '7' ->
-                '٧';
-            case '8' ->
-                '٨';
-            case '9' ->
-                '٩';
-            case '.' ->
-                '٫';
-            case 'ز' ->
-                '٫';
-            default ->
-                input;
-        };
-    }
-
-    /**
-     * Takes a char and if it is a number returns the equivalent number in
-     * English letters
-     *
-     * @param input Char to be checked if it has an equivalent number in English
-     * letters
-     * @return char equivalent to input number in English letters Or return
-     * input when no equivalent number in English letters
-     */
-    public char ToNumEng(char input) {
-        return switch (input) {
-            case '٠' ->
-                '0';
-            case '١' ->
-                '1';
-            case '٢' ->
-                '2';
-            case '٣' ->
-                '3';
-            case '٤' ->
-                '4';
-            case '٥' ->
-                '5';
-            case '٦' ->
-                '6';
-            case '٧' ->
-                '7';
-            case '٨' ->
-                '8';
-            case '٩' ->
-                '9';
-            case '٫' ->
-                '.';
-            default ->
-                input;
-        };
-    }
 
     /**
      * Takes a String and if it is a number in Arabic returns the equivalent in
@@ -113,61 +37,13 @@ public class utils {
      * @return double equivalent to input number in Arabic letters Or return 0.0
      * when no equivalent number in Arabic letters
      */
-    public double ToDoubleEnglish(String input) {
+    public static double ToDoubleEnglish(String input) {
         if (input == null) {
             return 0.0;
         }
-        String eng = "";
-        for (char c : input.toCharArray()) {
+        String eng = toEnglishDigits(input);
 
-            if (c == '-' || c == '+') {
-                eng = c + eng;
-            } else {
-                if (Character.isDigit(c) || c == '.' || c == '٫') {
-                    eng += ToNumEng(c);
-                }
-            }
-
-        }
         return Double.parseDouble(eng);
-    }
-
-    /**
-     * Takes a String and if it is a number in Arabic returns the equivalent in
-     * String type in english
-     *
-     * @param input String to be converted to English string
-     * @return English String equivalent to input number in Arabic letters Or
-     * return "" when no equivalent number in Arabic letters
-     */
-    public String ToStringEnglish(String input) {
-        if (input == null) {
-            return "";
-        }
-        String eng = "";
-        for (char c : input.toCharArray()) {
-            eng += ToNumEng(c);
-        }
-        return eng;
-    }
-
-    /**
-     * Takes a String and if it is a number in English returns the equivalent in
-     * String type in Arabic
-     *
-     * @param input String to be converted to Arabic string
-     * @return Arabic String equivalent to input number in Arabic letters Or
-     * return "" when no equivalent number in Arabic letters
-     */
-    public String ToStringArabic(String input) {
-        if (input == null) {
-            return "";
-        }
-        String Arab = "";
-        for (char c : input.toCharArray()) {
-            Arab += ToNumArab(c);
-        }
-        return Arab;
     }
 
     /**
@@ -178,12 +54,9 @@ public class utils {
      * @return Arabic String equivalent to input number in Arabic letters Or
      * return "" when no equivalent number in Arabic letters
      */
-    public String ToDoubleArabic(double input) {
+    public static String ToDoubleArabic(double input) {
         String EnglishNum = new DecimalFormat("0.000").format(input);
-        String Arab = "";
-        for (char c : EnglishNum.toCharArray()) {
-            Arab += ToNumArab(c);
-        }
+        String Arab = toArabicDigits(EnglishNum);
         return Arab;
     }
 
@@ -193,7 +66,7 @@ public class utils {
      * @param text String to be styled for jOptionpane
      * @return styled String to use in jOptionpane
      */
-    public String addStyle(String text) {
+    public static String addStyle(String text) {
         return "<html><body><h1 style='font-family: Arial; font-size: 20pt; text-align: center; '>"
                 + text.strip() + "</h1></body></html>";
     }
@@ -205,7 +78,7 @@ public class utils {
      * name but add number to it like >>> filename(1)
      * @return File object create with the new name
      */
-    public File NewName(String fileName) {
+    public static File NewName(String fileName) {
         int idxOfDot = fileName.lastIndexOf('.');
         String extension = fileName.substring(idxOfDot + 1);
         String fullname = fileName.substring(0, idxOfDot);
@@ -225,7 +98,7 @@ public class utils {
      * @return Properties object with Configuration file open in it
      * @throws exceptions.BusinessException
      */
-    public Properties CheckConfigFileAndFolder() throws BusinessException {
+    public static Properties CheckConfigFileAndFolder() throws BusinessException {
         try {
             Files.createDirectories(Paths.get(System.getProperty("user.dir") + "\\Temp"));
             if (!Files.exists(Paths.get(System.getProperty("user.dir") + "\\Temp\\config.properties"))) {
@@ -253,7 +126,7 @@ public class utils {
      * @return byte[] buffer with qr data to save as you want
      * @throws exceptions.BusinessException
      */
-    public byte[] generateQRcode(String data, int width, int height) throws BusinessException {
+    public static byte[] generateQRcode(String data, int width, int height) throws BusinessException {
         try {
             Map<EncodeHintType, Object> hintMap = new EnumMap<>(EncodeHintType.class);
             hintMap.put(EncodeHintType.CHARACTER_SET, "UTF-8");
@@ -269,6 +142,39 @@ public class utils {
             Logger.getLogger(utils.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
             throw new BusinessException("error on QR Gen");
         }
+    }
+
+    /**
+     * Takes a text and add style to it to be used in jOptionpane
+     *
+     * @param input String to be checked for matching the pattern
+     * @param patternToMatch String contain regex pattern
+     * @return Boolean true if the input matches the pattern .
+     */
+    public static boolean isInputMatchPattern(String input, String patternToMatch) {
+        Pattern pattern = Pattern.compile(patternToMatch);
+        Matcher matcher = pattern.matcher(input);
+        return matcher.matches();
+    }
+
+    public static String toEnglishDigits(String input) {
+        if (input == null) {
+            return "";
+        }
+        return input
+                .replace("٠", "0").replace("١", "1").replace("٢", "2").replace("٣", "3")
+                .replace("٤", "4").replace("٥", "5").replace("٦", "6").replace("٧", "7")
+                .replace("٨", "8").replace("٩", "9").replace("٫", ".");
+    }
+
+    public static String toArabicDigits(String input) {
+        if (input == null) {
+            return "";
+        }
+        return input
+                .replace("0", "٠").replace("1", "١").replace("2", "٢").replace("3", "٣")
+                .replace("4", "٤").replace("5", "٥").replace("6", "٦").replace("7", "٧")
+                .replace("8", "٨").replace("9", "٩").replace(".", "٫").replace("ز", "٫");
     }
 
 }
