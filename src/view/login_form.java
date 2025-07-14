@@ -22,7 +22,10 @@ public class login_form extends javax.swing.JFrame {
         try {
             initComponents();
 
-            Properties properties = new utils().CheckConfigFileAndFolder();
+            Properties properties = utils.CheckConfigFileAndFolder();
+            if (!properties.getProperty("ip", "localhost").equalsIgnoreCase("localhost")) {
+                JOptionPane.showMessageDialog(null, "conneting to remote DataBase Ip:" + properties.getProperty("ip", "localhost"), "انتبه", JOptionPane.INFORMATION_MESSAGE);
+            }
             this.dbConnection = new sqlcon(properties.getProperty("ip", "localhost"));
             userController = new UserController(new UserDAO(dbConnection));
         } catch (SQLException ex) {
