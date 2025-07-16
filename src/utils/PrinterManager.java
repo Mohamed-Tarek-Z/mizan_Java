@@ -54,7 +54,7 @@ public class PrinterManager {
      */
     private void QRPrint(byte[] data) throws BusinessException {
         try {
-            PrintService xPrinter = getPrinterByName(new utils().CheckConfigFileAndFolder().getProperty("qrPrinterName", "Xprinter"));
+            PrintService xPrinter = getPrinterByName(utils.CheckConfigFileAndFolder().getProperty("qrPrinterName", "Xprinter"));
             if (xPrinter == null) {
                 throw new BusinessException("Xprinter not found!");
             }
@@ -192,7 +192,7 @@ public class PrinterManager {
     private void printImage(BufferedImage image) throws BusinessException {
         try {
             PrinterJob job = PrinterJob.getPrinterJob();
-            PrintService HWPrinter = getPrinterByName(new utils().CheckConfigFileAndFolder().getProperty("ticketPrinterName", "Honeywell"));
+            PrintService HWPrinter = getPrinterByName(utils.CheckConfigFileAndFolder().getProperty("ticketPrinterName", "Honeywell"));
             if (HWPrinter == null) {
                 throw new BusinessException("HWPrinter not found!");
             }
@@ -264,7 +264,7 @@ public class PrinterManager {
                 n += " ";
             }
             if (printQr) {
-                QRPrint(new utils().generateQRcode("{\n \"رقم البالتة\": " + values.get(0) + " ,\n  \"الصنف\": " + n + " ,\n\"اللوط\": " + values.get(3)
+                QRPrint(utils.generateQRcode("{\n \"رقم البالتة\": " + values.get(0) + " ,\n  \"الصنف\": " + n + " ,\n\"اللوط\": " + values.get(3)
                         + " ,\n\"الوزن الصافي\": " + values.get(6) + "\n}", 400, 400));
             }
             if (printTicket) {

@@ -188,13 +188,13 @@ public class StorageDAO {
     public List<String[]> getStockOfProduct(String ProName) throws DatabaseException {
         try {
             List<String[]> Stock = new ArrayList<>();
-            ResultSet st = dbConnection.dataRead("lot ,COUNT( distinct pallet_numb)  ,count(weight_),SUM(weight_)", "storage",
+            ResultSet st = dbConnection.dataRead("lot, COUNT( distinct pallet_numb), count(weight_), SUM(weight_), used", "storage",
                     "pro_id=(select pro_id from products where pro_name=N'" + ProName
-                    + "')  group by lot");
+                    + "')  group by lot, used");
 
             while (st.next()) {
                 Stock.add(new String[]{st.getString(1), st.getString(2),
-                    st.getString(3), st.getString(4)});
+                    st.getString(3), st.getString(4), st.getBoolean(5) + ""});
             }
 
             return Stock;
@@ -207,12 +207,12 @@ public class StorageDAO {
     public List<String[]> getAllStock() throws DatabaseException {
         try {
             List<String[]> Stock = new ArrayList<>();
-            ResultSet st = dbConnection.dataRead("pro_name, lot, COUNT(weight_), SUM(weight_)", "storage ,products",
-                    "storage.pro_id = products.pro_id group by pro_name, lot order by pro_name ");
+            ResultSet st = dbConnection.dataRead("pro_name, lot, COUNT(weight_), SUM(weight_), used", "storage ,products",
+                    "storage.pro_id = products.pro_id group by pro_name, lot, used order by pro_name ");
 
             while (st.next()) {
                 Stock.add(new String[]{st.getString(1), st.getString(2),
-                    st.getString(3), st.getString(4)});
+                    st.getString(3), st.getString(4), st.getBoolean(5) + ""});
             }
 
             return Stock;

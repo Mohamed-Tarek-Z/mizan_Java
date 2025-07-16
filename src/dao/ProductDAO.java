@@ -15,11 +15,9 @@ import utils.utils;
 public class ProductDAO {
 
     private final sqlcon dbConnection;
-    private final utils util;
 
     public ProductDAO(sqlcon dbConnection) {
         this.dbConnection = dbConnection;
-        this.util = new utils();
     }
 
     public List<Product> getProducts() throws DatabaseException {
@@ -58,7 +56,7 @@ public class ProductDAO {
         try {
             dbConnection.inData("products", "pro_name, weight_of_con, Color, IsBox",
                     "N'" + pro.getName() + "',N'"
-                    + util.toEnglishDigits(pro.getWeight_of_con()) + "',N'"
+                    + utils.toEnglishDigits(pro.getWeight_of_con()) + "',N'"
                     + pro.getColor() + "'," + (pro.isIsBox() ? "1" : "0"));
         } catch (SQLException ex) {
             Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
@@ -70,7 +68,7 @@ public class ProductDAO {
         try {
             dbConnection.update("products",
                     "pro_name=N'" + pro.getName() + "' ,weight_of_con=N'"
-                    + util.toEnglishDigits(pro.getWeight_of_con()) + "' ,Color=N'"
+                    + utils.toEnglishDigits(pro.getWeight_of_con()) + "' ,Color=N'"
                     + pro.getColor() + "',IsBox = " + (pro.isIsBox() ? "1" : "0"),
                     "pro_id=" + pro.getId() + " ");
         } catch (SQLException ex) {

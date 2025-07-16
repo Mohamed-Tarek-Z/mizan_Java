@@ -10,16 +10,14 @@ import utils.utils;
 public class OrderDAO {
 
     private final sqlcon dbConnection;
-    private final utils util;
 
     public OrderDAO(sqlcon dbConnection) {
         this.dbConnection = dbConnection;
-        this.util = new utils();
     }
 
     public void addOrder(String totalWeight) throws DatabaseException {
         try {
-            dbConnection.inData("orders", "ord_wight,ord_date", util.ToDoubleEnglish(totalWeight) + ",GETDATE()");
+            dbConnection.inData("orders", "ord_wight,ord_date", utils.ToDoubleEnglish(totalWeight) + ",GETDATE()");
         } catch (SQLException ex) {
             Logger.getLogger(OrderDAO.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
             throw new DatabaseException("حدث خطأ أثناء طلب بيانات المخزن", ex);

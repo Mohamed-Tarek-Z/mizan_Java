@@ -14,36 +14,34 @@ public class StorageController {
 
     private final StorageDAO storageDAO;
     private final ProductDAO productDAO;
-    private final utils util;
 
     public StorageController(StorageDAO storageDAO, ProductDAO productDAO) {
         this.storageDAO = storageDAO;
         this.productDAO = productDAO;
-        this.util = new utils();
     }
 
     public int addStorage(String productName, String totalWeight, String netWeight, String lotNumber,
             String numOfCon, String palletNumber, boolean isUsed, String empty_pack) throws DatabaseException, BusinessException {
         Product product = productDAO.getProductByName(productName);
 
-        int[] storageCountUsed_NUsed = storageDAO.getStorageCount((int) util.ToDoubleEnglish(palletNumber), util.toEnglishDigits(lotNumber), product.getId());
+        int[] storageCountUsed_NUsed = storageDAO.getStorageCount((int) utils.ToDoubleEnglish(palletNumber), utils.toEnglishDigits(lotNumber), product.getId());
         if (storageCountUsed_NUsed[0] == 0 && storageCountUsed_NUsed[1] == 0) {
-            Bag bag = new Bag(0, product.getId(), util.ToDoubleEnglish(totalWeight), util.ToDoubleEnglish(netWeight),
-                    util.toEnglishDigits(lotNumber), (int) util.ToDoubleEnglish(numOfCon), (int) util.ToDoubleEnglish(palletNumber),
-                    isUsed, new Date(), util.ToDoubleEnglish(empty_pack)/100);
+            Bag bag = new Bag(0, product.getId(), utils.ToDoubleEnglish(totalWeight), utils.ToDoubleEnglish(netWeight),
+                    utils.toEnglishDigits(lotNumber), (int) utils.ToDoubleEnglish(numOfCon), (int) utils.ToDoubleEnglish(palletNumber),
+                    isUsed, new Date(), utils.ToDoubleEnglish(empty_pack) / 100);
             storageDAO.addBag(bag);
-            return (int) util.ToDoubleEnglish(palletNumber);
+            return (int) utils.ToDoubleEnglish(palletNumber);
         } else if ((isUsed && storageCountUsed_NUsed[1] != 0) || (!isUsed && storageCountUsed_NUsed[0] != 0)) {
             //ex pallet mark not vaild
             throw new BusinessException("خطأ في تعليم الشكارة");
         } else if ((isUsed && storageCountUsed_NUsed[1] == 0 && storageCountUsed_NUsed[0] >= 20) || (!isUsed && storageCountUsed_NUsed[0] == 0 && storageCountUsed_NUsed[1] >= 20)) {
-            return addStorage(productName, totalWeight, netWeight, lotNumber, numOfCon, (util.ToDoubleEnglish(palletNumber) + 1) + "", isUsed, empty_pack);
+            return addStorage(productName, totalWeight, netWeight, lotNumber, numOfCon, (utils.ToDoubleEnglish(palletNumber) + 1) + "", isUsed, empty_pack);
         } else if ((isUsed && storageCountUsed_NUsed[1] == 0 && storageCountUsed_NUsed[0] < 20) || (!isUsed && storageCountUsed_NUsed[0] == 0 && storageCountUsed_NUsed[1] < 20)) {
-            Bag bag = new Bag(0, product.getId(), util.ToDoubleEnglish(totalWeight), util.ToDoubleEnglish(netWeight),
-                    util.toEnglishDigits(lotNumber), (int) util.ToDoubleEnglish(numOfCon), (int) util.ToDoubleEnglish(palletNumber),
-                    isUsed, new Date(), util.ToDoubleEnglish(empty_pack)/100);
+            Bag bag = new Bag(0, product.getId(), utils.ToDoubleEnglish(totalWeight), utils.ToDoubleEnglish(netWeight),
+                    utils.toEnglishDigits(lotNumber), (int) utils.ToDoubleEnglish(numOfCon), (int) utils.ToDoubleEnglish(palletNumber),
+                    isUsed, new Date(), utils.ToDoubleEnglish(empty_pack) / 100);
             storageDAO.addBag(bag);
-            return (int) util.ToDoubleEnglish(palletNumber);
+            return (int) utils.ToDoubleEnglish(palletNumber);
         }
         throw new BusinessException("خطأ في إدخال الشكارة");
     }
@@ -53,11 +51,11 @@ public class StorageController {
             String numOfCon, String palletNumber, boolean isUsed, String empty_pack) throws DatabaseException, BusinessException {
         Product product = productDAO.getProductByName(productName);
 
-        int[] storageCount = storageDAO.getStorageCount((int) util.ToDoubleEnglish(palletNumber), util.toEnglishDigits(lotNumber), product.getId());
+        int[] storageCount = storageDAO.getStorageCount((int) utils.ToDoubleEnglish(palletNumber), utils.toEnglishDigits(lotNumber), product.getId());
         if (storageCount[0] == 0 && storageCount[1] == 0) {
-            Bag bag = new Bag(storage_id, product.getId(), util.ToDoubleEnglish(totalWeight), util.ToDoubleEnglish(netWeight),
-                    util.toEnglishDigits(lotNumber), (int) util.ToDoubleEnglish(numOfCon), (int) util.ToDoubleEnglish(palletNumber),
-                    isUsed, new Date(), util.ToDoubleEnglish(empty_pack));
+            Bag bag = new Bag(storage_id, product.getId(), utils.ToDoubleEnglish(totalWeight), utils.ToDoubleEnglish(netWeight),
+                    utils.toEnglishDigits(lotNumber), (int) utils.ToDoubleEnglish(numOfCon), (int) utils.ToDoubleEnglish(palletNumber),
+                    isUsed, new Date(), utils.ToDoubleEnglish(empty_pack));
             storageDAO.editBag(bag);
             return true;
         } else if ((isUsed && storageCount[1] != 0) || (!isUsed && storageCount[0] != 0)) {
@@ -66,9 +64,9 @@ public class StorageController {
         } else if ((isUsed && storageCount[1] == 0 && storageCount[0] >= 20) || (!isUsed && storageCount[0] == 0 && storageCount[1] >= 20)) {
             throw new BusinessException("البالتة ممتلئة");
         } else if ((isUsed && storageCount[1] == 0 && storageCount[0] < 20) || (!isUsed && storageCount[0] == 0 && storageCount[1] < 20)) {
-            Bag bag = new Bag(storage_id, product.getId(), util.ToDoubleEnglish(totalWeight), util.ToDoubleEnglish(netWeight),
-                    util.toEnglishDigits(lotNumber), (int) util.ToDoubleEnglish(numOfCon), (int) util.ToDoubleEnglish(palletNumber),
-                    isUsed, new Date(),util.ToDoubleEnglish(empty_pack));
+            Bag bag = new Bag(storage_id, product.getId(), utils.ToDoubleEnglish(totalWeight), utils.ToDoubleEnglish(netWeight),
+                    utils.toEnglishDigits(lotNumber), (int) utils.ToDoubleEnglish(numOfCon), (int) utils.ToDoubleEnglish(palletNumber),
+                    isUsed, new Date(), utils.ToDoubleEnglish(empty_pack));
             storageDAO.editBag(bag);
             return true;
         }
@@ -92,15 +90,15 @@ public class StorageController {
     }
 
     public List<Bag> getBagsToReport(int topNumber, String proName, String palletNumber, String lotNumber) throws DatabaseException {
-        return storageDAO.getBagsToReport(topNumber, proName, util.toEnglishDigits(palletNumber), util.toEnglishDigits(lotNumber));
+        return storageDAO.getBagsToReport(topNumber, proName, utils.toEnglishDigits(palletNumber), utils.toEnglishDigits(lotNumber));
     }
 
     public String calc_pallet_weight(String palletNumber, String lotNumber, String productName) throws DatabaseException {
-        return storageDAO.calc_pallet_weight((int) util.ToDoubleEnglish(palletNumber), util.toEnglishDigits(lotNumber), productName);
+        return storageDAO.calc_pallet_weight((int) utils.ToDoubleEnglish(palletNumber), utils.toEnglishDigits(lotNumber), productName);
     }
 
     public int countpallet(int palletNumber, String lotNumber, String productName, boolean IsUsed) throws DatabaseException, BusinessException {
-        int[] count = storageDAO.getStorageCount(palletNumber, util.toEnglishDigits(lotNumber),
+        int[] count = storageDAO.getStorageCount(palletNumber, utils.toEnglishDigits(lotNumber),
                 productDAO.getProductByName(productName).getId());
         return (IsUsed ? count[0] : count[1]);
     }

@@ -71,7 +71,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
 
     private short tick10x10, tick2x2;
     private int BagMax = 2, repDiff;
-    private final String Version = "V 2.5 MVC";
+    private final String Version = "V 2.5.1 MVC";
     private String ticketPrinterName, qrPrinterName;
 
     private long lastInputTime;
@@ -335,7 +335,28 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
         stock_panel = new javax.swing.JPanel();
         jComboBox_stock_Pros = new javax.swing.JComboBox<>();
         jScrollPane6 = new javax.swing.JScrollPane();
-        jTable_stock = new javax.swing.JTable();
+        jTable_stock = new javax.swing.JTable(){
+            @Override
+
+            public Component prepareRenderer(TableCellRenderer renderer, int rowIndex, int columnIndex) {
+                Component componenet = super.prepareRenderer(renderer, rowIndex, columnIndex);
+
+                boolean value = (boolean) getModel().getValueAt(rowIndex, 4);
+
+                if (value) {
+                    componenet.setBackground(isRowSelected(rowIndex) ? Color.YELLOW : Color.GREEN);
+                    componenet.setForeground(Color.BLACK);
+
+                } else {
+
+                    componenet.setBackground(isRowSelected(rowIndex) ? componenet.getBackground() : Color.WHITE);
+                    //componenet.setForeground(Color.BLACK);
+                }
+
+                return componenet;
+            }
+
+        };
         jLabel15 = new javax.swing.JLabel();
         jButton_stock_createExcl = new javax.swing.JButton();
         statistics_panel = new javax.swing.JPanel();
@@ -1820,12 +1841,19 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
 
                 },
                 new String [] {
-                    "اللوط", "عدد البالت", "عدد الشكاير", "الوزن الأجمالي"
+                    "اللوط", "عدد البالت", "عدد الشكاير", "الوزن الأجمالي", "s"
                 }
             ) {
-                boolean[] canEdit = new boolean [] {
-                    false, false, false, false
+                Class[] types = new Class [] {
+                    java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Boolean.class
                 };
+                boolean[] canEdit = new boolean [] {
+                    false, false, false, false, false
+                };
+
+                public Class getColumnClass(int columnIndex) {
+                    return types [columnIndex];
+                }
 
                 public boolean isCellEditable(int rowIndex, int columnIndex) {
                     return canEdit [columnIndex];
@@ -1837,6 +1865,11 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
             jTable_stock.getTableHeader().setResizingAllowed(false);
             jTable_stock.getTableHeader().setReorderingAllowed(false);
             jScrollPane6.setViewportView(jTable_stock);
+            if (jTable_stock.getColumnModel().getColumnCount() > 0) {
+                jTable_stock.getColumnModel().getColumn(4).setMinWidth(0);
+                jTable_stock.getColumnModel().getColumn(4).setPreferredWidth(0);
+                jTable_stock.getColumnModel().getColumn(4).setMaxWidth(0);
+            }
 
             stock_panel.add(jScrollPane6, new org.netbeans.lib.awtextra.AbsoluteConstraints(39, 109, 712, 477));
 
@@ -3391,7 +3424,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
 
                 for (String[] row : stock) {
                     model.addRow(new Object[]{utils.toArabicDigits(row[0]), utils.toArabicDigits(row[1]),
-                        utils.toArabicDigits(row[2]), utils.toArabicDigits(row[3])});
+                        utils.toArabicDigits(row[2]), utils.toArabicDigits(row[3]), Boolean.valueOf(row[4])});
                 }
             }
         } catch (DatabaseException ex) {

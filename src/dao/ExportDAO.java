@@ -14,11 +14,9 @@ import utils.utils;
 public class ExportDAO {
 
     private final sqlcon dbConnection;
-    private final utils util;
 
     public ExportDAO(sqlcon dbConnection) {
         this.dbConnection = dbConnection;
-        this.util = new utils();
     }
 
     public List<String[]> getstatistics(String date1, String date2) throws DatabaseException {
@@ -57,7 +55,7 @@ public class ExportDAO {
                     + ",(select num_of_con from storage where storage_id= " + storageId + " )"
                     + ",(select pallet_numb from storage where storage_id= " + storageId + " )"
                     + ",(select used from storage where storage_id= " + storageId + " )"
-                    + ",(SELECT TOP 1 ord_id FROM orders where ord_wight=" + util.ToDoubleEnglish(totalWeight) + " ORDER BY ord_id DESC)"
+                    + ",(SELECT TOP 1 ord_id FROM orders where ord_wight=" + utils.ToDoubleEnglish(totalWeight) + " ORDER BY ord_id DESC)"
                     + ",(select empty_pack from storage where storage_id= " + storageId + " ),"
                     + storageId
             );
@@ -92,8 +90,8 @@ public class ExportDAO {
                     "export inner join orders on orders.ord_id=export.ord_id",
                     "pro_id = ( select pro_id from products where pro_name =N'"
                     + proName + "') and" + " cli_id IN ( select cli_id from clients where cli_name=N'"
-                    + clientName + "') and" + " lot = N'" + util.toEnglishDigits(lot) + "' and"
-                    + " exported_date='" + util.toEnglishDigits(exported_date) + "'and ord_wight =" + util.ToDoubleEnglish(ord_wight));
+                    + clientName + "') and" + " lot = N'" + utils.toEnglishDigits(lot) + "' and"
+                    + " exported_date='" + utils.toEnglishDigits(exported_date) + "'and ord_wight =" + utils.ToDoubleEnglish(ord_wight));
             while (st.next()) {
                 temp += st.getString(1) + " , ";
             }
@@ -139,11 +137,11 @@ public class ExportDAO {
         try {
             List<Export> exports = new ArrayList<>();
             ResultSet rs = dbConnection.dataRead(
-                    "*", "export", "lot=N'" + util.toEnglishDigits(lot) + "' "
+                    "*", "export", "lot=N'" + utils.toEnglishDigits(lot) + "' "
                     + "and pro_id=(select pro_id from products where pro_name=N'" + proName + "') "
                     + "and cli_id=(select top(1) cli_id from clients where cli_name=N'" + clientName + "')"
                     + " and exported_date = '"
-                    + util.toEnglishDigits(exported_date) + "'" + "and num_of_con is not null  and pallet_numb is not null order by exp_id DESC");
+                    + utils.toEnglishDigits(exported_date) + "'" + "and num_of_con is not null  and pallet_numb is not null order by exp_id DESC");
             while (rs.next()) {
                 exports.add(new Export(rs.getInt("exp_id"), rs.getInt("pro_id"), rs.getInt("cli_id"), rs.getInt("ord_id"), rs.getInt("num_of_con"),
                         rs.getInt("pallet_numb"), rs.getDouble("tot_wight"),
@@ -160,18 +158,18 @@ public class ExportDAO {
     public boolean deleteExportOldWay(String lot, String proName, String clientName, String exported_date) throws DatabaseException {
         try {
             dbConnection.delData("export", "lot=N'"
-                    + util.toEnglishDigits(lot) + "'and pro_id=(select pro_id from products where pro_name=N'"
+                    + utils.toEnglishDigits(lot) + "'and pro_id=(select pro_id from products where pro_name=N'"
                     + proName + "') and cli_id=(select top(1) cli_id from clients where cli_name=N'"
                     + clientName + "') and exported_date = '"
-                    + util.toEnglishDigits(exported_date)
+                    + utils.toEnglishDigits(exported_date)
                     + "' and num_of_con is not null  and pallet_numb is not null ");
             return !dbConnection.dataRead("*", "export", "lot=N'"
-                    + util.toEnglishDigits(lot) + "'and pro_id=(select pro_id from products where pro_name=N'"
+                    + utils.toEnglishDigits(lot) + "'and pro_id=(select pro_id from products where pro_name=N'"
                     + proName + "') "
                     + "and cli_id=(select top(1) cli_id from clients where cli_name=N'"
                     + clientName + "')"
                     + " and exported_date = '"
-                    + util.toEnglishDigits(exported_date)
+                    + utils.toEnglishDigits(exported_date)
                     + "'and num_of_con is not null  and pallet_numb is not null").next();
 
         } catch (SQLException ex) {
