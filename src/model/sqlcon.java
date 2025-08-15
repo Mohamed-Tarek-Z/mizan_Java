@@ -34,6 +34,17 @@ public class sqlcon {
         st.execute("insert into " + tableName + " (" + colName + ") values (" + values + ")");
     }
 
+    public ResultSet inDataReturnInseted(String tableName, String colName, String values, String output[]) throws SQLException {
+        String out = "";
+        for (String s : output) {
+            out += "inserted." + s + ",";
+        }
+        if (out.endsWith(",")) {
+            out = out.substring(0, out.length() - 1);
+        }
+        return st.executeQuery("insert into " + tableName + " (" + colName + ") output " + out + " values (" + values + ")");
+    }
+
     public void inDataIdentityON(String tableName, String colName, String values) throws SQLException {
         st.execute("SET IDENTITY_INSERT " + tableName + " ON;  insert into " + tableName + " (" + colName + ") values (" + values + ");SET IDENTITY_INSERT " + tableName + " OFF;");
     }

@@ -11,8 +11,12 @@ public class OrderController {
         this.orderDAO = orderDAO;
     }
 
-    public void addOrder(String totalWeight) throws DatabaseException {
-        orderDAO.addOrder(totalWeight);
+    public String addOrder() throws DatabaseException {
+        return orderDAO.addOrder();
+    }
+
+    public void updateOrder(String id, double totalWeight) throws DatabaseException {
+        orderDAO.updateOrder(id, totalWeight);
     }
 
     public void deleteOrderById(String ordTid) throws DatabaseException {

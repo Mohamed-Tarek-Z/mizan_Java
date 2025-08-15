@@ -42,7 +42,7 @@ public class ExportDAO {
         }
     }
 
-    public void moveBagFromStorageToExport(String storageId, String clientName, String totalWeight) throws DatabaseException {
+    public void moveBagFromStorageToExport(String storageId, String clientName, String ord_id) throws DatabaseException {
         try {
             dbConnection.inData("export", "pro_id,cli_id,tot_wight,weight_,lot,inserted_date,exported_date,num_of_con,pallet_numb,used,ord_id,empty_pack,storageID",
                     "(select pro_id from storage where storage_id=" + storageId + ")"
@@ -55,7 +55,7 @@ public class ExportDAO {
                     + ",(select num_of_con from storage where storage_id= " + storageId + " )"
                     + ",(select pallet_numb from storage where storage_id= " + storageId + " )"
                     + ",(select used from storage where storage_id= " + storageId + " )"
-                    + ",(SELECT TOP 1 ord_id FROM orders where ord_wight=" + utils.ToDoubleEnglish(totalWeight) + " ORDER BY ord_id DESC)"
+                    + "," + ord_id
                     + ",(select empty_pack from storage where storage_id= " + storageId + " ),"
                     + storageId
             );

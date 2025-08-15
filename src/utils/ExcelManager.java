@@ -17,7 +17,8 @@ import java.time.format.FormatStyle;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import javax.swing.JTable;
+import model.Bag;
+import model.Product;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellCopyPolicy;
 import org.apache.poi.ss.util.CellRangeAddress;
@@ -62,31 +63,23 @@ public class ExcelManager {
     /**
      * this method it used to creating a permit with 120 unit space
      *
-     * @param orderIds list< string > ID of units in table
-     * @param totalWeight String the total weight of order
+     * @param bags list< Bag > Bags of order
      * @param ClientName String that contain Client name
-     * @param productName String that contain product name
-     * @param BagsTable Swing table with data of product units
+     * @param product Product object used in order
      * @param excelBackupPath String the shows the path for backup location
-     * @param isBoxes Boolean indicates products is packed in boxes or bags
      *
      * @return Boolean that indicates whether the file created or not
      * @throws exceptions.DatabaseException
      * @throws exceptions.BusinessException
      */
-    public boolean excel_120(List<String> orderIds, String totalWeight, String ClientName, String productName,
-            JTable BagsTable, String excelBackupPath, boolean isBoxes) throws DatabaseException, BusinessException {
+    public boolean excel_120(List<Bag> bags, String ClientName, Product product,
+            String excelBackupPath) throws DatabaseException, BusinessException {
         try (FileInputStream file = new FileInputStream(new File("Donot_Change\\120.xlsx"))) {
             XSSFWorkbook workbook = new XSSFWorkbook(file);
             XSSFSheet sheet = workbook.getSheetAt(0);
 
             Cell cell = sheet.getRow(0).getCell(0);
-            cell.setCellValue(contactForHeader(ClientName, productName, BagsTable.getValueAt(0, 2) + ""));
-
-            cell = sheet.getRow(23).getCell(11);
-            cell.setCellValue((isBoxes ? "عدد الصناديق :          " : "عدد الشكاير :          ")
-                    + utils.toArabicDigits(orderIds.size() + "")
-                    + (isBoxes ? " صندوق" : "  شيكاره") + "\n" + "الــــــــــــــــــــــوزن :       " + totalWeight + "");
+            cell.setCellValue(contactForHeader(ClientName, product.getName(), bags.getFirst().getLot()));
 
             this.cell_functions(cell, sheet);
             cell = sheet.getRow(26).getCell(11);
@@ -101,19 +94,26 @@ public class ExcelManager {
             strFormula1 = "(SUM(C23,F23,I23,L23,O23,R23)+(SUM(A23,E23,H23,K23,N23,Q23)/1000)-MOD((SUM(C23,F23,I23,L23,O23,R23)+(SUM(A23,E23,H23,K23,N23,Q23)/1000)),1000))/1000";
             cell.setCellFormula(strFormula1);
 
-            int f = 1;
-            for (int t = 0; t < 121; t += 20) {
-                for (int i = 2 + t; i <= 21 + t && i - 1 <= orderIds.size(); i++) {
-                    if (orderIds.size() == i - 2) {
-                        break;
-                    }
-                    cell = sheet.getRow(i - t).getCell(f);
-                    cell.setCellValue(((1000 * utils.ToDoubleEnglish(BagsTable.getValueAt(i - 2, 1).toString()) - (int) utils.ToDoubleEnglish(BagsTable.getValueAt(i - 2, 1).toString()) * 1000)));
-                    cell = sheet.getRow(i - t).getCell(f + 1);
-                    cell.setCellValue((int) utils.ToDoubleEnglish(BagsTable.getValueAt(i - 2, 1).toString()));
+            int col = 1, row = 2;
+            double TotalWeight = 0.0;
+            for (Bag bag : bags) {
+                cell = sheet.getRow(row).getCell(col);
+                cell.setCellValue((bag.getWeight() - (int) bag.getWeight()) * 1000);
+                cell = sheet.getRow(row).getCell(col + 1);
+                cell.setCellValue((int) bag.getWeight());
+                TotalWeight += bag.getWeight();
+                row++;
+                if (row >= 22) {
+                    col += 3;
+                    row = 2;
                 }
-                f += 3;
             }
+
+            cell = sheet.getRow(23).getCell(11);
+            cell.setCellValue((product.isBox() ? "عدد الصناديق :          " : "عدد الشكاير :          ")
+                    + utils.toArabicDigits(bags.size() + "")
+                    + (product.isBox() ? " صندوق" : "  شيكاره") + "\n" + "الــــــــــــــــــــــوزن :       " + utils.ToDoubleArabic(TotalWeight) + "");
+
             create_excel_in_path(ClientName, workbook, excelBackupPath);
             return true;
 
@@ -124,33 +124,25 @@ public class ExcelManager {
     }
 
     /**
-     * this method it used to creating a permit with 160 unit space
+     * this method it used to creating a permit with 120 unit space
      *
-     * @param orderIds list< string > ID of units in table
-     * @param totalWeight String the total weight of order
+     * @param bags list< Bag > Bags of order
      * @param ClientName String that contain Client name
-     * @param productName String that contain product name
-     * @param BagsTable Swing table with data of product units
+     * @param product Product object used in order
      * @param excelBackupPath String the shows the path for backup location
-     * @param isBoxes Boolean indicates products is packed in boxes or bags
      *
      * @return Boolean that indicates whether the file created or not
      * @throws exceptions.DatabaseException
      * @throws exceptions.BusinessException
      */
-    public boolean excel_160(List<String> orderIds, String totalWeight, String ClientName,
-            String productName, JTable BagsTable, String excelBackupPath, boolean isBoxes) throws BusinessException, DatabaseException {
+    public boolean excel_160(List<Bag> bags, String ClientName, Product product,
+            String excelBackupPath) throws DatabaseException, BusinessException {
         try (FileInputStream file = new FileInputStream(new File("Donot_Change\\160.xlsx"))) {
             XSSFWorkbook workbook = new XSSFWorkbook(file);
             XSSFSheet sheet = workbook.getSheetAt(0);
 
             Cell cell = sheet.getRow(0).getCell(0);
-            cell.setCellValue(contactForHeader(ClientName, productName, BagsTable.getValueAt(0, 2) + ""));
-
-            cell = sheet.getRow(23).getCell(16);
-            cell.setCellValue((isBoxes ? "عدد الصناديق :          " : "عدد الشكاير :          ")
-                    + utils.toArabicDigits(orderIds.size() + "")
-                    + (isBoxes ? " صندوق" : "  شيكاره") + "\n" + "الــــــــــــــــــــــوزن :       " + totalWeight + "");
+            cell.setCellValue(contactForHeader(ClientName, product.getName(), bags.getFirst().getLot()));
 
             this.cell_functions(cell, sheet);
 
@@ -182,20 +174,24 @@ public class ExcelManager {
             strFormula1 = "(SUM(C23,F23,I23,L23,O23,R23,U23,X23)+(SUM(A23,E23,H23,K23,N23,Q23,T23,W23)/1000)-MOD((SUM(C23,F23,I23,L23,O23,R23,U23,X23)+(SUM(A23,E23,H23,K23,N23,Q23,T23,W23)/1000)),1000))/1000";
             cell.setCellFormula(strFormula1);
 
-            int f = 1;
-            for (int t = 0; t < 161; t += 20) {
-
-                for (int i = 2 + t; i <= 21 + t && i - 1 <= orderIds.size(); i++) {
-                    if (orderIds.size() == i - 2) {
-                        break;
-                    }
-                    cell = sheet.getRow(i - t).getCell(f);
-                    cell.setCellValue(((1000 * utils.ToDoubleEnglish(BagsTable.getValueAt(i - 2, 1).toString()) - (int) utils.ToDoubleEnglish(BagsTable.getValueAt(i - 2, 1).toString()) * 1000)));
-                    cell = sheet.getRow(i - t).getCell(f + 1);
-                    cell.setCellValue((int) utils.ToDoubleEnglish(BagsTable.getValueAt(i - 2, 1).toString()));
+            int col = 1, row = 2;
+            double TotalWeight = 0.0;
+            for (Bag bag : bags) {
+                cell = sheet.getRow(row).getCell(col);
+                cell.setCellValue((bag.getWeight() - (int) bag.getWeight()) * 1000);
+                cell = sheet.getRow(row).getCell(col + 1);
+                cell.setCellValue((int) bag.getWeight());
+                TotalWeight += bag.getWeight();
+                row++;
+                if (row >= 22) {
+                    col += 3;
+                    row = 2;
                 }
-                f += 3;
             }
+            cell = sheet.getRow(23).getCell(16);
+            cell.setCellValue((product.isBox() ? "عدد الصناديق :          " : "عدد الشكاير :          ")
+                    + utils.toArabicDigits(bags.size() + "")
+                    + (product.isBox() ? " صندوق" : "  شيكاره") + "\n" + "الــــــــــــــــــــــوزن :       " + utils.ToDoubleArabic(TotalWeight) + "");
 
             create_excel_in_path(ClientName, workbook, excelBackupPath);
 
@@ -207,32 +203,24 @@ public class ExcelManager {
     }
 
     /**
-     * this method it used to creating a permit with 200 unit space
+     * this method it used to creating a permit with 120 unit space
      *
-     * @param orderIds list< string > ID of units in table
-     * @param totalWeight String the total weight of order
+     * @param bags list< Bag > Bags of order
      * @param ClientName String that contain Client name
-     * @param productName String that contain product name
-     * @param BagsTable Swing table with data of product units
+     * @param product Product object used in order
      * @param excelBackupPath String the shows the path for backup location
-     * @param isBoxes Boolean indicates products is packed in boxes or bags
      *
      * @return Boolean that indicates whether the file created or not
      * @throws exceptions.DatabaseException
      * @throws exceptions.BusinessException
      */
-    public boolean excel_200(List<String> orderIds, String totalWeight, String ClientName, String productName,
-            JTable BagsTable, String excelBackupPath, boolean isBoxes) throws BusinessException, DatabaseException {
+    public boolean excel_200(List<Bag> bags, String ClientName, Product product,
+            String excelBackupPath) throws DatabaseException, BusinessException {
         try (FileInputStream file = new FileInputStream(new File("Donot_Change\\200.xlsx"))) {
             XSSFWorkbook workbook = new XSSFWorkbook(file);
             XSSFSheet sheet = workbook.getSheetAt(0);
             Cell cell = sheet.getRow(0).getCell(0);
-            cell.setCellValue(contactForHeader(ClientName, productName, BagsTable.getValueAt(0, 2) + ""));
-
-            cell = sheet.getRow(23).getCell(21);
-            cell.setCellValue((isBoxes ? "عدد الصناديق :          " : "عدد الشكاير :          ")
-                    + utils.toArabicDigits(orderIds.size() + "")
-                    + (isBoxes ? " صندوق" : "  شيكاره") + "\n" + "الــــــــــــــــــــــوزن :       " + totalWeight + "");
+            cell.setCellValue(contactForHeader(ClientName, product.getName(), bags.getFirst().getLot()));
 
             this.cell_functions(cell, sheet);
 
@@ -282,20 +270,24 @@ public class ExcelManager {
             strFormula1 = "(SUM(C23,F23,I23,L23,O23,R23,U23,X23,AA23,AD23)+(SUM(A23,E23,H23,K23,N23,Q23,T23,W23,Z23,AC23)/1000)-MOD((SUM(C23,F23,I23,L23,O23,R23,U23,X23,AA23,AD23)+(SUM(A23,E23,H23,K23,N23,Q23,T23,W23,Z23,AC23)/1000)),1000))/1000";
             cell.setCellFormula(strFormula1);
 
-            int f = 1;
-            for (int t = 0; t < 201; t += 20) {
-
-                for (int i = 2 + t; i <= 21 + t && i - 1 <= orderIds.size(); i++) {
-                    if (orderIds.size() == i - 2) {
-                        break;
-                    }
-                    cell = sheet.getRow(i - t).getCell(f);
-                    cell.setCellValue(((1000 * utils.ToDoubleEnglish(BagsTable.getValueAt(i - 2, 1).toString()) - (int) utils.ToDoubleEnglish(BagsTable.getValueAt(i - 2, 1).toString()) * 1000)));
-                    cell = sheet.getRow(i - t).getCell(f + 1);
-                    cell.setCellValue((int) utils.ToDoubleEnglish(BagsTable.getValueAt(i - 2, 1).toString()));
+            int col = 1, row = 2;
+            double TotalWeight = 0.0;
+            for (Bag bag : bags) {
+                cell = sheet.getRow(row).getCell(col);
+                cell.setCellValue((bag.getWeight() - (int) bag.getWeight()) * 1000);
+                cell = sheet.getRow(row).getCell(col + 1);
+                cell.setCellValue((int) bag.getWeight());
+                TotalWeight += bag.getWeight();
+                row++;
+                if (row >= 22) {
+                    col += 3;
+                    row = 2;
                 }
-                f += 3;
             }
+            cell = sheet.getRow(23).getCell(21);
+            cell.setCellValue((product.isBox() ? "عدد الصناديق :          " : "عدد الشكاير :          ")
+                    + utils.toArabicDigits(bags.size() + "")
+                    + (product.isBox() ? " صندوق" : "  شيكاره") + "\n" + "الــــــــــــــــــــــوزن :       " + utils.ToDoubleArabic(TotalWeight) + "");
 
             create_excel_in_path(ClientName, workbook, excelBackupPath);
             return true;
@@ -307,32 +299,21 @@ public class ExcelManager {
     }
 
     /**
-     * this method it used to creating a permit with 60-60 unit space
+     * this method it used to creating a permit with 120 unit space
      *
-     * @param sOrderIds list< string > ID of units in second order table
-     * @param fOrderIds list< string > ID of units in first order table
-     * @param wieghtSOrder String the total weight of second order
-     * @param wieghtFOrder String the total weight of first order
-     * @param typeSOrder String that contain second order product name
-     * @param typeFOrder String that contain first order product name
+     * @param fOrderBags list< Bag > Bags of First order
+     * @param sOrderBags list< Bag > Bags of Second order
      * @param ClientName String that contain Client name
-     * @param SIsBoxes Boolean indicates products in second order are packed in
-     * boxes or bags
-     * @param tableFOrder Swing table with data of first order product units
-     * @param tableSOrder Swing table with data of second order product units
-     * @param FIsBoxes Boolean indicates product units in first order are packed
-     * in boxes or bags
+     * @param fOrderProduct Product object used in First order
+     * @param sOrderProduct Product object used in Second order
      * @param excelBackupPath String the shows the path for backup location
      *
      * @return Boolean that indicates whether the file created or not
      * @throws exceptions.DatabaseException
      * @throws exceptions.BusinessException
      */
-    public boolean excel_60_60(List<String> sOrderIds, List<String> fOrderIds,
-            String wieghtSOrder, String wieghtFOrder,
-            String ClientName, String typeSOrder, String typeFOrder,
-            boolean FIsBoxes, boolean SIsBoxes,
-            JTable tableSOrder, JTable tableFOrder,
+    public boolean excel_60_60(List<Bag> fOrderBags, List<Bag> sOrderBags,
+            String ClientName, Product fOrderProduct, Product sOrderProduct,
             String excelBackupPath
     ) throws DatabaseException, BusinessException {
 
@@ -344,34 +325,25 @@ public class ExcelManager {
                 String _1 = "                                                  إذن تـسليم بضاعة\n";
                 String _2 = "السيد :" + ClientName + "";
                 String _3 = "التاريـــخ :" + date_now.format(arabicDateFormatter) + "";
-                String _4 = "صنف :" + typeFOrder + "";
-                String _5 = "رقم اللـــوط :" + tableFOrder.getValueAt(0, 2) + "";
-                String _6 = "صنف :" + typeSOrder + "";
-                String _7 = "رقم اللـــوط :" + tableSOrder.getValueAt(0, 2) + "";
+                String _4 = "صنف :" + fOrderProduct.getName() + "";
+                String _5 = "رقم اللـــوط :" + fOrderBags.getFirst().getLot();
+                String _6 = "صنف :" + sOrderProduct.getName() + "";
+                String _7 = "رقم اللـــوط :" + sOrderBags.getFirst().getLot();
                 for (int i = 0; i < 66 - ClientName.length(); i++) {
                     _2 += " ";
                 }
-                for (int i = 0; i < 60 - typeSOrder.length(); i++) {
+                for (int i = 0; i < 60 - sOrderProduct.getName().length(); i++) {
                     _4 += " ";
 
                 }
-                for (int i = 0; i < 65 - typeFOrder.length(); i++) {
+                for (int i = 0; i < 65 - fOrderProduct.getName().length(); i++) {
                     _5 += " ";
 
                 }
 
                 cell = sheet.getRow(0).getCell(0);
                 cell.setCellValue(_1 + _2 + _3 + "\n" + _4 + _6 + "\n" + _5 + _7);
-                String __1 = (FIsBoxes ? "عدد الصناديق : " : "عدد الشكاير : ")
-                        + utils.toArabicDigits(fOrderIds.size() + "")
-                        + (FIsBoxes ? " صندوق" : "  شيكاره");
-                String __2 = "الــوزن :  " + wieghtFOrder + "";
-                String __3 = (SIsBoxes ? "عدد الصناديق : " : "عدد الشكاير : ")
-                        + utils.toArabicDigits(sOrderIds.size() + "")
-                        + (SIsBoxes ? " صندوق" : "  شيكاره");
-                String __4 = "الــوزن :  " + wieghtSOrder + "";
-                cell = sheet.getRow(23).getCell(11);
-                cell.setCellValue(__1 + "  " + __2 + "\n" + __3 + " " + __4);
+
                 this.cell_functions(cell, sheet);
                 cell = sheet.getRow(22).getCell(9);
                 String strFormula1 = "IF(MOD(SUM(K3:K22),1000)>0,MOD(SUM(K3:K22),1000),IF(COUNTBLANK(K3:K22)=20,\" \",0))";
@@ -394,35 +366,46 @@ public class ExcelManager {
                 cell = sheet.getRow(26).getCell(15);
                 strFormula1 = "(SUM(L23,O23,R23)+(SUM(J23,N23,Q23)/1000)-MOD((SUM(L23,O23,R23)+(SUM(J23,N23,Q23)/1000)),1000))/1000";
                 cell.setCellFormula(strFormula1);
-                int f = 1;
-                for (int t = 0; t < 61; t += 20) {
 
-                    for (int i = 2 + t; i <= 21 + t && i - 1 <= fOrderIds.size(); i++) {
-                        if (fOrderIds.size() == i - 2) {
-                            break;
-                        }
-                        cell = sheet.getRow(i - t).getCell(f);
-                        cell.setCellValue(((1000 * utils.ToDoubleEnglish(tableFOrder.getValueAt(i - 2, 1).toString()) - (int) utils.ToDoubleEnglish(tableFOrder.getValueAt(i - 2, 1).toString()) * 1000)));
-                        cell = sheet.getRow(i - t).getCell(f + 1);
-                        cell.setCellValue((int) utils.ToDoubleEnglish(tableFOrder.getValueAt(i - 2, 1).toString()));
+                int col = 1, row = 2;
+                double fTotalWeight = 0.0;
+                for (Bag bag : fOrderBags) {
+                    cell = sheet.getRow(row).getCell(col);
+                    cell.setCellValue((bag.getWeight() - (int) bag.getWeight()) * 1000);
+                    cell = sheet.getRow(row).getCell(col + 1);
+                    cell.setCellValue((int) bag.getWeight());
+                    fTotalWeight += bag.getWeight();
+                    row++;
+                    if (row >= 22) {
+                        col += 3;
+                        row = 2;
                     }
-                    f += 3;
-                }
-                f = 10;
-                for (int t = 60; t < 121; t += 20) {
-
-                    for (int i = 2 + t; i <= 21 + t && i - 60 - 1 <= sOrderIds.size(); i++) {
-                        if (sOrderIds.size() == i + 60 - 2) {
-                            break;
-                        }
-                        cell = sheet.getRow(i - t).getCell(f);
-                        cell.setCellValue(((1000 * utils.ToDoubleEnglish(tableSOrder.getValueAt(i - 62, 1).toString()) - (int) utils.ToDoubleEnglish(tableSOrder.getValueAt(i - 62, 1).toString()) * 1000)));
-                        cell = sheet.getRow(i - t).getCell(f + 1);
-                        cell.setCellValue((int) utils.ToDoubleEnglish(tableSOrder.getValueAt(i - 62, 1).toString()));
-                    }
-                    f += 3;
                 }
 
+                col = 10;
+                double sTotalWeight = 0.0;
+                for (Bag bag : sOrderBags) {
+                    cell = sheet.getRow(row).getCell(col);
+                    cell.setCellValue((bag.getWeight() - (int) bag.getWeight()) * 1000);
+                    cell = sheet.getRow(row).getCell(col + 1);
+                    cell.setCellValue((int) bag.getWeight());
+                    sTotalWeight += bag.getWeight();
+                    row++;
+                    if (row >= 22) {
+                        col += 3;
+                        row = 2;
+                    }
+                }
+                String __1 = (fOrderProduct.isBox() ? "عدد الصناديق : " : "عدد الشكاير : ")
+                        + utils.toArabicDigits(fOrderBags.size() + "")
+                        + (fOrderProduct.isBox() ? " صندوق" : "  شيكاره");
+                String __2 = "الــوزن :  " + fTotalWeight + "";
+                String __3 = (sOrderProduct.isBox() ? "عدد الصناديق : " : "عدد الشكاير : ")
+                        + utils.toArabicDigits(sOrderBags.size() + "")
+                        + (sOrderProduct.isBox() ? " صندوق" : "  شيكاره");
+                String __4 = "الــوزن :  " + sTotalWeight + "";
+                cell = sheet.getRow(23).getCell(11);
+                cell.setCellValue(__1 + "  " + __2 + "\n" + __3 + " " + __4);
                 create_excel_in_path(ClientName, workbook, excelBackupPath);
 
             }

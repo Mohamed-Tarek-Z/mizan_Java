@@ -16,7 +16,7 @@ public class Product {
         this.IsBox = IsBox;
     }
 
-    public boolean isIsBox() {
+    public boolean isBox() {
         return IsBox;
     }
 

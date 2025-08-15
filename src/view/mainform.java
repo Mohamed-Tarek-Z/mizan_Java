@@ -38,7 +38,6 @@ import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
-import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
@@ -2984,15 +2983,13 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
         }
     }//GEN-LAST:event_jComboBox_rep_ProsItemStateChanged
 
-    List<String> orderIds = new ArrayList<>();
-    boolean second = false, isBoxesFirst = false;
-    String typeFOrder, wieghtFOrder;
-    JTable tableFOrder;
-    List<String> fOrderIds = new ArrayList<>();
+    List<Bag> orderBags = new ArrayList<>();
+    List<Bag> fOrderBags = new ArrayList<>();
+    Product typeFOrder;
+    boolean second = false;
 
     private void jButton_rep_printRepActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_rep_printRepActionPerformed
         evt.getID();
-        boolean isBoxesSecond;
 
         double ss = jTextField_rep_totweight.getText().isEmpty() ? 0.0
                 : utils.ToDoubleEnglish(jTextField_rep_totweight.getText());
@@ -3013,25 +3010,8 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
                     if (jTable_rep_preview.getRowCount() <= 60 && jCheckBox_rep_2n1.isSelected()) {
                         if (!second) {
 
-                            typeFOrder = jComboBox_rep_Pros.getSelectedItem().toString();
-
-                            isBoxesFirst = productController.getProduct(typeFOrder).isIsBox();
-
-                            wieghtFOrder = jTextField_rep_totweight.getText();
-
-                            fOrderIds = new ArrayList<>(orderIds);
-
-                            tableFOrder = new JTable();
-                            String[] columnNames = {"مسلسل", "وزن", "لوط", "رقم البالتة"};
-                            DefaultTableModel d = new DefaultTableModel(columnNames, 0);
-                            for (int i = 0; i < jTable_rep_preview.getRowCount(); i++) {
-                                Object[] row = {jTable_rep_preview.getValueAt(i, 0),
-                                    jTable_rep_preview.getValueAt(i, 1),
-                                    jTable_rep_preview.getValueAt(i, 2),
-                                    jTable_rep_preview.getValueAt(i, 3)};
-                                d.addRow(row);
-                            }
-                            tableFOrder.setModel(d);
+                            typeFOrder = (Product) jComboBox_rep_Pros.getSelectedItem();
+                            fOrderBags = new ArrayList<>(orderBags);
                             ((DefaultTableModel) jTable_rep_preview.getModel()).setRowCount(0);
                             jTextField_rep_numOfBag.setText("");
                             jTextField_rep_totweight.setText("");
@@ -3042,26 +3022,22 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
                                     JOptionPane.INFORMATION_MESSAGE);
 
                         } else {
-                            if (typeFOrder == jComboBox_rep_Pros.getSelectedItem() && tableFOrder.getValueAt(0, 2)
-                                    .toString().equals(utils.toEnglishDigits(jTable_rep_preview.getValueAt(0, 2).toString()))) {
+                            if (typeFOrder == (Product) jComboBox_rep_Pros.getSelectedItem() && fOrderBags.getFirst().getLot().equals(orderBags.getFirst().getLot())) {
                                 JOptionPane.showMessageDialog(this, utils.addStyle(" برجاء تغير الصنف أو اللوط  "), "إنتبه",
                                         JOptionPane.INFORMATION_MESSAGE);
 
                                 second = !second;
                             } else {
-                                isBoxesSecond = productController.getProduct(jComboBox_rep_Pros.getSelectedItem().toString()).isIsBox();
                                 jFileChooser1.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
                                 jFileChooser1.showSaveDialog(this);
                                 String excelBackupPath = jFileChooser1.getSelectedFile().getAbsolutePath();
-                                if (excelManager.excel_60_60(orderIds, fOrderIds, jTextField_rep_totweight.getText(), wieghtFOrder,
-                                        jTextField_rep_clientName.getText(), jComboBox_rep_Pros.getSelectedItem().toString(), typeFOrder,
-                                        isBoxesFirst, isBoxesSecond,
-                                        jTable_rep_preview, tableFOrder, excelBackupPath)) {
-                                    accessDataBase(name, jTextField_rep_totweight.getText(), orderIds);
-                                    accessDataBase(name, wieghtFOrder, fOrderIds);
+                                if (excelManager.excel_60_60(fOrderBags, orderBags,
+                                        jTextField_rep_clientName.getText(), (Product) jComboBox_rep_Pros.getSelectedItem(), typeFOrder, excelBackupPath)) {
+                                    accessDataBase(name, orderBags);
+                                    accessDataBase(name, fOrderBags);
 
                                     ((DefaultTableModel) jTable_rep_preview.getModel()).setRowCount(0);
-                                    ((DefaultTableModel) tableFOrder.getModel()).setRowCount(0);
+                                    fOrderBags.clear();
 
                                     jCheckBox_rep_2n1.setSelected(false);
                                     jCheckBox_rep_wzn.setSelected(false);
@@ -3076,15 +3052,14 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
                         }
                         second = !second;
                     } else if (jTable_rep_preview.getRowCount() <= 120) {
-                        isBoxesSecond = productController.getProduct(jComboBox_rep_Pros.getSelectedItem().toString()).isIsBox();
                         jFileChooser1.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
                         jFileChooser1.showSaveDialog(this);
                         String excelBackupPath = jFileChooser1.getSelectedFile().getAbsolutePath();
-                        if (excelManager.excel_120(orderIds, jTextField_rep_totweight.getText(),
+                        if (excelManager.excel_120(orderBags,
                                 jTextField_rep_clientName.getText(),
-                                jComboBox_rep_Pros.getSelectedItem().toString(),
-                                jTable_rep_preview, excelBackupPath, isBoxesSecond)) {
-                            accessDataBase(name, jTextField_rep_totweight.getText(), orderIds);
+                                (Product) jComboBox_rep_Pros.getSelectedItem(),
+                                excelBackupPath)) {
+                            accessDataBase(name, orderBags);
                             ((DefaultTableModel) jTable_rep_preview.getModel()).setRowCount(0);
 
                             jTextField_rep_clientName.setText("");
@@ -3097,16 +3072,14 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
                         }
 
                     } else if (jTable_rep_preview.getRowCount() <= 160) {
-                        isBoxesSecond = productController.getProduct(jComboBox_rep_Pros.getSelectedItem().toString()).isIsBox();
                         jFileChooser1.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
                         jFileChooser1.showSaveDialog(this);
                         String excelBackupPath = jFileChooser1.getSelectedFile().getAbsolutePath();
-                        if (excelManager.excel_160(orderIds, jTextField_rep_totweight.getText(),
+                        if (excelManager.excel_160(orderBags,
                                 jTextField_rep_clientName.getText(),
-                                jComboBox_rep_Pros.getSelectedItem().toString(),
-                                jTable_rep_preview, excelBackupPath, isBoxesSecond
-                        )) {
-                            accessDataBase(name, jTextField_rep_totweight.getText(), orderIds);
+                                (Product) jComboBox_rep_Pros.getSelectedItem(),
+                                excelBackupPath)) {
+                            accessDataBase(name, orderBags);
                             ((DefaultTableModel) jTable_rep_preview.getModel()).setRowCount(0);
                             jTextField_rep_clientName.setText("");
                             jTextField_rep_numOfBag.setText("");
@@ -3117,16 +3090,14 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
                                     JOptionPane.INFORMATION_MESSAGE);
                         }
                     } else if (jTable_rep_preview.getRowCount() <= 200) {
-                        isBoxesSecond = productController.getProduct(jComboBox_rep_Pros.getSelectedItem().toString()).isIsBox();
                         jFileChooser1.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
                         jFileChooser1.showSaveDialog(this);
                         String excelBackupPath = jFileChooser1.getSelectedFile().getAbsolutePath();
-                        if (excelManager.excel_200(orderIds, jTextField_rep_totweight.getText(),
+                        if (excelManager.excel_200(orderBags,
                                 jTextField_rep_clientName.getText(),
-                                jComboBox_rep_Pros.getSelectedItem().toString(),
-                                jTable_rep_preview, excelBackupPath, isBoxesSecond
-                        )) {
-                            accessDataBase(name, jTextField_rep_totweight.getText(), orderIds);
+                                (Product) jComboBox_rep_Pros.getSelectedItem(),
+                                excelBackupPath)) {
+                            accessDataBase(name, orderBags);
                             ((DefaultTableModel) jTable_rep_preview.getModel()).setRowCount(0);
                             jTextField_rep_clientName.setText("");
                             jTextField_rep_numOfBag.setText("");
@@ -3207,6 +3178,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
 
                                 boolean bagOutOfOrder = false;
                                 ArrayList<String> OutOfOrderBags = new ArrayList<>();
+                                orderBags.addAll(bags);
                                 for (Bag bag : bags) {
                                     if (wantedOrderWeight + repDiff > currentTotalWeight + weight_sum + bag.getWeight()) {
 
@@ -3217,8 +3189,6 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
                                             utils.toArabicDigits((jTable_rep_preview.getRowCount() + 1) + ""),
                                             utils.ToDoubleArabic(bag.getWeight()), utils.toArabicDigits(bag.getLot()),
                                             utils.toArabicDigits(bag.getPallet_numb() + ""), bag.isUsed()});
-
-                                        orderIds.add(bag.getId() + "");
 
                                         if (((DefaultComboBoxModel) jComboBox_rep_palletsNrep.getModel())
                                                 .getIndexOf(utils.toArabicDigits(bag.getPallet_numb() + "")) == -1) {
@@ -3306,15 +3276,13 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
                                             jComboBox_rep_Pros.getSelectedItem().toString(),
                                             jTable_rep_select.getModel().getValueAt(jTable_rep_select.getSelectedRow(), 3).toString(),
                                             jTable_rep_select.getModel().getValueAt(jTable_rep_select.getSelectedRow(), 2).toString());
-
+                                    orderBags.addAll(bags);
                                     for (Bag bag : bags) {
                                         bagsTakenFromPallet++;
                                         weight_sum += bag.getWeight();
                                         ((DefaultTableModel) jTable_rep_preview.getModel()).addRow(new Object[]{
                                             utils.toArabicDigits(jTable_rep_preview.getRowCount() + 1 + ""), utils.ToDoubleArabic(bag.getWeight()),
                                             utils.toArabicDigits(bag.getLot()), utils.toArabicDigits(bag.getPallet_numb() + ""), bag.isUsed()});
-
-                                        orderIds.add(bag.getId() + "");
 
                                         if (((DefaultComboBoxModel) jComboBox_rep_palletsNrep.getModel())
                                                 .getIndexOf(utils.toArabicDigits(bag.getPallet_numb() + "")) == -1) {
@@ -4410,7 +4378,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
         List<Product> pros = productController.getAvailableProducts();
         for (Product pro : pros) {
             model.addRow(new Object[]{pro.getId(), pro.getName(), utils.toArabicDigits(pro.getWeight_of_con()),
-                pro.getColor(), pro.isIsBox()});
+                pro.getColor(), pro.isBox()});
         }
 
     }
@@ -4460,8 +4428,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
                         Boolean.valueOf(pallet[4])});
                 }
                 ((DefaultTableModel) jTable_rep_preview.getModel()).setRowCount(0);
-
-                orderIds.clear();
+                orderBags.clear();
                 jTextField_rep_totweight.setText("");
                 jComboBox_rep_palletsNrep.removeAllItems();
             }
@@ -4487,10 +4454,10 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
                 jTextField_storage_EmptyConeWeight.setText(utils.toArabicDigits(pro.getWeight_of_con()));
             }
             jTextField_storage_Color.setText(pro.getColor());
-            jCheckBox_storage_Box.setSelected(pro.isIsBox());
-            BagMax = pro.isIsBox() ? 3 : 2;
-            jLabel11.setText(!pro.isIsBox() ? "فارغ الشيكاره" : "فارغ الصندوق");
-            jTextField_storage_EmptyBagWeight.setBackground(pro.isIsBox() ? Color.pink : Color.WHITE);
+            jCheckBox_storage_Box.setSelected(pro.isBox());
+            BagMax = pro.isBox() ? 3 : 2;
+            jLabel11.setText(!pro.isBox() ? "فارغ الشيكاره" : "فارغ الصندوق");
+            jTextField_storage_EmptyBagWeight.setBackground(pro.isBox() ? Color.pink : Color.WHITE);
         }
 
         if (model.getRowCount() != 0) {
@@ -4632,17 +4599,17 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
         clearTimer.restart();
     }
 
-    private void accessDataBase(String clientName, String totalWeight, List<String> idsFromStorageToExport) throws DatabaseException {
+    private void accessDataBase(String clientName, List<Bag> FromStorageToExport) throws DatabaseException {
         try {
             clientController.addClientByName(clientName);
-            orderController.addOrder(totalWeight);
-
-            for (String id : idsFromStorageToExport) {
-                exportController.moveBagFromStorageToExport(id, clientName, totalWeight);
-
-                storageController.removeBag(id);
-
+            String ordId = orderController.addOrder();
+            double totalWeight = 0.0;
+            for (Bag bag : FromStorageToExport) {
+                totalWeight += bag.getWeight();
+                exportController.moveBagFromStorageToExport(bag.getId() + "", clientName, ordId);
+                storageController.removeBag(bag.getId() + "");
             }
+            orderController.updateOrder(ordId, totalWeight);
         } catch (DatabaseException ex) {
             Logger.getLogger(utils.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
             throw new DatabaseException("حدث خطأ أثناء عمل الأكسل", ex);

@@ -1,11 +1,11 @@
 package dao;
 
 import exceptions.DatabaseException;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.sqlcon;
-import utils.utils;
 
 public class OrderDAO {
 
@@ -15,9 +15,22 @@ public class OrderDAO {
         this.dbConnection = dbConnection;
     }
 
-    public void addOrder(String totalWeight) throws DatabaseException {
+    public String addOrder() throws DatabaseException {
         try {
-            dbConnection.inData("orders", "ord_wight,ord_date", utils.ToDoubleEnglish(totalWeight) + ",GETDATE()");
+            ResultSet rs = dbConnection.inDataReturnInseted("orders", "ord_wight,ord_date", 0.0 + ",GETDATE()", new String[]{"ord_id"});
+            if (rs.next()) {
+                return rs.getString("ord_id");
+            }
+            return "0";
+        } catch (SQLException ex) {
+            Logger.getLogger(OrderDAO.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
+            throw new DatabaseException("حدث خطأ أثناء طلب بيانات المخزن", ex);
+        }
+    }
+
+    public void updateOrder(String id, double totalWeight) throws DatabaseException {
+        try {
+            dbConnection.update("orders", "ord_wight=" + totalWeight, "ord_id=" + id);
         } catch (SQLException ex) {
             Logger.getLogger(OrderDAO.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
             throw new DatabaseException("حدث خطأ أثناء طلب بيانات المخزن", ex);

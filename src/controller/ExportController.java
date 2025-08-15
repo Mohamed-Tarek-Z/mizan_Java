@@ -21,8 +21,8 @@ public class ExportController {
         return exportDAO.getstatistics(date1, date2);
     }
 
-    public void moveBagFromStorageToExport(String storageId, String clientName, String totalWeight) throws DatabaseException {
-        exportDAO.moveBagFromStorageToExport(storageId, clientName, totalWeight);
+    public void moveBagFromStorageToExport(String storageId, String clientName, String ord_id) throws DatabaseException {
+        exportDAO.moveBagFromStorageToExport(storageId, clientName, ord_id);
     }
 
     public void removeExportByOrderId(String Ord_id) throws DatabaseException {
