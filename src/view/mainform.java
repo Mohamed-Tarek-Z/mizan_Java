@@ -319,6 +319,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
         jButton_reps_clear = new javax.swing.JButton();
         jCheckBox_rep_wzn = new javax.swing.JCheckBox();
         jTextField_Ezn_Search_pros = new javax.swing.JTextField();
+        jCheckBox_rep_highLightMarked = new javax.swing.JCheckBox();
         products_panel = new javax.swing.JPanel();
         jTextField_pro_name = new javax.swing.JTextField();
         jButton_add_pro = new javax.swing.JButton();
@@ -1705,6 +1706,9 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
             });
             makePermit.add(jTextField_Ezn_Search_pros, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 35, 200, -1));
 
+            jCheckBox_rep_highLightMarked.setText("تعليم في الاذن؟");
+            makePermit.add(jCheckBox_rep_highLightMarked, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 240, -1, 30));
+
             left_panel.add(makePermit, "Ezn");
 
             products_panel.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
@@ -2986,7 +2990,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
     List<Bag> orderBags = new ArrayList<>();
     List<Bag> fOrderBags = new ArrayList<>();
     Product typeFOrder;
-    boolean second = false;
+    boolean second = false, highLightFirst = false;
 
     private void jButton_rep_printRepActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_rep_printRepActionPerformed
         evt.getID();
@@ -3011,11 +3015,13 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
                         if (!second) {
 
                             typeFOrder = (Product) jComboBox_rep_Pros.getSelectedItem();
+                            highLightFirst = jCheckBox_rep_highLightMarked.isSelected();
                             fOrderBags = new ArrayList<>(orderBags);
                             ((DefaultTableModel) jTable_rep_preview.getModel()).setRowCount(0);
                             jTextField_rep_numOfBag.setText("");
                             jTextField_rep_totweight.setText("");
                             jCheckBox_rep_wzn.setSelected(false);
+                            jCheckBox_rep_highLightMarked.setSelected(false);
                             jComboBox_rep_palletsNrep.removeAllItems();
 
                             JOptionPane.showMessageDialog(this, utils.addStyle(" ادخل الأذن الثاني  "), "إنتبه",
@@ -3032,7 +3038,8 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
                                 jFileChooser1.showSaveDialog(this);
                                 String excelBackupPath = jFileChooser1.getSelectedFile().getAbsolutePath();
                                 if (excelManager.excel_60_60(fOrderBags, orderBags,
-                                        jTextField_rep_clientName.getText(), (Product) jComboBox_rep_Pros.getSelectedItem(), typeFOrder, excelBackupPath)) {
+                                        jTextField_rep_clientName.getText(), (Product) jComboBox_rep_Pros.getSelectedItem(),
+                                        typeFOrder, excelBackupPath, highLightFirst, jCheckBox_rep_highLightMarked.isSelected())) {
                                     accessDataBase(name, orderBags);
                                     accessDataBase(name, fOrderBags);
 
@@ -3058,7 +3065,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
                         if (excelManager.excel_120(orderBags,
                                 jTextField_rep_clientName.getText(),
                                 (Product) jComboBox_rep_Pros.getSelectedItem(),
-                                excelBackupPath)) {
+                                excelBackupPath, jCheckBox_rep_highLightMarked.isSelected())) {
                             accessDataBase(name, orderBags);
                             ((DefaultTableModel) jTable_rep_preview.getModel()).setRowCount(0);
 
@@ -3078,7 +3085,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
                         if (excelManager.excel_160(orderBags,
                                 jTextField_rep_clientName.getText(),
                                 (Product) jComboBox_rep_Pros.getSelectedItem(),
-                                excelBackupPath)) {
+                                excelBackupPath, jCheckBox_rep_highLightMarked.isSelected())) {
                             accessDataBase(name, orderBags);
                             ((DefaultTableModel) jTable_rep_preview.getModel()).setRowCount(0);
                             jTextField_rep_clientName.setText("");
@@ -3096,7 +3103,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
                         if (excelManager.excel_200(orderBags,
                                 jTextField_rep_clientName.getText(),
                                 (Product) jComboBox_rep_Pros.getSelectedItem(),
-                                excelBackupPath)) {
+                                excelBackupPath, jCheckBox_rep_highLightMarked.isSelected())) {
                             accessDataBase(name, orderBags);
                             ((DefaultTableModel) jTable_rep_preview.getModel()).setRowCount(0);
                             jTextField_rep_clientName.setText("");
@@ -4702,6 +4709,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
     private javax.swing.JCheckBox jCheckBox_ME_MarkBag;
     private javax.swing.JCheckBox jCheckBox_Pros_IsBox;
     private javax.swing.JCheckBox jCheckBox_rep_2n1;
+    private javax.swing.JCheckBox jCheckBox_rep_highLightMarked;
     private javax.swing.JCheckBox jCheckBox_rep_wzn;
     private javax.swing.JCheckBox jCheckBox_set_printExcel;
     private javax.swing.JCheckBox jCheckBox_storage_Box;

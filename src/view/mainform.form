@@ -2214,6 +2214,16 @@
                     </Constraint>
                   </Constraints>
                 </Component>
+                <Component class="javax.swing.JCheckBox" name="jCheckBox_rep_highLightMarked">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="&#x62a;&#x639;&#x644;&#x64a;&#x645; &#x641;&#x64a; &#x627;&#x644;&#x627;&#x630;&#x646;&#x61f;"/>
+                  </Properties>
+                  <Constraints>
+                    <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
+                      <AbsoluteConstraints x="520" y="240" width="-1" height="30"/>
+                    </Constraint>
+                  </Constraints>
+                </Component>
               </SubComponents>
             </Container>
             <Container class="javax.swing.JPanel" name="products_panel">

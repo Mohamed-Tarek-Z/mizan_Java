@@ -21,6 +21,9 @@ import model.Bag;
 import model.Product;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellCopyPolicy;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.FillPatternType;
+import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -61,22 +64,39 @@ public class ExcelManager {
     }
 
     /**
+     * this method it used to apply HighLight Color to cell
+     *
+     * @param cell Cell cell object to apply color to
+     * @param style CellStyle object just init new CellStyle
+     * @param color IndexedColors object select color from saved colors
+     */
+    private void applyColorToCell(Cell cell, CellStyle style, IndexedColors color) {
+        style.cloneStyleFrom(cell.getCellStyle());
+        style.setFillForegroundColor(color.getIndex());
+        style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+        cell.setCellStyle(style);
+    }
+
+    /**
      * this method it used to creating a permit with 120 unit space
      *
      * @param bags list< Bag > Bags of order
      * @param ClientName String that contain Client name
      * @param product Product object used in order
      * @param excelBackupPath String the shows the path for backup location
+     * @param highLight Boolean to check is highlight needed or not
      *
      * @return Boolean that indicates whether the file created or not
      * @throws exceptions.DatabaseException
      * @throws exceptions.BusinessException
      */
     public boolean excel_120(List<Bag> bags, String ClientName, Product product,
-            String excelBackupPath) throws DatabaseException, BusinessException {
+            String excelBackupPath, boolean highLight) throws DatabaseException, BusinessException {
         try (FileInputStream file = new FileInputStream(new File("Donot_Change\\120.xlsx"))) {
             XSSFWorkbook workbook = new XSSFWorkbook(file);
             XSSFSheet sheet = workbook.getSheetAt(0);
+            CellStyle style1 = workbook.createCellStyle();
+            CellStyle style2 = workbook.createCellStyle();
 
             Cell cell = sheet.getRow(0).getCell(0);
             cell.setCellValue(contactForHeader(ClientName, product.getName(), bags.getFirst().getLot()));
@@ -96,10 +116,17 @@ public class ExcelManager {
 
             int col = 1, row = 2;
             double TotalWeight = 0.0;
+
             for (Bag bag : bags) {
                 cell = sheet.getRow(row).getCell(col);
+                if (highLight && bag.isUsed()) {
+                    applyColorToCell(cell, style1, IndexedColors.GREY_25_PERCENT);
+                }
                 cell.setCellValue((bag.getWeight() - (int) bag.getWeight()) * 1000);
                 cell = sheet.getRow(row).getCell(col + 1);
+                if (highLight && bag.isUsed()) {
+                    applyColorToCell(cell, style2, IndexedColors.GREY_25_PERCENT);
+                }
                 cell.setCellValue((int) bag.getWeight());
                 TotalWeight += bag.getWeight();
                 row++;
@@ -130,16 +157,19 @@ public class ExcelManager {
      * @param ClientName String that contain Client name
      * @param product Product object used in order
      * @param excelBackupPath String the shows the path for backup location
+     * @param highLight Boolean to check is highlight needed or not
      *
      * @return Boolean that indicates whether the file created or not
      * @throws exceptions.DatabaseException
      * @throws exceptions.BusinessException
      */
     public boolean excel_160(List<Bag> bags, String ClientName, Product product,
-            String excelBackupPath) throws DatabaseException, BusinessException {
+            String excelBackupPath, boolean highLight) throws DatabaseException, BusinessException {
         try (FileInputStream file = new FileInputStream(new File("Donot_Change\\160.xlsx"))) {
             XSSFWorkbook workbook = new XSSFWorkbook(file);
             XSSFSheet sheet = workbook.getSheetAt(0);
+            CellStyle style1 = workbook.createCellStyle();
+            CellStyle style2 = workbook.createCellStyle();
 
             Cell cell = sheet.getRow(0).getCell(0);
             cell.setCellValue(contactForHeader(ClientName, product.getName(), bags.getFirst().getLot()));
@@ -178,8 +208,14 @@ public class ExcelManager {
             double TotalWeight = 0.0;
             for (Bag bag : bags) {
                 cell = sheet.getRow(row).getCell(col);
+                if (highLight && bag.isUsed()) {
+                    applyColorToCell(cell, style1, IndexedColors.GREY_25_PERCENT);
+                }
                 cell.setCellValue((bag.getWeight() - (int) bag.getWeight()) * 1000);
                 cell = sheet.getRow(row).getCell(col + 1);
+                if (highLight && bag.isUsed()) {
+                    applyColorToCell(cell, style2, IndexedColors.GREY_25_PERCENT);
+                }
                 cell.setCellValue((int) bag.getWeight());
                 TotalWeight += bag.getWeight();
                 row++;
@@ -209,16 +245,20 @@ public class ExcelManager {
      * @param ClientName String that contain Client name
      * @param product Product object used in order
      * @param excelBackupPath String the shows the path for backup location
+     * @param highLight Boolean to check is highlight needed or not
      *
      * @return Boolean that indicates whether the file created or not
      * @throws exceptions.DatabaseException
      * @throws exceptions.BusinessException
      */
     public boolean excel_200(List<Bag> bags, String ClientName, Product product,
-            String excelBackupPath) throws DatabaseException, BusinessException {
+            String excelBackupPath, boolean highLight) throws DatabaseException, BusinessException {
         try (FileInputStream file = new FileInputStream(new File("Donot_Change\\200.xlsx"))) {
             XSSFWorkbook workbook = new XSSFWorkbook(file);
             XSSFSheet sheet = workbook.getSheetAt(0);
+            CellStyle style1 = workbook.createCellStyle();
+            CellStyle style2 = workbook.createCellStyle();
+
             Cell cell = sheet.getRow(0).getCell(0);
             cell.setCellValue(contactForHeader(ClientName, product.getName(), bags.getFirst().getLot()));
 
@@ -274,8 +314,14 @@ public class ExcelManager {
             double TotalWeight = 0.0;
             for (Bag bag : bags) {
                 cell = sheet.getRow(row).getCell(col);
+                if (highLight && bag.isUsed()) {
+                    applyColorToCell(cell, style1, IndexedColors.GREY_25_PERCENT);
+                }
                 cell.setCellValue((bag.getWeight() - (int) bag.getWeight()) * 1000);
                 cell = sheet.getRow(row).getCell(col + 1);
+                if (highLight && bag.isUsed()) {
+                    applyColorToCell(cell, style2, IndexedColors.GREY_25_PERCENT);
+                }
                 cell.setCellValue((int) bag.getWeight());
                 TotalWeight += bag.getWeight();
                 row++;
@@ -307,6 +353,10 @@ public class ExcelManager {
      * @param fOrderProduct Product object used in First order
      * @param sOrderProduct Product object used in Second order
      * @param excelBackupPath String the shows the path for backup location
+     * @param fHighLight Boolean to check is highlight for first permit needed
+     * or not
+     * @param sHighLight Boolean to check is highlight for second permit needed
+     * or not
      *
      * @return Boolean that indicates whether the file created or not
      * @throws exceptions.DatabaseException
@@ -314,13 +364,16 @@ public class ExcelManager {
      */
     public boolean excel_60_60(List<Bag> fOrderBags, List<Bag> sOrderBags,
             String ClientName, Product fOrderProduct, Product sOrderProduct,
-            String excelBackupPath
+            String excelBackupPath, boolean fHighLight, boolean sHighLight
     ) throws DatabaseException, BusinessException {
 
         try (FileInputStream file = new FileInputStream(new File("Donot_Change\\60-60.xlsx"))) {
             date_now = LocalDate.now();
             try (XSSFWorkbook workbook = new XSSFWorkbook(file)) {
                 XSSFSheet sheet = workbook.getSheetAt(0);
+                CellStyle style1 = workbook.createCellStyle();
+                CellStyle style2 = workbook.createCellStyle();
+
                 Cell cell;
                 String _1 = "                                                  إذن تـسليم بضاعة\n";
                 String _2 = "السيد :" + ClientName + "";
@@ -371,8 +424,14 @@ public class ExcelManager {
                 double fTotalWeight = 0.0;
                 for (Bag bag : fOrderBags) {
                     cell = sheet.getRow(row).getCell(col);
+                    if (fHighLight && bag.isUsed()) {
+                        applyColorToCell(cell, style1, IndexedColors.GREY_25_PERCENT);
+                    }
                     cell.setCellValue((bag.getWeight() - (int) bag.getWeight()) * 1000);
                     cell = sheet.getRow(row).getCell(col + 1);
+                    if (sHighLight && bag.isUsed()) {
+                        applyColorToCell(cell, style2, IndexedColors.GREY_25_PERCENT);
+                    }
                     cell.setCellValue((int) bag.getWeight());
                     fTotalWeight += bag.getWeight();
                     row++;
@@ -436,12 +495,16 @@ public class ExcelManager {
                 cell.setCellValue("التاريـــخ :   " + date_now.format(arabicDateFormatter) + "");
                 String prevname = "";
                 ArrayList<Integer> reg = new ArrayList<>();
+
+                CellStyle baseStyle = sheet.getRow(RowIndex).getCell(2).getCellStyle();
+                CellStyle highLightStyle = workbook.createCellStyle();
+
                 for (String[] row : stock) {
 
                     if (RowIndex >= 6) {
                         CellCopyPolicy poli = new CellCopyPolicy();
-                        poli.setCopyCellStyle(true);
-                        poli.setCopyCellValue(true);
+                        //poli.setCopyCellStyle(true);
+                        //poli.setCopyCellValue(true);
                         sheet.copyRows(RowIndex - 1, RowIndex, RowIndex, poli);
                     }
                     if (prevname.equalsIgnoreCase(row[0])) {
@@ -458,17 +521,31 @@ public class ExcelManager {
                     }
 
                     cell = sheet.getRow(RowIndex).getCell(2);
+                    if (row[4].equals("true")) {
+                        applyColorToCell(cell, highLightStyle, IndexedColors.LIGHT_GREEN);
+                    } else {
+                        cell.setCellStyle(baseStyle);
+                    }
                     cell.setCellValue(utils.toArabicDigits(row[1]));
 
                     cell = sheet.getRow(RowIndex).getCell(3);
+                    if (row[4].equals("true")) {
+                        applyColorToCell(cell, highLightStyle, IndexedColors.LIGHT_GREEN);
+                    } else {
+                        cell.setCellStyle(baseStyle);
+                    }
                     cell.setCellValue(utils.toArabicDigits(row[2]));
 
                     cell = sheet.getRow(RowIndex).getCell(4);
+                    if (row[4].equals("true")) {
+                        applyColorToCell(cell, highLightStyle, IndexedColors.LIGHT_GREEN);
+                    } else {
+                        cell.setCellStyle(baseStyle);
+                    }
                     cell.setCellValue(utils.toArabicDigits(row[3]));
 
-                    cell = sheet.getRow(RowIndex).getCell(5);
-                    cell.setCellValue(utils.toArabicDigits(row[4]));
-
+//                    cell = sheet.getRow(RowIndex).getCell(5);
+//                    cell.setCellValue(utils.toArabicDigits(row[4]));
                     RowIndex++;
                 }
                 if (reg.size() > 1) {
