@@ -70,7 +70,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
 
     private short tick10x10, tick2x2;
     private int BagMax = 2, repDiff;
-    private final String Version = "V 2.5.1 MVC";
+    private final String Version = "V 2.6.2 MVC";
     private String ticketPrinterName, qrPrinterName;
 
     private long lastInputTime;
@@ -3185,10 +3185,10 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
 
                                 boolean bagOutOfOrder = false;
                                 ArrayList<String> OutOfOrderBags = new ArrayList<>();
-                                orderBags.addAll(bags);
                                 for (Bag bag : bags) {
                                     if (wantedOrderWeight + repDiff > currentTotalWeight + weight_sum + bag.getWeight()) {
 
+                                        orderBags.add(bag);
                                         bagsTakenFromPallet++;
                                         weight_sum += bag.getWeight();
 
@@ -3459,7 +3459,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
 
                 List<String[]> yumya = exportController.getYuwmya(jCheckBox_youm_old.isSelected(), dateFrom, dateTo, selectedCIDs);
                 for (String[] row : yumya) {
-                    model.addRow(new Object[]{utils.toArabicDigits(row[2]), utils.toArabicDigits(row[1]),
+                    model.addRow(new Object[]{row[2], utils.toArabicDigits(row[1]),
                         utils.toArabicDigits(row[3]), utils.toArabicDigits(row[5]),
                         utils.toArabicDigits(row[0]), utils.toArabicDigits(row[4])});
                 }

@@ -65,11 +65,11 @@ public class ExportController {
                 if (findExportByOrderId(exports.getFirst().getOrd_id() + "")) {
                     throw new BusinessException(" تم استرجاع البيان بنجاح");
                 } else {
-                    throw new BusinessException("رجا أعد تحميل الجدول");
+                    throw new BusinessException("رجا أعد تحميل الجدول يوجد شئ خطأ");
                 }
             }
         } else {
-            throw new BusinessException("رجا أعد تحميل الجدول");
+            throw new BusinessException("رجا أعد تحميل الجدول يوجد شئ خطأ");
         }
 
     }
