@@ -429,7 +429,7 @@ public class ExcelManager {
                     }
                     cell.setCellValue((bag.getWeight() - (int) bag.getWeight()) * 1000);
                     cell = sheet.getRow(row).getCell(col + 1);
-                    if (sHighLight && bag.isUsed()) {
+                    if (fHighLight && bag.isUsed()) {
                         applyColorToCell(cell, style2, IndexedColors.GREY_25_PERCENT);
                     }
                     cell.setCellValue((int) bag.getWeight());
@@ -442,11 +442,18 @@ public class ExcelManager {
                 }
 
                 col = 10;
+                row = 2;
                 double sTotalWeight = 0.0;
                 for (Bag bag : sOrderBags) {
                     cell = sheet.getRow(row).getCell(col);
+                    if (sHighLight && bag.isUsed()) {
+                        applyColorToCell(cell, style1, IndexedColors.GREY_25_PERCENT);
+                    }
                     cell.setCellValue((bag.getWeight() - (int) bag.getWeight()) * 1000);
                     cell = sheet.getRow(row).getCell(col + 1);
+                    if (sHighLight && bag.isUsed()) {
+                        applyColorToCell(cell, style2, IndexedColors.GREY_25_PERCENT);
+                    }
                     cell.setCellValue((int) bag.getWeight());
                     sTotalWeight += bag.getWeight();
                     row++;

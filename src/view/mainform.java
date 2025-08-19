@@ -70,7 +70,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
 
     private short tick10x10, tick2x2;
     private int BagMax = 2, repDiff;
-    private final String Version = "V 2.6.2 MVC";
+    private final String Version = "V 2.6.3 MVC";
     private String ticketPrinterName, qrPrinterName;
 
     private long lastInputTime;
