@@ -52,9 +52,9 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class mainform extends javax.swing.JFrame implements ErrorListener {
-
+    
     private final String MizanPattern = "[0-9\u0660-\u0669]{1,3}[.,\u060C,\u0632][0-9\u0660-\u0669]{2}";
-
+    
     private final sqlcon opj;
     private final ProductController productController;
     private final StorageController storageController;
@@ -62,24 +62,24 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
     private final ClientController clientController;
     private final OrderController orderController;
     private final MachineController machineController;
-
+    
     private final ExcelManager excelManager;
     private final PrinterManager printerManager;
-
+    
     private int pro_Table_SelectedID = 0;
-
+    
     private short tick10x10, tick2x2;
     private int BagMax = 2, repDiff;
     private final String Version = "V 2.6.3 MVC";
     private String ticketPrinterName, qrPrinterName;
-
+    
     private long lastInputTime;
     private final StringBuilder mizanInputBuilder = new StringBuilder();
     private String savedText = "";
     private boolean enterFromMizan = false;
-
+    
     private final Timer clearTimer;
-
+    
     @Override
     public void onError(Exception ex) {
         // Safely update UI here
@@ -87,11 +87,11 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
             JOptionPane.showMessageDialog(this, utils.addStyle(ex.getLocalizedMessage()), "exception", JOptionPane.INFORMATION_MESSAGE);
         });
     }
-
+    
     public mainform(boolean admin, sqlcon dbConnection) throws DatabaseException, BusinessException {
         initComponents();
         this.opj = dbConnection;
-
+        
         this.excelManager = new ExcelManager();
         this.printerManager = new PrinterManager(this);
         this.productController = new ProductController(new ProductDAO(dbConnection));
@@ -100,26 +100,26 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
         this.clientController = new ClientController(new ClientDAO(dbConnection));
         this.orderController = new OrderController(new OrderDAO(dbConnection));
         this.machineController = new MachineController(new MachineDAO(dbConnection), new ProductDAO(dbConnection));
-
+        
         if (!admin) {
             jButton_addPro_opener.setEnabled(false);
             jButton_Ezn_opener.setEnabled(false);
             jButton_Outs_opener.setEnabled(false);
             jButton_Settings_opener.setEnabled(false);
         }
-
+        
         clearTimer = new Timer(100, e -> {
             mizanInputBuilder.setLength(0);
             lastInputTime = -1;
         });
         clearTimer.setRepeats(false);
-
+        
         populateCombos();
         readConfig();
         setupKeyBindings();
 //        LibVosk.setLogLevel(LogLevel.WARNINGS);
     }
-
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -2671,7 +2671,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
         if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
             calc_net_weight();
             jTextField_storage_coneNumber.requestFocusInWindow();
-
+            
             if (!jTextField_storage_NetWeight.getText().isBlank() && !enterFromMizan) {
                 jButton_storage_addData.doClick();
             }
@@ -2703,7 +2703,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
                 jCheckBox_storage_freezeConeNumber.setSelected(false);
                 jButton_storage_Clear.doClick();
             }
-
+            
         }
         calc_net_weight();
     }//GEN-LAST:event_jTextField_storage_TotalWeightKeyTyped
@@ -2724,22 +2724,22 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
                     && !jTextField_storage_palletNumber.getText().isBlank() && !jTextField_storage_EmptyBagWeight.getText().isBlank()
                     && !jTextField_storage_coneNumber.getText().isBlank() && !jTextField_storage_TotalWeight.getText().isBlank()
                     && jComboBox_storage_products.getSelectedIndex() != -1) {
-
+                
                 if ((utils.ToDoubleEnglish(jTextField_storage_TotalWeight.getText()) <= 60.0
                         && utils.ToDoubleEnglish(jTextField_storage_NetWeight.getText()) > 15.0)
                         || jCheckBox_storage_ignoreLimits.isSelected()) {
                     calc_net_weight();
-
+                    
                     int filledPallet = storageController.addStorage(jComboBox_storage_products.getSelectedItem().toString(),
                             jTextField_storage_TotalWeight.getText(), jTextField_storage_NetWeight.getText(), jTextField_storage_lot.getText(),
                             jTextField_storage_coneNumber.getText(), jTextField_storage_palletNumber.getText(),
                             jCheckBox_storage_MarkBag.isSelected(), jTextField_storage_EmptyBagWeight.getText()
                     );
-
+                    
                     jTextField_storage_palletNumber.setText(utils.toArabicDigits(filledPallet + ""));
-
+                    
                     calc_pallet_weight();
-
+                    
                     jProgressBar_storage_pallet.setValue(storageController.countpallet(filledPallet, jTextField_storage_lot.getText(),
                             jComboBox_storage_products.getSelectedItem().toString(), jCheckBox_storage_MarkBag.isSelected()));
                     if (jCheckBox_storage_printLTicket.isSelected() || jCheckBox_storage_QR.isSelected()) {
@@ -2762,15 +2762,15 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
                             jLabel_print_ValTypeDenir.setSize(190, 60);
                             jLabel_print_ValType.setText(" ");
                         }
-
+                        
                         jLabel_print_ValPallet.setText(jTextField_storage_palletNumber.getText());
                         jLabel_print_ValColor.setText(jTextField_storage_Color.getText());
-
+                        
                         jLabel_print_ValLot.setText(jTextField_storage_lot.getText());
                         jLabel_print_ValNCone.setText(jTextField_storage_coneNumber.getText());
                         jLabel_print_ValTotalWeight.setText(jTextField_storage_TotalWeight.getText());
                         jLabel_print_ValNetWeight.setText(jTextField_storage_NetWeight.getText());
-
+                        
                         printerManager.printTickets(new ArrayList<>(Arrays.asList(
                                 jTextField_storage_palletNumber.getText(), jTextField_storage_Color.getText(),
                                 jComboBox_storage_products.getSelectedItem().toString(),
@@ -2779,7 +2779,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
                                 jPanel_print,
                                 jCheckBox_storage_printLTicket.isSelected(), jCheckBox_storage_QR.isSelected(),
                                 jCheckBox_set_printExcel.isSelected(), jCheckBox_troll.isSelected());
-
+                        
                         incTicketCounters(jCheckBox_storage_printLTicket.isSelected(), jCheckBox_storage_QR.isSelected());
                     }
                     jButton_storage_Clear.doClick();
@@ -2808,7 +2808,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
             if (JOptionPane.showConfirmDialog(this, utils.addStyle("هل تريد الحذف ؟"), "تنبيه",
                     JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
                 if (jTable_storage.getSelectedRowCount() == 1) {
-
+                    
                     storageController.removeBag(
                             jTable_storage.getModel().getValueAt(jTable_storage.getSelectedRow(), 4).toString());
                     JOptionPane.showMessageDialog(this, utils.addStyle(" تم حذف البيان بنجاح "), "ناجح",
@@ -2860,7 +2860,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
                     }
                 }
             } else {
-
+                
                 if (jTextField_pro_name.getText().isBlank()) {
                     JOptionPane.showMessageDialog(this, utils.addStyle("برجاء أدخال اسم الصنف"), "إنتبه",
                             JOptionPane.INFORMATION_MESSAGE);
@@ -2917,7 +2917,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
         if (pro_Table_SelectedID != 0) {
             try {
                 if (productController.removeProduct(pro_Table_SelectedID)) {
-
+                    
                     JOptionPane.showMessageDialog(this, utils.addStyle("تم حذف الصنف بنجاح "), "ناجح",
                             JOptionPane.INFORMATION_MESSAGE);
                     jTextField_pro_name.setText("");
@@ -2945,7 +2945,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
         evt.getID();
         try {
             jTextField_storage_lot.setText("");
-
+            
             if (jComboBox_storage_products.hasFocus()) {
                 jCheckBox_storage_FreezeConeWeightChange.setSelected(false);
                 jCheckBox_storage_ignoreLimits.setSelected(false);
@@ -2986,7 +2986,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
             JOptionPane.showMessageDialog(this, utils.addStyle(ex.getLocalizedMessage()), "exception", JOptionPane.INFORMATION_MESSAGE);
         }
     }//GEN-LAST:event_jComboBox_rep_ProsItemStateChanged
-
+    
     List<Bag> orderBags = new ArrayList<>();
     List<Bag> fOrderBags = new ArrayList<>();
     Product typeFOrder;
@@ -2994,18 +2994,18 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
 
     private void jButton_rep_printRepActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_rep_printRepActionPerformed
         evt.getID();
-
+        
         double ss = jTextField_rep_totweight.getText().isEmpty() ? 0.0
                 : utils.ToDoubleEnglish(jTextField_rep_totweight.getText());
         try {
             if (jTable_rep_preview.getRowCount() >= 0 && !jTextField_rep_clientName.getText().isBlank()
                     && (jTable_rep_preview.getRowCount() == (int) utils.ToDoubleEnglish(jTextField_rep_numOfBag.getText())
                     || !(utils.ToDoubleEnglish(jTextField_rep_numOfBag.getText()) >= ss + repDiff))) {
-
+                
                 if (JOptionPane.showConfirmDialog(this, utils.addStyle("سيتم التصدير للأكسل "), "تنبيه",
                         JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
                     String name = jTextField_rep_clientName.getText().split("تسليم")[0].strip();
-
+                    
                     if (jTable_rep_preview.getRowCount() > 60 && jCheckBox_rep_2n1.isSelected()) {
                         JOptionPane.showMessageDialog(this, utils.addStyle("لا يمن عمل إذنين و عدد الشكائر أكثر من ٦٠ في الإذن الواحد"), "إنتبه",
                                 JOptionPane.INFORMATION_MESSAGE);
@@ -3013,7 +3013,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
                     }
                     if (jTable_rep_preview.getRowCount() <= 60 && jCheckBox_rep_2n1.isSelected()) {
                         if (!second) {
-
+                            
                             typeFOrder = (Product) jComboBox_rep_Pros.getSelectedItem();
                             highLightFirst = jCheckBox_rep_highLightMarked.isSelected();
                             fOrderBags = new ArrayList<>(orderBags);
@@ -3023,31 +3023,32 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
                             jCheckBox_rep_wzn.setSelected(false);
                             jCheckBox_rep_highLightMarked.setSelected(false);
                             jComboBox_rep_palletsNrep.removeAllItems();
-
+                            
                             JOptionPane.showMessageDialog(this, utils.addStyle(" ادخل الأذن الثاني  "), "إنتبه",
                                     JOptionPane.INFORMATION_MESSAGE);
-
+                            
                         } else {
                             if (typeFOrder == (Product) jComboBox_rep_Pros.getSelectedItem() && fOrderBags.getFirst().getLot().equals(orderBags.getFirst().getLot())) {
                                 JOptionPane.showMessageDialog(this, utils.addStyle(" برجاء تغير الصنف أو اللوط  "), "إنتبه",
                                         JOptionPane.INFORMATION_MESSAGE);
-
+                                
                                 second = !second;
                             } else {
                                 jFileChooser1.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
                                 jFileChooser1.showSaveDialog(this);
                                 String excelBackupPath = jFileChooser1.getSelectedFile().getAbsolutePath();
                                 if (excelManager.excel_60_60(fOrderBags, orderBags,
-                                        jTextField_rep_clientName.getText(), (Product) jComboBox_rep_Pros.getSelectedItem(),
-                                        typeFOrder, excelBackupPath, highLightFirst, jCheckBox_rep_highLightMarked.isSelected())) {
+                                        jTextField_rep_clientName.getText(), typeFOrder, (Product) jComboBox_rep_Pros.getSelectedItem(),
+                                        excelBackupPath, highLightFirst, jCheckBox_rep_highLightMarked.isSelected())) {
                                     accessDataBase(name, orderBags);
                                     accessDataBase(name, fOrderBags);
-
+                                    
                                     ((DefaultTableModel) jTable_rep_preview.getModel()).setRowCount(0);
                                     fOrderBags.clear();
-
+                                    
                                     jCheckBox_rep_2n1.setSelected(false);
                                     jCheckBox_rep_wzn.setSelected(false);
+                                    jCheckBox_rep_highLightMarked.setSelected(false);
                                     jTextField_rep_clientName.setText("");
                                     jTextField_rep_numOfBag.setText("");
                                     jTextField_rep_totweight.setText("");
@@ -3068,16 +3069,17 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
                                 excelBackupPath, jCheckBox_rep_highLightMarked.isSelected())) {
                             accessDataBase(name, orderBags);
                             ((DefaultTableModel) jTable_rep_preview.getModel()).setRowCount(0);
-
+                            
                             jTextField_rep_clientName.setText("");
                             jTextField_rep_numOfBag.setText("");
                             jTextField_rep_totweight.setText("");
                             jCheckBox_rep_wzn.setSelected(false);
+                            jCheckBox_rep_highLightMarked.setSelected(false);
                         } else {
                             JOptionPane.showMessageDialog(this, utils.addStyle(" حدث خطأ في عمل الاذن"), "إنتبه",
                                     JOptionPane.INFORMATION_MESSAGE);
                         }
-
+                        
                     } else if (jTable_rep_preview.getRowCount() <= 160) {
                         jFileChooser1.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
                         jFileChooser1.showSaveDialog(this);
@@ -3092,6 +3094,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
                             jTextField_rep_numOfBag.setText("");
                             jTextField_rep_totweight.setText("");
                             jCheckBox_rep_wzn.setSelected(false);
+                            jCheckBox_rep_highLightMarked.setSelected(false);
                         } else {
                             JOptionPane.showMessageDialog(this, utils.addStyle(" حدث خطأ في عمل الاذن"), "إنتبه",
                                     JOptionPane.INFORMATION_MESSAGE);
@@ -3110,6 +3113,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
                             jTextField_rep_numOfBag.setText("");
                             jTextField_rep_totweight.setText("");
                             jCheckBox_rep_wzn.setSelected(false);
+                            jCheckBox_rep_highLightMarked.setSelected(false);
                         } else {
                             JOptionPane.showMessageDialog(this, utils.addStyle(" حدث خطأ في عمل الاذن"), "إنتبه",
                                     JOptionPane.INFORMATION_MESSAGE);
@@ -3178,25 +3182,25 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
                                             + jTable_rep_select.getValueAt(jTable_rep_select.getSelectedRow(), 3) + ""),
                                     "تنبيه",
                                     JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-
+                                
                                 List<Bag> bags = storageController.getBagsToReport(0, jComboBox_rep_Pros.getSelectedItem().toString(), jTable_rep_select.getModel()
                                         .getValueAt(jTable_rep_select.getSelectedRow(), 3).toString(), jTable_rep_select.getModel()
                                         .getValueAt(jTable_rep_select.getSelectedRow(), 2).toString());
-
+                                
                                 boolean bagOutOfOrder = false;
                                 ArrayList<String> OutOfOrderBags = new ArrayList<>();
                                 for (Bag bag : bags) {
                                     if (wantedOrderWeight + repDiff > currentTotalWeight + weight_sum + bag.getWeight()) {
-
+                                        
                                         orderBags.add(bag);
                                         bagsTakenFromPallet++;
                                         weight_sum += bag.getWeight();
-
+                                        
                                         ((DefaultTableModel) jTable_rep_preview.getModel()).addRow(new Object[]{
                                             utils.toArabicDigits((jTable_rep_preview.getRowCount() + 1) + ""),
                                             utils.ToDoubleArabic(bag.getWeight()), utils.toArabicDigits(bag.getLot()),
                                             utils.toArabicDigits(bag.getPallet_numb() + ""), bag.isUsed()});
-
+                                        
                                         if (((DefaultComboBoxModel) jComboBox_rep_palletsNrep.getModel())
                                                 .getIndexOf(utils.toArabicDigits(bag.getPallet_numb() + "")) == -1) {
                                             jComboBox_rep_palletsNrep.addItem(utils.toArabicDigits(bag.getPallet_numb() + ""));
@@ -3227,24 +3231,24 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
                                                 JOptionPane.INFORMATION_MESSAGE);
                                     }
                                 }
-
+                                
                                 currentTotalWeight += weight_sum;
                                 jTextField_rep_totweight.setText(utils.ToDoubleArabic(currentTotalWeight));
-
+                                
                                 if (wantedOrderWeight >= utils.ToDoubleEnglish(jTable_rep_select.getModel()
                                         .getValueAt(jTable_rep_select.getSelectedRow(), 1).toString()) + currentTotalWeight
                                         || (Integer.parseInt(jTable_rep_select.getModel().getValueAt(jTable_rep_select.getSelectedRow(), 0).toString()) - bagsTakenFromPallet) <= 0
                                         || utils.ToDoubleEnglish(jTable_rep_select.getModel().getValueAt(jTable_rep_select.getSelectedRow(), 1).toString()) - weight_sum <= 0.0) {
-
+                                    
                                     ((DefaultTableModel) jTable_rep_select.getModel()).removeRow(jTable_rep_select.getSelectedRow());
-
+                                    
                                 } else {
                                     jTable_rep_select.getModel().setValueAt(utils.ToDoubleArabic(utils.ToDoubleEnglish(jTable_rep_select.getModel()
                                             .getValueAt(jTable_rep_select.getSelectedRow(), 1).toString()) - weight_sum),
                                             jTable_rep_select.getSelectedRow(), 1);
                                     jTable_rep_select.getModel().setValueAt(utils.toArabicDigits((Integer.parseInt(jTable_rep_select.getModel()
                                             .getValueAt(jTable_rep_select.getSelectedRow(), 0).toString()) - bagsTakenFromPallet) + ""), jTable_rep_select.getSelectedRow(), 0);
-
+                                    
                                 }
                                 jTable_rep_preview.changeSelection(jTable_rep_preview.getRowCount() - 1, 0, false, false);
                             }
@@ -3256,7 +3260,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
                         JOptionPane.showMessageDialog(this, utils.addStyle("لقد اكتمل الوزن"), "إنتبه",
                                 JOptionPane.INFORMATION_MESSAGE);
                     }
-
+                    
                 } else {
                     if ((int) utils.ToDoubleEnglish(jTextField_rep_numOfBag.getText()) > 200) {
                         JOptionPane.showMessageDialog(this, utils.addStyle("رجاء ادخل  عدد أقل من  ٢٠١"), "إنتبه",
@@ -3290,28 +3294,28 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
                                         ((DefaultTableModel) jTable_rep_preview.getModel()).addRow(new Object[]{
                                             utils.toArabicDigits(jTable_rep_preview.getRowCount() + 1 + ""), utils.ToDoubleArabic(bag.getWeight()),
                                             utils.toArabicDigits(bag.getLot()), utils.toArabicDigits(bag.getPallet_numb() + ""), bag.isUsed()});
-
+                                        
                                         if (((DefaultComboBoxModel) jComboBox_rep_palletsNrep.getModel())
                                                 .getIndexOf(utils.toArabicDigits(bag.getPallet_numb() + "")) == -1) {
                                             jComboBox_rep_palletsNrep.addItem(utils.toArabicDigits(bag.getPallet_numb() + ""));
                                         }
-
+                                        
                                     }
-
+                                    
                                     currentTotalWeight += weight_sum;
                                     jTextField_rep_totweight.setText(utils.ToDoubleArabic(currentTotalWeight));
-
+                                    
                                     jTable_rep_select.getModel().setValueAt(utils.ToDoubleArabic(utils.ToDoubleEnglish(jTable_rep_select.getModel()
                                             .getValueAt(jTable_rep_select.getSelectedRow(), 1).toString()) - weight_sum),
                                             jTable_rep_select.getSelectedRow(), 1);
                                     jTable_rep_select.getModel().setValueAt(utils.toArabicDigits((Integer.parseInt(jTable_rep_select.getModel()
                                             .getValueAt(jTable_rep_select.getSelectedRow(), 0).toString()) - bagsTakenFromPallet) + ""), jTable_rep_select.getSelectedRow(), 0);
-
+                                    
                                     if (wantedOrderQuantity >= utils.ToDoubleEnglish(jTable_rep_select.getModel().getValueAt(jTable_rep_select.getSelectedRow(), 0).toString())
                                             && jTable_rep_preview.getRowCount() < wantedOrderQuantity
                                             || utils.ToDoubleEnglish(jTable_rep_select.getValueAt(jTable_rep_select.getSelectedRow(), 0).toString()) == 0.0
                                             || utils.ToDoubleEnglish(jTable_rep_select.getValueAt(jTable_rep_select.getSelectedRow(), 1).toString()) == 0.0) {
-
+                                        
                                         ((DefaultTableModel) jTable_rep_select.getModel()).removeRow(jTable_rep_select.getSelectedRow());
                                     }
                                 }
@@ -3396,7 +3400,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
                 DefaultTableModel model = (DefaultTableModel) jTable_stock.getModel();
                 model.setRowCount(0);
                 List<String[]> stock = storageController.getStockOfProduct(jComboBox_stock_Pros.getSelectedItem().toString());
-
+                
                 for (String[] row : stock) {
                     model.addRow(new Object[]{utils.toArabicDigits(row[0]), utils.toArabicDigits(row[1]),
                         utils.toArabicDigits(row[2]), utils.toArabicDigits(row[3]), Boolean.valueOf(row[4])});
@@ -3456,7 +3460,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                 String dateFrom = sdf.format(jDateChooser_yum_fromDate.getCalendar().getTime());
                 String dateTo = sdf.format(jDateChooser_yum_ToDate.getCalendar().getTime());
-
+                
                 List<String[]> yumya = exportController.getYuwmya(jCheckBox_youm_old.isSelected(), dateFrom, dateTo, selectedCIDs);
                 for (String[] row : yumya) {
                     model.addRow(new Object[]{row[2], utils.toArabicDigits(row[1]),
@@ -3511,7 +3515,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
                                 jTable_yumia.getValueAt(jTable_yumia.getSelectedRow(), 1) + "",
                                 jTable_yumia.getValueAt(jTable_yumia.getSelectedRow(), 0) + "",
                                 jTable_yumia.getValueAt(jTable_yumia.getSelectedRow(), 5) + "");
-
+                        
                         jButton_youm_search.doClick();
                     }
                 } else {
@@ -3539,7 +3543,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
         try {
             if (!jTextField_E_Wight.getText().isBlank() && !jTextField_E_PaltNum.getText().isBlank()
                     && !jTextField_E_ConNum.getText().isBlank() && !jTextField_E_lot.getText().isBlank()) {
-
+                
                 storageController.updateStorage(Integer.parseInt(jTable_storage.getModel().getValueAt(jTable_storage.getSelectedRow(), 4).toString()),
                         jComboBox_E_proName.getSelectedItem().toString(), jTextField_E_TotWight.getText(),
                         jTextField_E_Wight.getText(), jTextField_E_lot.getText(), jTextField_E_ConNum.getText(),
@@ -3633,7 +3637,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
                     jTextField_E_O_Wight.setText(utils.ToDoubleArabic(bag.getWeight()));
                     jTextField_E_Wight.setText(utils.ToDoubleArabic(bag.getWeight()));
                     jTextField_E_Color.setText(product.getColor());
-
+                    
                 } else if (jTable_storage.getSelectedRowCount() > 1) {
                     MultiEdit.setVisible(true);
                     this.setEnabled(false);
@@ -3683,7 +3687,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
     private void jButton_E_printActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_E_printActionPerformed
         evt.getID();
         try {
-
+            
             try {
                 if (jComboBox_E_proName.getSelectedItem().toString().split(" ", 2)[1].length() > 11) {
                     jLabel_print_ValType.setFont(new Font("Arial", Font.PLAIN, 20));
@@ -3703,15 +3707,15 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
                 jLabel_print_ValTypeDenir.setSize(190, 60);
                 jLabel_print_ValType.setText(" ");
             }
-
+            
             jLabel_print_ValPallet.setText(jTextField_E_PaltNum.getText());
             jLabel_print_ValColor.setText(jTextField_E_Color.getText());
-
+            
             jLabel_print_ValLot.setText(jTextField_E_lot.getText());
             jLabel_print_ValNCone.setText(jTextField_E_ConNum.getText());
             jLabel_print_ValTotalWeight.setText(jTextField_E_TotWight.getText());
             jLabel_print_ValNetWeight.setText(jTextField_E_Wight.getText());
-
+            
             printerManager.printTickets(new ArrayList<>(Arrays.asList(
                     jTextField_E_PaltNum.getText(),
                     jTextField_E_Color.getText(),
@@ -3723,7 +3727,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
                     jPanel_print,
                     jCheckBox_E_P.isSelected(), jCheckBox_E_QR.isSelected(),
                     jCheckBox_set_printExcel.isSelected(), jCheckBox_troll.isSelected());
-
+            
             incTicketCounters(jCheckBox_E_P.isSelected(), jCheckBox_E_QR.isSelected());
         } catch (BusinessException ex) {
             JOptionPane.showMessageDialog(SingleEdit, utils.addStyle(ex.getLocalizedMessage()), "exception", JOptionPane.INFORMATION_MESSAGE);
@@ -3775,7 +3779,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
 
     private void jTextField_ME_lotKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_ME_lotKeyTyped
         sendToWight(jTextField_ME_lot, null, evt);
-
+        
         textbox_length_limiter(evt, jTextField_ME_lot, 5);
         char input = evt.getKeyChar();
         if (Character.isDigit(input)) {
@@ -3845,7 +3849,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
         evt.getID();
         try {
             if (jCheckBox_set_printExcel.isSelected()) {
-
+                
                 new Thread(() -> {
                     try {
                         if (jCheckBox_troll.isSelected()) {
@@ -3907,22 +3911,22 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
                 }
                 cell = sheet.getRow(RowIndex).getCell(1);
                 cell.setCellValue(jTable_yumia.getValueAt(selectedRow, 1).toString());
-
+                
                 cell = sheet.getRow(RowIndex).getCell(2);
                 cell.setCellValue(jTable_yumia.getValueAt(selectedRow, 2).toString());
-
+                
                 cell = sheet.getRow(RowIndex).getCell(3);
                 cell.setCellValue(jTable_yumia.getValueAt(selectedRow, 3).toString());
-
+                
                 cell = sheet.getRow(RowIndex).getCell(4);
                 cell.setCellValue(jTable_yumia.getValueAt(selectedRow, 4).toString());
-
+                
                 cell = sheet.getRow(RowIndex).getCell(5);
                 cell.setCellValue(jTable_yumia.getValueAt(selectedRow, 5).toString());
-
+                
                 RowIndex++;
             }
-
+            
             try (FileOutputStream fileOut = new FileOutputStream(
                     System.getProperty("user.dir") + "\\Temp\\report.xlsx")) {
                 workbook.write(fileOut);
@@ -3982,11 +3986,11 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
                 String date2 = sdf.format(jDateChooser_statis_toDate.getCalendar().getTime());
                 List<String[]> statistics = exportController.getstatistics(date1, date2);
                 if (excelManager.staticsticsExcel(statistics, date1, date2)) {
-
+                    
                     JOptionPane.showMessageDialog(this, utils.addStyle("please print the Execl"), "Done",
                             JOptionPane.INFORMATION_MESSAGE);
                 }
-
+                
             } catch (DatabaseException ex) {
                 JOptionPane.showMessageDialog(this, utils.addStyle(ex.getLocalizedMessage()), "exception", JOptionPane.INFORMATION_MESSAGE);
                 Logger.getLogger(mainform.class.getName()).log(Level.SEVERE, null, ex);
@@ -4017,7 +4021,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
         try {
             sendToWight(jTextField_storage_SearchProducts, jTextField_storage_TotalWeight, evt);
             evt.setKeyChar(utils.toArabicDigits(evt.getKeyChar() + "").charAt(0));
-
+            
             if (evt.getKeyChar() == KeyEvent.VK_DELETE) {
                 jTextField_storage_SearchProducts.setText("");
             }
@@ -4039,7 +4043,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
             default ->
                 jLabel_print_ValPallet.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         }
-
+        
         switch (jLabel_print_ValLot.getHorizontalAlignment()) {
             case javax.swing.SwingConstants.CENTER ->
                 jLabel_print_ValLot.setHorizontalAlignment(javax.swing.SwingConstants.LEADING);
@@ -4050,7 +4054,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
             default ->
                 jLabel_print_ValLot.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         }
-
+        
         switch (jLabel_print_ValNetWeight.getHorizontalAlignment()) {
             case javax.swing.SwingConstants.CENTER ->
                 jLabel_print_ValNetWeight.setHorizontalAlignment(javax.swing.SwingConstants.LEADING);
@@ -4138,7 +4142,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
         if (jTable_machines.getSelectedRow() > -1) {
             try {
                 if (machineController.removeMachine((int) jTable_machines.getModel().getValueAt(jTable_machines.getSelectedRow(), 0))) {
-
+                    
                     JOptionPane.showMessageDialog(this, utils.addStyle("تم الحذف  بنجاح "), "ناجح",
                             JOptionPane.INFORMATION_MESSAGE);
                     fill_machine();
@@ -4180,14 +4184,14 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
                     jCheckBox_storage_MarkBag.setSelected(false);
                     jTextField_storage_SearchProducts.setText("");
                     combox_fill_with(jComboBox_storage_products, jTextField_storage_SearchProducts.getText());
-
+                    
                     jComboBox_storage_products.setSelectedItem(productController.getProduct(
                             (String) jTable_machines.getModel().getValueAt(jTable_machines.getSelectedRow(), 2)));
                     fill_storage_table();
                 } catch (BusinessException ex) {
                     jComboBox_storage_products.setSelectedIndex(-1);
                 }
-
+                
                 jTextField_storage_lot.setText(((String) model.getValueAt(jTable_machines.getSelectedRow(), 3)).strip());
                 jButton_Mizan_opener.doClick();
                 jTextField_storage_palletNumber.setText("");
@@ -4201,7 +4205,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
         try {
             sendToWight(jTextField_Ezn_Search_pros, null, evt);
             evt.setKeyChar(utils.toArabicDigits(evt.getKeyChar() + "").charAt(0));
-
+            
             if (evt.getKeyChar() == KeyEvent.VK_DELETE) {
                 jTextField_Ezn_Search_pros.setText("");
             }
@@ -4223,11 +4227,11 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
             JOptionPane.showMessageDialog(this, utils.addStyle(ex.getLocalizedMessage()), "exception", JOptionPane.INFORMATION_MESSAGE);
         }
     }//GEN-LAST:event_jButton_Settings_openerActionPerformed
-
+    
     private void setupKeyBindings() {
         InputMap inputMap = rootPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
         ActionMap actionMap = rootPane.getActionMap();
-
+        
         inputMap.put(KeyStroke.getKeyStroke("F1"), "openWznPanel");
         actionMap.put("openWznPanel", new AbstractAction() {
             @Override
@@ -4236,7 +4240,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
                 jTextField_storage_TotalWeight.requestFocus();
             }
         });
-
+        
         inputMap.put(KeyStroke.getKeyStroke("F2"), "OpenReportPanel");
         actionMap.put("OpenReportPanel", new AbstractAction() {
             @Override
@@ -4244,7 +4248,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
                 jButton_Ezn_opener.doClick();
             }
         });
-
+        
         inputMap.put(KeyStroke.getKeyStroke("F3"), "OpenAddProPanel");
         actionMap.put("OpenAddProPanel", new AbstractAction() {
             @Override
@@ -4252,7 +4256,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
                 jButton_addPro_opener.doClick();
             }
         });
-
+        
         inputMap.put(KeyStroke.getKeyStroke("F4"), "OpenEmptyPanel");
         actionMap.put("OpenEmptyPanel", new AbstractAction() {
             @Override
@@ -4260,7 +4264,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
                 jButton_Emp_opener.doClick();
             }
         });
-
+        
         inputMap.put(KeyStroke.getKeyStroke("F5"), "OpenStockPanel");
         actionMap.put("OpenStockPanel", new AbstractAction() {
             @Override
@@ -4268,7 +4272,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
                 jButton_Stock_opener.doClick();
             }
         });
-
+        
         inputMap.put(KeyStroke.getKeyStroke("F12"), "TrollToggle");
         actionMap.put("TrollToggle", new AbstractAction() {
             @Override
@@ -4277,7 +4281,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
             }
         });
     }
-
+    
     private void open_panel(Component comp) {
         left_panel.removeAll();
         left_panel.add(comp);
@@ -4285,9 +4289,9 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
         left_panel.repaint();
         this.setAlwaysOnTop(false);
     }
-
+    
     private void textbox_number_weight(KeyEvent event, JTextField textboxname, int length) {
-
+        
         if (event.getKeyChar() == KeyEvent.VK_DELETE) {
             if ((event.getModifiersEx() & KeyEvent.SHIFT_DOWN_MASK) != 0) {
                 jButton_storage_Clear.doClick();
@@ -4318,7 +4322,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
             }
         }
     }
-
+    
     private void textbox_length_limiter(KeyEvent event, JTextField textboxname, int length) {
         if (textboxname.getText().length() > length - 1 && event.getKeyChar() != KeyEvent.VK_ENTER
                 && event.getKeyChar() != KeyEvent.VK_BACK_SPACE) {
@@ -4331,9 +4335,9 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
             textboxname.setText("");
         }
     }
-
+    
     private void textbox_number(KeyEvent event, JTextField textboxname, int length, boolean lastEven) {
-
+        
         if (event.getKeyChar() == KeyEvent.VK_DELETE) {
             if ((event.getModifiersEx() & KeyEvent.SHIFT_DOWN_MASK) != 0) {
                 jButton_storage_Clear.doClick();
@@ -4355,20 +4359,20 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
             }
         }
     }
-
+    
     private void combox_fill(JComboBox<Product> Combo) throws DatabaseException {
         Combo.removeAllItems();
         Combo.setModel(new DefaultComboBoxModel<>(productController.getAvailableProducts().toArray(Product[]::new)));
         Combo.setSelectedIndex(-1);
     }
-
+    
     private void combox_fill_with(JComboBox<Product> Combo, String term) throws DatabaseException {
-
+        
         Combo.removeAllItems();
         Combo.setModel(new DefaultComboBoxModel<>(productController.getAvailableProductsLike(term).toArray(Product[]::new)));
         Combo.setSelectedIndex(-1);
     }
-
+    
     private void populateCombos() throws DatabaseException {
         this.combox_fill(jComboBox_storage_products);
         this.combox_fill(jComboBox_rep_Pros);
@@ -4378,7 +4382,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
         this.combox_fill(jComboBox_stock_Pros);
         this.combox_fill(jComboBox_mach_pros);
     }
-
+    
     private void fill_pro_table() throws DatabaseException {
         DefaultTableModel model = (DefaultTableModel) jTable_pro.getModel();
         model.setRowCount(0);
@@ -4387,9 +4391,9 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
             model.addRow(new Object[]{pro.getId(), pro.getName(), utils.toArabicDigits(pro.getWeight_of_con()),
                 pro.getColor(), pro.isBox()});
         }
-
+        
     }
-
+    
     private void fill_machine() throws DatabaseException {
         DefaultTableModel model = (DefaultTableModel) jTable_machines.getModel();
         model.setRowCount(0);
@@ -4405,9 +4409,9 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
                     mach.getUpdatedAt()});
             }
         }
-
+        
     }
-
+    
     private void calc_net_weight() {
         if (!jTextField_storage_coneNumber.getText().isBlank() && !jTextField_storage_EmptyConeWeight.getText().isBlank()
                 && !jTextField_storage_EmptyBagWeight.getText().isBlank()
@@ -4417,17 +4421,17 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
                     weight_of_con = utils.ToDoubleEnglish(jTextField_storage_EmptyConeWeight.getText()) / 1000,
                     bag_weight = utils.ToDoubleEnglish(jTextField_storage_EmptyBagWeight.getText()) / 100,
                     weight = utils.ToDoubleEnglish(jTextField_storage_TotalWeight.getText());
-
+            
             jTextField_storage_NetWeight.setText(utils.ToDoubleArabic(weight - (bag_weight + (num_of_con * weight_of_con))));
         }
     }
-
+    
     private void fill_Table_rep_select() throws DatabaseException, BusinessException {
         try {
             if (jComboBox_rep_Pros.getSelectedIndex() != -1) {
                 ((DefaultTableModel) jTable_rep_select.getModel()).setRowCount(0);
                 List<String[]> pallets = storageController.getPalletsForReport(jComboBox_rep_Pros.getSelectedItem().toString());
-
+                
                 for (String[] pallet : pallets) {
                     ((DefaultTableModel) jTable_rep_select.getModel())
                             .addRow(new Object[]{utils.toArabicDigits(pallet[0]), utils.toArabicDigits(pallet[1]),
@@ -4444,12 +4448,12 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
             JOptionPane.showMessageDialog(this, utils.addStyle(ex.getLocalizedMessage()), "exception", JOptionPane.INFORMATION_MESSAGE);
         }
     }
-
+    
     private void fill_storage_table() throws DatabaseException, BusinessException {
         DefaultTableModel model = (DefaultTableModel) jTable_storage.getModel();
         model.setRowCount(0);
         List<Bag> bags = storageController.getBags(jComboBox_storage_products.getSelectedItem().toString());
-
+        
         for (Bag bag : bags) {
             model.addRow(new Object[]{utils.ToDoubleArabic(bag.getWeight()), utils.toArabicDigits(bag.getNum_of_con() + ""),
                 utils.toArabicDigits(bag.getLot()), utils.toArabicDigits(bag.getPallet_numb() + ""), bag.getId(), "",
@@ -4466,7 +4470,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
             jLabel11.setText(!pro.isBox() ? "فارغ الشيكاره" : "فارغ الصندوق");
             jTextField_storage_EmptyBagWeight.setBackground(pro.isBox() ? Color.pink : Color.WHITE);
         }
-
+        
         if (model.getRowCount() != 0) {
             String lott = utils.toEnglishDigits(model.getValueAt(model.getRowCount() - 1, 2).toString()),
                     pallet_num = utils.toEnglishDigits(model.getValueAt(model.getRowCount() - 1, 3).toString());
@@ -4478,12 +4482,12 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
                     pallet_num = utils.toEnglishDigits(model.getValueAt(i, 3).toString());
                     cunt = 0;
                 }
-
+                
                 model.setValueAt(utils.toArabicDigits(++cunt + ""), i, 5);
             }
         }
     }
-
+    
     private void calc_pallet_weight() throws DatabaseException {
         if (!jTextField_storage_palletNumber.getText().isEmpty() && !jTextField_storage_lot.getText().isEmpty()
                 && jComboBox_storage_products.getSelectedIndex() != -1) {
@@ -4491,7 +4495,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
                     jTextField_storage_lot.getText(), jComboBox_storage_products.getSelectedItem().toString())));
         }
     }
-
+    
     private void fill_Statistics_table() {
         if (jDateChooser_statis_fromDate.getCalendar() != null && jDateChooser_statis_toDate.getCalendar() != null) {
             DefaultTableModel model = (DefaultTableModel) jTable_statis.getModel();
@@ -4504,7 +4508,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
                 for (String[] row : statistics) {
                     model.addRow(new Object[]{row[0], utils.toArabicDigits(row[1]),
                         utils.toArabicDigits(row[2]), utils.toArabicDigits(row[3])});
-
+                    
                 }
                 double tot = 0.0;
                 for (int i = 0; i < model.getRowCount(); i++) {
@@ -4516,10 +4520,10 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
                         .getName()).log(Level.SEVERE, null, ex);
                 JOptionPane.showMessageDialog(this, utils.addStyle(ex.getLocalizedMessage()), "exception", JOptionPane.INFORMATION_MESSAGE);
             }
-
+            
         }
     }
-
+    
     private void readConfig() throws BusinessException {
         Properties properties = utils.CheckConfigFileAndFolder();
 
@@ -4531,7 +4535,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
         tick10x10 = Short.parseShort(properties.getProperty("ticket10x10", "0"));
         tick2x2 = Short.parseShort(properties.getProperty("ticket2x2", "0"));
         repDiff = Integer.parseInt(properties.getProperty("repdiff", "15"));
-
+        
         jLabel_ip.setText("Connected To: " + properties.getProperty("ip", "localhost"));
         boolean print10x10 = Boolean.parseBoolean(properties.getProperty("print10x10", "true"));
         boolean print2x2 = Boolean.parseBoolean(properties.getProperty("print2x2", "false"));
@@ -4541,13 +4545,13 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
         jLabel_Ticket10x10Counter.setText("" + tick10x10);
         jLabel_Ticket2x2Counter.setText("" + tick2x2);
         jTextField_setting_repsDiff.setText(utils.toArabicDigits(repDiff + ""));
-
+        
         jCheckBox_storage_printLTicket.setSelected(print10x10);
         jCheckBox_storage_QR.setSelected(print2x2);
         jCheckBox_set_printExcel.setSelected(PrintExcel);
         jCheckBox_troll.setSelected(Boolean.parseBoolean(properties.getProperty("Troll", "false")));
     }
-
+    
     private void saveConfig() throws BusinessException {
         Properties properties = utils.CheckConfigFileAndFolder();
 
@@ -4570,11 +4574,11 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
             throw new BusinessException("file not found");
         }
     }
-
+    
     void sendToWight(JTextField fromTextField, JTextField toTextField, KeyEvent evt) {
         long now = System.currentTimeMillis();
         char c = evt.getKeyChar();
-
+        
         if (lastInputTime == -1 || now - lastInputTime > 100) {
             mizanInputBuilder.setLength(0); // Reset if too slow
             enterFromMizan = false;
@@ -4582,7 +4586,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
         } else {
             evt.consume();
         }
-
+        
         if (c == '\n') {
             String mizanInput = mizanInputBuilder.toString().trim();
             mizanInputBuilder.setLength(0);
@@ -4605,7 +4609,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
         lastInputTime = now;
         clearTimer.restart();
     }
-
+    
     private void accessDataBase(String clientName, List<Bag> FromStorageToExport) throws DatabaseException {
         try {
             clientController.addClientByName(clientName);
@@ -4622,7 +4626,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
             throw new DatabaseException("حدث خطأ أثناء عمل الأكسل", ex);
         }
     }
-
+    
     private void incTicketCounters(boolean t10x10, boolean t2x2) throws BusinessException {
         if (t10x10) {
             tick10x10++;

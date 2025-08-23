@@ -465,11 +465,11 @@ public class ExcelManager {
                 String __1 = (fOrderProduct.isBox() ? "عدد الصناديق : " : "عدد الشكاير : ")
                         + utils.toArabicDigits(fOrderBags.size() + "")
                         + (fOrderProduct.isBox() ? " صندوق" : "  شيكاره");
-                String __2 = "الــوزن :  " + fTotalWeight + "";
+                String __2 = "الــوزن :  " + utils.ToDoubleArabic(fTotalWeight) + "";
                 String __3 = (sOrderProduct.isBox() ? "عدد الصناديق : " : "عدد الشكاير : ")
                         + utils.toArabicDigits(sOrderBags.size() + "")
                         + (sOrderProduct.isBox() ? " صندوق" : "  شيكاره");
-                String __4 = "الــوزن :  " + sTotalWeight + "";
+                String __4 = "الــوزن :  " + utils.ToDoubleArabic(sTotalWeight) + "";
                 cell = sheet.getRow(23).getCell(11);
                 cell.setCellValue(__1 + "  " + __2 + "\n" + __3 + " " + __4);
                 create_excel_in_path(ClientName, workbook, excelBackupPath);
