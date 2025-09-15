@@ -26,9 +26,18 @@ import javax.swing.SwingUtilities;
 public class PrinterManager {
 
     private final ErrorListener errorListener;
+    private final PrintService QRPrinter, TicketPrinter;
+
+    public PrinterManager() throws BusinessException {
+        this.errorListener = null;
+        this.QRPrinter = getPrinterByName(utils.CheckConfigFileAndFolder().getProperty("qrPrinterName", "Microsoft Print"));
+        this.TicketPrinter = getPrinterByName(utils.CheckConfigFileAndFolder().getProperty("ticketPrinterName", "Microsoft Print"));;
+    }
 
     public PrinterManager(ErrorListener errorListener) {
         this.errorListener = errorListener;
+        this.QRPrinter = null;
+        this.TicketPrinter = null;
     }
 
     /**
@@ -54,15 +63,14 @@ public class PrinterManager {
      */
     private void QRPrint(byte[] data) throws BusinessException {
         try {
-            PrintService xPrinter = getPrinterByName(utils.CheckConfigFileAndFolder().getProperty("qrPrinterName", "Xprinter"));
-            if (xPrinter == null) {
-                throw new BusinessException("Xprinter not found!");
+            if (QRPrinter == null) {
+                throw new BusinessException("QR printer not found!");
             }
             DocFlavor flavor = DocFlavor.BYTE_ARRAY.PNG;
             PrintRequestAttributeSet pras = new HashPrintRequestAttributeSet();
 
             pras.add(new MediaPrintableArea(0, 3, 18, 18, MediaPrintableArea.MM));
-            DocPrintJob job = xPrinter.createPrintJob();
+            DocPrintJob job = QRPrinter.createPrintJob();
             Doc doc = new SimpleDoc(data, flavor, null);
             job.print(doc, pras);
         } catch (PrintException ex) {
@@ -191,15 +199,11 @@ public class PrinterManager {
 
     private void printImage(BufferedImage image) throws BusinessException {
         try {
-            PrinterJob job = PrinterJob.getPrinterJob();
-            PrintService HWPrinter = getPrinterByName(utils.CheckConfigFileAndFolder().getProperty("ticketPrinterName", "Honeywell"));
-            if (HWPrinter == null) {
+            if (TicketPrinter == null) {
                 throw new BusinessException("HWPrinter not found!");
             }
-            job.setPrintService(HWPrinter);
-            PrintRequestAttributeSet attributes = new HashPrintRequestAttributeSet();
-            attributes.add(new MediaPrintableArea(0, 0, 100, 100, MediaPrintableArea.MM));
-
+            PrinterJob job = PrinterJob.getPrinterJob();
+            job.setPrintService(TicketPrinter);
             job.setJobName("Print Ticket");
             job.setPrintable((graphics, pageFormat, pageIndex) -> {
                 if (pageIndex > 0) {
@@ -216,6 +220,8 @@ public class PrinterManager {
 
                 return Printable.PAGE_EXISTS;
             });
+            PrintRequestAttributeSet attributes = new HashPrintRequestAttributeSet();
+            attributes.add(new MediaPrintableArea(0, 0, 100, 100, MediaPrintableArea.MM));
             job.print(attributes);
         } catch (PrinterException e) {
             throw new BusinessException("error in panel Printing");
