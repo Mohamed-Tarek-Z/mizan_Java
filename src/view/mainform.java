@@ -72,7 +72,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
 
     private short tick10x10, tick2x2;
     private int BagMax = 2, repDiff;
-    private final String Version = "V 2.6.4";
+    private final String Version = "V 2.7";
     private String ticketPrinterName, qrPrinterName;
 
     private long lastInputTime;
@@ -751,6 +751,69 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
         jSeparator_print_main = new javax.swing.JSeparator();
         jSeparator_print_valBox = new javax.swing.JSeparator();
         jSeparator_print_Double = new javax.swing.JSeparator();
+        newStorage_panel = new javax.swing.JPanel();
+        jScrollPane11 = new javax.swing.JScrollPane();
+        jTable_newStorage = new javax.swing.JTable()
+
+        {
+
+            @Override
+
+            public Component prepareRenderer(TableCellRenderer renderer, int rowIndex, int columnIndex) {
+                Component componenet = super.prepareRenderer(renderer, rowIndex, columnIndex);
+
+                boolean value = (boolean) getModel().getValueAt(rowIndex, 6);
+
+                if (value) {
+                    componenet.setBackground(isRowSelected(rowIndex) ? Color.YELLOW : Color.GREEN);
+                    componenet.setForeground(Color.BLACK);
+
+                } else {
+                    componenet.setBackground(isRowSelected(rowIndex) ? componenet.getBackground() : Color.WHITE);
+                    //componenet.setForeground(Color.BLACK);
+                }
+
+                return componenet;
+            }
+
+        }
+
+        ;
+        jButton_newStorage_addData = new javax.swing.JButton();
+        jButton_newStorage_delData = new javax.swing.JButton();
+        jComboBox_newStorage_products = new javax.swing.JComboBox<>();
+        jTextField_newStorage_lot = new javax.swing.JTextField();
+        jTextField_newStorage_ConeTotalWeight = new javax.swing.JTextField();
+        jLabel56 = new javax.swing.JLabel();
+        jLabel57 = new javax.swing.JLabel();
+        jLabel59 = new javax.swing.JLabel();
+        jTextField_newStorage_palletNumber = new javax.swing.JTextField();
+        jTextField_newStorage_EmptyConeWeight = new javax.swing.JTextField();
+        jLabel61 = new javax.swing.JLabel();
+        jTextField_newStorage_ConeNetWeight = new javax.swing.JTextField();
+        jLabel62 = new javax.swing.JLabel();
+        jLabel63 = new javax.swing.JLabel();
+        jTextField_newStorage_PalletWeight = new javax.swing.JTextField();
+        jCheckBox_newStorage_MarkBag = new javax.swing.JCheckBox();
+        jButton_newStorage_Clear = new javax.swing.JButton();
+        jCheckBox_newStorage_printTicket = new javax.swing.JCheckBox();
+        jTextField_newStorage_Color = new javax.swing.JTextField();
+        jLabel64 = new javax.swing.JLabel();
+        jCheckBox_newStorage_QR = new javax.swing.JCheckBox();
+        jCheckBox_newStorage_Box = new javax.swing.JCheckBox();
+        jSeparator8 = new javax.swing.JSeparator();
+        jSeparator9 = new javax.swing.JSeparator();
+        jSeparator10 = new javax.swing.JSeparator();
+        jButton_newStorage_RePrintLastTicket = new javax.swing.JButton();
+        jProgressBar_newStorage_pallet = new javax.swing.JProgressBar();
+        jCheckBox_newStorage_FreezeConeWeightChange = new javax.swing.JCheckBox();
+        jCheckBox_newStorage_ignoreLimits = new javax.swing.JCheckBox();
+        jTextField_newStorage_SearchProducts = new javax.swing.JTextField();
+        jScrollPane12 = new javax.swing.JScrollPane();
+        jTable_cone = new javax.swing.JTable();
+        jLabel65 = new javax.swing.JLabel();
+        jTextField_newStorage_bagWeight = new javax.swing.JTextField();
+        jButton_newStorage_addCone = new javax.swing.JButton();
 
         jFileChooser1.setDialogType(javax.swing.JFileChooser.SAVE_DIALOG);
         jFileChooser1.setCurrentDirectory(new java.io.File("F:\\"));
@@ -2598,6 +2661,349 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
 
             left_panel.add(jTabbedPane_settings, "Settings");
 
+            newStorage_panel.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+            newStorage_panel.setMaximumSize(new java.awt.Dimension(835, 640));
+            newStorage_panel.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+            jTable_newStorage.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+            jTable_newStorage.setModel(new javax.swing.table.DefaultTableModel(
+                new Object [][] {
+
+                },
+                new String [] {
+                    "الوزن", "عدد الكون", "رقم اللوط", "رقم البالتة", "م", "مسلسل ", "s"
+                }
+            ) {
+                Class[] types = new Class [] {
+                    java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Boolean.class
+                };
+                boolean[] canEdit = new boolean [] {
+                    false, false, false, false, false, false, false
+                };
+
+                public Class getColumnClass(int columnIndex) {
+                    return types [columnIndex];
+                }
+
+                public boolean isCellEditable(int rowIndex, int columnIndex) {
+                    return canEdit [columnIndex];
+                }
+            });
+            jTable_newStorage.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
+            jTable_newStorage.getTableHeader().setFont(new Font("Tahoma", 1, 16));
+            jTable_newStorage.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+            jTable_newStorage.setRowHeight(25);
+            jTable_newStorage.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+            jTable_newStorage.setShowGrid(true);
+            jTable_newStorage.getTableHeader().setReorderingAllowed(false);
+            jTable_newStorage.addMouseListener(new java.awt.event.MouseAdapter() {
+                public void mouseReleased(java.awt.event.MouseEvent evt) {
+                    jTable_newStorageMouseReleased(evt);
+                }
+            });
+            jTable_newStorage.addKeyListener(new java.awt.event.KeyAdapter() {
+                public void keyTyped(java.awt.event.KeyEvent evt) {
+                    jTable_newStorageKeyTyped(evt);
+                }
+            });
+            jScrollPane11.setViewportView(jTable_newStorage);
+            if (jTable_newStorage.getColumnModel().getColumnCount() > 0) {
+                jTable_newStorage.getColumnModel().getColumn(0).setResizable(false);
+                jTable_newStorage.getColumnModel().getColumn(1).setResizable(false);
+                jTable_newStorage.getColumnModel().getColumn(2).setResizable(false);
+                jTable_newStorage.getColumnModel().getColumn(3).setResizable(false);
+                jTable_newStorage.getColumnModel().getColumn(4).setMinWidth(0);
+                jTable_newStorage.getColumnModel().getColumn(4).setPreferredWidth(0);
+                jTable_newStorage.getColumnModel().getColumn(4).setMaxWidth(0);
+                jTable_newStorage.getColumnModel().getColumn(5).setResizable(false);
+                jTable_newStorage.getColumnModel().getColumn(6).setMinWidth(0);
+                jTable_newStorage.getColumnModel().getColumn(6).setPreferredWidth(0);
+                jTable_newStorage.getColumnModel().getColumn(6).setMaxWidth(0);
+            }
+
+            newStorage_panel.add(jScrollPane11, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 20, 590, 620));
+
+            jButton_newStorage_addData.setBackground(new java.awt.Color(0, 204, 255));
+            jButton_newStorage_addData.setFont(new java.awt.Font("sansserif", 0, 24)); // NOI18N
+            jButton_newStorage_addData.setLabel("+");
+            jButton_newStorage_addData.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    jButton_newStorage_addDataActionPerformed(evt);
+                }
+            });
+            newStorage_panel.add(jButton_newStorage_addData, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 610, 70, 30));
+
+            jButton_newStorage_delData.setBackground(new java.awt.Color(255, 0, 0));
+            jButton_newStorage_delData.setFont(new java.awt.Font("sansserif", 0, 14)); // NOI18N
+            jButton_newStorage_delData.setForeground(new java.awt.Color(255, 255, 255));
+            jButton_newStorage_delData.setText("AC");
+            jButton_newStorage_delData.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    jButton_newStorage_delDataActionPerformed(evt);
+                }
+            });
+            newStorage_panel.add(jButton_newStorage_delData, new org.netbeans.lib.awtextra.AbsoluteConstraints(605, 610, 50, 30));
+
+            jComboBox_newStorage_products.setFont(new java.awt.Font("sansserif", 0, 18)); // NOI18N
+            jComboBox_newStorage_products.addItemListener(new java.awt.event.ItemListener() {
+                public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                    jComboBox_newStorage_productsItemStateChanged(evt);
+                }
+            });
+            newStorage_panel.add(jComboBox_newStorage_products, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 200, 210, 30));
+
+            jTextField_newStorage_lot.setFont(new java.awt.Font("sansserif", 0, 24)); // NOI18N
+            jTextField_newStorage_lot.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+            jTextField_newStorage_lot.setMaximumSize(new java.awt.Dimension(7, 38));
+            jTextField_newStorage_lot.addKeyListener(new java.awt.event.KeyAdapter() {
+                public void keyTyped(java.awt.event.KeyEvent evt) {
+                    jTextField_newStorage_lotKeyTyped(evt);
+                }
+            });
+            newStorage_panel.add(jTextField_newStorage_lot, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 240, 120, 36));
+
+            jTextField_newStorage_ConeTotalWeight.setBackground(new java.awt.Color(255, 204, 204));
+            jTextField_newStorage_ConeTotalWeight.setFont(new java.awt.Font("sansserif", 0, 24)); // NOI18N
+            jTextField_newStorage_ConeTotalWeight.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+            jTextField_newStorage_ConeTotalWeight.setMaximumSize(new java.awt.Dimension(7, 38));
+            jTextField_newStorage_ConeTotalWeight.addFocusListener(new java.awt.event.FocusAdapter() {
+                public void focusGained(java.awt.event.FocusEvent evt) {
+                    jTextField_newStorage_ConeTotalWeightFocusGained(evt);
+                }
+            });
+            jTextField_newStorage_ConeTotalWeight.addKeyListener(new java.awt.event.KeyAdapter() {
+                public void keyTyped(java.awt.event.KeyEvent evt) {
+                    jTextField_newStorage_ConeTotalWeightKeyTyped(evt);
+                }
+            });
+            newStorage_panel.add(jTextField_newStorage_ConeTotalWeight, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 340, 120, -1));
+
+            jLabel56.setFont(new java.awt.Font("sansserif", 0, 18)); // NOI18N
+            jLabel56.setText("الوزن القائم");
+            jLabel56.setMaximumSize(new java.awt.Dimension(82, 24));
+            jLabel56.setMinimumSize(new java.awt.Dimension(82, 24));
+            jLabel56.setPreferredSize(new java.awt.Dimension(82, 24));
+            newStorage_panel.add(jLabel56, new org.netbeans.lib.awtextra.AbsoluteConstraints(735, 340, -1, 30));
+
+            jLabel57.setFont(new java.awt.Font("sansserif", 0, 18)); // NOI18N
+            jLabel57.setText("اللوط");
+            jLabel57.setMaximumSize(new java.awt.Dimension(82, 24));
+            jLabel57.setMinimumSize(new java.awt.Dimension(82, 24));
+            jLabel57.setPreferredSize(new java.awt.Dimension(82, 24));
+            newStorage_panel.add(jLabel57, new org.netbeans.lib.awtextra.AbsoluteConstraints(740, 240, -1, 30));
+
+            jLabel59.setFont(new java.awt.Font("sansserif", 0, 18)); // NOI18N
+            jLabel59.setText("وزن الكونه");
+            jLabel59.setMaximumSize(new java.awt.Dimension(82, 24));
+            jLabel59.setMinimumSize(new java.awt.Dimension(82, 24));
+            jLabel59.setPreferredSize(new java.awt.Dimension(82, 24));
+            newStorage_panel.add(jLabel59, new org.netbeans.lib.awtextra.AbsoluteConstraints(740, 440, -1, 30));
+
+            jTextField_newStorage_palletNumber.setFont(new java.awt.Font("sansserif", 0, 24)); // NOI18N
+            jTextField_newStorage_palletNumber.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+            jTextField_newStorage_palletNumber.setMaximumSize(new java.awt.Dimension(7, 38));
+            jTextField_newStorage_palletNumber.addFocusListener(new java.awt.event.FocusAdapter() {
+                public void focusGained(java.awt.event.FocusEvent evt) {
+                    jTextField_newStorage_palletNumberFocusGained(evt);
+                }
+            });
+            jTextField_newStorage_palletNumber.addKeyListener(new java.awt.event.KeyAdapter() {
+                public void keyTyped(java.awt.event.KeyEvent evt) {
+                    jTextField_newStorage_palletNumberKeyTyped(evt);
+                }
+            });
+            newStorage_panel.add(jTextField_newStorage_palletNumber, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 280, 120, -1));
+
+            jTextField_newStorage_EmptyConeWeight.setFont(new java.awt.Font("sansserif", 0, 24)); // NOI18N
+            jTextField_newStorage_EmptyConeWeight.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+            jTextField_newStorage_EmptyConeWeight.setMaximumSize(new java.awt.Dimension(7, 38));
+            jTextField_newStorage_EmptyConeWeight.addKeyListener(new java.awt.event.KeyAdapter() {
+                public void keyTyped(java.awt.event.KeyEvent evt) {
+                    jTextField_newStorage_EmptyConeWeightKeyTyped(evt);
+                }
+            });
+            newStorage_panel.add(jTextField_newStorage_EmptyConeWeight, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 440, 120, -1));
+
+            jLabel61.setFont(new java.awt.Font("sansserif", 0, 18)); // NOI18N
+            jLabel61.setText("الوزن الصافي");
+            newStorage_panel.add(jLabel61, new org.netbeans.lib.awtextra.AbsoluteConstraints(735, 390, -1, 30));
+
+            jTextField_newStorage_ConeNetWeight.setEditable(false);
+            jTextField_newStorage_ConeNetWeight.setBackground(new java.awt.Color(204, 255, 204));
+            jTextField_newStorage_ConeNetWeight.setFont(new java.awt.Font("sansserif", 0, 24)); // NOI18N
+            jTextField_newStorage_ConeNetWeight.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+            jTextField_newStorage_ConeNetWeight.setMaximumSize(new java.awt.Dimension(7, 38));
+            jTextField_newStorage_ConeNetWeight.addKeyListener(new java.awt.event.KeyAdapter() {
+                public void keyTyped(java.awt.event.KeyEvent evt) {
+                    jTextField_newStorage_ConeNetWeightKeyTyped(evt);
+                }
+            });
+            newStorage_panel.add(jTextField_newStorage_ConeNetWeight, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 390, 120, -1));
+
+            jLabel62.setFont(new java.awt.Font("sansserif", 0, 18)); // NOI18N
+            jLabel62.setText("رقم البالتة");
+            jLabel62.setMaximumSize(new java.awt.Dimension(82, 24));
+            jLabel62.setMinimumSize(new java.awt.Dimension(82, 24));
+            jLabel62.setPreferredSize(new java.awt.Dimension(82, 24));
+            newStorage_panel.add(jLabel62, new org.netbeans.lib.awtextra.AbsoluteConstraints(740, 280, -1, 30));
+
+            jLabel63.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+            jLabel63.setText("وزن البالتة");
+            newStorage_panel.add(jLabel63, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 530, 70, 30));
+
+            jTextField_newStorage_PalletWeight.setEditable(false);
+            jTextField_newStorage_PalletWeight.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+            jTextField_newStorage_PalletWeight.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+            newStorage_panel.add(jTextField_newStorage_PalletWeight, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 530, 140, 30));
+
+            jCheckBox_newStorage_MarkBag.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+            jCheckBox_newStorage_MarkBag.setText("تعليم البالته");
+            jCheckBox_newStorage_MarkBag.setFocusable(false);
+            newStorage_panel.add(jCheckBox_newStorage_MarkBag, new org.netbeans.lib.awtextra.AbsoluteConstraints(740, 310, -1, 20));
+
+            jButton_newStorage_Clear.setBackground(new java.awt.Color(255, 51, 51));
+            jButton_newStorage_Clear.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+            jButton_newStorage_Clear.setForeground(new java.awt.Color(255, 255, 255));
+            jButton_newStorage_Clear.setText("C");
+            jButton_newStorage_Clear.setToolTipText("Clear");
+            jButton_newStorage_Clear.setBorderPainted(false);
+            jButton_newStorage_Clear.setCursor(new java.awt.Cursor(java.awt.Cursor.CROSSHAIR_CURSOR));
+            jButton_newStorage_Clear.setFocusable(false);
+            jButton_newStorage_Clear.setName(""); // NOI18N
+            jButton_newStorage_Clear.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    jButton_newStorage_ClearActionPerformed(evt);
+                }
+            });
+            newStorage_panel.add(jButton_newStorage_Clear, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 610, 40, -1));
+
+            jCheckBox_newStorage_printTicket.setSelected(true);
+            jCheckBox_newStorage_printTicket.setText("طباعة");
+            jCheckBox_newStorage_printTicket.setFocusable(false);
+            newStorage_panel.add(jCheckBox_newStorage_printTicket, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 136, -1, -1));
+
+            jTextField_newStorage_Color.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+            jTextField_newStorage_Color.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+            jTextField_newStorage_Color.addKeyListener(new java.awt.event.KeyAdapter() {
+                public void keyTyped(java.awt.event.KeyEvent evt) {
+                    jTextField_newStorage_ColorKeyTyped(evt);
+                }
+            });
+            newStorage_panel.add(jTextField_newStorage_Color, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 575, 140, 30));
+
+            jLabel64.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+            jLabel64.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+            jLabel64.setText("اللون");
+            newStorage_panel.add(jLabel64, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 575, 70, 30));
+
+            jCheckBox_newStorage_QR.setText("QR");
+            jCheckBox_newStorage_QR.setFocusable(false);
+            newStorage_panel.add(jCheckBox_newStorage_QR, new org.netbeans.lib.awtextra.AbsoluteConstraints(790, 240, -1, -1));
+
+            jCheckBox_newStorage_Box.setText("صندوق");
+            jCheckBox_newStorage_Box.setEnabled(false);
+            newStorage_panel.add(jCheckBox_newStorage_Box, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 170, -1, -1));
+
+            jSeparator8.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true));
+            newStorage_panel.add(jSeparator8, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 330, 230, -1));
+            newStorage_panel.add(jSeparator9, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 230, 210, -1));
+
+            jSeparator10.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true));
+            newStorage_panel.add(jSeparator10, new org.netbeans.lib.awtextra.AbsoluteConstraints(602, 482, 230, -1));
+
+            jButton_newStorage_RePrintLastTicket.setBackground(new java.awt.Color(153, 153, 255));
+            jButton_newStorage_RePrintLastTicket.setFont(new java.awt.Font("Segoe UI", 0, 10)); // NOI18N
+            jButton_newStorage_RePrintLastTicket.setText("Print");
+            jButton_newStorage_RePrintLastTicket.setToolTipText("Re-Print ticket");
+            jButton_newStorage_RePrintLastTicket.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+            jButton_newStorage_RePrintLastTicket.setFocusable(false);
+            jButton_newStorage_RePrintLastTicket.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    jButton_newStorage_RePrintLastTicketActionPerformed(evt);
+                }
+            });
+            newStorage_panel.add(jButton_newStorage_RePrintLastTicket, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 140, 60, 20));
+
+            jProgressBar_newStorage_pallet.setMaximum(20);
+            jProgressBar_newStorage_pallet.setToolTipText("Pallet");
+            jProgressBar_newStorage_pallet.setFocusable(false);
+            jProgressBar_newStorage_pallet.setMaximumSize(new java.awt.Dimension(10, 14));
+            jProgressBar_newStorage_pallet.setRequestFocusEnabled(false);
+            newStorage_panel.add(jProgressBar_newStorage_pallet, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 2, 590, -1));
+
+            jCheckBox_newStorage_FreezeConeWeightChange.setFocusable(false);
+            newStorage_panel.add(jCheckBox_newStorage_FreezeConeWeightChange, new org.netbeans.lib.awtextra.AbsoluteConstraints(815, 450, -1, -1));
+
+            jCheckBox_newStorage_ignoreLimits.setText("سماح الوزن");
+            jCheckBox_newStorage_ignoreLimits.setFocusable(false);
+            newStorage_panel.add(jCheckBox_newStorage_ignoreLimits, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 136, -1, -1));
+
+            jTextField_newStorage_SearchProducts.addKeyListener(new java.awt.event.KeyAdapter() {
+                public void keyTyped(java.awt.event.KeyEvent evt) {
+                    jTextField_newStorage_SearchProductsKeyTyped(evt);
+                }
+            });
+            newStorage_panel.add(jTextField_newStorage_SearchProducts, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 160, 150, 35));
+
+            jTable_cone.setModel(new javax.swing.table.DefaultTableModel(
+                new Object [][] {
+
+                },
+                new String [] {
+                    "#", "وزن"
+                }
+            ) {
+                Class[] types = new Class [] {
+                    java.lang.Short.class, java.lang.String.class
+                };
+                boolean[] canEdit = new boolean [] {
+                    false, false
+                };
+
+                public Class getColumnClass(int columnIndex) {
+                    return types [columnIndex];
+                }
+
+                public boolean isCellEditable(int rowIndex, int columnIndex) {
+                    return canEdit [columnIndex];
+                }
+            });
+            jTable_cone.setColumnSelectionAllowed(true);
+            jTable_cone.getTableHeader().setReorderingAllowed(false);
+            jTable_cone.addKeyListener(new java.awt.event.KeyAdapter() {
+                public void keyTyped(java.awt.event.KeyEvent evt) {
+                    jTable_coneKeyTyped(evt);
+                }
+            });
+            jScrollPane12.setViewportView(jTable_cone);
+            jTable_cone.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+            if (jTable_cone.getColumnModel().getColumnCount() > 0) {
+                jTable_cone.getColumnModel().getColumn(0).setPreferredWidth(50);
+                jTable_cone.getColumnModel().getColumn(1).setPreferredWidth(250);
+            }
+
+            newStorage_panel.add(jScrollPane12, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 10, 220, 120));
+
+            jLabel65.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+            jLabel65.setText("وزن الشيكارة");
+            newStorage_panel.add(jLabel65, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 490, 70, 30));
+
+            jTextField_newStorage_bagWeight.setEditable(false);
+            jTextField_newStorage_bagWeight.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+            jTextField_newStorage_bagWeight.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+            newStorage_panel.add(jTextField_newStorage_bagWeight, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 490, 140, 30));
+
+            jButton_newStorage_addCone.setFont(new java.awt.Font("sansserif", 0, 24)); // NOI18N
+            jButton_newStorage_addCone.setLabel("+");
+            jButton_newStorage_addCone.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    jButton_newStorage_addConeActionPerformed(evt);
+                }
+            });
+            newStorage_panel.add(jButton_newStorage_addCone, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 610, -1, 30));
+
+            left_panel.add(newStorage_panel, "Mizan");
+
             jSplitPane1.setLeftComponent(left_panel);
             left_panel.getAccessibleContext().setAccessibleName("");
 
@@ -2651,7 +3057,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
 
     private void jTextField_storage_lotKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_storage_lotKeyTyped
         sendToWight(jTextField_storage_lot, jTextField_storage_TotalWeight, evt);
-        textbox_length_limiter(evt, jTextField_storage_lot, 9);
+        textbox_length_limiter(evt, jTextField_storage_lot, 9, () -> jButton_storage_Clear.doClick());
         char input = evt.getKeyChar();
         if (Character.isDigit(input)) {
             evt.setKeyChar(utils.toArabicDigits(input + "").charAt(0));
@@ -2663,7 +3069,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
 
     private void jTextField_storage_coneNumberKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_storage_coneNumberKeyTyped
         sendToWight(jTextField_storage_coneNumber, jTextField_storage_TotalWeight, evt);
-        textbox_number(evt, jTextField_storage_coneNumber, 3, false);
+        textbox_number(evt, jTextField_storage_coneNumber, 3, false, () -> jButton_storage_Clear.doClick());
         calc_net_weight();
         if (evt.getKeyChar() == KeyEvent.VK_ENTER && !enterFromMizan && !jTextField_storage_coneNumber.getText().isEmpty()) {
             jTextField_storage_EmptyBagWeight.requestFocusInWindow();
@@ -2673,7 +3079,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
     private void jTextField_storage_palletNumberKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_storage_palletNumberKeyTyped
         try {
             sendToWight(jTextField_storage_palletNumber, jTextField_storage_TotalWeight, evt);
-            textbox_number(evt, jTextField_storage_palletNumber, 5, false);
+            textbox_number(evt, jTextField_storage_palletNumber, 5, false, () -> jButton_storage_Clear.doClick());
             calc_pallet_weight();
             jCheckBox_storage_MarkBag.setSelected(false);
             calc_net_weight();
@@ -2716,7 +3122,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
 
     private void jTextField_storage_EmptyBagWeightKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_storage_EmptyBagWeightKeyTyped
         sendToWight(jTextField_storage_EmptyBagWeight, jTextField_storage_TotalWeight, evt);
-        textbox_number(evt, jTextField_storage_EmptyBagWeight, BagMax, true);
+        textbox_number(evt, jTextField_storage_EmptyBagWeight, BagMax, true, () -> jButton_storage_Clear.doClick());
         calc_net_weight();
         if (evt.getKeyChar() == KeyEvent.VK_ENTER && !enterFromMizan && !jTextField_storage_EmptyBagWeight.getText().isEmpty()) {
             jTextField_storage_TotalWeight.requestFocusInWindow();
@@ -2724,7 +3130,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
     }//GEN-LAST:event_jTextField_storage_EmptyBagWeightKeyTyped
 
     private void jTextField_storage_TotalWeightKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_storage_TotalWeightKeyTyped
-        textbox_number_weight(evt, jTextField_storage_TotalWeight, 8);
+        textbox_number_weight(evt, jTextField_storage_TotalWeight, 8, () -> jButton_storage_Clear.doClick());
         calc_net_weight();
         if (evt.getKeyChar() == KeyEvent.VK_ENTER && !jTextField_storage_TotalWeight.getText().isBlank()) {
             jTextField_storage_NetWeight.requestFocusInWindow();
@@ -2741,7 +3147,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
 
     private void jTextField_storage_EmptyConeWeightKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_storage_EmptyConeWeightKeyTyped
         sendToWight(jTextField_storage_EmptyConeWeight, jTextField_storage_TotalWeight, evt);
-        textbox_number(evt, jTextField_storage_EmptyConeWeight, 4, false);
+        textbox_number(evt, jTextField_storage_EmptyConeWeight, 4, false, () -> jButton_storage_Clear.doClick());
         calc_net_weight();
         if (evt.getKeyChar() == KeyEvent.VK_ENTER && !enterFromMizan) {
             jTextField_storage_lot.requestFocusInWindow();
@@ -2919,7 +3325,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
 
     private void jTextField_pro_nameKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_pro_nameKeyTyped
         sendToWight(jTextField_pro_name, null, evt);
-        textbox_length_limiter(evt, jTextField_pro_name, 35);
+        textbox_length_limiter(evt, jTextField_pro_name, 35, () -> jTextField_pro_name.requestFocusInWindow());
         char input = evt.getKeyChar();
         if (Character.isDigit(input)) {
             evt.setKeyChar(utils.toArabicDigits(input + "").charAt(0));
@@ -3166,7 +3572,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
     }//GEN-LAST:event_jButton_rep_printRepActionPerformed
 
     private void jTextField_rep_numOfBagKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_rep_numOfBagKeyTyped
-        textbox_number(evt, jTextField_rep_numOfBag, jCheckBox_rep_wzn.isSelected() ? 4 : 3, false);
+        textbox_number(evt, jTextField_rep_numOfBag, jCheckBox_rep_wzn.isSelected() ? 4 : 3, false, () -> jTextField_rep_numOfBag.requestFocusInWindow());
         sendToWight(jTextField_rep_numOfBag, null, evt);
     }//GEN-LAST:event_jTextField_rep_numOfBagKeyTyped
 
@@ -3598,17 +4004,17 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
 
     private void jTextField_E_WightKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_E_WightKeyTyped
         sendToWight(jTextField_E_Wight, null, evt);
-        textbox_number_weight(evt, jTextField_E_Wight, 999);
+        textbox_number_weight(evt, jTextField_E_Wight, 999, () -> jTextField_E_Wight.requestFocusInWindow());
     }//GEN-LAST:event_jTextField_E_WightKeyTyped
 
     private void jTextField_E_PaltNumKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_E_PaltNumKeyTyped
         sendToWight(jTextField_E_PaltNum, null, evt);
-        textbox_number(evt, jTextField_E_PaltNum, 999, false);
+        textbox_number(evt, jTextField_E_PaltNum, 999, false, () -> jTextField_E_PaltNum.requestFocusInWindow());
     }//GEN-LAST:event_jTextField_E_PaltNumKeyTyped
 
     private void jTextField_E_ConNumKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_E_ConNumKeyTyped
         sendToWight(jTextField_E_ConNum, null, evt);
-        textbox_number(evt, jTextField_E_ConNum, 999, false);
+        textbox_number(evt, jTextField_E_ConNum, 999, false, () -> jTextField_E_ConNum.requestFocusInWindow());
         jTextField_E_Wight.setText(utils.ToDoubleArabic(
                 (((utils.ToDoubleEnglish(jTextField_E_O_ConNum.getText()) - utils.ToDoubleEnglish(jTextField_E_ConNum.getText()))
                 * (utils.ToDoubleEnglish(jTextField_storage_EmptyConeWeight.getText()) / 1000))
@@ -3617,7 +4023,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
 
     private void jTextField_E_lotKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_E_lotKeyTyped
         sendToWight(jTextField_E_lot, null, evt);
-        textbox_length_limiter(evt, jTextField_E_lot, 5);
+        textbox_length_limiter(evt, jTextField_E_lot, 5, () -> jTextField_E_lot.requestFocusInWindow());
         char input = evt.getKeyChar();
         if (Character.isDigit(input)) {
             evt.setKeyChar(utils.toArabicDigits(input + "").charAt(0));
@@ -3627,7 +4033,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
     private void jTextField_Pros_conWightKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_Pros_conWightKeyTyped
         sendToWight(jTextField_Pros_conWight, null, evt);
         evt.setKeyChar(utils.toArabicDigits(evt.getKeyChar() + "").charAt(0));
-        textbox_number(evt, jTextField_Pros_conWight, 4, false);
+        textbox_number(evt, jTextField_Pros_conWight, 4, false, () -> jTextField_Pros_conWight.requestFocusInWindow());
     }//GEN-LAST:event_jTextField_Pros_conWightKeyTyped
 
     private void jButton_Emp_openerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_Emp_openerActionPerformed
@@ -3773,7 +4179,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
     }//GEN-LAST:event_jTextField_storage_ColorKeyTyped
 
     private void jTextField_E_TotWightKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_E_TotWightKeyTyped
-        textbox_number_weight(evt, jTextField_E_TotWight, 999);
+        textbox_number_weight(evt, jTextField_E_TotWight, 999, () -> jTextField_E_TotWight.requestFocusInWindow());
         try {
             jTextField_E_Wight.setText(utils.ToDoubleArabic(
                     ((utils.ToDoubleEnglish(jTextField_E_O_TotWight.getText())
@@ -3811,7 +4217,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
     private void jTextField_ME_lotKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_ME_lotKeyTyped
         sendToWight(jTextField_ME_lot, null, evt);
 
-        textbox_length_limiter(evt, jTextField_ME_lot, 5);
+        textbox_length_limiter(evt, jTextField_ME_lot, 5, () -> jTextField_ME_lot.requestFocusInWindow());
         char input = evt.getKeyChar();
         if (Character.isDigit(input)) {
             evt.setKeyChar(utils.toArabicDigits(input + "").charAt(0));
@@ -3820,7 +4226,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
 
     private void jTextField_ME_PaltNumKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_ME_PaltNumKeyTyped
         sendToWight(jTextField_ME_PaltNum, null, evt);
-        textbox_number(evt, jTextField_ME_PaltNum, 999, false);
+        textbox_number(evt, jTextField_ME_PaltNum, 999, false, () -> jTextField_ME_PaltNum.requestFocusInWindow());
     }//GEN-LAST:event_jTextField_ME_PaltNumKeyTyped
 
     private void jButton_ME_EditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_ME_EditActionPerformed
@@ -3997,7 +4403,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
 
     private void jTextField_setting_repsDiffKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_setting_repsDiffKeyTyped
         evt.getID();
-        textbox_number(evt, jTextField_setting_repsDiff, 2, false);
+        textbox_number(evt, jTextField_setting_repsDiff, 2, false, () -> jTextField_setting_repsDiff.requestFocusInWindow());
         if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
             repDiff = Integer.parseInt(utils.toEnglishDigits(jTextField_setting_repsDiff.getText()));
         }
@@ -4161,7 +4567,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
 
     private void jTextField_mach_lotKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_mach_lotKeyTyped
         sendToWight(jTextField_mach_lot, null, evt);
-        textbox_length_limiter(evt, jTextField_mach_lot, 5);
+        textbox_length_limiter(evt, jTextField_mach_lot, 5, () -> jTextField_mach_lot.requestFocusInWindow());
         char input = evt.getKeyChar();
         if (Character.isDigit(input)) {
             evt.setKeyChar(utils.toArabicDigits(input + "").charAt(0));
@@ -4303,6 +4709,363 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
         }
     }//GEN-LAST:event_jButton_set_QRPrinterActionPerformed
 
+    private void jTextField_newStorage_SearchProductsKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_newStorage_SearchProductsKeyTyped
+        try {
+            sendToWight(jTextField_newStorage_SearchProducts, jTextField_newStorage_ConeTotalWeight, evt);
+            evt.setKeyChar(utils.toArabicDigits(evt.getKeyChar() + "").charAt(0));
+
+            if (evt.getKeyChar() == KeyEvent.VK_DELETE) {
+                jTextField_newStorage_SearchProducts.setText("");
+            }
+            combox_fill_with(jComboBox_newStorage_products, jTextField_newStorage_SearchProducts.getText());
+        } catch (DatabaseException ex) {
+            Logger.getLogger(mainform.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(this, utils.addStyle(ex.getLocalizedMessage()), "exception", JOptionPane.INFORMATION_MESSAGE);
+        }
+    }//GEN-LAST:event_jTextField_newStorage_SearchProductsKeyTyped
+
+    private void jButton_newStorage_RePrintLastTicketActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_newStorage_RePrintLastTicketActionPerformed
+        evt.getID();
+        try {
+            if (jCheckBox_set_printExcel.isSelected()) {
+
+                new Thread(() -> {
+                    try {
+                        if (jCheckBox_troll.isSelected()) {
+                            Thread.sleep(((int) (Math.random() * 6) + 1) * 1000);
+                        }
+                        printerManager.print_excel_ticket();
+                    } catch (BusinessException | InterruptedException ex) {
+                        JOptionPane.showMessageDialog(this, utils.addStyle(ex.getLocalizedMessage()), "exception", JOptionPane.INFORMATION_MESSAGE);
+                    }
+                }).start();
+            } else {
+                printerManager.printPanelToImage(jPanel_print, jCheckBox_troll.isSelected());
+            }
+            incTicketCounters(true, false);
+            this.jTextField_newStorage_ConeTotalWeight.requestFocusInWindow();
+        } catch (BusinessException ex) {
+            JOptionPane.showMessageDialog(this, utils.addStyle(ex.getLocalizedMessage()), "exception", JOptionPane.INFORMATION_MESSAGE);
+        }
+    }//GEN-LAST:event_jButton_newStorage_RePrintLastTicketActionPerformed
+
+    private void jTextField_newStorage_ColorKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_newStorage_ColorKeyTyped
+        sendToWight(jTextField_newStorage_Color, jTextField_newStorage_ConeTotalWeight, evt);
+        if (Character.isDigit(evt.getKeyChar())) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_jTextField_newStorage_ColorKeyTyped
+
+    private void jButton_newStorage_ClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_newStorage_ClearActionPerformed
+        evt.getID();
+        jTextField_newStorage_ConeTotalWeight.setText("");
+        jTextField_newStorage_ConeNetWeight.setText("");
+        jTextField_newStorage_ConeTotalWeight.requestFocus();
+    }//GEN-LAST:event_jButton_newStorage_ClearActionPerformed
+
+    private void jTextField_newStorage_ConeNetWeightKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_newStorage_ConeNetWeightKeyTyped
+        if (evt.getKeyChar() == KeyEvent.VK_MINUS && (!jTextField_newStorage_ConeNetWeight.getText().isBlank())) {
+            double x = utils.ToDoubleEnglish(jTextField_newStorage_ConeTotalWeight.getText());
+            if ((evt.getModifiersEx() & KeyEvent.SHIFT_DOWN_MASK) != 0) {
+                jTextField_newStorage_ConeTotalWeight.setText(utils.ToDoubleArabic(x + 0.02));
+            } else {
+                jTextField_newStorage_ConeTotalWeight.setText(utils.ToDoubleArabic(x - 0.02));
+            }
+            newCalc_net_weight();
+        }
+        if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
+            newCalc_net_weight();
+            jTextField_newStorage_ConeTotalWeight.requestFocusInWindow();
+
+            if (!jTextField_newStorage_ConeNetWeight.getText().isBlank() && !enterFromMizan) {
+                if ((evt.getModifiersEx() & KeyEvent.SHIFT_DOWN_MASK) != 0) {
+                    jButton_newStorage_addCone.doClick();
+                    jButton_newStorage_addData.doClick();
+                } else {
+                    jButton_newStorage_addCone.doClick();
+                }
+            }
+        }
+        if (evt.getKeyChar() == KeyEvent.VK_DELETE) {
+            if ((evt.getModifiersEx() & KeyEvent.SHIFT_DOWN_MASK) != 0) {
+                jButton_newStorage_Clear.doClick();
+            }
+        }
+    }//GEN-LAST:event_jTextField_newStorage_ConeNetWeightKeyTyped
+
+    private void jTextField_newStorage_EmptyConeWeightKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_newStorage_EmptyConeWeightKeyTyped
+        sendToWight(jTextField_newStorage_EmptyConeWeight, jTextField_newStorage_ConeTotalWeight, evt);
+        textbox_number(evt, jTextField_newStorage_EmptyConeWeight, 4, false, () -> jButton_newStorage_Clear.doClick());
+        newCalc_net_weight();
+        if (evt.getKeyChar() == KeyEvent.VK_ENTER && !enterFromMizan) {
+            jTextField_newStorage_lot.requestFocusInWindow();
+        }
+    }//GEN-LAST:event_jTextField_newStorage_EmptyConeWeightKeyTyped
+
+    private void jTextField_newStorage_palletNumberKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_newStorage_palletNumberKeyTyped
+        try {
+            sendToWight(jTextField_newStorage_palletNumber, jTextField_newStorage_ConeTotalWeight, evt);
+            textbox_number(evt, jTextField_newStorage_palletNumber, 5, false, () -> jButton_newStorage_Clear.doClick());
+            calc_pallet_weight();
+            jCheckBox_newStorage_MarkBag.setSelected(false);
+            newCalc_net_weight();
+            if (jTextField_newStorage_palletNumber.getText().isBlank()) {
+                jTextField_newStorage_PalletWeight.setText("");
+            }
+            if (evt.getKeyChar() == KeyEvent.VK_ENTER && !enterFromMizan) {
+                jTextField_newStorage_ConeTotalWeight.requestFocusInWindow();
+            }
+        } catch (DatabaseException ex) {
+            Logger.getLogger(mainform.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(this, utils.addStyle(ex.getLocalizedMessage()), "exception", JOptionPane.INFORMATION_MESSAGE);
+        }
+    }//GEN-LAST:event_jTextField_newStorage_palletNumberKeyTyped
+
+    private void jTextField_newStorage_palletNumberFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextField_newStorage_palletNumberFocusGained
+        evt.getID();
+        jTextField_newStorage_palletNumber.selectAll();
+    }//GEN-LAST:event_jTextField_newStorage_palletNumberFocusGained
+
+    private void jTextField_newStorage_ConeTotalWeightKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_newStorage_ConeTotalWeightKeyTyped
+        textbox_number_weight(evt, jTextField_newStorage_ConeTotalWeight, 8, () -> jButton_newStorage_Clear.doClick());
+        newCalc_net_weight();
+        if (evt.getKeyChar() == KeyEvent.VK_ENTER && !jTextField_newStorage_ConeTotalWeight.getText().isBlank()) {
+            jTextField_newStorage_ConeNetWeight.requestFocusInWindow();
+        }
+        newCalc_net_weight();
+    }//GEN-LAST:event_jTextField_newStorage_ConeTotalWeightKeyTyped
+
+    private void jTextField_newStorage_ConeTotalWeightFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextField_newStorage_ConeTotalWeightFocusGained
+        evt.getID();
+        jTextField_newStorage_ConeTotalWeight.selectAll();
+    }//GEN-LAST:event_jTextField_newStorage_ConeTotalWeightFocusGained
+
+    private void jTextField_newStorage_lotKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_newStorage_lotKeyTyped
+        sendToWight(jTextField_newStorage_lot, jTextField_newStorage_ConeTotalWeight, evt);
+        textbox_length_limiter(evt, jTextField_newStorage_lot, 9, () -> jButton_newStorage_Clear.doClick());
+        char input = evt.getKeyChar();
+        if (Character.isDigit(input)) {
+            evt.setKeyChar(utils.toArabicDigits(input + "").charAt(0));
+        }
+        if (evt.getKeyChar() == KeyEvent.VK_ENTER && !enterFromMizan) {
+            jTextField_newStorage_palletNumber.requestFocusInWindow();
+        }
+    }//GEN-LAST:event_jTextField_newStorage_lotKeyTyped
+
+    private void jComboBox_newStorage_productsItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jComboBox_newStorage_productsItemStateChanged
+        evt.getID();
+        try {
+            jTextField_newStorage_lot.setText("");
+
+            if (jComboBox_newStorage_products.hasFocus()) {
+                jCheckBox_newStorage_FreezeConeWeightChange.setSelected(false);
+                jCheckBox_newStorage_ignoreLimits.setSelected(false);
+
+                jCheckBox_newStorage_MarkBag.setSelected(false);
+                fill_newStorage_table();
+            }
+            if (jTable_newStorage.getRowCount() != 0) {
+                jTextField_newStorage_lot.setText(jTable_newStorage.getValueAt(0, 2) + "");
+                if (!jTable_newStorage.getValueAt(0, 5).equals("٢٠")) {
+                    jTextField_newStorage_palletNumber.setText(jTable_newStorage.getValueAt(0, 3) + "");
+                } else {
+                    jTextField_newStorage_palletNumber.setText(utils.toArabicDigits(
+                            (int) (utils.ToDoubleEnglish((String) jTable_newStorage.getValueAt(0, 3)) + 1) + ""));
+                }
+                calc_pallet_weight();
+            }
+        } catch (DatabaseException ex) {
+            Logger.getLogger(mainform.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(this, utils.addStyle(ex.getLocalizedMessage()), "exception", JOptionPane.INFORMATION_MESSAGE);
+        } catch (BusinessException ex) {
+            JOptionPane.showMessageDialog(this, utils.addStyle(ex.getLocalizedMessage()), "exception", JOptionPane.INFORMATION_MESSAGE);
+        }
+    }//GEN-LAST:event_jComboBox_newStorage_productsItemStateChanged
+
+    private void jButton_newStorage_delDataActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_newStorage_delDataActionPerformed
+        try {
+            evt.getID();
+            if (JOptionPane.showConfirmDialog(this, utils.addStyle("هل تريد الحذف ؟"), "تنبيه",
+                    JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+                if (jTable_newStorage.getSelectedRowCount() == 1) {
+
+                    storageController.removeBag(
+                            jTable_newStorage.getModel().getValueAt(jTable_newStorage.getSelectedRow(), 4).toString());
+                    JOptionPane.showMessageDialog(this, utils.addStyle(" تم حذف البيان بنجاح "), "ناجح",
+                            JOptionPane.INFORMATION_MESSAGE);
+                    fill_newStorage_table();
+                } else if (jTable_newStorage.getSelectedRowCount() > 1) {
+                    for (int row : jTable_newStorage.getSelectedRows()) {
+                        storageController.removeBag(jTable_newStorage.getModel().getValueAt(row, 4).toString());
+                    }
+                    fill_newStorage_table();
+                    JOptionPane.showMessageDialog(this, utils.addStyle("تم حذف البيــانات بنجاح"), "ناجح",
+                            JOptionPane.INFORMATION_MESSAGE);
+                } else {
+                    JOptionPane.showMessageDialog(this, utils.addStyle("برجاء أختيار بيان من الجدول أولا"), "إنتبه",
+                            JOptionPane.INFORMATION_MESSAGE);
+                }
+            }
+        } catch (DatabaseException ex) {
+            Logger.getLogger(mainform.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(this, utils.addStyle(ex.getLocalizedMessage()), "exception", JOptionPane.INFORMATION_MESSAGE);
+        } catch (BusinessException ex) {
+            JOptionPane.showMessageDialog(this, utils.addStyle(ex.getLocalizedMessage()), "exception", JOptionPane.INFORMATION_MESSAGE);
+        }
+    }//GEN-LAST:event_jButton_newStorage_delDataActionPerformed
+
+    private void jButton_newStorage_addDataActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_newStorage_addDataActionPerformed
+        evt.getID();
+        try {
+            if (!jTextField_newStorage_lot.getText().isBlank()
+                    && !jTextField_newStorage_palletNumber.getText().isBlank()
+                    && jTable_cone.getRowCount() > 0
+                    && jComboBox_newStorage_products.getSelectedIndex() != -1) {
+                newCalc_net_weight();
+                double num_of_con = jTable_cone.getRowCount(),
+                        weight_of_con = (utils.ToDoubleEnglish(jTextField_newStorage_EmptyConeWeight.getText()) / 1000) * num_of_con,
+                        totsum = SumConeTableWeight(),
+                        netweight = totsum - weight_of_con;
+                if ((netweight <= 60.0 && netweight > 15.0) || jCheckBox_newStorage_ignoreLimits.isSelected()) {
+                    int filledPallet = storageController.addStorage(jComboBox_newStorage_products.getSelectedItem().toString(),
+                            totsum + "", netweight + "", jTextField_newStorage_lot.getText(),
+                            jTable_cone.getRowCount() + "", jTextField_newStorage_palletNumber.getText(),
+                            jCheckBox_newStorage_MarkBag.isSelected(), "0.0"
+                    );
+
+                    jTextField_newStorage_palletNumber.setText(utils.toArabicDigits(filledPallet + ""));
+
+                    calc_pallet_weight();
+
+                    jProgressBar_newStorage_pallet.setValue(storageController.countpallet(filledPallet, jTextField_newStorage_lot.getText(),
+                            jComboBox_newStorage_products.getSelectedItem().toString(), jCheckBox_newStorage_MarkBag.isSelected()));
+                    if (jCheckBox_newStorage_printTicket.isSelected() || jCheckBox_newStorage_QR.isSelected()) {
+                        try {
+                            if (jComboBox_newStorage_products.getSelectedItem().toString().split(" ", 2)[1].length() > 11) {
+                                jLabel_print_ValType.setFont(new Font("Arial", Font.PLAIN, 20));
+                            } else {
+                                jLabel_print_ValType.setFont(new Font("Arial", Font.PLAIN, 30));
+                            }
+                            if (jComboBox_newStorage_products.getSelectedItem().toString().split(" ", 2)[0].length() > 11) {
+                                jLabel_print_ValTypeDenir.setFont(new Font("Arial", Font.PLAIN, 24));
+                            } else {
+                                jLabel_print_ValTypeDenir.setFont(new Font("Arial", Font.PLAIN, 35));
+                            }
+                            jLabel_print_ValTypeDenir.setSize(190, 28);
+                            jLabel_print_ValTypeDenir.setText(jComboBox_newStorage_products.getSelectedItem().toString().split(" ", 2)[0]);
+                            jLabel_print_ValType.setText(jComboBox_newStorage_products.getSelectedItem().toString().split(" ", 2)[1]);
+                        } catch (java.lang.ArrayIndexOutOfBoundsException ex) {
+                            jLabel_print_ValTypeDenir.setText(jComboBox_newStorage_products.getSelectedItem().toString());
+                            jLabel_print_ValTypeDenir.setSize(190, 60);
+                            jLabel_print_ValType.setText(" ");
+                        }
+
+                        jLabel_print_ValPallet.setText(jTextField_newStorage_palletNumber.getText());
+                        jLabel_print_ValColor.setText(jTextField_newStorage_Color.getText());
+
+                        jLabel_print_ValLot.setText(jTextField_newStorage_lot.getText());
+                        jLabel_print_ValNCone.setText(jTable_cone.getRowCount() + "");
+                        jLabel_print_ValTotalWeight.setText(totsum + "");
+                        jLabel_print_ValNetWeight.setText(netweight + "");
+
+                        printerManager.printTickets(new ArrayList<>(Arrays.asList(
+                                jTextField_newStorage_palletNumber.getText(), jTextField_newStorage_Color.getText(),
+                                jComboBox_newStorage_products.getSelectedItem().toString(),
+                                jTextField_newStorage_lot.getText(), jTable_cone.getRowCount() + "",
+                                totsum + "", netweight + "")),
+                                jPanel_print,
+                                jCheckBox_newStorage_printTicket.isSelected(), jCheckBox_newStorage_QR.isSelected(),
+                                jCheckBox_set_printExcel.isSelected(), jCheckBox_troll.isSelected());
+
+                        incTicketCounters(jCheckBox_newStorage_printTicket.isSelected(), jCheckBox_newStorage_QR.isSelected());
+                    }
+                    jButton_newStorage_Clear.doClick();
+                    DefaultTableModel model = (DefaultTableModel) jTable_cone.getModel();
+                    model.setRowCount(0);
+                    fill_newStorage_table();
+                } else {
+                    JOptionPane.showMessageDialog(this, utils.addStyle("خطأ في وزن الشيكاره "), "إنتبه",
+                            JOptionPane.INFORMATION_MESSAGE);
+                    jTextField_newStorage_ConeTotalWeight.requestFocus();
+                    jTextField_newStorage_ConeTotalWeight.selectAll();
+                }
+            } else {
+                JOptionPane.showMessageDialog(this, utils.addStyle(" برجاء إدخال البيانات كامله"), "إنتبه",
+                        JOptionPane.INFORMATION_MESSAGE);
+            }
+        } catch (DatabaseException ex) {
+            Logger.getLogger(mainform.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(this, utils.addStyle(ex.getLocalizedMessage()), "exception", JOptionPane.INFORMATION_MESSAGE);
+        } catch (BusinessException ex) {
+            JOptionPane.showMessageDialog(this, utils.addStyle(ex.getLocalizedMessage()), "exception", JOptionPane.INFORMATION_MESSAGE);
+        }
+    }//GEN-LAST:event_jButton_newStorage_addDataActionPerformed
+
+    private void jTable_newStorageKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTable_newStorageKeyTyped
+        if (evt.getKeyChar() == KeyEvent.VK_DELETE && jTable_newStorage.hasFocus()) {
+            jButton_newStorage_delData.doClick();
+        }
+    }//GEN-LAST:event_jTable_newStorageKeyTyped
+
+    private void jTable_newStorageMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable_newStorageMouseReleased
+        evt.getID();
+        try {
+            if (evt.getClickCount() == 3 && jTable_newStorage.getSelectedRowCount() > 0) {
+                if (jTable_newStorage.getSelectedRowCount() == 1) {
+                    SingleEdit.setVisible(true);
+                    SingleEdit.setSize(780, 400);
+                    this.setEnabled(false);
+                    Bag bag = storageController.getBagById(
+                            Integer.parseInt(jTable_newStorage.getModel().getValueAt(jTable_newStorage.getSelectedRow(), 4).toString()));
+                    Product product = productController.getProduct(bag.getPro_id());
+                    jCheckBox_E_O_Mark.setSelected(bag.isUsed());
+                    jCheckBox_E_Mark.setSelected(bag.isUsed());
+                    jTextField_E_O_TotWight.setText(utils.ToDoubleArabic(bag.getTot_wight()));
+                    jTextField_E_TotWight.setText(utils.ToDoubleArabic(bag.getTot_wight()));
+                    jComboBox_E_O_proName.setSelectedItem(product);
+                    jComboBox_E_proName.setSelectedItem(product);
+                    jTextField_E_O_lot.setText(utils.toArabicDigits(bag.getLot()));
+                    jTextField_E_lot.setText(utils.toArabicDigits(bag.getLot()));
+                    jTextField_E_O_ConNum.setText(utils.toArabicDigits(bag.getNum_of_con() + ""));
+                    jTextField_E_ConNum.setText(utils.toArabicDigits(bag.getNum_of_con() + ""));
+                    jTextField_E_O_PaltNum.setText(utils.toArabicDigits(bag.getPallet_numb() + ""));
+                    jTextField_E_PaltNum.setText(utils.toArabicDigits(bag.getPallet_numb() + ""));
+                    jTextField_E_O_Wight.setText(utils.ToDoubleArabic(bag.getWeight()));
+                    jTextField_E_Wight.setText(utils.ToDoubleArabic(bag.getWeight()));
+                    jTextField_E_Color.setText(product.getColor());
+
+                } else if (jTable_newStorage.getSelectedRowCount() > 1) {
+                    MultiEdit.setVisible(true);
+                    this.setEnabled(false);
+                    jComboBox_ME_type.setSelectedItem(jComboBox_newStorage_products.getSelectedItem());
+                    jTextField_ME_PaltNum
+                            .setText(jTable_newStorage.getModel().getValueAt(jTable_newStorage.getSelectedRow(), 3).toString());
+                    jTextField_ME_lot
+                            .setText(jTable_newStorage.getModel().getValueAt(jTable_newStorage.getSelectedRow(), 2).toString());
+                    jCheckBox_ME_MarkBag.setSelected((boolean) jTable_newStorage.getModel()
+                            .getValueAt(jTable_newStorage.getSelectedRow(), 6));
+                }
+            }
+        } catch (DatabaseException ex) {
+            Logger.getLogger(mainform.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(this, utils.addStyle(ex.getLocalizedMessage()), "exception", JOptionPane.INFORMATION_MESSAGE);
+        } catch (BusinessException ex) {
+            JOptionPane.showMessageDialog(this, utils.addStyle(ex.getLocalizedMessage()), "exception", JOptionPane.INFORMATION_MESSAGE);
+        }
+    }//GEN-LAST:event_jTable_newStorageMouseReleased
+
+    private void jButton_newStorage_addConeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_newStorage_addConeActionPerformed
+        evt.getID();
+        fill_cone_table();
+    }//GEN-LAST:event_jButton_newStorage_addConeActionPerformed
+
+    private void jTable_coneKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTable_coneKeyTyped
+        if (evt.getKeyChar() == KeyEvent.VK_DELETE && jTable_cone.hasFocus()) {
+            DefaultTableModel model = (DefaultTableModel) jTable_cone.getModel();
+            model.removeRow(jTable_cone.getSelectedRow());
+        }
+    }//GEN-LAST:event_jTable_coneKeyTyped
+
     private void setupKeyBindings() {
         InputMap inputMap = rootPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
         ActionMap actionMap = rootPane.getActionMap();
@@ -4348,6 +5111,19 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
             }
         });
 
+        inputMap.put(KeyStroke.getKeyStroke("F9"), "OpenNewInput");
+        actionMap.put("OpenNewInput", new AbstractAction() {
+            @Override
+            public void actionPerformed(java.awt.event.ActionEvent e) {
+                open_panel(newStorage_panel);
+                if (jComboBox_newStorage_products.getSelectedIndex() == -1) {
+                    DefaultTableModel model = (DefaultTableModel) jTable_newStorage.getModel();
+                    model.setRowCount(0);
+                }
+                setAlwaysOnTop(jCheckBox_set_printExcel.isSelected());
+            }
+        });
+
         inputMap.put(KeyStroke.getKeyStroke("F12"), "TrollToggle");
         actionMap.put("TrollToggle", new AbstractAction() {
             @Override
@@ -4365,11 +5141,11 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
         this.setAlwaysOnTop(false);
     }
 
-    private void textbox_number_weight(KeyEvent event, JTextField textboxname, int length) {
+    private void textbox_number_weight(KeyEvent event, JTextField textboxname, int length, Runnable clearFunction) {
 
         if (event.getKeyChar() == KeyEvent.VK_DELETE) {
             if ((event.getModifiersEx() & KeyEvent.SHIFT_DOWN_MASK) != 0) {
-                jButton_storage_Clear.doClick();
+                clearFunction.run();
             }
             textboxname.setText("");
         }
@@ -4398,24 +5174,24 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
         }
     }
 
-    private void textbox_length_limiter(KeyEvent event, JTextField textboxname, int length) {
+    private void textbox_length_limiter(KeyEvent event, JTextField textboxname, int length, Runnable clearFunction) {
         if (textboxname.getText().length() > length - 1 && event.getKeyChar() != KeyEvent.VK_ENTER
                 && event.getKeyChar() != KeyEvent.VK_BACK_SPACE) {
             event.consume();
         }
         if (event.getKeyChar() == KeyEvent.VK_DELETE) {
             if ((event.getModifiersEx() & KeyEvent.SHIFT_DOWN_MASK) != 0) {
-                jButton_storage_Clear.doClick();
+                clearFunction.run();
             }
             textboxname.setText("");
         }
     }
 
-    private void textbox_number(KeyEvent event, JTextField textboxname, int length, boolean lastEven) {
+    private void textbox_number(KeyEvent event, JTextField textboxname, int length, boolean lastEven, Runnable clearFunction) {
 
         if (event.getKeyChar() == KeyEvent.VK_DELETE) {
             if ((event.getModifiersEx() & KeyEvent.SHIFT_DOWN_MASK) != 0) {
-                jButton_storage_Clear.doClick();
+                clearFunction.run();
             }
             textboxname.setText("");
         }
@@ -4450,12 +5226,22 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
 
     private void populateCombos() throws DatabaseException {
         this.combox_fill(jComboBox_storage_products);
+        this.combox_fill(jComboBox_newStorage_products);
         this.combox_fill(jComboBox_rep_Pros);
         this.combox_fill(jComboBox_E_O_proName);
         this.combox_fill(jComboBox_E_proName);
         this.combox_fill(jComboBox_ME_type);
         this.combox_fill(jComboBox_stock_Pros);
         this.combox_fill(jComboBox_mach_pros);
+    }
+
+    private void fill_cone_table() {
+        if (utils.isInputMatchPattern(utils.toEnglishDigits(jTextField_newStorage_ConeTotalWeight.getText()), MizanPattern) && !jTextField_newStorage_ConeNetWeight.getText().isBlank()) {
+            DefaultTableModel model = (DefaultTableModel) jTable_cone.getModel();
+            model.addRow(new Object[]{utils.toArabicDigits((model.getRowCount() + 1) + ""), jTextField_newStorage_ConeTotalWeight.getText()});
+        }
+        newCalc_net_weight();
+        jButton_newStorage_Clear.doClick();
     }
 
     private void fill_pro_table() throws DatabaseException {
@@ -4499,6 +5285,32 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
 
             jTextField_storage_NetWeight.setText(utils.ToDoubleArabic(weight - (bag_weight + (num_of_con * weight_of_con))));
         }
+    }
+
+    private void newCalc_net_weight() {
+        if (jTable_cone.getRowCount() > 0 && !jTextField_newStorage_EmptyConeWeight.getText().isBlank()
+                && !jTextField_newStorage_EmptyConeWeight.getText().isBlank()
+                && (utils.isInputMatchPattern(utils.toEnglishDigits(jTextField_newStorage_ConeTotalWeight.getText()), MizanPattern))) {
+            double num_of_con = jTable_cone.getRowCount(),
+                    weight_of_con = utils.ToDoubleEnglish(jTextField_newStorage_EmptyConeWeight.getText()) / 1000,
+                    bag_weight = SumConeTableWeight(),
+                    weight = utils.ToDoubleEnglish(jTextField_newStorage_ConeTotalWeight.getText());
+            jTextField_newStorage_bagWeight.setText(utils.ToDoubleArabic(bag_weight - (num_of_con * weight_of_con)));
+            jTextField_newStorage_ConeNetWeight.setText(utils.ToDoubleArabic(weight - weight_of_con));
+        }
+        if (jTable_cone.getRowCount() == 0 && (utils.isInputMatchPattern(utils.toEnglishDigits(jTextField_newStorage_ConeTotalWeight.getText()), MizanPattern))) {
+            jTextField_newStorage_ConeNetWeight.setText(utils.ToDoubleArabic(utils.ToDoubleEnglish(jTextField_newStorage_ConeTotalWeight.getText())
+                    - utils.ToDoubleEnglish(jTextField_newStorage_EmptyConeWeight.getText()) / 1000));
+        }
+    }
+
+    private double SumConeTableWeight() {
+        double sum = 0.0;
+        DefaultTableModel model = (DefaultTableModel) jTable_cone.getModel();
+        for (int i = 0; i < jTable_cone.getRowCount(); i++) {
+            sum += utils.ToDoubleEnglish(model.getValueAt(i, 1).toString());
+        }
+        return sum;
     }
 
     private void fill_Table_rep_select() throws DatabaseException, BusinessException {
@@ -4599,14 +5411,52 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
         }
     }
 
+    private void fill_newStorage_table() throws DatabaseException, BusinessException {
+        DefaultTableModel model = (DefaultTableModel) jTable_newStorage.getModel();
+        model.setRowCount(0);
+        List<Bag> bags = storageController.getBags(jComboBox_newStorage_products.getSelectedItem().toString());
+
+        for (Bag bag : bags) {
+            model.addRow(new Object[]{utils.ToDoubleArabic(bag.getWeight()), utils.toArabicDigits(bag.getNum_of_con() + ""),
+                utils.toArabicDigits(bag.getLot()), utils.toArabicDigits(bag.getPallet_numb() + ""), bag.getId(), "",
+                bag.isUsed()});
+        }
+        Product pro = productController.getProduct(jComboBox_newStorage_products.getSelectedItem().toString());
+        if (pro != null) {
+            if (!jCheckBox_newStorage_FreezeConeWeightChange.isSelected()) {
+                jTextField_newStorage_EmptyConeWeight.setText(utils.toArabicDigits(pro.getWeight_of_con()));
+            }
+            jTextField_newStorage_Color.setText(pro.getColor());
+            jCheckBox_newStorage_Box.setSelected(pro.isBox());
+            BagMax = pro.isBox() ? 3 : 2;
+
+        }
+
+        if (model.getRowCount() != 0) {
+            String lott = utils.toEnglishDigits(model.getValueAt(model.getRowCount() - 1, 2).toString()),
+                    pallet_num = utils.toEnglishDigits(model.getValueAt(model.getRowCount() - 1, 3).toString());
+            int cunt = 0;
+            for (int i = model.getRowCount() - 1; i >= 0; i--) {
+                if (!lott.equals(utils.toEnglishDigits(model.getValueAt(i, 2).toString()))
+                        || !pallet_num.equals(utils.toEnglishDigits(model.getValueAt(i, 3).toString()))) {
+                    lott = utils.toEnglishDigits(model.getValueAt(i, 2).toString());
+                    pallet_num = utils.toEnglishDigits(model.getValueAt(i, 3).toString());
+                    cunt = 0;
+                }
+
+                model.setValueAt(utils.toArabicDigits(++cunt + ""), i, 5);
+            }
+        }
+    }
+
     private void readConfig() throws BusinessException {
         Properties properties = utils.CheckConfigFileAndFolder();
 
         //"config.properties"
         // Load the properties file
         // Access configuration values
-        ticketPrinterName = properties.getProperty("ticketPrinterName", "Honeywell");
-        qrPrinterName = properties.getProperty("qrPrinterName", "Xprinter");
+        ticketPrinterName = properties.getProperty("ticketPrinterName", "Microsoft Print");
+        qrPrinterName = properties.getProperty("qrPrinterName", "Microsoft Print");
         tick10x10 = Short.parseShort(properties.getProperty("ticket10x10", "0"));
         tick2x2 = Short.parseShort(properties.getProperty("ticket2x2", "0"));
         repDiff = Integer.parseInt(properties.getProperty("repdiff", "15"));
@@ -4623,6 +5473,8 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
 
         jCheckBox_storage_printLTicket.setSelected(print10x10);
         jCheckBox_storage_QR.setSelected(print2x2);
+        jCheckBox_newStorage_printTicket.setSelected(print10x10);
+        jCheckBox_newStorage_QR.setSelected(print2x2);
         jCheckBox_set_printExcel.setSelected(PrintExcel);
         jCheckBox_troll.setSelected(Boolean.parseBoolean(properties.getProperty("Troll", "false")));
     }
@@ -4765,6 +5617,11 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
     private javax.swing.JButton jButton_del_pro;
     private javax.swing.JButton jButton_mach_Delete;
     private javax.swing.JButton jButton_mach_addMach;
+    private javax.swing.JButton jButton_newStorage_Clear;
+    private javax.swing.JButton jButton_newStorage_RePrintLastTicket;
+    private javax.swing.JButton jButton_newStorage_addCone;
+    private javax.swing.JButton jButton_newStorage_addData;
+    private javax.swing.JButton jButton_newStorage_delData;
     private javax.swing.JButton jButton_rep_printRep;
     private javax.swing.JButton jButton_reps_clear;
     private javax.swing.JButton jButton_set_QRPrinter;
@@ -4789,6 +5646,12 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
     private javax.swing.JCheckBox jCheckBox_E_QR;
     private javax.swing.JCheckBox jCheckBox_ME_MarkBag;
     private javax.swing.JCheckBox jCheckBox_Pros_IsBox;
+    private javax.swing.JCheckBox jCheckBox_newStorage_Box;
+    private javax.swing.JCheckBox jCheckBox_newStorage_FreezeConeWeightChange;
+    private javax.swing.JCheckBox jCheckBox_newStorage_MarkBag;
+    private javax.swing.JCheckBox jCheckBox_newStorage_QR;
+    private javax.swing.JCheckBox jCheckBox_newStorage_ignoreLimits;
+    private javax.swing.JCheckBox jCheckBox_newStorage_printTicket;
     private javax.swing.JCheckBox jCheckBox_rep_2n1;
     private javax.swing.JCheckBox jCheckBox_rep_highLightMarked;
     private javax.swing.JCheckBox jCheckBox_rep_wzn;
@@ -4807,6 +5670,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
     private javax.swing.JComboBox<Product> jComboBox_E_proName;
     private javax.swing.JComboBox<Product> jComboBox_ME_type;
     private javax.swing.JComboBox<Product> jComboBox_mach_pros;
+    private javax.swing.JComboBox<Product> jComboBox_newStorage_products;
     private javax.swing.JComboBox<Product> jComboBox_rep_Pros;
     private javax.swing.JComboBox<String> jComboBox_rep_palletsNrep;
     private javax.swing.JComboBox<Product> jComboBox_stock_Pros;
@@ -4866,7 +5730,15 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
     private javax.swing.JLabel jLabel52;
     private javax.swing.JLabel jLabel53;
     private javax.swing.JLabel jLabel54;
+    private javax.swing.JLabel jLabel56;
+    private javax.swing.JLabel jLabel57;
+    private javax.swing.JLabel jLabel59;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel61;
+    private javax.swing.JLabel jLabel62;
+    private javax.swing.JLabel jLabel63;
+    private javax.swing.JLabel jLabel64;
+    private javax.swing.JLabel jLabel65;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
@@ -4894,9 +5766,12 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
     private javax.swing.JLabel jLabel_version;
     private javax.swing.JPanel jPanel_Machines;
     private javax.swing.JPanel jPanel_print;
+    private javax.swing.JProgressBar jProgressBar_newStorage_pallet;
     private javax.swing.JProgressBar jProgressBar_storage_pallet;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane10;
+    private javax.swing.JScrollPane jScrollPane11;
+    private javax.swing.JScrollPane jScrollPane12;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
@@ -4905,11 +5780,14 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
     private javax.swing.JScrollPane jScrollPane7;
     private javax.swing.JScrollPane jScrollPane8;
     private javax.swing.JScrollPane jScrollPane9;
+    private javax.swing.JSeparator jSeparator10;
     private javax.swing.JSeparator jSeparator14;
     private javax.swing.JSeparator jSeparator4;
     private javax.swing.JSeparator jSeparator5;
     private javax.swing.JSeparator jSeparator6;
     private javax.swing.JSeparator jSeparator7;
+    private javax.swing.JSeparator jSeparator8;
+    private javax.swing.JSeparator jSeparator9;
     private javax.swing.JSeparator jSeparator_print_Double;
     private javax.swing.JSeparator jSeparator_print_color;
     private javax.swing.JSeparator jSeparator_print_lot;
@@ -4925,7 +5803,9 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
     private javax.swing.JPanel jTab_set_about;
     private javax.swing.JPanel jTab_set_order;
     private javax.swing.JTabbedPane jTabbedPane_settings;
+    private javax.swing.JTable jTable_cone;
     private javax.swing.JTable jTable_machines;
+    private javax.swing.JTable jTable_newStorage;
     private javax.swing.JTable jTable_pro;
     private javax.swing.JTable jTable_rep_preview;
     private javax.swing.JTable jTable_rep_select;
@@ -4953,6 +5833,15 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
     private javax.swing.JTextField jTextField_Pros_conWight;
     private javax.swing.JTextField jTextField_mach_MName;
     private javax.swing.JTextField jTextField_mach_lot;
+    private javax.swing.JTextField jTextField_newStorage_Color;
+    private javax.swing.JTextField jTextField_newStorage_ConeNetWeight;
+    private javax.swing.JTextField jTextField_newStorage_ConeTotalWeight;
+    private javax.swing.JTextField jTextField_newStorage_EmptyConeWeight;
+    private javax.swing.JTextField jTextField_newStorage_PalletWeight;
+    private javax.swing.JTextField jTextField_newStorage_SearchProducts;
+    private javax.swing.JTextField jTextField_newStorage_bagWeight;
+    private javax.swing.JTextField jTextField_newStorage_lot;
+    private javax.swing.JTextField jTextField_newStorage_palletNumber;
     private javax.swing.JTextField jTextField_pro_name;
     private javax.swing.JTextField jTextField_rep_clientName;
     private javax.swing.JTextField jTextField_rep_numOfBag;
@@ -4973,6 +5862,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
     private javax.swing.JTextField jTextField_youm_ClientFilter;
     private javax.swing.JPanel left_panel;
     private javax.swing.JPanel makePermit;
+    private javax.swing.JPanel newStorage_panel;
     private javax.swing.JPanel pause_panel;
     private javax.swing.JPanel products_panel;
     private javax.swing.JPanel right_panel_menu;
