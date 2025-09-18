@@ -72,7 +72,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
 
     private short tick10x10, tick2x2;
     private int BagMax = 2, repDiff;
-    private final String Version = "V 2.7";
+    private final String Version = "V 2.7.1";
     private String ticketPrinterName, qrPrinterName;
 
     private long lastInputTime;
@@ -1202,6 +1202,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
             right_panel_menu.add(jButton_Emp_opener, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 460, 110, 40));
 
             jLabel_version.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+            jLabel_version.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
             jLabel_version.setText(Version);
             jLabel_version.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(255, 51, 51), 3, true));
             jLabel_version.setCursor(new java.awt.Cursor(java.awt.Cursor.CROSSHAIR_CURSOR));
@@ -2724,14 +2725,14 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
             newStorage_panel.add(jScrollPane11, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 20, 590, 620));
 
             jButton_newStorage_addData.setBackground(new java.awt.Color(0, 204, 255));
-            jButton_newStorage_addData.setFont(new java.awt.Font("sansserif", 0, 24)); // NOI18N
-            jButton_newStorage_addData.setLabel("+");
+            jButton_newStorage_addData.setFont(new java.awt.Font("sansserif", 0, 12)); // NOI18N
+            jButton_newStorage_addData.setText("AS");
             jButton_newStorage_addData.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent evt) {
                     jButton_newStorage_addDataActionPerformed(evt);
                 }
             });
-            newStorage_panel.add(jButton_newStorage_addData, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 610, 70, 30));
+            newStorage_panel.add(jButton_newStorage_addData, new org.netbeans.lib.awtextra.AbsoluteConstraints(780, 610, 50, 30));
 
             jButton_newStorage_delData.setBackground(new java.awt.Color(255, 0, 0));
             jButton_newStorage_delData.setFont(new java.awt.Font("sansserif", 0, 14)); // NOI18N
@@ -2993,14 +2994,14 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
             jTextField_newStorage_bagWeight.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
             newStorage_panel.add(jTextField_newStorage_bagWeight, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 490, 140, 30));
 
-            jButton_newStorage_addCone.setFont(new java.awt.Font("sansserif", 0, 24)); // NOI18N
-            jButton_newStorage_addCone.setLabel("+");
+            jButton_newStorage_addCone.setFont(new java.awt.Font("sansserif", 0, 12)); // NOI18N
+            jButton_newStorage_addCone.setText("AW");
             jButton_newStorage_addCone.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent evt) {
                     jButton_newStorage_addConeActionPerformed(evt);
                 }
             });
-            newStorage_panel.add(jButton_newStorage_addCone, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 610, -1, 30));
+            newStorage_panel.add(jButton_newStorage_addCone, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 610, 50, 30));
 
             left_panel.add(newStorage_panel, "Mizan");
 
@@ -4829,8 +4830,14 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
     private void jTextField_newStorage_ConeTotalWeightKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_newStorage_ConeTotalWeightKeyTyped
         textbox_number_weight(evt, jTextField_newStorage_ConeTotalWeight, 8, () -> jButton_newStorage_Clear.doClick());
         newCalc_net_weight();
-        if (evt.getKeyChar() == KeyEvent.VK_ENTER && !jTextField_newStorage_ConeTotalWeight.getText().isBlank()) {
-            jTextField_newStorage_ConeNetWeight.requestFocusInWindow();
+        if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
+            if (!jTextField_newStorage_ConeTotalWeight.getText().isBlank()) {
+                jTextField_newStorage_ConeNetWeight.requestFocusInWindow();
+            } else {
+                if ((evt.getModifiersEx() & KeyEvent.SHIFT_DOWN_MASK) != 0) {
+                    jButton_newStorage_addData.doClick();
+                }
+            }
         }
         newCalc_net_weight();
     }//GEN-LAST:event_jTextField_newStorage_ConeTotalWeightKeyTyped

@@ -28,16 +28,10 @@ public class PrinterManager {
     private final ErrorListener errorListener;
     private final PrintService QRPrinter, TicketPrinter;
 
-    public PrinterManager() throws BusinessException {
-        this.errorListener = null;
-        this.QRPrinter = getPrinterByName(utils.CheckConfigFileAndFolder().getProperty("qrPrinterName", "Microsoft Print"));
-        this.TicketPrinter = getPrinterByName(utils.CheckConfigFileAndFolder().getProperty("ticketPrinterName", "Microsoft Print"));;
-    }
-
-    public PrinterManager(ErrorListener errorListener) {
+    public PrinterManager(ErrorListener errorListener) throws BusinessException {
         this.errorListener = errorListener;
-        this.QRPrinter = null;
-        this.TicketPrinter = null;
+        this.QRPrinter = getPrinterByName(utils.CheckConfigFileAndFolder().getProperty("qrPrinterName", "Microsoft Print"));
+        this.TicketPrinter = getPrinterByName(utils.CheckConfigFileAndFolder().getProperty("ticketPrinterName", "Microsoft Print"));
     }
 
     /**
@@ -64,7 +58,7 @@ public class PrinterManager {
     private void QRPrint(byte[] data) throws BusinessException {
         try {
             if (QRPrinter == null) {
-                throw new BusinessException("QR printer not found!");
+                throw new BusinessException(utils.CheckConfigFileAndFolder().getProperty("qrPrinterName", "Microsoft Print") + " QR printer not found!");
             }
             DocFlavor flavor = DocFlavor.BYTE_ARRAY.PNG;
             PrintRequestAttributeSet pras = new HashPrintRequestAttributeSet();
@@ -200,7 +194,7 @@ public class PrinterManager {
     private void printImage(BufferedImage image) throws BusinessException {
         try {
             if (TicketPrinter == null) {
-                throw new BusinessException("HWPrinter not found!");
+                throw new BusinessException(utils.CheckConfigFileAndFolder().getProperty("ticketPrinterName", "Microsoft Print") + "Ticket printer not found!");
             }
             PrinterJob job = PrinterJob.getPrinterJob();
             job.setPrintService(TicketPrinter);
