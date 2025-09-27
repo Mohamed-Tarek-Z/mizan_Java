@@ -19,7 +19,7 @@ public class Order {
     }
 
     public double getTot_wight() {
-        return tot_wight;
+        return Math.round(tot_wight);
     }
 
     public Date getDate() {

@@ -26,10 +26,20 @@ import javax.swing.SwingUtilities;
 public class PrinterManager {
 
     private final ErrorListener errorListener;
-    private final PrintService QRPrinter, TicketPrinter;
+    private PrintService QRPrinter, TicketPrinter;
 
     public PrinterManager(ErrorListener errorListener) throws BusinessException {
         this.errorListener = errorListener;
+        this.QRPrinter = getPrinterByName(utils.CheckConfigFileAndFolder().getProperty("qrPrinterName", "Microsoft Print"));
+        this.TicketPrinter = getPrinterByName(utils.CheckConfigFileAndFolder().getProperty("ticketPrinterName", "Microsoft Print"));
+    }
+
+    /**
+     * reinitialize printers after any modification
+     *
+     * @throws exceptions.BusinessException
+     */
+    public void reInitPrinters() throws BusinessException {
         this.QRPrinter = getPrinterByName(utils.CheckConfigFileAndFolder().getProperty("qrPrinterName", "Microsoft Print"));
         this.TicketPrinter = getPrinterByName(utils.CheckConfigFileAndFolder().getProperty("ticketPrinterName", "Microsoft Print"));
     }
