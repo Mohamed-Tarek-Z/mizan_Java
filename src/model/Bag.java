@@ -41,11 +41,11 @@ public class Bag {
     }
 
     public double getTot_wight() {
-        return Math.round(tot_wight);
+        return tot_wight;
     }
 
     public double getWeight() {
-        return Math.round(weight);
+        return weight;
     }
 
     public String getLot() {

@@ -122,7 +122,7 @@ public class ExcelManager {
                 if (highLight && bag.isUsed()) {
                     applyColorToCell(cell, style1, IndexedColors.GREY_25_PERCENT);
                 }
-                cell.setCellValue((bag.getWeight() - (int) bag.getWeight()) * 1000);
+                cell.setCellValue(Math.round((bag.getWeight() - (int) bag.getWeight()) * 1000));
                 cell = sheet.getRow(row).getCell(col + 1);
                 if (highLight && bag.isUsed()) {
                     applyColorToCell(cell, style2, IndexedColors.GREY_25_PERCENT);
@@ -211,7 +211,7 @@ public class ExcelManager {
                 if (highLight && bag.isUsed()) {
                     applyColorToCell(cell, style1, IndexedColors.GREY_25_PERCENT);
                 }
-                cell.setCellValue((bag.getWeight() - (int) bag.getWeight()) * 1000);
+                cell.setCellValue(Math.round((bag.getWeight() - (int) bag.getWeight()) * 1000));
                 cell = sheet.getRow(row).getCell(col + 1);
                 if (highLight && bag.isUsed()) {
                     applyColorToCell(cell, style2, IndexedColors.GREY_25_PERCENT);
@@ -317,7 +317,7 @@ public class ExcelManager {
                 if (highLight && bag.isUsed()) {
                     applyColorToCell(cell, style1, IndexedColors.GREY_25_PERCENT);
                 }
-                cell.setCellValue((bag.getWeight() - (int) bag.getWeight()) * 1000);
+                cell.setCellValue(Math.round((bag.getWeight() - (int) bag.getWeight()) * 1000));
                 cell = sheet.getRow(row).getCell(col + 1);
                 if (highLight && bag.isUsed()) {
                     applyColorToCell(cell, style2, IndexedColors.GREY_25_PERCENT);
@@ -427,7 +427,7 @@ public class ExcelManager {
                     if (fHighLight && bag.isUsed()) {
                         applyColorToCell(cell, style1, IndexedColors.GREY_25_PERCENT);
                     }
-                    cell.setCellValue((bag.getWeight() - (int) bag.getWeight()) * 1000);
+                    cell.setCellValue(Math.round((bag.getWeight() - (int) bag.getWeight()) * 1000));
                     cell = sheet.getRow(row).getCell(col + 1);
                     if (fHighLight && bag.isUsed()) {
                         applyColorToCell(cell, style2, IndexedColors.GREY_25_PERCENT);
@@ -449,7 +449,7 @@ public class ExcelManager {
                     if (sHighLight && bag.isUsed()) {
                         applyColorToCell(cell, style1, IndexedColors.GREY_25_PERCENT);
                     }
-                    cell.setCellValue((bag.getWeight() - (int) bag.getWeight()) * 1000);
+                    cell.setCellValue(Math.round((bag.getWeight() - (int) bag.getWeight()) * 1000));
                     cell = sheet.getRow(row).getCell(col + 1);
                     if (sHighLight && bag.isUsed()) {
                         applyColorToCell(cell, style2, IndexedColors.GREY_25_PERCENT);
