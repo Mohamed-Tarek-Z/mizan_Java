@@ -55,7 +55,7 @@ public class utils {
      * return "" when no equivalent number in Arabic letters
      */
     public static String ToDoubleArabic(double input) {
-        String EnglishNum = new DecimalFormat("0.000").format(input);
+        String EnglishNum = new DecimalFormat("0.00").format(input);
         String Arab = toArabicDigits(EnglishNum);
         return Arab;
     }

@@ -55,7 +55,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class mainform extends javax.swing.JFrame implements ErrorListener {
 
-    private final String MizanPattern = "[0-9\u0660-\u0669]{1,3}[.,\u060C,\u0632][0-9\u0660-\u0669]{2}";
+    private final String MizanPattern = "[0-9\u0660-\u0669]{1,2}[.,\u060C,\u0632][0-9\u0660-\u0669]{2}";
 
     private final sqlcon opj;
     private final ProductController productController;
@@ -72,7 +72,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
 
     private short tick10x10, tick2x2;
     private int BagMax = 2, repDiff;
-    private final String Version = "V 2.7.2";
+    private final String Version = "V 2.7.5";
     private String ticketPrinterName, qrPrinterName;
 
     private long lastInputTime;
@@ -3200,7 +3200,8 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
             if (!jTextField_storage_NetWeight.getText().isBlank() && !jTextField_storage_lot.getText().isBlank()
                     && !jTextField_storage_palletNumber.getText().isBlank() && !jTextField_storage_EmptyBagWeight.getText().isBlank()
                     && !jTextField_storage_coneNumber.getText().isBlank() && !jTextField_storage_TotalWeight.getText().isBlank()
-                    && jComboBox_storage_products.getSelectedIndex() != -1) {
+                    && jComboBox_storage_products.getSelectedIndex() != -1 && utils.isInputMatchPattern(utils.
+                            toEnglishDigits(jTextField_storage_TotalWeight.getText()), MizanPattern)) {
 
                 if ((utils.ToDoubleEnglish(jTextField_storage_TotalWeight.getText()) <= 60.0
                         && utils.ToDoubleEnglish(jTextField_storage_NetWeight.getText()) > 15.0)
