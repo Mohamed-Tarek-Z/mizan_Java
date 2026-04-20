@@ -1,4 +1,4 @@
-package dao;
+package repository;
 
 import exceptions.BusinessException;
 import model.sqlcon;
@@ -12,11 +12,11 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.Machine;
 
-public class MachineDAO {
+public class MachineRepository {
 
     private final sqlcon dbConnection;
 
-    public MachineDAO(sqlcon dbConnection) {
+    public MachineRepository(sqlcon dbConnection) {
         this.dbConnection = dbConnection;
     }
 
@@ -31,7 +31,7 @@ public class MachineDAO {
 
             return machines;
         } catch (SQLException ex) {
-            Logger.getLogger(MachineDAO.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
+            Logger.getLogger(MachineRepository.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
             throw new DatabaseException("حدث خطأ أثناء طلب البيانات", ex);
         }
     }
@@ -43,7 +43,7 @@ public class MachineDAO {
                     + " ,Lot=N'" + machine.getLot() + "'",
                     "MachID=" + machine.getMachId());
         } catch (SQLException ex) {
-            Logger.getLogger(MachineDAO.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
+            Logger.getLogger(MachineRepository.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
             throw new DatabaseException("حدث خطأ أثناء تعديل بيانات الصنف: " + machine.getMachName(), ex);
         }
     }
@@ -54,7 +54,7 @@ public class MachineDAO {
                     "N'" + machine.getMachName() + "',"
                     + machine.getProId() + ",N'" + machine.getLot() + "'");
         } catch (SQLException ex) {
-            Logger.getLogger(MachineDAO.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
+            Logger.getLogger(MachineRepository.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
             throw new DatabaseException("حدث خطأ أثناء إضافة البيانات", ex);
         }
     }
@@ -66,7 +66,7 @@ public class MachineDAO {
             return true;
 
         } catch (SQLException ex) {
-            Logger.getLogger(MachineDAO.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
+            Logger.getLogger(MachineRepository.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
             throw new DatabaseException("حدث خطأ أثناء حذف البيانات", ex);
         }
 

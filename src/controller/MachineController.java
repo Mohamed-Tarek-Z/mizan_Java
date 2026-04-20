@@ -3,36 +3,36 @@ package controller;
 import exceptions.DatabaseException;
 import java.util.List;
 import model.Machine;
-import dao.MachineDAO;
-import dao.ProductDAO;
+import repository.MachineRepository;
+import repository.ProductRepository;
 import exceptions.BusinessException;
 import java.util.Date;
 import model.Product;
 
 public class MachineController {
 
-    private final MachineDAO machineDAO;
-    private final ProductDAO productDAO;
+    private final MachineRepository machineRepo;
+    private final ProductRepository productRepo;
 
-    public MachineController(MachineDAO machineDAO, ProductDAO productDAO) {
-        this.machineDAO = machineDAO;
-        this.productDAO = productDAO;
+    public MachineController(MachineRepository machineRepo, ProductRepository productRepo) {
+        this.machineRepo = machineRepo;
+        this.productRepo = productRepo;
     }
 
     public List<Machine> getMachines() throws DatabaseException {
-        return machineDAO.getMachines();
+        return machineRepo.getMachines();
     }
 
     public void editMachine(Machine machine) throws DatabaseException {
-        machineDAO.editMachine(machine);
+        machineRepo.editMachine(machine);
     }
 
     public void addMachine(String machineName, String productName, String lot) throws DatabaseException, BusinessException {
-        Product product = productDAO.getProductByName(productName);
-        machineDAO.addMachine(new Machine(0, machineName, product.getId(), lot, new Date()));
+        Product product = productRepo.getProductByName(productName);
+        machineRepo.addMachine(new Machine(0, machineName, product.getId(), lot, new Date()));
     }
 
     public boolean removeMachine(int machId) throws DatabaseException {
-        return machineDAO.deleteMachine(machId);
+        return machineRepo.deleteMachine(machId);
     }
 }

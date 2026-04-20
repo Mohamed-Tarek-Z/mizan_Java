@@ -747,11 +747,12 @@ public class ExcelManager {
 
     /**
      * this method it used in creating ticket excel if used
+     * we already stopped using this method , and we may remove it soon
      *
      * @param values the values to create excel with
      * @throws exceptions.BusinessException
      */
-    public void excel_Ticket(ArrayList<String> values) throws BusinessException {
+    public void excel_TicketR(ArrayList<String> values) throws BusinessException {
         try {
 
             try (FileInputStream EX = new FileInputStream(new File("Donot_Change\\Ticket.xlsx")); XSSFWorkbook workbook = new XSSFWorkbook(EX)) {

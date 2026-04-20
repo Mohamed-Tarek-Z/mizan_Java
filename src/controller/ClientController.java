@@ -1,23 +1,23 @@
 package controller;
 
-import dao.ClientDAO;
+import repository.ClientRepository;
 import exceptions.DatabaseException;
 import java.util.List;
 import model.Client;
 
 public class ClientController {
 
-    private final ClientDAO clientDAO;
+    private final ClientRepository clientRepo;
 
-    public ClientController(ClientDAO clientDAO) {
-        this.clientDAO = clientDAO;
+    public ClientController(ClientRepository clientRepo) {
+        this.clientRepo = clientRepo;
     }
 
     public void addClientByName(String clientName) throws DatabaseException {
-        clientDAO.addClientByName(clientName);
+        clientRepo.addClientByName(clientName);
     }
 
     public List<Client> getClientLike(String subName) throws DatabaseException {
-        return clientDAO.getClientLike(subName);
+        return clientRepo.getClientLike(subName);
     }
 }

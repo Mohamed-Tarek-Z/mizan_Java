@@ -1,4 +1,4 @@
-package dao;
+package repository;
 
 import exceptions.*;
 import java.sql.ResultSet;
@@ -11,11 +11,11 @@ import model.sqlcon;
 import model.Export;
 import utils.utils;
 
-public class ExportDAO {
+public class ExportRepository {
 
     private final sqlcon dbConnection;
 
-    public ExportDAO(sqlcon dbConnection) {
+    public ExportRepository(sqlcon dbConnection) {
         this.dbConnection = dbConnection;
     }
 
@@ -37,7 +37,7 @@ public class ExportDAO {
 
             return statistics;
         } catch (SQLException ex) {
-            Logger.getLogger(ExportDAO.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
+            Logger.getLogger(ExportRepository.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
             throw new DatabaseException("حدث خطأ أثناء حساب المخزن", ex);
         }
     }
@@ -60,7 +60,7 @@ public class ExportDAO {
                     + storageId
             );
         } catch (SQLException ex) {
-            Logger.getLogger(ExportDAO.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
+            Logger.getLogger(ExportRepository.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
             throw new DatabaseException("حدث خطأ أثناء حساب المخزن", ex);
         }
     }
@@ -69,7 +69,7 @@ public class ExportDAO {
         try {
             dbConnection.delData("export", "ord_id=" + Ord_id);
         } catch (SQLException ex) {
-            Logger.getLogger(ExportDAO.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
+            Logger.getLogger(ExportRepository.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
             throw new DatabaseException("حدث خطأ أثناء حساب المخزن", ex);
         }
     }
@@ -78,7 +78,7 @@ public class ExportDAO {
         try {
             return !dbConnection.dataRead("*", "export", "ord_id=" + Ord_id).next();
         } catch (SQLException ex) {
-            Logger.getLogger(ExportDAO.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
+            Logger.getLogger(ExportRepository.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
             throw new DatabaseException("حدث خطأ أثناء حساب المخزن", ex);
         }
     }
@@ -97,7 +97,7 @@ public class ExportDAO {
             }
             return temp;
         } catch (SQLException ex) {
-            Logger.getLogger(ExportDAO.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
+            Logger.getLogger(ExportRepository.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
             throw new DatabaseException("حدث خطأ أثناء حساب المخزن", ex);
         }
     }
@@ -128,7 +128,7 @@ public class ExportDAO {
 
             return youmya;
         } catch (SQLException ex) {
-            Logger.getLogger(ExportDAO.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
+            Logger.getLogger(ExportRepository.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
             throw new DatabaseException("حدث خطأ أثناء حساب المخزن", ex);
         }
     }
@@ -150,7 +150,7 @@ public class ExportDAO {
             }
             return exports;
         } catch (SQLException ex) {
-            Logger.getLogger(ExportDAO.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
+            Logger.getLogger(ExportRepository.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
             throw new DatabaseException("حدث خطأ أثناء حساب المخزن", ex);
         }
     }
@@ -173,7 +173,7 @@ public class ExportDAO {
                     + "'and num_of_con is not null  and pallet_numb is not null").next();
 
         } catch (SQLException ex) {
-            Logger.getLogger(ExportDAO.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
+            Logger.getLogger(ExportRepository.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
             throw new DatabaseException("حدث خطأ أثناء حساب المخزن", ex);
         }
     }
