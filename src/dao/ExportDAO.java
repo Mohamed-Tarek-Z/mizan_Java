@@ -83,17 +83,13 @@ public class ExportDAO {
         }
     }
 
-    public String getPalletsForOrder(String proName, String clientName, String lot, String exported_date, String ord_wight) throws DatabaseException {
+    public String getDetailsForOrder(int ordID) throws DatabaseException {
         try {
             String temp = "";
-            ResultSet st = dbConnection.dataRead("distinct pallet_numb",
-                    "export inner join orders on orders.ord_id=export.ord_id",
-                    "pro_id = ( select pro_id from products where pro_name =N'"
-                    + proName + "') and" + " cli_id IN ( select cli_id from clients where cli_name=N'"
-                    + clientName + "') and" + " lot = N'" + utils.toEnglishDigits(lot) + "' and"
-                    + " exported_date='" + utils.toEnglishDigits(exported_date) + "'and ord_wight =" + utils.ToDoubleEnglish(ord_wight));
+            ResultSet st = dbConnection.dataRead("STRING_AGG(CAST(pallet_numb AS VARCHAR), ',') AS packages, SUM(sums) AS total_sum",
+                    "( SELECT DISTINCT pallet_numb, sum(num_of_con) as sums FROM export WHERE ord_id = " + ordID + " group by pallet_numb )t");
             while (st.next()) {
-                temp += st.getString(1) + " , ";
+                temp = "pallets " + st.getString(1) + " Number Of cone " + st.getString(2) + "\n";
             }
             return temp;
         } catch (SQLException ex) {
@@ -106,24 +102,24 @@ public class ExportDAO {
         try {
             List<String[]> youmya = new ArrayList<>();
             ResultSet st = !oldWay ? dbConnection.dataRead(
-                    "ord_wight,pro_name,cli_name,lot,FORMAT (exported_date, 'yyyy-MM-dd'),count(weight_)",
+                    "ord_wight,pro_name,cli_name,lot,FORMAT (exported_date, 'yyyy-MM-dd'),count(weight_),export.ord_id",
                     "export inner join clients on clients.cli_id=export.cli_id inner join products on products.pro_id=export.pro_id inner join orders on orders.ord_id=export.ord_id",
                     !selectedCIDs.isEmpty() ? "exported_date between '" + dateFrom
                     + "' and '" + dateTo + "' and export.cli_id in (" + selectedCIDs + ") "
-                    + " group by orders.ord_wight,products.pro_name,clients.cli_name,lot,exported_date order by exported_date ,cli_name "
+                    + " group by orders.ord_wight,products.pro_name,clients.cli_name,lot,exported_date,export.ord_id order by exported_date ,cli_name "
                     : "exported_date between '" + dateFrom + "' and '" + dateTo + "' "
-                    + " group by orders.ord_wight,products.pro_name,clients.cli_name,lot,exported_date order by exported_date ,cli_name ")
+                    + " group by orders.ord_wight,products.pro_name,clients.cli_name,lot,exported_date,export.ord_id order by exported_date ,cli_name ")
                     : dbConnection.dataRead(
-                            "sum(weight_),pro_name,cli_name,lot,FORMAT (exported_date, 'yyyy-MM-dd'),count(weight_)",
+                            "sum(weight_),pro_name,cli_name,lot,FORMAT (exported_date, 'yyyy-MM-dd'),count(weight_),export.ord_id",
                             "export inner join clients on clients.cli_id=export.cli_id inner join products on products.pro_id=export.pro_id",
                             !selectedCIDs.isEmpty() ? "exported_date between '" + dateFrom + "' and '"
                             + dateTo + "' and export.cli_id in (" + selectedCIDs + ") "
-                            + " group by products.pro_name,clients.cli_name,lot,exported_date order by exported_date ,cli_name "
+                            + " group by products.pro_name,clients.cli_name,lot,exported_date,export.ord_id order by exported_date ,cli_name "
                             : "exported_date between '" + dateFrom + "' and '" + dateTo + "' "
-                            + " group by products.pro_name,clients.cli_name,lot,exported_date order by exported_date ,cli_name ");
+                            + " group by products.pro_name,clients.cli_name,lot,exported_date,export.ord_id ,order by exported_date ,cli_name ");
             while (st.next()) {
                 youmya.add(new String[]{st.getString(1), st.getString(2),
-                    st.getString(3), st.getString(4), st.getString(5), st.getString(6)});
+                    st.getString(3), st.getString(4), st.getString(5), st.getString(6), st.getString(7)});
             }
 
             return youmya;

@@ -37,8 +37,8 @@ public class ExportController {
         return exportDAO.getYuwmya(oldWay, dateFrom, dateTo, selectedCIDs);
     }
 
-    public String getPalletsForOrder(String proName, String clientName, String lot, String exported_date, String ord_wight) throws DatabaseException {
-        return exportDAO.getPalletsForOrder(proName, clientName, lot, exported_date, ord_wight);
+    public String getDetailsForOrder(int ordID) throws DatabaseException {
+        return exportDAO.getDetailsForOrder(ordID);
     }
 
     public void moveBagFromExportToStorage(boolean old, String lot, String proName, String clientName, String exported_date) throws DatabaseException, BusinessException {
