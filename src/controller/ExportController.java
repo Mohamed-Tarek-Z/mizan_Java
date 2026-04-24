@@ -19,8 +19,8 @@ public class ExportController {
         this.orderRepo = orderRepo;
     }
 
-    public List<String[]> getstatistics(String date1, String date2) throws DatabaseException {
-        return exportRepo.getstatistics(date1, date2);
+    public List<String[]> getstatistics(String date1, String date2, Product p) throws DatabaseException {
+        return exportRepo.getstatistics(date1, date2, p);
     }
 
     public void moveBagFromStorageToExport(String storageId, String clientName, String ord_id) throws DatabaseException {
@@ -35,16 +35,16 @@ public class ExportController {
         return exportRepo.findExportByOrderId(Ord_id);
     }
 
-    public List<String[]> getYuwmya(boolean oldWay, String dateFrom, String dateTo, String selectedCIDs) throws DatabaseException {
-        return exportRepo.getYuwmya(oldWay, dateFrom, dateTo, selectedCIDs);
+    public List<Object[]> getYuwmya(String dateFrom, String dateTo, String selectedCIDs) throws DatabaseException {
+        return exportRepo.getYuwmya(dateFrom, dateTo, selectedCIDs);
     }
 
     public String getDetailsForOrder(int ordID) throws DatabaseException {
         return exportRepo.getDetailsForOrder(ordID);
     }
 
-    public void moveBagFromExportToStorage(boolean old, String lot, String proName, String clientName, String exported_date) throws DatabaseException, BusinessException {
-        List<Export> exports = exportRepo.restoreExportToStorage(lot, proName, clientName, exported_date);
+    public void moveBagFromExportToStorage(int ord_id) throws DatabaseException, BusinessException {
+        List<Export> exports = exportRepo.restoreExportToStorage(ord_id);
 
         if (!exports.isEmpty()) {
 
@@ -53,23 +53,14 @@ public class ExportController {
                         exp.getLot(), exp.getNum_of_con(), exp.getPallet_numb(), exp.isUsed(), exp.getInserted_date(), exp.getEmpty_pack()));
             }
 
-            if (old) {
-
-                if (!exportRepo.deleteExportOldWay(lot, proName, clientName, exported_date)) {
-                    throw new BusinessException(" تم استرجاع البيان بنجاح");
-                } else {
-                    throw new BusinessException(" حدث خطأ ما");
-                }
-
+            removeExportByOrderId(exports.getFirst().getOrd_id() + "");
+            orderRepo.deleteOrderById(exports.getFirst().getOrd_id() + "");
+            if (findExportByOrderId(exports.getFirst().getOrd_id() + "")) {
+                throw new BusinessException(" تم استرجاع البيان بنجاح");
             } else {
-                removeExportByOrderId(exports.getFirst().getOrd_id() + "");
-                orderRepo.deleteOrderById(exports.getFirst().getOrd_id() + "");
-                if (findExportByOrderId(exports.getFirst().getOrd_id() + "")) {
-                    throw new BusinessException(" تم استرجاع البيان بنجاح");
-                } else {
-                    throw new BusinessException("رجا أعد تحميل الجدول يوجد شئ خطأ");
-                }
+                throw new BusinessException("رجا أعد تحميل الجدول يوجد شئ خطأ");
             }
+
         } else {
             throw new BusinessException("رجا أعد تحميل الجدول يوجد شئ خطأ");
         }

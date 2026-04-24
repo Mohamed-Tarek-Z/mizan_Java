@@ -22,11 +22,7 @@ public class StorageController {
 
     public int[] addStorage(Bag req, boolean ignoreLimit) throws Exception {
 
-        validateInput(req);
-
-        if (!ignoreLimit) {
-            validateWeight(req);
-        }
+        validateInput(req, ignoreLimit);
 
         int palletNumber = resolvePalletNumber(req);
 
@@ -41,33 +37,7 @@ public class StorageController {
         return new int[]{palletNumber, count};
     }
 
-    public int addStorage(String productName, String totalWeight, String netWeight, String lotNumber,
-            String numOfCon, String palletNumber, boolean isUsed, String empty_pack) throws DatabaseException, BusinessException {
-        Product product = productRepo.getProductByName(productName);
-
-        int[] storageCountUsed_NUsed = storageRepo.getStorageCount((int) utils.ToDoubleEnglish(palletNumber), utils.toEnglishDigits(lotNumber), product.getId());
-        if (storageCountUsed_NUsed[0] == 0 && storageCountUsed_NUsed[1] == 0) {
-            Bag bag = new Bag(0, product.getId(), utils.ToDoubleEnglish(totalWeight), utils.ToDoubleEnglish(netWeight),
-                    utils.toEnglishDigits(lotNumber), (int) utils.ToDoubleEnglish(numOfCon), (int) utils.ToDoubleEnglish(palletNumber),
-                    isUsed, new Date(), utils.ToDoubleEnglish(empty_pack) / 100);
-            storageRepo.addBag(bag);
-            return (int) utils.ToDoubleEnglish(palletNumber);
-        } else if ((isUsed && storageCountUsed_NUsed[1] != 0) || (!isUsed && storageCountUsed_NUsed[0] != 0)) {
-            //ex pallet mark not vaild
-            throw new BusinessException("خطأ في تعليم الشكارة");
-        } else if ((isUsed && storageCountUsed_NUsed[1] == 0 && storageCountUsed_NUsed[0] >= 20) || (!isUsed && storageCountUsed_NUsed[0] == 0 && storageCountUsed_NUsed[1] >= 20)) {
-            return addStorage(productName, totalWeight, netWeight, lotNumber, numOfCon, (utils.ToDoubleEnglish(palletNumber) + 1) + "", isUsed, empty_pack);
-        } else if ((isUsed && storageCountUsed_NUsed[1] == 0 && storageCountUsed_NUsed[0] < 20) || (!isUsed && storageCountUsed_NUsed[0] == 0 && storageCountUsed_NUsed[1] < 20)) {
-            Bag bag = new Bag(0, product.getId(), utils.ToDoubleEnglish(totalWeight), utils.ToDoubleEnglish(netWeight),
-                    utils.toEnglishDigits(lotNumber), (int) utils.ToDoubleEnglish(numOfCon), (int) utils.ToDoubleEnglish(palletNumber),
-                    isUsed, new Date(), utils.ToDoubleEnglish(empty_pack) / 100);
-            storageRepo.addBag(bag);
-            return (int) utils.ToDoubleEnglish(palletNumber);
-        }
-        throw new BusinessException("خطأ في إدخال الشكارة");
-    }
     // edite and delete
-
     public boolean updateStorage(int storage_id, String productName, String totalWeight, String netWeight, String lotNumber,
             String numOfCon, String palletNumber, boolean isUsed, String empty_pack) throws DatabaseException, BusinessException {
         Product product = productRepo.getProductByName(productName);
@@ -146,15 +116,25 @@ public class StorageController {
         return storageRepo.getAllStock();
     }
 
-    private void validateInput(Bag req) throws BusinessException {
-        if (req.getPro_id() == 0 || req.getLot().isBlank()) {
-            throw new BusinessException("برجاء إدخال البيانات كامله");
+    private void validateInput(Bag req, boolean IgnoreLimit) throws BusinessException {
+        if (req.getPro_id() == 0) {
+            throw new BusinessException("برجاء إختيار صنف ");
         }
-    }
+        if (req.getLot().isBlank()) {
+            throw new BusinessException("برجاء إدخال رقم اللوط ");
+        }
 
-    private void validateWeight(Bag req) throws BusinessException {
-        if (!(req.getTot_wight() <= 60.0 && req.getWeight() > 15.0)) {
-            throw new BusinessException("خطأ في وزن الشيكاره");
+        if (req.getNum_of_con() < 1) {
+            throw new BusinessException("برجاء إدخال عدد الكون ");
+        }
+
+        if (!IgnoreLimit) {
+            if (req.getTot_wight() >= 60.0 && req.getTot_wight() < 0.0) {
+                throw new BusinessException("خطأ في وزن الشيكاره");
+            }
+            if (req.getWeight() >= 60.0 && req.getWeight() < 0.0) {
+                throw new BusinessException("خطأ في وزن الشيكاره");
+            }
         }
     }
 
