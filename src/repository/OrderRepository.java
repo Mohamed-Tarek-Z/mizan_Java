@@ -1,4 +1,4 @@
-package dao;
+package repository;
 
 import exceptions.DatabaseException;
 import java.sql.ResultSet;
@@ -7,11 +7,11 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.sqlcon;
 
-public class OrderDAO {
+public class OrderRepository {
 
     private final sqlcon dbConnection;
 
-    public OrderDAO(sqlcon dbConnection) {
+    public OrderRepository(sqlcon dbConnection) {
         this.dbConnection = dbConnection;
     }
 
@@ -23,7 +23,7 @@ public class OrderDAO {
             }
             return "0";
         } catch (SQLException ex) {
-            Logger.getLogger(OrderDAO.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
+            Logger.getLogger(OrderRepository.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
             throw new DatabaseException("حدث خطأ أثناء طلب بيانات المخزن", ex);
         }
     }
@@ -32,7 +32,7 @@ public class OrderDAO {
         try {
             dbConnection.update("orders", "ord_wight=" + totalWeight, "ord_id=" + id);
         } catch (SQLException ex) {
-            Logger.getLogger(OrderDAO.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
+            Logger.getLogger(OrderRepository.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
             throw new DatabaseException("حدث خطأ أثناء طلب بيانات المخزن", ex);
         }
     }
@@ -41,7 +41,7 @@ public class OrderDAO {
         try {
             dbConnection.delData("orders", "ord_id=" + ordTid);
         } catch (SQLException ex) {
-            Logger.getLogger(OrderDAO.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
+            Logger.getLogger(OrderRepository.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
             throw new DatabaseException("حدث خطأ أثناء طلب بيانات المخزن", ex);
         }
     }

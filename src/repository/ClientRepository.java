@@ -1,4 +1,4 @@
-package dao;
+package repository;
 
 import exceptions.DatabaseException;
 import model.sqlcon;
@@ -10,11 +10,11 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.Client;
 
-public class ClientDAO {
+public class ClientRepository {
 
     private final sqlcon dbConnection;
 
-    public ClientDAO(sqlcon dbConnection) {
+    public ClientRepository(sqlcon dbConnection) {
         this.dbConnection = dbConnection;
     }
 
@@ -24,7 +24,7 @@ public class ClientDAO {
                 dbConnection.inData("clients", "cli_name", "N'" + clientName + "'");
             }
         } catch (SQLException ex) {
-            Logger.getLogger(ClientDAO.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
+            Logger.getLogger(ClientRepository.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
             throw new DatabaseException("حدث خطأ أثناءعرض الشكارة", ex);
         }
     }
@@ -38,7 +38,7 @@ public class ClientDAO {
             }
             return clients;
         } catch (SQLException ex) {
-            Logger.getLogger(ClientDAO.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
+            Logger.getLogger(ClientRepository.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
             throw new DatabaseException("حدث خطأ أثناءعرض الشكارة", ex);
         }
     }

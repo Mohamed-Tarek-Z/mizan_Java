@@ -1,25 +1,25 @@
 package controller;
 
-import dao.OrderDAO;
+import repository.OrderRepository;
 import exceptions.DatabaseException;
 
 public class OrderController {
 
-    private final OrderDAO orderDAO;
+    private final OrderRepository orderRepo;
 
-    public OrderController(OrderDAO orderDAO) {
-        this.orderDAO = orderDAO;
+    public OrderController(OrderRepository orderRepo) {
+        this.orderRepo = orderRepo;
     }
 
     public String addOrder() throws DatabaseException {
-        return orderDAO.addOrder();
+        return orderRepo.addOrder();
     }
 
     public void updateOrder(String id, double totalWeight) throws DatabaseException {
-        orderDAO.updateOrder(id, totalWeight);
+        orderRepo.updateOrder(id, totalWeight);
     }
 
     public void deleteOrderById(String ordTid) throws DatabaseException {
-        orderDAO.deleteOrderById(ordTid);
+        orderRepo.deleteOrderById(ordTid);
     }
 }

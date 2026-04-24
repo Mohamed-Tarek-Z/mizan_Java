@@ -1,4 +1,4 @@
-package dao;
+package repository;
 
 import exceptions.DatabaseException;
 import model.sqlcon;
@@ -10,11 +10,11 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.Bag;
 
-public class StorageDAO {
+public class StorageRepository {
 
     private final sqlcon dbConnection;
 
-    public StorageDAO(sqlcon dbConnection) {
+    public StorageRepository(sqlcon dbConnection) {
         this.dbConnection = dbConnection;
     }
 
@@ -35,7 +35,7 @@ public class StorageDAO {
 
             return Bags;
         } catch (SQLException ex) {
-            Logger.getLogger(StorageDAO.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
+            Logger.getLogger(StorageRepository.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
             throw new DatabaseException("حدث خطأ أثناء طلب بيانات المخزن", ex);
         }
     }
@@ -53,7 +53,7 @@ public class StorageDAO {
 
             return Bags;
         } catch (SQLException ex) {
-            Logger.getLogger(StorageDAO.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
+            Logger.getLogger(StorageRepository.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
             throw new DatabaseException("حدث خطأ أثناء طلب بيانات المخزن", ex);
         }
     }
@@ -73,7 +73,7 @@ public class StorageDAO {
 
             return pallets;
         } catch (SQLException ex) {
-            Logger.getLogger(StorageDAO.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
+            Logger.getLogger(StorageRepository.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
             throw new DatabaseException("حدث خطأ أثناء طلب بيانات المخزن", ex);
         }
     }
@@ -102,7 +102,7 @@ public class StorageDAO {
                 );
             }
         } catch (SQLException ex) {
-            Logger.getLogger(StorageDAO.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
+            Logger.getLogger(StorageRepository.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
             throw new DatabaseException("حدث خطأ أثناء إضافة الشكارة", ex);
         }
     }
@@ -120,7 +120,7 @@ public class StorageDAO {
                     "storage_id=" + bag.getId() + ""
             );
         } catch (SQLException ex) {
-            Logger.getLogger(StorageDAO.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
+            Logger.getLogger(StorageRepository.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
             throw new DatabaseException("حدث خطأ أثناء تعديل الشكارة", ex);
         }
     }
@@ -130,7 +130,7 @@ public class StorageDAO {
             dbConnection.delData("storage", "storage_id=" + bagId + "");
             return true;
         } catch (SQLException ex) {
-            Logger.getLogger(StorageDAO.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
+            Logger.getLogger(StorageRepository.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
             throw new DatabaseException("حدث خطأ أثناء حذف الشكارة", ex);
         }
     }
@@ -147,7 +147,7 @@ public class StorageDAO {
             int nUsedC = rs.getInt(1);
             return new int[]{usedC, nUsedC};
         } catch (SQLException ex) {
-            Logger.getLogger(StorageDAO.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
+            Logger.getLogger(StorageRepository.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
             throw new DatabaseException("حدث خطأ أثناء عد الشكارة", ex);
         }
     }
@@ -163,7 +163,7 @@ public class StorageDAO {
             }
             return bag;
         } catch (SQLException ex) {
-            Logger.getLogger(StorageDAO.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
+            Logger.getLogger(StorageRepository.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
             throw new DatabaseException("حدث خطأ أثناءعرض الشكارة", ex);
         }
     }
@@ -180,7 +180,7 @@ public class StorageDAO {
             return st.getString(1);
 
         } catch (SQLException ex) {
-            Logger.getLogger(StorageDAO.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
+            Logger.getLogger(StorageRepository.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
             throw new DatabaseException("حدث خطأ أثناءحساب مجموع البالتة", ex);
         }
     }
@@ -199,7 +199,7 @@ public class StorageDAO {
 
             return Stock;
         } catch (SQLException ex) {
-            Logger.getLogger(StorageDAO.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
+            Logger.getLogger(StorageRepository.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
             throw new DatabaseException("حدث خطأ أثناء حساب المخزن", ex);
         }
     }
@@ -217,7 +217,7 @@ public class StorageDAO {
 
             return Stock;
         } catch (SQLException ex) {
-            Logger.getLogger(StorageDAO.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
+            Logger.getLogger(StorageRepository.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
             throw new DatabaseException("حدث خطأ أثناء حساب المخزن", ex);
         }
     }

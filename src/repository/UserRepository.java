@@ -1,4 +1,4 @@
-package dao;
+package repository;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -8,11 +8,11 @@ import exceptions.DatabaseException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class UserDAO {
+public class UserRepository {
 
     private final sqlcon dbConnection;
 
-    public UserDAO(sqlcon dbConnection) {
+    public UserRepository(sqlcon dbConnection) {
         this.dbConnection = dbConnection;
     }
 
@@ -27,7 +27,7 @@ public class UserDAO {
 
             return null;
         } catch (SQLException ex) {
-            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
+            Logger.getLogger(UserRepository.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
             throw new DatabaseException("حدث خطأ أثناء التسجيل الدخول", ex);
         }
     }

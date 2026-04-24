@@ -11,6 +11,9 @@ public class Bag {
     private boolean used;
     private Date date;
 
+    public Bag() {
+    }
+
     public Bag(int id, int pro_id, double tot_wight, double weight, String lot, int num_of_con, int pallet_numb, boolean used, Date date, double empty_pack) {
         this.id = id;
         this.pro_id = pro_id;
@@ -24,40 +27,63 @@ public class Bag {
         this.empty_pack = empty_pack;
     }
 
+    public Bag(int pro_id, int num_of_con, int pallet_numb, double tot_wight, double weight, double empty_pack, String lot, boolean used) {
+        this.pro_id = pro_id;
+        this.num_of_con = num_of_con;
+        this.pallet_numb = pallet_numb;
+        this.tot_wight = tot_wight;
+        this.weight = weight;
+        this.empty_pack = empty_pack;
+        this.lot = lot;
+        this.used = used;
+    }
+
     public int getId() {
         return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public int getPro_id() {
         return pro_id;
     }
 
+    public void setPro_id(int pro_id) {
+        this.pro_id = pro_id;
+    }
+
     public int getNum_of_con() {
         return num_of_con;
+    }
+
+    public void setNum_of_con(int num_of_con) {
+        this.num_of_con = num_of_con;
     }
 
     public int getPallet_numb() {
         return pallet_numb;
     }
 
+    public void setPallet_numb(int pallet_numb) {
+        this.pallet_numb = pallet_numb;
+    }
+
     public double getTot_wight() {
         return tot_wight;
+    }
+
+    public void setTot_wight(double tot_wight) {
+        this.tot_wight = tot_wight;
     }
 
     public double getWeight() {
         return weight;
     }
 
-    public String getLot() {
-        return lot;
-    }
-
-    public boolean isUsed() {
-        return used;
-    }
-
-    public Date getDate() {
-        return date;
+    public void setWeight(double weight) {
+        this.weight = weight;
     }
 
     public double getEmpty_pack() {
@@ -66,6 +92,30 @@ public class Bag {
 
     public void setEmpty_pack(double empty_pack) {
         this.empty_pack = empty_pack;
+    }
+
+    public String getLot() {
+        return lot;
+    }
+
+    public void setLot(String lot) {
+        this.lot = lot;
+    }
+
+    public boolean isUsed() {
+        return used;
+    }
+
+    public void setUsed(boolean used) {
+        this.used = used;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
     }
 
     @Override

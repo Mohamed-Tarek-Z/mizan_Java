@@ -1,4 +1,4 @@
-package dao;
+package repository;
 
 import exceptions.BusinessException;
 import exceptions.DatabaseException;
@@ -12,11 +12,11 @@ import java.util.logging.Logger;
 import model.Product;
 import utils.utils;
 
-public class ProductDAO {
+public class ProductRepository {
 
     private final sqlcon dbConnection;
 
-    public ProductDAO(sqlcon dbConnection) {
+    public ProductRepository(sqlcon dbConnection) {
         this.dbConnection = dbConnection;
     }
 
@@ -31,7 +31,7 @@ public class ProductDAO {
 
             return products;
         } catch (SQLException ex) {
-            Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
+            Logger.getLogger(ProductRepository.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
             throw new DatabaseException("حدث خطأ أثناء طلب البيانات", ex);
         }
     }
@@ -47,7 +47,7 @@ public class ProductDAO {
 
             return products;
         } catch (SQLException ex) {
-            Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
+            Logger.getLogger(ProductRepository.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
             throw new DatabaseException("حدث خطأ أثناء طلب البيانات التي تشبه " + subOfName, ex);
         }
     }
@@ -59,7 +59,7 @@ public class ProductDAO {
                     + utils.toEnglishDigits(pro.getWeight_of_con()) + "',N'"
                     + pro.getColor() + "'," + (pro.isBox() ? "1" : "0"));
         } catch (SQLException ex) {
-            Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
+            Logger.getLogger(ProductRepository.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
             throw new DatabaseException("حدث خطأ أثناء إضافة البيانات", ex);
         }
     }
@@ -72,7 +72,7 @@ public class ProductDAO {
                     + pro.getColor() + "',IsBox = " + (pro.isBox() ? "1" : "0"),
                     "pro_id=" + pro.getId() + " ");
         } catch (SQLException ex) {
-            Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
+            Logger.getLogger(ProductRepository.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
             throw new DatabaseException("حدث خطأ أثناء تعديل بيانات الصنف: " + pro.getName(), ex);
         }
     }
@@ -85,7 +85,7 @@ public class ProductDAO {
             }
             throw new BusinessException("رجاء مسح الشكائر أولا");
         } catch (SQLException ex) {
-            Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
+            Logger.getLogger(ProductRepository.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
             throw new DatabaseException("حدث خطأ أثناء حذف البيانات", ex);
         }
 
@@ -99,7 +99,7 @@ public class ProductDAO {
             }
             throw new BusinessException("لايوجد صنف بأسم: " + productName);
         } catch (SQLException ex) {
-            Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
+            Logger.getLogger(ProductRepository.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
             throw new DatabaseException("حدث خطأ أثناء طلب بيانات صنف بأسم : " + productName, ex);
         }
     }
@@ -112,7 +112,7 @@ public class ProductDAO {
             }
             throw new BusinessException("لايوجد صنف بمسلسل : " + id);
         } catch (SQLException ex) {
-            Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
+            Logger.getLogger(ProductRepository.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
             throw new DatabaseException("حدث خطأ أثناء طلب بيانات صنف بأسم : " + id, ex);
         }
     }
