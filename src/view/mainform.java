@@ -2367,11 +2367,11 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
 
                 },
                 new String [] {
-                    "الأسم", "الصنف", "اللوط", "عدد الشكاير", "الوزن", "التاريخ"
+                    "الأسم", "الصنف", "اللوط", "عدد الشكاير", "الوزن", "التاريخ", "ordID"
                 }
             ) {
                 boolean[] canEdit = new boolean [] {
-                    false, false, false, false, false, false
+                    false, false, false, false, false, false, false
                 };
 
                 public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -2396,6 +2396,9 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
                 jTable_yumia.getColumnModel().getColumn(3).setPreferredWidth(50);
                 jTable_yumia.getColumnModel().getColumn(4).setPreferredWidth(120);
                 jTable_yumia.getColumnModel().getColumn(5).setPreferredWidth(120);
+                jTable_yumia.getColumnModel().getColumn(6).setMinWidth(0);
+                jTable_yumia.getColumnModel().getColumn(6).setPreferredWidth(0);
+                jTable_yumia.getColumnModel().getColumn(6).setMaxWidth(0);
             }
 
             showPermit_panel.add(jScrollPane8, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 307, 810, 330));
@@ -3381,7 +3384,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
                 for (String[] row : yumya) {
                     model.addRow(new Object[]{row[2], utils.toArabicDigits(row[1]),
                         utils.toArabicDigits(row[3]), utils.toArabicDigits(row[5]),
-                        utils.toArabicDigits(row[0]), utils.toArabicDigits(row[4])});
+                        utils.toArabicDigits(row[0]), utils.toArabicDigits(row[4]), row[6]});
                 }
             }
         } catch (DatabaseException ex) {
@@ -3805,12 +3808,8 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
         try {
             if (evt.getClickCount() == 3) {
                 TableModel model = jTable_yumia.getModel();
-                String temp = exportController.getPalletsForOrder(model.getValueAt(jTable_yumia.getSelectedRow(), 1).toString(),
-                        model.getValueAt(jTable_yumia.getSelectedRow(), 0).toString(),
-                        model.getValueAt(jTable_yumia.getSelectedRow(), 2).toString(),
-                        model.getValueAt(jTable_yumia.getSelectedRow(), 5).toString(),
-                        model.getValueAt(jTable_yumia.getSelectedRow(), 4).toString());
-                JOptionPane.showMessageDialog(this, temp, "Pallets", JOptionPane.INFORMATION_MESSAGE);
+                String temp = exportController.getDetailsForOrder(Integer.parseInt(model.getValueAt(jTable_yumia.getSelectedRow(), 6).toString()));
+                JOptionPane.showMessageDialog(this, temp, "Details", JOptionPane.INFORMATION_MESSAGE);
             }
         } catch (DatabaseException ex) {
             JOptionPane.showMessageDialog(this, utils.addStyle(ex.getLocalizedMessage()), "exception", JOptionPane.INFORMATION_MESSAGE);
