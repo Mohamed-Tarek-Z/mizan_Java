@@ -3744,7 +3744,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
                                 jTextField_rep_totweight.setText(utils.ToDoubleArabic(currentTotalWeight));
 
                                 currentConeCount += coneCount;
-                                jTextField_rep_ConeCount.setText(utils.ToDoubleArabic(currentConeCount));
+                                jTextField_rep_ConeCount.setText(utils.toArabicDigits("" + currentConeCount));
 
                                 if (wantedOrderWeight >= utils.ToDoubleEnglish(jTable_rep_select.getModel()
                                         .getValueAt(jTable_rep_select.getSelectedRow(), 1).toString()) + currentTotalWeight
@@ -3818,7 +3818,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
                                     jTextField_rep_totweight.setText(utils.ToDoubleArabic(currentTotalWeight));
 
                                     currentConeCount += coneCount;
-                                    jTextField_rep_ConeCount.setText(utils.ToDoubleArabic(currentConeCount));
+                                    jTextField_rep_ConeCount.setText(utils.toArabicDigits("" + currentConeCount));
 
                                     jTable_rep_select.getModel().setValueAt(utils.ToDoubleArabic(utils.ToDoubleEnglish(jTable_rep_select.getModel()
                                             .getValueAt(jTable_rep_select.getSelectedRow(), 1).toString()) - weight_sum),
