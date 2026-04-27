@@ -3151,7 +3151,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
                                 jTextField_rep_totweight.setText(utils.ToDoubleArabic(currentTotalWeight));
 
                                 currentConeCount += coneCount;
-                                jTextField_rep_ConeCount.setText(utils.ToDoubleArabic(currentConeCount));
+                                jTextField_rep_ConeCount.setText(utils.toArabicDigits("" + currentConeCount));
 
                                 if (wantedOrderWeight >= utils.ToDoubleEnglish(jTable_rep_select.getModel()
                                         .getValueAt(jTable_rep_select.getSelectedRow(), 1).toString()) + currentTotalWeight
@@ -3225,7 +3225,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
                                     jTextField_rep_totweight.setText(utils.ToDoubleArabic(currentTotalWeight));
 
                                     currentConeCount += coneCount;
-                                    jTextField_rep_ConeCount.setText(utils.ToDoubleArabic(currentConeCount));
+                                    jTextField_rep_ConeCount.setText(utils.toArabicDigits("" + currentConeCount));
 
                                     jTable_rep_select.getModel().setValueAt(utils.ToDoubleArabic(utils.ToDoubleEnglish(jTable_rep_select.getModel()
                                             .getValueAt(jTable_rep_select.getSelectedRow(), 1).toString()) - weight_sum),
@@ -4588,8 +4588,8 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
     private void PreparePrintingPanel(Ticket t) throws BusinessException {
 
         try {
-            jLabel_print_ValType.setFont(new Font("Arial", Font.PLAIN, 20));
-            jLabel_print_ValTypeDenir.setFont(new Font("Arial", Font.PLAIN, 24));
+            jLabel_print_ValType.setFont(new Font("Arial", Font.PLAIN, 30));
+            jLabel_print_ValTypeDenir.setFont(new Font("Arial", Font.PLAIN, 30));
             jLabel_print_ValTypeDenir.setSize(190, 28);
             jLabel_print_ValTypeDenir.setText(t.getProductName().split(" ", 2)[0]);
             jLabel_print_ValType.setText(t.getProductName().split(" ", 2)[1]);
