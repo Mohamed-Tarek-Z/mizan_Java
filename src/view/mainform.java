@@ -70,7 +70,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
 
     private short tick10x10;
     private int BagMax = 2, repDiff;
-    private final String Version = "V 3";
+    private final String Version = "V 3.1";
     private String ticketPrinterName;
 
     private long lastInputTime;
@@ -4603,7 +4603,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
         jLabel_print_ValPallet.setText(t.getPalletNumber());
         jLabel_print_ValColor.setText(t.getColor());
         jLabel_print_ValLot.setText(t.getLot());
-        jLabel_print_ValNCone.setText(t.getColor());
+        jLabel_print_ValNCone.setText(t.getConeNumber());
         jLabel_print_ValTotalWeight.setText(t.getTotalWeight());
         jLabel_print_ValNetWeight.setText(t.getNetWeight());
 
