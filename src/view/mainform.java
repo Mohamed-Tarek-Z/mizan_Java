@@ -106,7 +106,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
         if (!admin) {
             jButton_addPro_opener.setEnabled(false);
             jButton_Ezn_opener.setEnabled(false);
-            jButton_Outs_opener.setEnabled(false);
+            jButton_youm_opener.setEnabled(false);
             jButton_Settings_opener.setEnabled(false);
         }
 
@@ -181,7 +181,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
         jButton_DoBack = new javax.swing.JButton();
         jButton_Stock_opener = new javax.swing.JButton();
         jButton_Statics_opener = new javax.swing.JButton();
-        jButton_Outs_opener = new javax.swing.JButton();
+        jButton_youm_opener = new javax.swing.JButton();
         jButton_Emp_opener = new javax.swing.JButton();
         jLabel_version = new javax.swing.JLabel();
         jButton_Settings_opener = new javax.swing.JButton();
@@ -379,8 +379,8 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
         showPermit_panel = new javax.swing.JPanel();
         jScrollPane8 = new javax.swing.JScrollPane();
         jTable_yumia = new javax.swing.JTable();
-        jDateChooser_yum_fromDate = new com.toedter.calendar.JDateChooser();
-        jDateChooser_yum_ToDate = new com.toedter.calendar.JDateChooser();
+        jDateChooser_youm_fromDate = new com.toedter.calendar.JDateChooser();
+        jDateChooser_youm_ToDate = new com.toedter.calendar.JDateChooser();
         jLabel22 = new javax.swing.JLabel();
         jLabel23 = new javax.swing.JLabel();
         jButton_youm_search = new javax.swing.JButton();
@@ -1187,14 +1187,14 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
             });
             right_panel_menu.add(jButton_Statics_opener, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 310, 110, 40));
 
-            jButton_Outs_opener.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-            jButton_Outs_opener.setText("يوميه");
-            jButton_Outs_opener.addActionListener(new java.awt.event.ActionListener() {
+            jButton_youm_opener.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+            jButton_youm_opener.setText("يوميه");
+            jButton_youm_opener.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent evt) {
-                    jButton_Outs_openerActionPerformed(evt);
+                    jButton_youm_openerActionPerformed(evt);
                 }
             });
-            right_panel_menu.add(jButton_Outs_opener, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 370, 110, 40));
+            right_panel_menu.add(jButton_youm_opener, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 370, 110, 40));
 
             jButton_Emp_opener.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
             jButton_Emp_opener.setText("أي");
@@ -2023,8 +2023,8 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
             jLabel19.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
             jLabel19.setText("من");
             statistics_panel.add(jLabel19, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 20, -1, -1));
-            statistics_panel.add(jDateChooser_statis_fromDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 70, 140, 30));
-            statistics_panel.add(jDateChooser_statis_toDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 70, 140, 30));
+            statistics_panel.add(jDateChooser_statis_fromDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 70, 140, 30));
+            statistics_panel.add(jDateChooser_statis_toDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 70, 140, 30));
 
             jLabel20.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
             jLabel20.setText("التاريخ:");
@@ -2111,8 +2111,8 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
             }
 
             showPermit_panel.add(jScrollPane8, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 307, 810, 330));
-            showPermit_panel.add(jDateChooser_yum_fromDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 220, 180, 30));
-            showPermit_panel.add(jDateChooser_yum_ToDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 220, 160, 30));
+            showPermit_panel.add(jDateChooser_youm_fromDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 220, 180, 30));
+            showPermit_panel.add(jDateChooser_youm_ToDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 220, 160, 30));
 
             jLabel22.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
             jLabel22.setText("من");
@@ -3950,14 +3950,14 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
         jDateChooser_statis_toDate.setCalendar(null);
     }//GEN-LAST:event_jButton_Statics_openerActionPerformed
 
-    private void jButton_Outs_openerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_Outs_openerActionPerformed
+    private void jButton_youm_openerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_youm_openerActionPerformed
         evt.getID();
         open_panel(showPermit_panel);
-        jDateChooser_yum_fromDate.setCalendar(null);
-        jDateChooser_yum_ToDate.setCalendar(null);
+        jDateChooser_youm_fromDate.setCalendar(null);
+        jDateChooser_youm_ToDate.setCalendar(null);
         jTable_youm_clinets.setAutoCreateRowSorter(true);
         jTable_yumia.setAutoCreateRowSorter(true);
-    }//GEN-LAST:event_jButton_Outs_openerActionPerformed
+    }//GEN-LAST:event_jButton_youm_openerActionPerformed
 
     private void jButton_youm_searchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_youm_searchActionPerformed
         evt.getID();
@@ -3969,12 +3969,12 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
                 }
                 selectedCIDs = selectedCIDs.substring(0, selectedCIDs.length() - 1);
             }
-            if (jDateChooser_yum_fromDate.getCalendar() != null && jDateChooser_yum_ToDate.getCalendar() != null) {
+            if (jDateChooser_youm_fromDate.getCalendar() != null && jDateChooser_youm_ToDate.getCalendar() != null) {
                 DefaultTableModel model = (DefaultTableModel) jTable_yumia.getModel();
                 model.setRowCount(0);
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                String dateFrom = sdf.format(jDateChooser_yum_fromDate.getCalendar().getTime());
-                String dateTo = sdf.format(jDateChooser_yum_ToDate.getCalendar().getTime());
+                String dateFrom = sdf.format(jDateChooser_youm_fromDate.getCalendar().getTime());
+                String dateTo = sdf.format(jDateChooser_youm_ToDate.getCalendar().getTime());
 
                 List<String[]> yumya = exportController.getYuwmya(jCheckBox_youm_old.isSelected(), dateFrom, dateTo, selectedCIDs);
                 for (String[] row : yumya) {
@@ -5722,7 +5722,6 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
     private javax.swing.JButton jButton_Ezn_opener;
     private javax.swing.JButton jButton_ME_Edit;
     private javax.swing.JButton jButton_Mizan_opener;
-    private javax.swing.JButton jButton_Outs_opener;
     private javax.swing.JButton jButton_Reset_TicketCount10x10;
     private javax.swing.JButton jButton_Reset_TicketCount2x2;
     private javax.swing.JButton jButton_Settings_opener;
@@ -5754,6 +5753,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
     private javax.swing.JButton jButton_storage_delData;
     private javax.swing.JButton jButton_youm_createExcel;
     private javax.swing.JButton jButton_youm_getClients;
+    private javax.swing.JButton jButton_youm_opener;
     private javax.swing.JButton jButton_youm_refund;
     private javax.swing.JButton jButton_youm_search;
     private javax.swing.JCheckBox jCheckBox_E_Mark;
@@ -5794,8 +5794,8 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
     private javax.swing.JComboBox<Product> jComboBox_storage_products;
     private com.toedter.calendar.JDateChooser jDateChooser_statis_fromDate;
     private com.toedter.calendar.JDateChooser jDateChooser_statis_toDate;
-    private com.toedter.calendar.JDateChooser jDateChooser_yum_ToDate;
-    private com.toedter.calendar.JDateChooser jDateChooser_yum_fromDate;
+    private com.toedter.calendar.JDateChooser jDateChooser_youm_ToDate;
+    private com.toedter.calendar.JDateChooser jDateChooser_youm_fromDate;
     private javax.swing.JFileChooser jFileChooser1;
     private javax.swing.JFrame jFrame_MultiEdit;
     private javax.swing.JFrame jFrame_SingleEdit;
