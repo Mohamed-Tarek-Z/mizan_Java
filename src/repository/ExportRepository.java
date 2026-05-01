@@ -99,17 +99,17 @@ public class ExportRepository {
         }
     }
 
-    public List<Object[]> getYuwmya(String dateFrom, String dateTo, String selectedCIDs) throws DatabaseException {
+    public List<Object[]> getYuwmya(String dateFrom, String dateTo, String selectedCIDs, Product p) throws DatabaseException {
         try {
             List<Object[]> youmya = new ArrayList<>();
             ResultSet st = dbConnection.dataRead(
                     "ord_wight,pro_name,cli_name,lot,FORMAT (exported_date, 'yyyy-MM-dd'),count(weight_),export.ord_id",
                     "export inner join clients on clients.cli_id=export.cli_id inner join products on products.pro_id=export.pro_id inner join orders on orders.ord_id=export.ord_id",
-                    !selectedCIDs.isEmpty() ? "exported_date between '" + dateFrom
-                    + "' and '" + dateTo + "' and export.cli_id in (" + selectedCIDs + ") "
+                    "exported_date between '" + dateFrom + "' and '" + dateTo + "'"
+                    + (!selectedCIDs.isEmpty() ? " and export.cli_id in (" + selectedCIDs + ")" : "")
+                    + (p != null ? "and export.pro_id =" + p.getId() : "")
                     + " group by orders.ord_wight,products.pro_name,clients.cli_name,lot,exported_date,export.ord_id order by exported_date ,cli_name "
-                    : "exported_date between '" + dateFrom + "' and '" + dateTo + "' "
-                    + " group by orders.ord_wight,products.pro_name,clients.cli_name,lot,exported_date,export.ord_id order by exported_date ,cli_name ");
+            );
 
             while (st.next()) {
                 youmya.add(new Object[]{st.getString(1), st.getString(2),

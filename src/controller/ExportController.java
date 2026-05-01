@@ -35,8 +35,8 @@ public class ExportController {
         return exportRepo.findExportByOrderId(Ord_id);
     }
 
-    public List<Object[]> getYuwmya(String dateFrom, String dateTo, String selectedCIDs) throws DatabaseException {
-        return exportRepo.getYuwmya(dateFrom, dateTo, selectedCIDs);
+    public List<Object[]> getYuwmya(String dateFrom, String dateTo, String selectedCIDs, Product p) throws DatabaseException {
+        return exportRepo.getYuwmya(dateFrom, dateTo, selectedCIDs, p);
     }
 
     public String getDetailsForOrder(int ordID) throws DatabaseException {
