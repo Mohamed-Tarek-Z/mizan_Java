@@ -20,7 +20,7 @@ public class StorageController {
         this.productRepo = productRepo;
     }
 
-    public int[] addStorage(Bag req, boolean ignoreLimit) throws Exception {
+    public int[] addStorage(Bag req, boolean ignoreLimit) throws DatabaseException, BusinessException {
 
         validateInput(req, ignoreLimit);
 

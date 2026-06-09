@@ -21,7 +21,7 @@ public class ProductController {
         return productRepo.getProductsLike(subOfName);
     }
 
-    public Product getProduct(String productName) throws DatabaseException, BusinessException {
+    public Product getProduct(String productName) throws DatabaseException {
         return productRepo.getProductByName(productName);
     }
 

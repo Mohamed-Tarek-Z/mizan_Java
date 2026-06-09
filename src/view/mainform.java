@@ -591,6 +591,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
         jCheckBox_storage_ignoreLimits = new javax.swing.JCheckBox();
         jSeparator7 = new javax.swing.JSeparator();
         jTextField_storage_SearchProducts = new javax.swing.JTextField();
+        jTextField_inputExeption = new javax.swing.JTextField();
         makePermit = new javax.swing.JPanel();
         jComboBox_rep_Pros = new javax.swing.JComboBox<>();
         jLabel1 = new javax.swing.JLabel();
@@ -738,9 +739,10 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
         jTextArea_emp = new javax.swing.JTextArea();
         jLabel38 = new javax.swing.JLabel();
 
-        jFileChooser1.setDialogType(javax.swing.JFileChooser.SAVE_DIALOG);
-        jFileChooser1.setCurrentDirectory(new java.io.File("F:\\"));
-            jFileChooser1.setFileSelectionMode(javax.swing.JFileChooser.DIRECTORIES_ONLY);
+        jFileChooser1.setDialogType(javax.swing.JFileChooser.CUSTOM_DIALOG);
+        jFileChooser1.setCurrentDirectory(new java.io.File("P:\\"));
+            jFileChooser1.setDialogTitle("");
+            jFileChooser1.setFileSelectionMode(javax.swing.JFileChooser.FILES_AND_DIRECTORIES);
             jFileChooser1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
 
             SingleEdit.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -1880,7 +1882,16 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
                     jTextField_storage_SearchProductsKeyTyped(evt);
                 }
             });
-            storage_panel.add(jTextField_storage_SearchProducts, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 40, 150, 20));
+            storage_panel.add(jTextField_storage_SearchProducts, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 40, 150, 20));
+
+            jTextField_inputExeption.setEditable(false);
+            jTextField_inputExeption.setBackground(new java.awt.Color(255, 255, 255));
+            jTextField_inputExeption.setAutoscrolls(false);
+            jTextField_inputExeption.setBorder(null);
+            jTextField_inputExeption.setFocusable(false);
+            jTextField_inputExeption.setRequestFocusEnabled(false);
+            jTextField_inputExeption.setVerifyInputWhenFocusTarget(false);
+            storage_panel.add(jTextField_inputExeption, new org.netbeans.lib.awtextra.AbsoluteConstraints(780, 40, 40, 30));
 
             left_panel.add(storage_panel, "Mizan");
 
@@ -2357,14 +2368,14 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
             statistics_panel.add(jButton_statistics_createExcl, new org.netbeans.lib.awtextra.AbsoluteConstraints(720, 590, -1, -1));
 
             jComboBox_statistics_products.setFont(new java.awt.Font("sansserif", 0, 18)); // NOI18N
-            statistics_panel.add(jComboBox_statistics_products, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 70, 160, 30));
+            statistics_panel.add(jComboBox_statistics_products, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 70, 190, 30));
 
             jTextField_statistics_Search_pros.addKeyListener(new java.awt.event.KeyAdapter() {
                 public void keyTyped(java.awt.event.KeyEvent evt) {
                     jTextField_statistics_Search_prosKeyTyped(evt);
                 }
             });
-            statistics_panel.add(jTextField_statistics_Search_pros, new org.netbeans.lib.awtextra.AbsoluteConstraints(31, 40, 120, -1));
+            statistics_panel.add(jTextField_statistics_Search_pros, new org.netbeans.lib.awtextra.AbsoluteConstraints(31, 40, 140, -1));
 
             left_panel.add(statistics_panel, "statis");
 
@@ -2507,14 +2518,14 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
             showPermit_panel.add(jButton_youm_createExcel, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 230, 150, 40));
 
             jComboBox_youm_products.setFont(new java.awt.Font("sansserif", 0, 18)); // NOI18N
-            showPermit_panel.add(jComboBox_youm_products, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 130, 160, 30));
+            showPermit_panel.add(jComboBox_youm_products, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 130, 200, 30));
 
             jTextField_youm_Search_pros.addKeyListener(new java.awt.event.KeyAdapter() {
                 public void keyTyped(java.awt.event.KeyEvent evt) {
                     jTextField_youm_Search_prosKeyTyped(evt);
                 }
             });
-            showPermit_panel.add(jTextField_youm_Search_pros, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 100, 120, -1));
+            showPermit_panel.add(jTextField_youm_Search_pros, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 100, 140, -1));
 
             left_panel.add(showPermit_panel, "yomia");
 
@@ -2643,7 +2654,11 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
             } else {
                 jTextField_storage_TotalWeight.setText(utils.ToDoubleArabic(x - 0.02));
             }
-            calc_net_weight();
+            try {
+                calc_net_weight();
+            } catch (BusinessException e) {
+                showMessageInlable(true);
+            }
         }
         if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
             jTextField_storage_coneNumber.requestFocusInWindow();
@@ -2671,7 +2686,11 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
         textbox_number_weight(evt, jTextField_storage_TotalWeight, 8, () -> jButton_storage_Clear.doClick());
         if (evt.getKeyChar() == KeyEvent.VK_ENTER && !jTextField_storage_TotalWeight.getText().isBlank()) {
             jTextField_storage_NetWeight.requestFocusInWindow();
-            calc_net_weight();
+            try {
+                calc_net_weight();
+            } catch (BusinessException e) {
+                showMessageInlable(true);
+            }
         }
         if (evt.getKeyChar() == KeyEvent.VK_DELETE) {
             if ((evt.getModifiersEx() & KeyEvent.CTRL_DOWN_MASK) != 0) {
@@ -2713,11 +2732,15 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
                     jTextField_storage_coneNumber.getText(),
                     jTextField_storage_TotalWeight.getText(),
                     jTextField_storage_NetWeight.getText()
-            ));
+            ), jCheckBox_storage_printLTicket.isSelected());
             jButton_storage_Clear.doClick();
             fill_storage_table();
-        } catch (Exception ex) {
+            showMessageInlable(false);
+        } catch (DatabaseException ex) {
+            Logger.getLogger(mainform.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(this, utils.addStyle(ex.getLocalizedMessage()), "exception", JOptionPane.WARNING_MESSAGE);
+        } catch (BusinessException ex) {
+            showMessageInlable(true);
         }
     }//GEN-LAST:event_jButton_storage_addDataActionPerformed
 
@@ -2955,7 +2978,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
                                 second = !second;
                             } else {
                                 jFileChooser1.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-                                jFileChooser1.showSaveDialog(this);
+                                jFileChooser1.showOpenDialog(this);
                                 String excelBackupPath = jFileChooser1.getSelectedFile().getAbsolutePath();
                                 if (excelManager.excel_60_60(fOrderBags, orderBags,
                                         jTextField_rep_clientName.getText(), typeFOrder, (Product) jComboBox_rep_Pros.getSelectedItem(),
@@ -2982,7 +3005,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
                         second = !second;
                     } else if (jTable_rep_preview.getRowCount() <= 120) {
                         jFileChooser1.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-                        jFileChooser1.showSaveDialog(this);
+                        jFileChooser1.showOpenDialog(this);
                         String excelBackupPath = jFileChooser1.getSelectedFile().getAbsolutePath();
                         if (excelManager.excel_120(orderBags,
                                 jTextField_rep_clientName.getText(),
@@ -3004,7 +3027,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
 
                     } else if (jTable_rep_preview.getRowCount() <= 160) {
                         jFileChooser1.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-                        jFileChooser1.showSaveDialog(this);
+                        jFileChooser1.showOpenDialog(this);
                         String excelBackupPath = jFileChooser1.getSelectedFile().getAbsolutePath();
                         if (excelManager.excel_160(orderBags,
                                 jTextField_rep_clientName.getText(),
@@ -3024,7 +3047,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
                         }
                     } else if (jTable_rep_preview.getRowCount() <= 200) {
                         jFileChooser1.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-                        jFileChooser1.showSaveDialog(this);
+                        jFileChooser1.showOpenDialog(this);
                         String excelBackupPath = jFileChooser1.getSelectedFile().getAbsolutePath();
                         if (excelManager.excel_200(orderBags,
                                 jTextField_rep_clientName.getText(),
@@ -3617,42 +3640,13 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
 
     private void jButton_E_printActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_E_printActionPerformed
         evt.getID();
-        try {
-
-            try {
-                if (jComboBox_E_proName.getSelectedItem().toString().split(" ", 2)[1].length() > 11) {
-                    jLabel_print_ValType.setFont(new Font("Arial", Font.PLAIN, 20));
-                } else {
-                    jLabel_print_ValType.setFont(new Font("Arial", Font.PLAIN, 30));
-                }
-                if (jComboBox_E_proName.getSelectedItem().toString().split(" ", 2)[0].length() > 11) {
-                    jLabel_print_ValTypeDenir.setFont(new Font("Arial", Font.PLAIN, 24));
-                } else {
-                    jLabel_print_ValTypeDenir.setFont(new Font("Arial", Font.PLAIN, 35));
-                }
-                jLabel_print_ValTypeDenir.setSize(190, 28);
-                jLabel_print_ValTypeDenir.setText(jComboBox_E_proName.getSelectedItem().toString().split(" ", 2)[0]);
-                jLabel_print_ValType.setText(jComboBox_E_proName.getSelectedItem().toString().split(" ", 2)[1]);
-            } catch (java.lang.ArrayIndexOutOfBoundsException ex) {
-                jLabel_print_ValTypeDenir.setText(jComboBox_E_proName.getSelectedItem().toString());
-                jLabel_print_ValTypeDenir.setSize(190, 60);
-                jLabel_print_ValType.setText(" ");
-            }
-
-            jLabel_print_ValPallet.setText(jTextField_E_PaltNum.getText());
-            jLabel_print_ValColor.setText(jTextField_E_Color.getText());
-
-            jLabel_print_ValLot.setText(jTextField_E_lot.getText());
-            jLabel_print_ValNCone.setText(jTextField_E_ConNum.getText());
-            jLabel_print_ValTotalWeight.setText(jTextField_E_TotWight.getText());
-            jLabel_print_ValNetWeight.setText(jTextField_E_Wight.getText());
-
-            printerManager.printPanelToImage(jPanel_print);
-
-            incTicketCounters();
-        } catch (BusinessException ex) {
-            JOptionPane.showMessageDialog(SingleEdit, utils.addStyle(ex.getLocalizedMessage()), "exception", JOptionPane.INFORMATION_MESSAGE);
-        }
+        PreparePrintingPanel(new Ticket(((Product) jComboBox_E_proName.getSelectedItem()).getName(),
+                jTextField_E_PaltNum.getText(),
+                ((Product) jComboBox_E_proName.getSelectedItem()).getColor(),
+                jTextField_E_lot.getText(),
+                jTextField_E_ConNum.getText(),
+                jTextField_E_TotWight.getText(),
+                jTextField_E_Wight.getText()), jCheckBox_E_P.isSelected());
     }//GEN-LAST:event_jButton_E_printActionPerformed
 
     private void jTextField_storage_ColorKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_storage_ColorKeyTyped
@@ -4297,6 +4291,10 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
         JOptionPane.showMessageDialog(this, utils.addStyle(msg), "Info", JOptionPane.INFORMATION_MESSAGE);
     }
 
+    private void showMessageInlable(boolean red) {
+        jTextField_inputExeption.setBackground(red ? Color.red : Color.white);
+    }
+
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ///                                                                                                              ///
     ///                                               Helpers                                                        ///
@@ -4434,18 +4432,15 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
     }
 
     private void calc_net_weight() throws BusinessException {
-        try {
-            if (!jTextField_storage_EmptyConeWeight.getText().isBlank()) {
-                int num_of_con = parseInt(jTextField_storage_coneNumber, "عدد الكون");
-                double weight_of_con = (double) parseInt(jTextField_storage_EmptyConeWeight, "وزن الكون") / 1000,
-                        bag_weight = (double) parseInt(jTextField_storage_EmptyBagWeight, "وزن الفارغ") / 100,
-                        weight = parseDouble(jTextField_storage_TotalWeight, "وزن القائم");
+        if (!jTextField_storage_EmptyConeWeight.getText().isBlank()) {
+            int num_of_con = parseInt(jTextField_storage_coneNumber, "عدد الكون");
+            double weight_of_con = (double) parseInt(jTextField_storage_EmptyConeWeight, "وزن الكون") / 1000,
+                    bag_weight = (double) parseInt(jTextField_storage_EmptyBagWeight, "وزن الفارغ") / 100,
+                    weight = parseDouble(jTextField_storage_TotalWeight, "وزن القائم");
 
-                jTextField_storage_NetWeight.setText(utils.ToDoubleArabic(weight - (bag_weight + (num_of_con * weight_of_con))));
-            }
-        } catch (BusinessException ex) {
-            JOptionPane.showMessageDialog(this, utils.addStyle(ex.getLocalizedMessage()), "exception", JOptionPane.INFORMATION_MESSAGE);
+            jTextField_storage_NetWeight.setText(utils.ToDoubleArabic(weight - (bag_weight + (num_of_con * weight_of_con))));
         }
+
     }
 
     private void calc_pallet_weight() throws DatabaseException {
@@ -4456,7 +4451,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
         }
     }
 
-    private void fill_storage_table() throws DatabaseException, BusinessException {
+    private void fill_storage_table() throws DatabaseException {
         DefaultTableModel model = (DefaultTableModel) jTable_storage.getModel();
         model.setRowCount(0);
         List<Bag> bags = storageController.getBags(jComboBox_storage_products.getSelectedItem().toString());
@@ -4635,7 +4630,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
         saveConfig();
     }
 
-    private void PreparePrintingPanel(Ticket t) throws BusinessException {
+    private void PreparePrintingPanel(Ticket t, boolean doPrint) {
 
         try {
             jLabel_print_ValType.setFont(new Font("Arial", Font.PLAIN, 30));
@@ -4657,9 +4652,10 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
         jLabel_print_ValTotalWeight.setText(t.getTotalWeight());
         jLabel_print_ValNetWeight.setText(t.getNetWeight());
 
-        printerManager.printPanelToImage(jPanel_print);
-
-        incTicketCounters();
+        if (doPrint) {
+            printerManager.printPanelToImage(jPanel_print);
+            incTicketCounters();
+        }
 
     }
 
@@ -4915,6 +4911,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
     private javax.swing.JTextField jTextField_ME_lot;
     private javax.swing.JTextField jTextField_Pros_color;
     private javax.swing.JTextField jTextField_Pros_conWight;
+    private javax.swing.JTextField jTextField_inputExeption;
     private javax.swing.JTextField jTextField_mach_MName;
     private javax.swing.JTextField jTextField_mach_lot;
     private javax.swing.JTextField jTextField_pro_name;
