@@ -67,7 +67,7 @@ public class utils {
      * @return styled String to use in jOptionpane
      */
     public static String addStyle(String text) {
-        return "<html><body><h1 style='font-family: Arial; font-size: 20pt; text-align: center; '>"
+        return "<html><body style='width: 300px'><h1 style='font-family: Arial; font-size: 17pt; text-align: center; '>"
                 + text.strip() + "</h1></body></html>";
     }
 

@@ -70,7 +70,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
 
     private short tick10x10;
     private int BagMax = 2, repDiff;
-    private final String Version = "V 3.1";
+    private final String Version = "V 3.3";
     private String ticketPrinterName;
 
     private long lastInputTime;
@@ -85,7 +85,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
     public void onError(Exception ex) {
         // Safely update UI here
         SwingUtilities.invokeLater(() -> {
-            JOptionPane.showMessageDialog(this, utils.addStyle(ex.getLocalizedMessage()), "exception", JOptionPane.INFORMATION_MESSAGE);
+            showExceptionAndLog(ex);
         });
     }
 
@@ -744,6 +744,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
             jFileChooser1.setDialogTitle("");
             jFileChooser1.setFileSelectionMode(javax.swing.JFileChooser.FILES_AND_DIRECTORIES);
             jFileChooser1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+            jFileChooser1.getAccessibleContext().setAccessibleParent(this);
 
             SingleEdit.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
             SingleEdit.setTitle("Single Edit");
@@ -943,6 +944,8 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
             jLabel13.setText("الأماكن الحمراء لايمكن تعديلها في نفس العملية*");
             SingleEdit.getContentPane().add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 120, 280, 20));
 
+            SingleEdit.getAccessibleContext().setAccessibleParent(this);
+
             MultiEdit.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
             MultiEdit.setTitle("Multi Edit");
             MultiEdit.setAlwaysOnTop(true);
@@ -1013,6 +1016,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
             MultiEdit.getContentPane().add(jCheckBox_ME_MarkBag, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 140, -1, -1));
 
             MultiEdit.getAccessibleContext().setAccessibleName("Multiedit_Window");
+            MultiEdit.getAccessibleContext().setAccessibleParent(this);
 
             setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
             setTitle("mizan program " + Version);
@@ -2598,8 +2602,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
             open_panel(products_panel);
             fill_pro_table();
         } catch (DatabaseException ex) {
-            Logger.getLogger(mainform.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(this, utils.addStyle(ex.getLocalizedMessage()), "exception", JOptionPane.INFORMATION_MESSAGE);
+            showExceptionAndLog(ex);
         }
     }//GEN-LAST:event_jButton_addPro_openerActionPerformed
 
@@ -2641,8 +2644,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
                 jTextField_storage_coneNumber.requestFocusInWindow();
             }
         } catch (DatabaseException ex) {
-            Logger.getLogger(mainform.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(this, utils.addStyle(ex.getLocalizedMessage()), "exception", JOptionPane.INFORMATION_MESSAGE);
+            showExceptionAndLog(ex);
         }
     }//GEN-LAST:event_jTextField_storage_palletNumberKeyTyped
 
@@ -2737,8 +2739,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
             fill_storage_table();
             showMessageInlable(false);
         } catch (DatabaseException ex) {
-            Logger.getLogger(mainform.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(this, utils.addStyle(ex.getLocalizedMessage()), "exception", JOptionPane.WARNING_MESSAGE);
+            showExceptionAndLog(ex);
         } catch (BusinessException ex) {
             showMessageInlable(true);
         }
@@ -2753,26 +2754,20 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
 
                     storageController.removeBag(
                             jTable_storage.getModel().getValueAt(jTable_storage.getSelectedRow(), 4).toString());
-                    JOptionPane.showMessageDialog(this, utils.addStyle(" تم حذف البيان بنجاح "), "ناجح",
-                            JOptionPane.INFORMATION_MESSAGE);
+                    showMessage(" تم حذف البيان بنجاح ", "ناجح");
                     fill_storage_table();
                 } else if (jTable_storage.getSelectedRowCount() > 1) {
                     for (int row : jTable_storage.getSelectedRows()) {
                         storageController.removeBag(jTable_storage.getModel().getValueAt(row, 4).toString());
                     }
                     fill_storage_table();
-                    JOptionPane.showMessageDialog(this, utils.addStyle("تم حذف البيــانات بنجاح"), "ناجح",
-                            JOptionPane.INFORMATION_MESSAGE);
+                    showMessage("تم حذف البيــانات بنجاح", "ناجح");
                 } else {
-                    JOptionPane.showMessageDialog(this, utils.addStyle("برجاء أختيار بيان من الجدول أولا"), "إنتبه",
-                            JOptionPane.INFORMATION_MESSAGE);
+                    showMessage("برجاء أختيار بيان من الجدول أولا", "إنتبه");
                 }
             }
-        } catch (DatabaseException ex) {
-            Logger.getLogger(mainform.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(this, utils.addStyle(ex.getLocalizedMessage()), "exception", JOptionPane.INFORMATION_MESSAGE);
-        } catch (BusinessException ex) {
-            JOptionPane.showMessageDialog(this, utils.addStyle(ex.getLocalizedMessage()), "exception", JOptionPane.INFORMATION_MESSAGE);
+        } catch (DatabaseException | BusinessException ex) {
+            showExceptionAndLog(ex);
         }
     }//GEN-LAST:event_jButton_storage_delDataActionPerformed
 
@@ -2781,13 +2776,11 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
         try {
             if (pro_Table_SelectedID == 0) {
                 if (jTextField_pro_name.getText().isBlank() || jTextField_Pros_conWight.getText().isBlank()) {
-                    JOptionPane.showMessageDialog(this, utils.addStyle("برجاء أدخال البيانات كامله"), "إنتبه",
-                            JOptionPane.INFORMATION_MESSAGE);
+                    showMessage("برجاء أدخال البيانات كامله", "إنتبه");
                 } else {
                     try {
                         productController.getProduct(jTextField_pro_name.getText());
-                        JOptionPane.showMessageDialog(this, utils.addStyle("هذا الصنف موجود بالفعل"), "إنتبه",
-                                JOptionPane.INFORMATION_MESSAGE);
+                        showMessage("هذا الصنف موجود بالفعل", "إنتبه");
                     } catch (BusinessException ex) {
                         productController.addNewProduct(jTextField_pro_name.getText(), jTextField_Pros_conWight.getText(),
                                 jTextField_Pros_color.getText(), jCheckBox_Pros_IsBox.isSelected());
@@ -2797,15 +2790,13 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
                         jCheckBox_Pros_IsBox.setSelected(false);
                         fill_pro_table();
                         populateCombos();
-                        JOptionPane.showMessageDialog(this, utils.addStyle("تم إدخال الصنف بنجاح"), "ناجح",
-                                JOptionPane.INFORMATION_MESSAGE);
+                        showMessage("تم إدخال الصنف بنجاح", "ناجح");
                     }
                 }
             } else {
 
                 if (jTextField_pro_name.getText().isBlank()) {
-                    JOptionPane.showMessageDialog(this, utils.addStyle("برجاء أدخال اسم الصنف"), "إنتبه",
-                            JOptionPane.INFORMATION_MESSAGE);
+                    showMessage("برجاء أدخال اسم الصنف", "إنتبه");
                 } else {
                     productController.updateProduct(pro_Table_SelectedID, jTextField_pro_name.getText(),
                             jTextField_Pros_conWight.getText(), jTextField_Pros_color.getText(), jCheckBox_Pros_IsBox.isSelected());
@@ -2816,15 +2807,11 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
                     jCheckBox_Pros_IsBox.setSelected(false);
                     fill_pro_table();
                     populateCombos();
-                    JOptionPane.showMessageDialog(this, utils.addStyle("تم تعديل الصنف بنجاح "), "ناجح",
-                            JOptionPane.INFORMATION_MESSAGE);
+                    showMessage("تم تعديل الصنف بنجاح ", "ناجح");
                 }
             }
         } catch (DatabaseException ex) {
-            Logger.getLogger(mainform.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(this, utils.addStyle(ex.getLocalizedMessage()), "exception", JOptionPane.INFORMATION_MESSAGE);
-        } catch (BusinessException ex) {
-            JOptionPane.showMessageDialog(this, utils.addStyle(ex.getLocalizedMessage()), "exception", JOptionPane.INFORMATION_MESSAGE);
+            showExceptionAndLog(ex);
         }
     }//GEN-LAST:event_jButton_add_proActionPerformed
 
@@ -2850,7 +2837,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
             jCheckBox_Pros_IsBox.setSelected(model.getValueAt(jTable_pro.getSelectedRow(), 4).toString().equals("true"));
             pro_Table_SelectedID = Integer.parseInt(model.getValueAt(jTable_pro.getSelectedRow(), 0).toString());
         } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, e.getLocalizedMessage(), "exception", JOptionPane.INFORMATION_MESSAGE);
+            showExceptionAndLog(e);
         }
     }//GEN-LAST:event_jTable_proMouseClicked
 
@@ -2860,25 +2847,19 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
             try {
                 if (productController.removeProduct(pro_Table_SelectedID)) {
 
-                    JOptionPane.showMessageDialog(this, utils.addStyle("تم حذف الصنف بنجاح "), "ناجح",
-                            JOptionPane.INFORMATION_MESSAGE);
+                    showMessage("تم حذف الصنف بنجاح ", "ناجح");
                     jTextField_pro_name.setText("");
                     pro_Table_SelectedID = 0;
                     fill_pro_table();
                     populateCombos();
                 } else {
-                    JOptionPane.showMessageDialog(this, utils.addStyle("لا يمكن حذف هذا الصنف "), "إنتبه",
-                            JOptionPane.INFORMATION_MESSAGE);
+                    showMessage("لا يمكن حذف هذا الصنف ", "إنتبه");
                 }
-            } catch (DatabaseException ex) {
-                Logger.getLogger(mainform.class.getName()).log(Level.SEVERE, null, ex);
-                JOptionPane.showMessageDialog(this, utils.addStyle(ex.getLocalizedMessage()), "exception", JOptionPane.INFORMATION_MESSAGE);
-            } catch (BusinessException ex) {
-                JOptionPane.showMessageDialog(this, utils.addStyle(ex.getLocalizedMessage()), "exception", JOptionPane.INFORMATION_MESSAGE);
+            } catch (DatabaseException | BusinessException ex) {
+                showExceptionAndLog(ex);
             }
         } else {
-            JOptionPane.showMessageDialog(this, utils.addStyle(" برجاء أختيار صنف من الجدول أولا"), "إنتبه",
-                    JOptionPane.INFORMATION_MESSAGE);
+            showMessage(" برجاء أختيار صنف من الجدول أولا", "إنتبه");
         }
 
     }//GEN-LAST:event_jButton_del_proActionPerformed
@@ -2906,13 +2887,9 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
                 }
                 calc_pallet_weight();
             }
-        } catch (DatabaseException ex) {
-            Logger.getLogger(mainform.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(this, utils.addStyle(ex.getLocalizedMessage()), "exception", JOptionPane.INFORMATION_MESSAGE);
-        } catch (BusinessException ex) {
-            JOptionPane.showMessageDialog(this, utils.addStyle(ex.getLocalizedMessage()), "exception", JOptionPane.INFORMATION_MESSAGE);
+        } catch (DatabaseException | BusinessException ex) {
+            showExceptionAndLog(ex);
         }
-
     }//GEN-LAST:event_jComboBox_storage_productsItemStateChanged
 
     private void jComboBox_rep_ProsItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jComboBox_rep_ProsItemStateChanged
@@ -2921,11 +2898,8 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
             if (jComboBox_rep_Pros.hasFocus()) {
                 fill_Table_rep_select();
             }
-        } catch (DatabaseException ex) {
-            Logger.getLogger(mainform.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(this, utils.addStyle(ex.getLocalizedMessage()), "exception", JOptionPane.INFORMATION_MESSAGE);
-        } catch (BusinessException ex) {
-            JOptionPane.showMessageDialog(this, utils.addStyle(ex.getLocalizedMessage()), "exception", JOptionPane.INFORMATION_MESSAGE);
+        } catch (DatabaseException | BusinessException ex) {
+            showExceptionAndLog(ex);
         }
     }//GEN-LAST:event_jComboBox_rep_ProsItemStateChanged
 
@@ -2949,8 +2923,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
                     String name = jTextField_rep_clientName.getText().split("تسليم")[0].strip();
 
                     if (jTable_rep_preview.getRowCount() > 60 && jCheckBox_rep_2n1.isSelected()) {
-                        JOptionPane.showMessageDialog(this, utils.addStyle("لا يمن عمل إذنين و عدد الشكائر أكثر من ٦٠ في الإذن الواحد"), "إنتبه",
-                                JOptionPane.INFORMATION_MESSAGE);
+                        showMessage("لا يمن عمل إذنين و عدد الشكائر أكثر من ٦٠ في الإذن الواحد", "إنتبه");
                         return;
                     }
                     if (jTable_rep_preview.getRowCount() <= 60 && jCheckBox_rep_2n1.isSelected()) {
@@ -2967,14 +2940,10 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
                             jCheckBox_rep_highLightMarked.setSelected(false);
                             jComboBox_rep_palletsNrep.removeAllItems();
 
-                            JOptionPane.showMessageDialog(this, utils.addStyle(" ادخل الأذن الثاني  "), "إنتبه",
-                                    JOptionPane.INFORMATION_MESSAGE);
-
+                            showMessage(" ادخل الأذن الثاني  ", "إنتبه");
                         } else {
                             if (typeFOrder == (Product) jComboBox_rep_Pros.getSelectedItem() && fOrderBags.getFirst().getLot().equals(orderBags.getFirst().getLot())) {
-                                JOptionPane.showMessageDialog(this, utils.addStyle(" برجاء تغير الصنف أو اللوط  "), "إنتبه",
-                                        JOptionPane.INFORMATION_MESSAGE);
-
+                                showMessage(" برجاء تغير الصنف أو اللوط  ", "إنتبه");
                                 second = !second;
                             } else {
                                 jFileChooser1.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
@@ -2997,8 +2966,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
                                     jTextField_rep_totweight.setText("");
                                     jTextField_rep_ConeCount.setText("");
                                 } else {
-                                    JOptionPane.showMessageDialog(this, utils.addStyle(" حدث خطأ في عمل الاذن"), "إنتبه",
-                                            JOptionPane.INFORMATION_MESSAGE);
+                                    showMessage(" حدث خطأ في عمل الاذن", "إنتبه");
                                 }
                             }
                         }
@@ -3021,8 +2989,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
                             jCheckBox_rep_wzn.setSelected(false);
                             jCheckBox_rep_highLightMarked.setSelected(false);
                         } else {
-                            JOptionPane.showMessageDialog(this, utils.addStyle(" حدث خطأ في عمل الاذن"), "إنتبه",
-                                    JOptionPane.INFORMATION_MESSAGE);
+                            showMessage(" حدث خطأ في عمل الاذن", "إنتبه");
                         }
 
                     } else if (jTable_rep_preview.getRowCount() <= 160) {
@@ -3042,8 +3009,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
                             jCheckBox_rep_wzn.setSelected(false);
                             jCheckBox_rep_highLightMarked.setSelected(false);
                         } else {
-                            JOptionPane.showMessageDialog(this, utils.addStyle(" حدث خطأ في عمل الاذن"), "إنتبه",
-                                    JOptionPane.INFORMATION_MESSAGE);
+                            showMessage(" حدث خطأ في عمل الاذن", "إنتبه");
                         }
                     } else if (jTable_rep_preview.getRowCount() <= 200) {
                         jFileChooser1.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
@@ -3062,23 +3028,17 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
                             jCheckBox_rep_wzn.setSelected(false);
                             jCheckBox_rep_highLightMarked.setSelected(false);
                         } else {
-                            JOptionPane.showMessageDialog(this, utils.addStyle(" حدث خطأ في عمل الاذن"), "إنتبه",
-                                    JOptionPane.INFORMATION_MESSAGE);
+                            showMessage(" حدث خطأ في عمل الاذن", "إنتبه");
                         }
                     }
                     jComboBox_rep_palletsNrep.removeAllItems();
                 }
             } else {
-                JOptionPane.showMessageDialog(this, utils.addStyle(" تدخل البيانات كامله أولا"), "إنتبه",
-                        JOptionPane.INFORMATION_MESSAGE);
+                showMessage(" تدخل البيانات كامله أولا", "إنتبه");
             }
-        } catch (DatabaseException ex) {
-            Logger.getLogger(mainform.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(this, utils.addStyle(ex.getLocalizedMessage()), "exception", JOptionPane.INFORMATION_MESSAGE);
-        } catch (BusinessException ex) {
-            JOptionPane.showMessageDialog(this, utils.addStyle(ex.getLocalizedMessage()), "exception", JOptionPane.INFORMATION_MESSAGE);
+        } catch (DatabaseException | BusinessException ex) {
+            showExceptionAndLog(ex);
         }
-
     }//GEN-LAST:event_jButton_rep_printRepActionPerformed
 
     private void jTextField_rep_numOfBagKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_rep_numOfBagKeyTyped
@@ -3090,11 +3050,8 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
         evt.getID();
         try {
             fill_Table_rep_select();
-        } catch (DatabaseException ex) {
-            Logger.getLogger(mainform.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(this, utils.addStyle(ex.getLocalizedMessage()), "exception", JOptionPane.INFORMATION_MESSAGE);
-        } catch (BusinessException ex) {
-            JOptionPane.showMessageDialog(this, utils.addStyle(ex.getLocalizedMessage()), "exception", JOptionPane.INFORMATION_MESSAGE);
+        } catch (DatabaseException | BusinessException ex) {
+            showExceptionAndLog(ex);
         }
     }//GEN-LAST:event_jTextField_rep_numOfBagKeyReleased
 
@@ -3117,8 +3074,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
                 if (jCheckBox_rep_wzn.isSelected()) {
                     double wantedOrderWeight = utils.ToDoubleEnglish(jTextField_rep_numOfBag.getText());
                     if (wantedOrderWeight > 7000.0) {
-                        JOptionPane.showMessageDialog(this, utils.addStyle("رجاء ادخل  وزن أقل من  ٧٠٠٠"), "إنتبه",
-                                JOptionPane.INFORMATION_MESSAGE);
+                        showMessage("رجاء ادخل  وزن أقل من  ٧٠٠٠", "إنتبه");
                         return;
                     }
                     if (wantedOrderWeight >= currentTotalWeight + repDiff) {
@@ -3176,12 +3132,9 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
                                 }
                                 if (bagOutOfOrder) {
                                     if (OutOfOrderBags.isEmpty()) {
-                                        JOptionPane.showMessageDialog(this, utils.addStyle("لم يتم إضافة شكائر"),
-                                                "ملحوظة", JOptionPane.INFORMATION_MESSAGE);
+                                        showMessage("لم يتم إضافة شكائر", "ملحوظة");
                                     } else {
-                                        JOptionPane.showMessageDialog(this,
-                                                utils.addStyle("الشكائر هى: " + OutOfOrderBags.toString()), "ملحوظة",
-                                                JOptionPane.INFORMATION_MESSAGE);
+                                        showMessage("الشكائر هى: " + OutOfOrderBags.toString(), "ملحوظة");
                                     }
                                 }
 
@@ -3209,18 +3162,14 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
                                 jTable_rep_preview.changeSelection(jTable_rep_preview.getRowCount() - 1, 0, false, false);
                             }
                         } else {
-                            JOptionPane.showMessageDialog(this, utils.addStyle("لا يمكن ادخال اكثر من لوط"), "إنتبه",
-                                    JOptionPane.INFORMATION_MESSAGE);
+                            showMessage("لا يمكن ادخال اكثر من لوط", "إنتبه");
                         }
                     } else {
-                        JOptionPane.showMessageDialog(this, utils.addStyle("لقد اكتمل الوزن"), "إنتبه",
-                                JOptionPane.INFORMATION_MESSAGE);
+                        showMessage("لقد اكتمل الوزن", "إنتبه");
                     }
-
                 } else {
                     if ((int) utils.ToDoubleEnglish(jTextField_rep_numOfBag.getText()) > 200) {
-                        JOptionPane.showMessageDialog(this, utils.addStyle("رجاء ادخل  عدد أقل من  ٢٠١"), "إنتبه",
-                                JOptionPane.INFORMATION_MESSAGE);
+                        showMessage("رجاء ادخل  عدد أقل من  ٢٠١", "إنتبه");
                         return;
                     }
                     if ((int) utils.ToDoubleEnglish(jTextField_rep_numOfBag.getText()) != jTable_rep_preview.getRowCount()) {
@@ -3282,21 +3231,17 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
                                 jTable_rep_preview.changeSelection(jTable_rep_preview.getRowCount() - 1, 0, false, false);
                             }
                         } else {
-                            JOptionPane.showMessageDialog(this, utils.addStyle("لا يمكن ادخال اكثر من لوط  "), "إنتبه",
-                                    JOptionPane.INFORMATION_MESSAGE);
+                            showMessage("لا يمكن ادخال اكثر من لوط  ", "إنتبه");
                         }
                     } else {
-                        JOptionPane.showMessageDialog(this, utils.addStyle(" لقد اكتمل العدد "), "إنتبه",
-                                JOptionPane.INFORMATION_MESSAGE);
+                        showMessage(" لقد اكتمل العدد ", "إنتبه");
                     }
                 }
             } else {
-                JOptionPane.showMessageDialog(this, utils.addStyle("برجاء ادخال عدد الشكاير"), "إنتبه",
-                        JOptionPane.INFORMATION_MESSAGE);
+                showMessage("برجاء ادخال عدد الشكاير", "إنتبه");
             }
         } catch (DatabaseException ex) {
-            Logger.getLogger(mainform.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(this, utils.addStyle(ex.getLocalizedMessage()), "exception", JOptionPane.INFORMATION_MESSAGE);
+            showExceptionAndLog(ex);
         }
     }//GEN-LAST:event_jTable_rep_selectMouseClicked
 
@@ -3314,16 +3259,13 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
             if (jFileChooser1.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
                 if (jFileChooser1.getSelectedFile() != null) {
                     opj.backup(jFileChooser1.getSelectedFile().getAbsolutePath() + " " + LocalDate.now() + ".bak");
-                    JOptionPane.showMessageDialog(this, utils.addStyle("Back up succes "), "succes",
-                            JOptionPane.INFORMATION_MESSAGE);
+                    showMessage("Back up succes ", "succes");
                 }
             } else {
-                JOptionPane.showMessageDialog(this, utils.addStyle("Back up faild "), "faild",
-                        JOptionPane.WARNING_MESSAGE);
+                showMessage("Back up faild ", "faild");
             }
         } catch (SQLException ex) {
-            Logger.getLogger(mainform.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(this, utils.addStyle(ex.getLocalizedMessage()), "exception", JOptionPane.INFORMATION_MESSAGE);
+            showExceptionAndLog(ex);
         }
     }//GEN-LAST:event_jButton_DoBackActionPerformed
 
@@ -3348,8 +3290,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
             ((DefaultTableModel) jTable_stock.getModel()).setRowCount(0);
             combox_fill(jComboBox_stock_Pros);
         } catch (DatabaseException ex) {
-            Logger.getLogger(mainform.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(this, utils.addStyle(ex.getLocalizedMessage()), "exception", JOptionPane.INFORMATION_MESSAGE);
+            showExceptionAndLog(ex);
         }
     }//GEN-LAST:event_jButton_Stock_openerActionPerformed
 
@@ -3367,8 +3308,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
                 }
             }
         } catch (DatabaseException ex) {
-            Logger.getLogger(mainform.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(this, utils.addStyle(ex.getLocalizedMessage()), "exception", JOptionPane.INFORMATION_MESSAGE);
+            showExceptionAndLog(ex);
         }
     }//GEN-LAST:event_jComboBox_stock_ProsItemStateChanged
 
@@ -3396,8 +3336,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
         try {
             combox_fill(jComboBox_statistics_products);
         } catch (DatabaseException ex) {
-            Logger.getLogger(mainform.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(this, utils.addStyle(ex.getLocalizedMessage()), "exception", JOptionPane.INFORMATION_MESSAGE);
+            showExceptionAndLog(ex);
         }
     }//GEN-LAST:event_jButton_Statics_openerActionPerformed
 
@@ -3411,8 +3350,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
         try {
             combox_fill(jComboBox_youm_products);
         } catch (DatabaseException ex) {
-            System.getLogger(mainform.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
-            JOptionPane.showMessageDialog(this, utils.addStyle(ex.getLocalizedMessage()), "exception", JOptionPane.INFORMATION_MESSAGE);
+            showExceptionAndLog(ex);
         }
     }//GEN-LAST:event_jButton_youm_openerActionPerformed
 
@@ -3442,8 +3380,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
                 }
             }
         } catch (DatabaseException ex) {
-            Logger.getLogger(mainform.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(this, utils.addStyle(ex.getLocalizedMessage()), "exception", JOptionPane.INFORMATION_MESSAGE);
+            showExceptionAndLog(ex);
         }
     }//GEN-LAST:event_jButton_youm_searchActionPerformed
 
@@ -3453,7 +3390,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
             saveConfig();
             System.exit(NORMAL);
         } catch (BusinessException ex) {
-            JOptionPane.showMessageDialog(this, utils.addStyle(ex.getLocalizedMessage()), "exception", JOptionPane.INFORMATION_MESSAGE);
+            showExceptionAndLog(ex);
         }
     }//GEN-LAST:event_formWindowClosing
 
@@ -3473,17 +3410,13 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
                         jButton_youm_search.doClick();
                     }
                 } else {
-                    JOptionPane.showMessageDialog(this, utils.addStyle(" يجب اختيار بيان من الجدول "), "إنتبه",
-                            JOptionPane.INFORMATION_MESSAGE);
+                    showMessage(" يجب اختيار بيان من الجدول ", "إنتبه");
                 }
             } else {
-                JOptionPane.showMessageDialog(this, utils.addStyle("لا يمكن اجراء العمليه "), "إنتبه", JOptionPane.INFORMATION_MESSAGE);
+                showMessage("لا يمكن اجراء العمليه ", "إنتبه");
             }
-        } catch (DatabaseException ex) {
-            Logger.getLogger(mainform.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(this, utils.addStyle(ex.getLocalizedMessage()), "exception", JOptionPane.INFORMATION_MESSAGE);
-        } catch (BusinessException ex) {
-            JOptionPane.showMessageDialog(this, utils.addStyle(ex.getLocalizedMessage()), "exception", JOptionPane.INFORMATION_MESSAGE);
+        } catch (DatabaseException | BusinessException ex) {
+            showExceptionAndLog(ex);
         }
     }//GEN-LAST:event_jButton_youm_refundActionPerformed
 
@@ -3505,17 +3438,12 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
                 this.setEnabled(true);
                 fill_storage_table();
                 SingleEdit.dispose();
-                JOptionPane.showMessageDialog(this, utils.addStyle(" تم تعديل البيانات بنجاح  "), "إنتبه",
-                        JOptionPane.INFORMATION_MESSAGE);
+                showMessage(" تم تعديل البيانات بنجاح  ", "إنتبه");
             } else {
-                JOptionPane.showMessageDialog(this, utils.addStyle("برجاء ادخال البيانات صحيحه "), "إنتبه",
-                        JOptionPane.INFORMATION_MESSAGE);
+                showMessage("برجاء ادخال البيانات صحيحه ", "إنتبه");
             }
-        } catch (DatabaseException ex) {
-            Logger.getLogger(mainform.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(SingleEdit, utils.addStyle(ex.getLocalizedMessage()), "exception", JOptionPane.INFORMATION_MESSAGE);
-        } catch (BusinessException ex) {
-            JOptionPane.showMessageDialog(SingleEdit, utils.addStyle(ex.getLocalizedMessage()), "exception", JOptionPane.INFORMATION_MESSAGE);
+        } catch (DatabaseException | BusinessException ex) {
+            showExceptionAndLog(ex);
         }
     }//GEN-LAST:event_jButton_E_EditActionPerformed
 
@@ -3604,11 +3532,8 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
                             .getValueAt(jTable_storage.getSelectedRow(), 6));
                 }
             }
-        } catch (DatabaseException ex) {
-            Logger.getLogger(mainform.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(this, utils.addStyle(ex.getLocalizedMessage()), "exception", JOptionPane.INFORMATION_MESSAGE);
-        } catch (BusinessException ex) {
-            JOptionPane.showMessageDialog(this, utils.addStyle(ex.getLocalizedMessage()), "exception", JOptionPane.INFORMATION_MESSAGE);
+        } catch (DatabaseException | BusinessException ex) {
+            showExceptionAndLog(ex);
         }
     }//GEN-LAST:event_jTable_storageMouseReleased
 
@@ -3676,7 +3601,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
             saveConfig();
             jLabel_Ticket10x10Counter.setText("" + tick10x10);
         } catch (BusinessException ex) {
-            JOptionPane.showMessageDialog(this, utils.addStyle(ex.getLocalizedMessage()), "exception", JOptionPane.INFORMATION_MESSAGE);
+            showExceptionAndLog(ex);
         }
     }//GEN-LAST:event_jButton_Reset_TicketCount10x10ActionPerformed
 
@@ -3739,12 +3664,9 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
         evt.getID();
         try {
             excelManager.stockExcel(storageController.getAllStock());
-            JOptionPane.showMessageDialog(this, utils.addStyle("please print the Execl"), "Done", JOptionPane.INFORMATION_MESSAGE);
-        } catch (DatabaseException ex) {
-            Logger.getLogger(mainform.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(this, utils.addStyle(ex.getLocalizedMessage()), "exception", JOptionPane.INFORMATION_MESSAGE);
-        } catch (BusinessException ex) {
-            JOptionPane.showMessageDialog(this, utils.addStyle(ex.getLocalizedMessage()), "exception", JOptionPane.INFORMATION_MESSAGE);
+            showMessage("please print the Execl", "Done");
+        } catch (DatabaseException | BusinessException ex) {
+            showExceptionAndLog(ex);
         }
     }//GEN-LAST:event_jButton_stock_createExclActionPerformed
 
@@ -3755,7 +3677,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
             incTicketCounters();
             this.jTextField_storage_coneNumber.requestFocusInWindow();
         } catch (BusinessException ex) {
-            JOptionPane.showMessageDialog(this, utils.addStyle(ex.getLocalizedMessage()), "exception", JOptionPane.INFORMATION_MESSAGE);
+            showExceptionAndLog(ex);
         }
     }//GEN-LAST:event_jButton_storage_RePrintLastTicketActionPerformed
 
@@ -3769,8 +3691,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
                 model.addRow(new Object[]{client.getId(), client.getName()});
             }
         } catch (DatabaseException ex) {
-            Logger.getLogger(mainform.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(this, utils.addStyle(ex.getLocalizedMessage()), "exception", JOptionPane.INFORMATION_MESSAGE);
+            showExceptionAndLog(ex);
         }
     }//GEN-LAST:event_jButton_youm_getClientsActionPerformed
 
@@ -3820,9 +3741,9 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
                     System.getProperty("user.dir") + "\\Temp\\report.xlsx")) {
                 workbook.write(fileOut);
             }
-            JOptionPane.showMessageDialog(this, utils.addStyle("please print the Execl"), "Done", JOptionPane.INFORMATION_MESSAGE);
+            showMessage("please print the Execl", "Done");
         } catch (IOException ex) {
-            JOptionPane.showMessageDialog(this, utils.addStyle(ex.getLocalizedMessage()), "exception", JOptionPane.INFORMATION_MESSAGE);
+            showExceptionAndLog(ex);
         }
     }//GEN-LAST:event_jButton_youm_createExcelActionPerformed
 
@@ -3831,10 +3752,10 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
             if (evt.getClickCount() == 3) {
                 TableModel model = jTable_yumia.getModel();
                 String temp = exportController.getDetailsForOrder(Integer.parseInt(model.getValueAt(jTable_yumia.getSelectedRow(), 6).toString()));
-                JOptionPane.showMessageDialog(this, temp, "Details", JOptionPane.INFORMATION_MESSAGE);
+                showMessage(temp, "Exported Pallets");
             }
         } catch (DatabaseException ex) {
-            JOptionPane.showMessageDialog(this, utils.addStyle(ex.getLocalizedMessage()), "exception", JOptionPane.INFORMATION_MESSAGE);
+            showExceptionAndLog(ex);
         }
 
     }//GEN-LAST:event_jTable_yumiaMouseReleased
@@ -3865,16 +3786,10 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
                 Product p = jComboBox_statistics_products.getSelectedItem() != null ? (Product) jComboBox_statistics_products.getSelectedItem() : null;
                 List<String[]> statistics = exportController.getstatistics(date1, date2, p);
                 if (excelManager.staticsticsExcel(statistics, date1, date2)) {
-
-                    JOptionPane.showMessageDialog(this, utils.addStyle("please print the Execl"), "Done",
-                            JOptionPane.INFORMATION_MESSAGE);
+                    showMessage("please print the Execl", "Done");
                 }
-
-            } catch (DatabaseException ex) {
-                JOptionPane.showMessageDialog(this, utils.addStyle(ex.getLocalizedMessage()), "exception", JOptionPane.INFORMATION_MESSAGE);
-                Logger.getLogger(mainform.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (BusinessException ex) {
-                JOptionPane.showMessageDialog(this, utils.addStyle(ex.getLocalizedMessage()), "exception", JOptionPane.INFORMATION_MESSAGE);
+            } catch (DatabaseException | BusinessException ex) {
+                showExceptionAndLog(ex);
             }
         }
     }//GEN-LAST:event_jButton_statistics_createExclActionPerformed
@@ -3884,11 +3799,8 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
         try {
             fill_Table_rep_select();
             jLabel_Order_num.setText(!jCheckBox_rep_wzn.isSelected() ? "عدد الشكاير" : "الوزن المطلوب");
-        } catch (DatabaseException ex) {
-            Logger.getLogger(mainform.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(this, utils.addStyle(ex.getLocalizedMessage()), "exception", JOptionPane.INFORMATION_MESSAGE);
-        } catch (BusinessException ex) {
-            JOptionPane.showMessageDialog(this, utils.addStyle(ex.getLocalizedMessage()), "exception", JOptionPane.INFORMATION_MESSAGE);
+        } catch (DatabaseException | BusinessException ex) {
+            showExceptionAndLog(ex);
         }
     }//GEN-LAST:event_jCheckBox_rep_wznActionPerformed
 
@@ -3906,8 +3818,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
             }
             combox_fill_with(jComboBox_storage_products, jTextField_storage_SearchProducts.getText());
         } catch (DatabaseException ex) {
-            Logger.getLogger(mainform.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(this, utils.addStyle(ex.getLocalizedMessage()), "exception", JOptionPane.INFORMATION_MESSAGE);
+            showExceptionAndLog(ex);
         }
     }//GEN-LAST:event_jTextField_storage_SearchProductsKeyTyped
 
@@ -3959,8 +3870,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
                 fill_machine();
             }
         } catch (DatabaseException ex) {
-            Logger.getLogger(mainform.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(this, utils.addStyle(ex.getLocalizedMessage()), "exception", JOptionPane.INFORMATION_MESSAGE);
+            showExceptionAndLog(ex);
         }
     }//GEN-LAST:event_jTabbedPane_settingsMouseClicked
 
@@ -3968,8 +3878,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
         try {
             readConfig();
         } catch (BusinessException ex) {
-            Logger.getLogger(mainform.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(this, utils.addStyle(ex.getLocalizedMessage()), "exception", JOptionPane.INFORMATION_MESSAGE);
+            showExceptionAndLog(ex);
         }
     }//GEN-LAST:event_jButton_set_reloadSettingFileActionPerformed
 
@@ -3993,8 +3902,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
                 jComboBox_mach_pros.setSelectedIndex(-1);
             }
         } catch (DatabaseException | BusinessException ex) {
-            Logger.getLogger(mainform.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(this, utils.addStyle(ex.getLocalizedMessage()), "exception", JOptionPane.INFORMATION_MESSAGE);
+            showExceptionAndLog(ex);
         }
     }//GEN-LAST:event_jButton_mach_addMachActionPerformed
 
@@ -4018,23 +3926,19 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
             try {
                 if (machineController.removeMachine((int) jTable_machines.getModel().getValueAt(jTable_machines.getSelectedRow(), 0))) {
 
-                    JOptionPane.showMessageDialog(this, utils.addStyle("تم الحذف  بنجاح "), "ناجح",
-                            JOptionPane.INFORMATION_MESSAGE);
+                    showMessage("تم الحذف  بنجاح ", "ناجح");
                     fill_machine();
                     jTextField_mach_MName.setText("");
                     jTextField_mach_lot.setText("");
                     jComboBox_mach_pros.setSelectedIndex(-1);
                 } else {
-                    JOptionPane.showMessageDialog(this, utils.addStyle("لا يمكن حذف هذا الصنف "), "إنتبه",
-                            JOptionPane.INFORMATION_MESSAGE);
+                    showMessage("لا يمكن حذف هذا الصنف ", "إنتبه");
                 }
             } catch (DatabaseException ex) {
-                Logger.getLogger(mainform.class.getName()).log(Level.SEVERE, null, ex);
-                JOptionPane.showMessageDialog(this, utils.addStyle(ex.getLocalizedMessage()), "exception", JOptionPane.INFORMATION_MESSAGE);
+                showExceptionAndLog(ex);
             }
         } else {
-            JOptionPane.showMessageDialog(this, utils.addStyle(" برجاء أختيار من الجدول أولا"), "إنتبه",
-                    JOptionPane.INFORMATION_MESSAGE);
+            showMessage(" برجاء أختيار من الجدول أولا", "إنتبه");
         }
     }//GEN-LAST:event_jButton_mach_DeleteActionPerformed
 
@@ -4072,7 +3976,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
                 jTextField_storage_palletNumber.setText("");
             }
         } catch (DatabaseException ex) {
-            JOptionPane.showMessageDialog(this, utils.addStyle(ex.getLocalizedMessage()), "exception", JOptionPane.INFORMATION_MESSAGE);
+            showExceptionAndLog(ex);
         }
     }//GEN-LAST:event_jTable_machinesMouseClicked
 
@@ -4086,8 +3990,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
             }
             combox_fill_with(jComboBox_rep_Pros, jTextField_Ezn_Search_pros.getText());
         } catch (DatabaseException ex) {
-            Logger.getLogger(mainform.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(this, utils.addStyle(ex.getLocalizedMessage()), "exception", JOptionPane.INFORMATION_MESSAGE);
+            showExceptionAndLog(ex);
         }
     }//GEN-LAST:event_jTextField_Ezn_Search_prosKeyTyped
 
@@ -4098,8 +4001,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
             saveConfig();
             readConfig();
         } catch (BusinessException ex) {
-            Logger.getLogger(mainform.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(this, utils.addStyle(ex.getLocalizedMessage()), "exception", JOptionPane.INFORMATION_MESSAGE);
+            showExceptionAndLog(ex);
         }
     }//GEN-LAST:event_jButton_Settings_openerActionPerformed
 
@@ -4113,8 +4015,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
             }
             combox_fill_with(jComboBox_stock_Pros, jTextField_stock_SearchProducts.getText());
         } catch (DatabaseException ex) {
-            Logger.getLogger(mainform.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(this, utils.addStyle(ex.getLocalizedMessage()), "exception", JOptionPane.INFORMATION_MESSAGE);
+            showExceptionAndLog(ex);
         }
     }//GEN-LAST:event_jTextField_stock_SearchProductsKeyTyped
 
@@ -4127,8 +4028,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
                     printServices, printServices[0])).getName();
             saveConfig();
         } catch (BusinessException ex) {
-            Logger.getLogger(mainform.class.getName()).log(Level.SEVERE, null, ex);
-            showError(ex.getLocalizedMessage());
+            showExceptionAndLog(ex);
         }
     }//GEN-LAST:event_jButton_set_TicketPrinterActionPerformed
 
@@ -4142,8 +4042,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
             }
             combox_fill_with(jComboBox_statistics_products, jTextField_statistics_Search_pros.getText());
         } catch (DatabaseException ex) {
-            Logger.getLogger(mainform.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(this, utils.addStyle(ex.getLocalizedMessage()), "exception", JOptionPane.INFORMATION_MESSAGE);
+            showExceptionAndLog(ex);
         }
     }//GEN-LAST:event_jTextField_statistics_Search_prosKeyTyped
 
@@ -4157,8 +4056,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
             }
             combox_fill_with(jComboBox_youm_products, jTextField_youm_Search_pros.getText());
         } catch (DatabaseException ex) {
-            Logger.getLogger(mainform.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(this, utils.addStyle(ex.getLocalizedMessage()), "exception", JOptionPane.INFORMATION_MESSAGE);
+            showExceptionAndLog(ex);
         }
     }//GEN-LAST:event_jTextField_youm_Search_prosKeyTyped
 
@@ -4237,7 +4135,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
             );
 
         } catch (BusinessException e) {
-            showMessage(e.getMessage());
+            showExceptionAndLog(e);
             return null;
         }
 
@@ -4283,12 +4181,23 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
         }
     }
 
-    private void showError(String msg) {
-        JOptionPane.showMessageDialog(this, utils.addStyle(msg), "exception", JOptionPane.WARNING_MESSAGE);
+    private void showError(String msg, String title) {
+        JOptionPane.showMessageDialog(this, utils.addStyle(msg), title, JOptionPane.WARNING_MESSAGE);
     }
 
-    private void showMessage(String msg) {
-        JOptionPane.showMessageDialog(this, utils.addStyle(msg), "Info", JOptionPane.INFORMATION_MESSAGE);
+    private void showMessage(String msg, String title) {
+        JOptionPane.showMessageDialog(this, utils.addStyle(msg), title, JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    private void showExceptionAndLog(Exception ex) {
+        if (!(ex instanceof BusinessException)) {
+            Logger.getLogger(mainform.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        if (ex instanceof SQLException) {
+            showError(ex.getLocalizedMessage(), "SQL Exception");
+        } else {
+            showMessage(ex.getLocalizedMessage(), "Exception");
+        }
     }
 
     private void showMessageInlable(boolean red) {
@@ -4538,8 +4447,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
                 jComboBox_rep_palletsNrep.removeAllItems();
             }
         } catch (DatabaseException ex) {
-            Logger.getLogger(mainform.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(this, utils.addStyle(ex.getLocalizedMessage()), "exception", JOptionPane.INFORMATION_MESSAGE);
+            showExceptionAndLog(ex);
         }
     }
 
@@ -4563,9 +4471,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
                 }
                 jTextField_statis_tot.setText(utils.ToDoubleArabic(tot));
             } catch (DatabaseException ex) {
-                Logger.getLogger(mainform.class
-                        .getName()).log(Level.SEVERE, null, ex);
-                JOptionPane.showMessageDialog(this, utils.addStyle(ex.getLocalizedMessage()), "exception", JOptionPane.INFORMATION_MESSAGE);
+                showExceptionAndLog(ex);
             }
 
         }
@@ -4709,7 +4615,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
                 new mainform().setVisible(true);
             } catch (BusinessException | DatabaseException | SQLException ex) {
                 Logger.getLogger(mainform.class.getName()).log(Level.SEVERE, null, ex);
-                JOptionPane.showMessageDialog(null, ex.getLocalizedMessage(), "إنتبه", JOptionPane.PLAIN_MESSAGE);
+                JOptionPane.showMessageDialog(null, utils.addStyle(ex.getLocalizedMessage()), "إنتبه", JOptionPane.PLAIN_MESSAGE);
                 System.exit(NORMAL);
             }
         });
