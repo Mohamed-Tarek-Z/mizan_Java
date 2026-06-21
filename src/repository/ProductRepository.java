@@ -20,11 +20,13 @@ public class ProductRepository {
         this.dbConnection = dbConnection;
     }
 
-    public List<Product> getProducts() throws DatabaseException {
+    
+
+    public List<Product> getAvailableStockProductsLike(String subOfName) throws DatabaseException {
         try {
             List<Product> products = new ArrayList<>();
 
-            ResultSet rs = dbConnection.dataRead("pro_id, pro_name, weight_of_con, Color, IsBox", "products");
+            ResultSet rs = dbConnection.dataRead("p.*", "products p", "EXISTS (SELECT 1 FROM storage s WHERE s.pro_id = p.pro_id ) and pro_name like N'%" + subOfName.strip() + "%' order by p.pro_id;");
             while (rs.next()) {
                 products.add(new Product(rs.getInt("pro_id"), rs.getString("pro_name"), rs.getString("weight_of_con"), rs.getString("Color"), rs.getBoolean("IsBox")));
             }

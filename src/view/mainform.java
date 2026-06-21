@@ -70,7 +70,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
 
     private short tick10x10;
     private int BagMax = 2, repDiff;
-    private final String Version = "V 3.3";
+    private final String Version = "V 3.5";
     private String ticketPrinterName;
 
     private long lastInputTime;
@@ -3288,7 +3288,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
         try {
             open_panel(stock_panel);
             ((DefaultTableModel) jTable_stock.getModel()).setRowCount(0);
-            combox_fill(jComboBox_stock_Pros);
+            combox_fill_with(jComboBox_stock_Pros, productController.getAvailableStockProductsLike(""));
         } catch (DatabaseException ex) {
             showExceptionAndLog(ex);
         }
@@ -3334,7 +3334,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
         jDateChooser_statis_fromDate.setCalendar(null);
         jDateChooser_statis_toDate.setCalendar(null);
         try {
-            combox_fill(jComboBox_statistics_products);
+            combox_fill_with(jComboBox_statistics_products, productController.getAvailableProductsLike(""));
         } catch (DatabaseException ex) {
             showExceptionAndLog(ex);
         }
@@ -3348,7 +3348,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
         jTable_youm_clinets.setAutoCreateRowSorter(true);
         jTable_yumia.setAutoCreateRowSorter(true);
         try {
-            combox_fill(jComboBox_youm_products);
+            combox_fill_with(jComboBox_youm_products, productController.getAvailableProductsLike(""));
         } catch (DatabaseException ex) {
             showExceptionAndLog(ex);
         }
@@ -3816,7 +3816,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
             if (evt.getKeyChar() == KeyEvent.VK_DELETE) {
                 jTextField_storage_SearchProducts.setText("");
             }
-            combox_fill_with(jComboBox_storage_products, jTextField_storage_SearchProducts.getText());
+            combox_fill_with(jComboBox_storage_products, productController.getAvailableProductsLike(jTextField_storage_SearchProducts.getText()));
         } catch (DatabaseException ex) {
             showExceptionAndLog(ex);
         }
@@ -3962,7 +3962,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
                     jCheckBox_storage_FreezeEmptyBagWight.setSelected(false);
                     jCheckBox_storage_MarkBag.setSelected(false);
                     jTextField_storage_SearchProducts.setText("");
-                    combox_fill_with(jComboBox_storage_products, jTextField_storage_SearchProducts.getText());
+                    combox_fill_with(jComboBox_storage_products, productController.getAvailableProductsLike(jTextField_storage_SearchProducts.getText()));
 
                     jComboBox_storage_products.setSelectedItem(productController.getProduct(
                             (String) jTable_machines.getModel().getValueAt(jTable_machines.getSelectedRow(), 2)));
@@ -3988,7 +3988,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
             if (evt.getKeyChar() == KeyEvent.VK_DELETE) {
                 jTextField_Ezn_Search_pros.setText("");
             }
-            combox_fill_with(jComboBox_rep_Pros, jTextField_Ezn_Search_pros.getText());
+            combox_fill_with(jComboBox_rep_Pros, productController.getAvailableProductsLike(jTextField_Ezn_Search_pros.getText()));
         } catch (DatabaseException ex) {
             showExceptionAndLog(ex);
         }
@@ -4013,7 +4013,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
             if (evt.getKeyChar() == KeyEvent.VK_DELETE) {
                 jTextField_stock_SearchProducts.setText("");
             }
-            combox_fill_with(jComboBox_stock_Pros, jTextField_stock_SearchProducts.getText());
+            combox_fill_with(jComboBox_stock_Pros, productController.getAvailableProductsLike(jTextField_stock_SearchProducts.getText()));
         } catch (DatabaseException ex) {
             showExceptionAndLog(ex);
         }
@@ -4040,7 +4040,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
             if (evt.getKeyChar() == KeyEvent.VK_DELETE) {
                 jTextField_statistics_Search_pros.setText("");
             }
-            combox_fill_with(jComboBox_statistics_products, jTextField_statistics_Search_pros.getText());
+            combox_fill_with(jComboBox_statistics_products, productController.getAvailableProductsLike(jTextField_statistics_Search_pros.getText()));
         } catch (DatabaseException ex) {
             showExceptionAndLog(ex);
         }
@@ -4054,7 +4054,8 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
             if (evt.getKeyChar() == KeyEvent.VK_DELETE) {
                 jTextField_youm_Search_pros.setText("");
             }
-            combox_fill_with(jComboBox_youm_products, jTextField_youm_Search_pros.getText());
+            combox_fill_with(jComboBox_youm_products,
+                    productController.getAvailableProductsLike(jTextField_youm_Search_pros.getText()));
         } catch (DatabaseException ex) {
             showExceptionAndLog(ex);
         }
@@ -4196,7 +4197,9 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
         if (ex instanceof SQLException) {
             showError(ex.getLocalizedMessage(), "SQL Exception");
         } else {
-            showMessage(ex.getLocalizedMessage(), "Exception");
+            if (ex != null) {
+                showMessage(ex.getLocalizedMessage(), "Exception");
+            }
         }
     }
 
@@ -4315,29 +4318,24 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
         clearTimer.restart();
     }
 
-    private void combox_fill(JComboBox<Product> Combo) throws DatabaseException {
+    private void combox_fill_with(JComboBox<Product> Combo, List<Product> products) throws DatabaseException {
         Combo.removeAllItems();
-        Combo.setModel(new DefaultComboBoxModel<>(productController.getAvailableProducts().toArray(Product[]::new)));
-        Combo.setSelectedIndex(-1);
-    }
-
-    private void combox_fill_with(JComboBox<Product> Combo, String term) throws DatabaseException {
-
-        Combo.removeAllItems();
-        Combo.setModel(new DefaultComboBoxModel<>(productController.getAvailableProductsLike(term).toArray(Product[]::new)));
+        Combo.setModel(new DefaultComboBoxModel<>(products.toArray(Product[]::new)));
         Combo.setSelectedIndex(-1);
     }
 
     private void populateCombos() throws DatabaseException {
-        this.combox_fill(jComboBox_storage_products);
-        this.combox_fill(jComboBox_rep_Pros);
-        this.combox_fill(jComboBox_E_O_proName);
-        this.combox_fill(jComboBox_E_proName);
-        this.combox_fill(jComboBox_ME_type);
-        this.combox_fill(jComboBox_stock_Pros);
-        this.combox_fill(jComboBox_mach_pros);
-        this.combox_fill(jComboBox_statistics_products);
-        this.combox_fill(jComboBox_youm_products);
+        List<Product> pros = productController.getAvailableProductsLike("");
+        List<Product> prosStock = productController.getAvailableStockProductsLike("");
+        this.combox_fill_with(jComboBox_storage_products, pros);
+        this.combox_fill_with(jComboBox_rep_Pros, prosStock);
+        this.combox_fill_with(jComboBox_E_O_proName, pros);
+        this.combox_fill_with(jComboBox_E_proName, pros);
+        this.combox_fill_with(jComboBox_ME_type, pros);
+        this.combox_fill_with(jComboBox_stock_Pros, prosStock);
+        this.combox_fill_with(jComboBox_mach_pros, pros);
+        this.combox_fill_with(jComboBox_statistics_products, pros);
+        this.combox_fill_with(jComboBox_youm_products, pros);
     }
 
     private void calc_net_weight() throws BusinessException {
@@ -4402,7 +4400,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
     private void fill_pro_table() throws DatabaseException {
         DefaultTableModel model = (DefaultTableModel) jTable_pro.getModel();
         model.setRowCount(0);
-        List<Product> pros = productController.getAvailableProducts();
+        List<Product> pros = productController.getAvailableProductsLike("");
         for (Product pro : pros) {
             model.addRow(new Object[]{pro.getId(), pro.getName(), utils.toArabicDigits(pro.getWeight_of_con()),
                 pro.getColor(), pro.isBox()});

@@ -12,9 +12,9 @@ public class ProductController {
     public ProductController(ProductRepository productRepo) {
         this.productRepo = productRepo;
     }
-
-    public List<Product> getAvailableProducts() throws DatabaseException {
-        return productRepo.getProducts();
+    
+    public List<Product> getAvailableStockProductsLike(String subOfName) throws DatabaseException {
+        return productRepo.getAvailableStockProductsLike(subOfName);
     }
 
     public List<Product> getAvailableProductsLike(String subOfName) throws DatabaseException {
