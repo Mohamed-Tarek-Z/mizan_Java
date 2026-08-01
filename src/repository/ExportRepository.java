@@ -10,7 +10,6 @@ import java.util.logging.Logger;
 import model.sqlcon;
 import model.Export;
 import model.Product;
-import utils.utils;
 
 public class ExportRepository {
 
@@ -84,11 +83,29 @@ public class ExportRepository {
         }
     }
 
-    public String getDetailsForOrder(int ordID) throws DatabaseException {
+    // this function wont work on old SQL Server you need SQl server 2017 or later
+    public String _getDetailsForOrder(int ordID) throws DatabaseException {
         try {
             String temp = "";
             ResultSet st = dbConnection.dataRead("STRING_AGG(CAST(pallet_numb AS VARCHAR), ',') AS packages, SUM(sums) AS total_sum",
                     "( SELECT DISTINCT pallet_numb, sum(num_of_con) as sums FROM export WHERE ord_id = " + ordID + " group by pallet_numb )t");
+            while (st.next()) {
+                temp = "pallets " + st.getString(1) + " Number Of cone " + st.getString(2) + "\n";
+            }
+            return temp;
+        } catch (SQLException ex) {
+            Logger.getLogger(ExportRepository.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
+            throw new DatabaseException("حدث خطأ أثناء حساب المخزن", ex);
+        }
+    }
+
+    // use this function for old SQL Server
+    public String getDetailsForOrder(int ordID) throws DatabaseException {
+        try {
+            String temp = "";
+            ResultSet st = dbConnection.st.executeQuery("WITH t AS ( SELECT pallet_numb, SUM(num_of_con) AS sums FROM export WHERE ord_id = " + ordID
+                    + " GROUP BY pallet_numb ) SELECT STUFF(( SELECT ',' + CAST(pallet_numb AS VARCHAR(20)) FROM t ORDER BY pallet_numb FOR XML PATH(''),"
+                    + " TYPE ).value('.', 'NVARCHAR(MAX)'), 1, 1, '') AS packages, SUM(sums) AS total_sum FROM t;");
             while (st.next()) {
                 temp = "pallets " + st.getString(1) + " Number Of cone " + st.getString(2) + "\n";
             }
