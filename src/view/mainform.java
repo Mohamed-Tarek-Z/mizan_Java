@@ -70,7 +70,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
 
     private short tick10x10;
     private int BagMax = 2, repDiff;
-    private final String Version = "V 3.5";
+    private final String Version = "V 3.8";
     private String ticketPrinterName;
 
     private long lastInputTime;
@@ -2778,10 +2778,9 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
                 if (jTextField_pro_name.getText().isBlank() || jTextField_Pros_conWight.getText().isBlank()) {
                     showMessage("برجاء أدخال البيانات كامله", "إنتبه");
                 } else {
-                    try {
-                        productController.getProduct(jTextField_pro_name.getText());
+                    if (productController.getProduct(jTextField_pro_name.getText()) != null) {
                         showMessage("هذا الصنف موجود بالفعل", "إنتبه");
-                    } catch (BusinessException ex) {
+                    } else {
                         productController.addNewProduct(jTextField_pro_name.getText(), jTextField_Pros_conWight.getText(),
                                 jTextField_Pros_color.getText(), jCheckBox_Pros_IsBox.isSelected());
                         jTextField_pro_name.setText("");
