@@ -1,7 +1,6 @@
 package utils;
 
 import exceptions.BusinessException;
-import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
@@ -17,7 +16,6 @@ import java.util.logging.Logger;
 import javax.print.attribute.standard.MediaPrintableArea;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
-
 
 public class PrinterManager {
 
@@ -60,38 +58,21 @@ public class PrinterManager {
      */
     public void printPanelToImage(JPanel panel) {
         SwingUtilities.invokeLater(() -> {
-            int dpi = 300; // High DPI for sharp quality
-            double scaleFactor = dpi / 72.0; // Convert from points to pixels
+            int printerDPI = 203;
+            int width = (int) (panel.getWidth() * printerDPI / 72.0);
+            int height = (int) (panel.getHeight() * printerDPI / 72.0);
+            double scaleX = width / (double) panel.getWidth();
+            double scaleY = height / (double) panel.getHeight();
+            double scale = Math.min(scaleX, scaleY);
 
-            // Scale up panel size for high-resolution rendering
-            int width = (int) (panel.getWidth() * scaleFactor);
-            int height = (int) (panel.getHeight() * scaleFactor);
-
-            // Create a high-resolution BufferedImage
-            BufferedImage panelImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB
-            );
-            Graphics2D g2dImage = panelImage.createGraphics();
-
-            // Apply high-quality rendering settings
-            g2dImage.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-            g2dImage.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_LCD_HRGB);
-            g2dImage.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
-            g2dImage.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
-            g2dImage.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS, RenderingHints.VALUE_FRACTIONALMETRICS_ON);
-
-            // Scale Graphics2D to high resolution
-            g2dImage.scale(scaleFactor, scaleFactor);
-
-            // Paint the panel onto the BufferedImage
-            panel.paint(g2dImage);
-            //panel.printAll(g2dImage);
-
-            g2dImage.dispose();
-            // Save image for debugging (optional) 
+            BufferedImage panelImage = new BufferedImage(width, height, BufferedImage.TYPE_BYTE_GRAY);
+            Graphics2D g2d = panelImage.createGraphics();
+            g2d.scale(scale, scale);
+            panel.printAll(g2d);
+            g2d.dispose();
             //ImageIO.write(panelImage, "PNG", new File(System.getProperty("user.dir") + "\\Temp\\debug_print.png"));
             new Thread(() -> {
                 try {
-
                     printImage(panelImage);
                 } catch (BusinessException ex) {
                     Logger.getLogger(PrinterManager.class.getName()).log(Level.SEVERE, null, ex);
@@ -108,20 +89,12 @@ public class PrinterManager {
             }
             PrinterJob job = PrinterJob.getPrinterJob();
             job.setPrintService(TicketPrinter);
-            job.setJobName("Print Ticket");
             job.setPrintable((graphics, pageFormat, pageIndex) -> {
                 if (pageIndex > 0) {
                     return Printable.NO_SUCH_PAGE;
                 }
                 Graphics2D g2d = (Graphics2D) graphics;
-                g2d.translate(pageFormat.getImageableX(), pageFormat.getImageableY());
-                //                int dpiForPrint = 203;
-                //                double pixelsPerCm = dpiForPrint / 2.54;
-                int widthPrint = (int) 760;//(10 * pixelsPerCm);
-                int heightPrint = (int) 486;//(10 * pixelsPerCm);
-
-                g2d.drawImage(image, 0, 1, widthPrint, heightPrint, Color.WHITE, null);
-
+                g2d.drawImage(image, 0, 0, 760, 486, null); // these number after many testing with 10 x 10 paper Size
                 return Printable.PAGE_EXISTS;
             });
             PrintRequestAttributeSet attributes = new HashPrintRequestAttributeSet();
@@ -131,7 +104,4 @@ public class PrinterManager {
             throw new BusinessException("error in panel Printing");
         }
     }
-
- 
-
 }
