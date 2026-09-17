@@ -8,8 +8,9 @@ import java.awt.print.Paper;
 import java.awt.print.Printable;
 import java.awt.print.PrinterException;
 import java.awt.print.PrinterJob;
-import javax.print.*;
 import java.util.Arrays;
+import javax.print.PrintService;
+import javax.print.PrintServiceLookup;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
@@ -17,7 +18,6 @@ public class PrinterManager {
 
     private final ErrorListener errorListener;
     private PrintService TicketPrinter;
-    private final int printerDPI = 203;
 
     public PrinterManager(ErrorListener errorListener) throws BusinessException {
         this.errorListener = errorListener;
@@ -58,7 +58,7 @@ public class PrinterManager {
     public void printPanelToImage(JPanel panel) {
         SwingUtilities.invokeLater(() -> {
             try {
-                panel.setSize(300, 350);
+                panel.setSize(300, 320);
                 if (TicketPrinter == null) {
                     throw new BusinessException(
                             utils.CheckConfigFileAndFolder().getProperty("ticketPrinterName", "Microsoft Print")
@@ -78,27 +78,24 @@ public class PrinterManager {
                 // Let the printer adjust the PageFormat if necessary
                 pageFormat = printerJob.validatePage(pageFormat);
 
-                printerJob.setPrintable(new Printable() {
-                    @Override
-                    public int print(Graphics graphics, PageFormat pf, int pageIndex) throws PrinterException {
-                        if (pageIndex > 0) {
-                            return NO_SUCH_PAGE;
-                        }
-                        Graphics2D g2 = (Graphics2D) graphics.create();
-                        try {
-
-                            double scaleX = pf.getImageableWidth() / panel.getWidth();
-                            double scaleY = pf.getImageableHeight() / panel.getHeight();
-
-                            g2.translate(pf.getImageableX()+5, pf.getImageableY());
-                            g2.scale(scaleX, scaleY);
-                            panel.printAll(g2);
-
-                        } finally {
-                            g2.dispose();
-                        }
-                        return PAGE_EXISTS;
+                printerJob.setPrintable((Graphics graphics, PageFormat pf, int pageIndex) -> {
+                    if (pageIndex > 0) {
+                        return Printable.NO_SUCH_PAGE;
                     }
+                    Graphics2D g2 = (Graphics2D) graphics.create();
+                    try {
+                        
+                        double scaleX = pf.getImageableWidth() / panel.getWidth();
+                        double scaleY = pf.getImageableHeight() / panel.getHeight();
+                        
+                        g2.translate(pf.getImageableX(), pf.getImageableY());
+                        g2.scale(scaleX, scaleY);
+                        panel.printAll(g2);
+                        
+                    } finally {
+                        g2.dispose();
+                    }
+                    return Printable.PAGE_EXISTS;
                 }, pageFormat);
                 new Thread(() -> {
                     try {
