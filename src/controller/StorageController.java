@@ -8,7 +8,7 @@ import java.util.Date;
 import java.util.List;
 import model.Product;
 import model.Bag;
-import utils.utils;
+import utils.NumberUtils;
 
 public class StorageController {
 
@@ -42,11 +42,11 @@ public class StorageController {
             String numOfCon, String palletNumber, boolean isUsed, String empty_pack) throws DatabaseException, BusinessException {
         Product product = productRepo.getProductByName(productName);
 
-        int[] storageCount = storageRepo.getStorageCount((int) utils.ToDoubleEnglish(palletNumber), utils.toEnglishDigits(lotNumber), product.getId());
+        int[] storageCount = storageRepo.getStorageCount((int) NumberUtils.ToDEng(palletNumber), NumberUtils.ToEng(lotNumber), product.getId());
         if (storageCount[0] == 0 && storageCount[1] == 0) {
-            Bag bag = new Bag(storage_id, product.getId(), utils.ToDoubleEnglish(totalWeight), utils.ToDoubleEnglish(netWeight),
-                    utils.toEnglishDigits(lotNumber), (int) utils.ToDoubleEnglish(numOfCon), (int) utils.ToDoubleEnglish(palletNumber),
-                    isUsed, new Date(), utils.ToDoubleEnglish(empty_pack));
+            Bag bag = new Bag(storage_id, product.getId(), NumberUtils.ToDEng(totalWeight), NumberUtils.ToDEng(netWeight),
+                    NumberUtils.ToEng(lotNumber), (int) NumberUtils.ToDEng(numOfCon), (int) NumberUtils.ToDEng(palletNumber),
+                    isUsed, new Date(), NumberUtils.ToDEng(empty_pack));
             storageRepo.editBag(bag);
             return true;
         } else if ((isUsed && storageCount[1] != 0) || (!isUsed && storageCount[0] != 0)) {
@@ -55,9 +55,9 @@ public class StorageController {
         } else if ((isUsed && storageCount[1] == 0 && storageCount[0] >= 20) || (!isUsed && storageCount[0] == 0 && storageCount[1] >= 20)) {
             throw new BusinessException("البالتة ممتلئة");
         } else if ((isUsed && storageCount[1] == 0 && storageCount[0] < 20) || (!isUsed && storageCount[0] == 0 && storageCount[1] < 20)) {
-            Bag bag = new Bag(storage_id, product.getId(), utils.ToDoubleEnglish(totalWeight), utils.ToDoubleEnglish(netWeight),
-                    utils.toEnglishDigits(lotNumber), (int) utils.ToDoubleEnglish(numOfCon), (int) utils.ToDoubleEnglish(palletNumber),
-                    isUsed, new Date(), utils.ToDoubleEnglish(empty_pack));
+            Bag bag = new Bag(storage_id, product.getId(), NumberUtils.ToDEng(totalWeight), NumberUtils.ToDEng(netWeight),
+                    NumberUtils.ToEng(lotNumber), (int) NumberUtils.ToDEng(numOfCon), (int) NumberUtils.ToDEng(palletNumber),
+                    isUsed, new Date(), NumberUtils.ToDEng(empty_pack));
             storageRepo.editBag(bag);
             return true;
         }
@@ -81,21 +81,21 @@ public class StorageController {
     }
 
     public List<Bag> getBagsToReport(int topNumber, String proName, String palletNumber, String lotNumber) throws DatabaseException {
-        return storageRepo.getBagsToReport(topNumber, proName, utils.toEnglishDigits(palletNumber), utils.toEnglishDigits(lotNumber));
+        return storageRepo.getBagsToReport(topNumber, proName, NumberUtils.ToEng(palletNumber), NumberUtils.ToEng(lotNumber));
     }
 
     public String calc_pallet_weight(String palletNumber, String lotNumber, String productName) throws DatabaseException {
-        return storageRepo.calc_pallet_weight((int) utils.ToDoubleEnglish(palletNumber), utils.toEnglishDigits(lotNumber), productName);
+        return storageRepo.calc_pallet_weight((int) NumberUtils.ToDEng(palletNumber), NumberUtils.ToEng(lotNumber), productName);
     }
 
     public int countpallet(int palletNumber, String lotNumber, String productName, boolean IsUsed) throws DatabaseException, BusinessException {
-        int[] count = storageRepo.getStorageCount(palletNumber, utils.toEnglishDigits(lotNumber),
+        int[] count = storageRepo.getStorageCount(palletNumber, NumberUtils.ToEng(lotNumber),
                 productRepo.getProductByName(productName).getId());
         return (IsUsed ? count[0] : count[1]);
     }
 
     public int countpallet(int palletNumber, String lotNumber, int productID, boolean IsUsed) throws DatabaseException, BusinessException {
-        int[] count = storageRepo.getStorageCount(palletNumber, utils.toEnglishDigits(lotNumber), productID);
+        int[] count = storageRepo.getStorageCount(palletNumber, NumberUtils.ToEng(lotNumber), productID);
         return (IsUsed ? count[0] : count[1]);
     }
 

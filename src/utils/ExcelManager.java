@@ -138,14 +138,14 @@ public class ExcelManager {
 
             cell = sheet.getRow(23).getCell(11);
             cell.setCellValue((product.isBox() ? "عدد الصناديق :          " : "عدد الشكاير :          ")
-                    + utils.toArabicDigits(bags.size() + "")
-                    + (product.isBox() ? " صندوق" : "  شيكاره") + "\n" + "الــــــــــــــــــــــوزن :       " + utils.ToDoubleArabic(TotalWeight) + "");
+                    + NumberUtils.ToArb(bags.size() + "")
+                    + (product.isBox() ? " صندوق" : "  شيكاره") + "\n" + "الــــــــــــــــــــــوزن :       " + NumberUtils.ToArb(TotalWeight) + "");
 
             create_excel_in_path(ClientName, workbook, excelBackupPath);
             return true;
 
         } catch (IOException ex) {
-            Logger.getLogger(utils.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
+            Logger.getLogger(ExcelManager.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
             throw new BusinessException("ملف غير موجود");
         }
     }
@@ -226,14 +226,14 @@ public class ExcelManager {
             }
             cell = sheet.getRow(23).getCell(16);
             cell.setCellValue((product.isBox() ? "عدد الصناديق :          " : "عدد الشكاير :          ")
-                    + utils.toArabicDigits(bags.size() + "")
-                    + (product.isBox() ? " صندوق" : "  شيكاره") + "\n" + "الــــــــــــــــــــــوزن :       " + utils.ToDoubleArabic(TotalWeight) + "");
+                    + NumberUtils.ToArb(bags.size() + "")
+                    + (product.isBox() ? " صندوق" : "  شيكاره") + "\n" + "الــــــــــــــــــــــوزن :       " + NumberUtils.ToArb(TotalWeight) + "");
 
             create_excel_in_path(ClientName, workbook, excelBackupPath);
 
             return true;
         } catch (IOException ex) {
-            Logger.getLogger(utils.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
+            Logger.getLogger(ExcelManager.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
             throw new BusinessException("ملف غير موجود");
         }
     }
@@ -332,13 +332,13 @@ public class ExcelManager {
             }
             cell = sheet.getRow(23).getCell(21);
             cell.setCellValue((product.isBox() ? "عدد الصناديق :          " : "عدد الشكاير :          ")
-                    + utils.toArabicDigits(bags.size() + "")
-                    + (product.isBox() ? " صندوق" : "  شيكاره") + "\n" + "الــــــــــــــــــــــوزن :       " + utils.ToDoubleArabic(TotalWeight) + "");
+                    + NumberUtils.ToArb(bags.size() + "")
+                    + (product.isBox() ? " صندوق" : "  شيكاره") + "\n" + "الــــــــــــــــــــــوزن :       " + NumberUtils.ToArb(TotalWeight) + "");
 
             create_excel_in_path(ClientName, workbook, excelBackupPath);
             return true;
         } catch (IOException ex) {
-            Logger.getLogger(utils.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
+            Logger.getLogger(ExcelManager.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
             throw new BusinessException("ملف غير موجود");
         }
 
@@ -463,13 +463,13 @@ public class ExcelManager {
                     }
                 }
                 String __1 = (fOrderProduct.isBox() ? "عدد الصناديق : " : "عدد الشكاير : ")
-                        + utils.toArabicDigits(fOrderBags.size() + "")
+                        + NumberUtils.ToArb(fOrderBags.size() + "")
                         + (fOrderProduct.isBox() ? " صندوق" : "  شيكاره");
-                String __2 = "الــوزن :  " + utils.ToDoubleArabic(fTotalWeight) + "";
+                String __2 = "الــوزن :  " + NumberUtils.ToArb(fTotalWeight) + "";
                 String __3 = (sOrderProduct.isBox() ? "عدد الصناديق : " : "عدد الشكاير : ")
-                        + utils.toArabicDigits(sOrderBags.size() + "")
+                        + NumberUtils.ToArb(sOrderBags.size() + "")
                         + (sOrderProduct.isBox() ? " صندوق" : "  شيكاره");
-                String __4 = "الــوزن :  " + utils.ToDoubleArabic(sTotalWeight) + "";
+                String __4 = "الــوزن :  " + NumberUtils.ToArb(sTotalWeight) + "";
                 cell = sheet.getRow(23).getCell(11);
                 cell.setCellValue(__1 + "  " + __2 + "\n" + __3 + " " + __4);
                 create_excel_in_path(ClientName, workbook, excelBackupPath);
@@ -477,7 +477,7 @@ public class ExcelManager {
             }
             return true;
         } catch (IOException ex) {
-            Logger.getLogger(utils.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
+            Logger.getLogger(ExcelManager.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
             throw new BusinessException("ملف غير موجود");
         }
 
@@ -533,7 +533,7 @@ public class ExcelManager {
                     } else {
                         cell.setCellStyle(baseStyle);
                     }
-                    cell.setCellValue(utils.toArabicDigits(row[1]));
+                    cell.setCellValue(NumberUtils.ToArb(row[1]));
 
                     cell = sheet.getRow(RowIndex).getCell(3);
                     if (row[4].equals("true")) {
@@ -541,7 +541,7 @@ public class ExcelManager {
                     } else {
                         cell.setCellStyle(baseStyle);
                     }
-                    cell.setCellValue(utils.toArabicDigits(row[2]));
+                    cell.setCellValue(NumberUtils.ToArb(row[2]));
 
                     cell = sheet.getRow(RowIndex).getCell(4);
                     if (row[4].equals("true")) {
@@ -549,10 +549,10 @@ public class ExcelManager {
                     } else {
                         cell.setCellStyle(baseStyle);
                     }
-                    cell.setCellValue(utils.toArabicDigits(row[3]));
+                    cell.setCellValue(NumberUtils.ToArb(row[3]));
 
 //                    cell = sheet.getRow(RowIndex).getCell(5);
-//                    cell.setCellValue(utils.toArabicDigits(row[4]));
+//                    cell.setCellValue(NumberUtils.ToArb(row[4]));
                     RowIndex++;
                 }
                 if (reg.size() > 1) {
@@ -567,7 +567,7 @@ public class ExcelManager {
             Desktop.getDesktop().open(new File(System.getProperty("user.dir") + "\\Temp\\"));
             return true;
         } catch (IOException ex) {
-            Logger.getLogger(utils.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
+            Logger.getLogger(ExcelManager.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
             throw new BusinessException("ملف غير موجود");
         }
     }
@@ -590,7 +590,7 @@ public class ExcelManager {
                 XSSFSheet sheet = workbook.getSheetAt(0);
                 Cell cell = sheet.getRow(1).getCell(1);
                 cell.setCellValue(
-                        "التاريـــخ من :   " + utils.toArabicDigits(date1) + "  إلى : " + utils.toArabicDigits(date2));
+                        "التاريـــخ من :   " + NumberUtils.ToArb(date1) + "  إلى : " + NumberUtils.ToArb(date2));
                 double prevTot = 0.0;
                 String prevName = "";
                 ArrayList<Integer> reg = new ArrayList<>();
@@ -610,7 +610,7 @@ public class ExcelManager {
                             sheet.addMergedRegion(new CellRangeAddress(reg.get(0), reg.get(reg.size() - 1), 1, 1));
                             sheet.addMergedRegion(new CellRangeAddress(reg.get(0), reg.get(reg.size() - 1), 5, 5));
                             cell = sheet.getRow(reg.get(0)).getCell(5);
-                            cell.setCellValue(utils.ToDoubleArabic(prevTot));
+                            cell.setCellValue(NumberUtils.ToArb(prevTot));
                         }
                         reg.clear();
                         reg.add(RowIndex);
@@ -623,13 +623,13 @@ public class ExcelManager {
                     }
 
                     cell = sheet.getRow(RowIndex).getCell(2);
-                    cell.setCellValue(utils.toArabicDigits(row[1]));
+                    cell.setCellValue(NumberUtils.ToArb(row[1]));
 
                     cell = sheet.getRow(RowIndex).getCell(3);
-                    cell.setCellValue(utils.toArabicDigits(row[2]));
+                    cell.setCellValue(NumberUtils.ToArb(row[2]));
 
                     cell = sheet.getRow(RowIndex).getCell(4);
-                    cell.setCellValue(utils.toArabicDigits(row[3]));
+                    cell.setCellValue(NumberUtils.ToArb(row[3]));
 
                     RowIndex++;
                 }
@@ -646,7 +646,7 @@ public class ExcelManager {
             Desktop.getDesktop().open(new File(System.getProperty("user.dir") + "\\Temp\\"));
             return true;
         } catch (IOException ex) {
-            Logger.getLogger(utils.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
+            Logger.getLogger(ExcelManager.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
             throw new BusinessException("ملف غير موجود");
         }
     }
@@ -740,14 +740,14 @@ public class ExcelManager {
                 }
             }
         } catch (IOException ex) {
-            Logger.getLogger(utils.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
+            Logger.getLogger(ExcelManager.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
             throw new BusinessException("ملف غير موجود");
         }
     }
 
     /**
-     * this method it used in creating ticket excel if used
-     * we already stopped using this method , and we may remove it soon
+     * this method it used in creating ticket excel if used we already stopped
+     * using this method , and we may remove it soon
      *
      * @param values the values to create excel with
      * @throws exceptions.BusinessException
@@ -772,7 +772,7 @@ public class ExcelManager {
                 }
             }
         } catch (IOException ex) {
-            Logger.getLogger(utils.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
+            Logger.getLogger(ExcelManager.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
             throw new BusinessException("ملف غير موجود");
         }
     }
