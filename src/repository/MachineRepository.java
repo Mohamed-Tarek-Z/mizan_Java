@@ -1,6 +1,5 @@
 package repository;
 
-import exceptions.BusinessException;
 import model.sqlcon;
 
 import exceptions.DatabaseException;
@@ -28,7 +27,6 @@ public class MachineRepository {
             while (rs.next()) {
                 machines.add(new Machine(rs.getInt("MachID"), rs.getString("MachName"), rs.getInt("ProductId"), rs.getString("Lot"), rs.getDate("UpdatedAt")));
             }
-
             return machines;
         } catch (SQLException ex) {
             Logger.getLogger(MachineRepository.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);

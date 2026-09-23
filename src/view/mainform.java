@@ -3109,7 +3109,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
                                             NumberUtils.ToArb(bag.getWeight()), NumberUtils.ToArb(bag.getLot()),
                                             NumberUtils.ToArb(bag.getPallet_numb() + ""), bag.isUsed()});
 
-                                        if (((DefaultComboBoxModel) jComboBox_rep_palletsNrep.getModel())
+                                        if (((DefaultComboBoxModel<String>) jComboBox_rep_palletsNrep.getModel())
                                                 .getIndexOf(NumberUtils.ToArb(bag.getPallet_numb() + "")) == -1) {
                                             jComboBox_rep_palletsNrep.addItem(NumberUtils.ToArb(bag.getPallet_numb() + ""));
                                         }
@@ -3200,7 +3200,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
                                             NumberUtils.ToArb(jTable_rep_preview.getRowCount() + 1 + ""), NumberUtils.ToArb(bag.getWeight()),
                                             NumberUtils.ToArb(bag.getLot()), NumberUtils.ToArb(bag.getPallet_numb() + ""), bag.isUsed()});
 
-                                        if (((DefaultComboBoxModel) jComboBox_rep_palletsNrep.getModel())
+                                        if (((DefaultComboBoxModel<String>) jComboBox_rep_palletsNrep.getModel())
                                                 .getIndexOf(NumberUtils.ToArb(bag.getPallet_numb() + "")) == -1) {
                                             jComboBox_rep_palletsNrep.addItem(NumberUtils.ToArb(bag.getPallet_numb() + ""));
                                         }
@@ -3920,7 +3920,6 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
     }//GEN-LAST:event_jTextField_mach_lotKeyTyped
 
     private void jButton_mach_DeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_mach_DeleteActionPerformed
-        // TODO add your handling code here:
         if (jTable_machines.getSelectedRow() > -1) {
             try {
                 if (machineController.removeMachine((int) jTable_machines.getModel().getValueAt(jTable_machines.getSelectedRow(), 0))) {
@@ -4227,7 +4226,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
             if ((!Character.isDigit(event.getKeyChar())
                     && (event.getKeyChar() == 'ز' || event.getKeyChar() == '.' || event.getKeyChar() == '٫'))
                     && !(textboxname.getText().contains(".") || textboxname.getText().contains("٫"))) {
-                event.setKeyChar(NumberUtils.ToArb(event.getKeyChar() + "").charAt(0));
+                event.setKeyChar('٫');
             } else {
                 if (Character.isDigit(event.getKeyChar())) {
                     if ((textboxname.getText().contains(".")

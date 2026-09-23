@@ -31,7 +31,8 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 public class ExcelManager {
 
     private final Locale arabicLocale = Locale.forLanguageTag("ar");
-    private final DateTimeFormatter arabicDateFormatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT).withLocale(arabicLocale).withDecimalStyle(DecimalStyle.of(arabicLocale));
+    private final DateTimeFormatter arabicDateFormatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT)
+            .withLocale(arabicLocale).withDecimalStyle(DecimalStyle.of(arabicLocale));
     private LocalDate date_now = LocalDate.now();
 
     private final String EXCEL_PATH = System.getProperty("user.dir") + "\\Temp\\myFile.xlsx";
@@ -39,9 +40,9 @@ public class ExcelManager {
     /**
      * this method it used in creating the header for the excels
      *
-     * @param ClientName String that contain Client name
+     * @param ClientName  String that contain Client name
      * @param productName String that contain product name
-     * @param lotNum String that contain Lot number
+     * @param lotNum      String that contain Lot number
      *
      * @return String that contain the right formatted header for excel file
      */
@@ -66,7 +67,7 @@ public class ExcelManager {
     /**
      * this method it used to apply HighLight Color to cell
      *
-     * @param cell Cell cell object to apply color to
+     * @param cell  Cell cell object to apply color to
      * @param style CellStyle object just init new CellStyle
      * @param color IndexedColors object select color from saved colors
      */
@@ -80,11 +81,11 @@ public class ExcelManager {
     /**
      * this method it used to creating a permit with 120 unit space
      *
-     * @param bags list< Bag > Bags of order
-     * @param ClientName String that contain Client name
-     * @param product Product object used in order
+     * @param bags            list< Bag > Bags of order
+     * @param ClientName      String that contain Client name
+     * @param product         Product object used in order
      * @param excelBackupPath String the shows the path for backup location
-     * @param highLight Boolean to check is highlight needed or not
+     * @param highLight       Boolean to check is highlight needed or not
      *
      * @return Boolean that indicates whether the file created or not
      * @throws exceptions.DatabaseException
@@ -139,7 +140,8 @@ public class ExcelManager {
             cell = sheet.getRow(23).getCell(11);
             cell.setCellValue((product.isBox() ? "عدد الصناديق :          " : "عدد الشكاير :          ")
                     + NumberUtils.ToArb(bags.size() + "")
-                    + (product.isBox() ? " صندوق" : "  شيكاره") + "\n" + "الــــــــــــــــــــــوزن :       " + NumberUtils.ToArb(TotalWeight) + "");
+                    + (product.isBox() ? " صندوق" : "  شيكاره") + "\n" + "الــــــــــــــــــــــوزن :       "
+                    + NumberUtils.ToArb(TotalWeight) + "");
 
             create_excel_in_path(ClientName, workbook, excelBackupPath);
             return true;
@@ -153,11 +155,11 @@ public class ExcelManager {
     /**
      * this method it used to creating a permit with 120 unit space
      *
-     * @param bags list< Bag > Bags of order
-     * @param ClientName String that contain Client name
-     * @param product Product object used in order
+     * @param bags            list< Bag > Bags of order
+     * @param ClientName      String that contain Client name
+     * @param product         Product object used in order
      * @param excelBackupPath String the shows the path for backup location
-     * @param highLight Boolean to check is highlight needed or not
+     * @param highLight       Boolean to check is highlight needed or not
      *
      * @return Boolean that indicates whether the file created or not
      * @throws exceptions.DatabaseException
@@ -227,7 +229,8 @@ public class ExcelManager {
             cell = sheet.getRow(23).getCell(16);
             cell.setCellValue((product.isBox() ? "عدد الصناديق :          " : "عدد الشكاير :          ")
                     + NumberUtils.ToArb(bags.size() + "")
-                    + (product.isBox() ? " صندوق" : "  شيكاره") + "\n" + "الــــــــــــــــــــــوزن :       " + NumberUtils.ToArb(TotalWeight) + "");
+                    + (product.isBox() ? " صندوق" : "  شيكاره") + "\n" + "الــــــــــــــــــــــوزن :       "
+                    + NumberUtils.ToArb(TotalWeight) + "");
 
             create_excel_in_path(ClientName, workbook, excelBackupPath);
 
@@ -241,11 +244,11 @@ public class ExcelManager {
     /**
      * this method it used to creating a permit with 120 unit space
      *
-     * @param bags list< Bag > Bags of order
-     * @param ClientName String that contain Client name
-     * @param product Product object used in order
+     * @param bags            list< Bag > Bags of order
+     * @param ClientName      String that contain Client name
+     * @param product         Product object used in order
      * @param excelBackupPath String the shows the path for backup location
-     * @param highLight Boolean to check is highlight needed or not
+     * @param highLight       Boolean to check is highlight needed or not
      *
      * @return Boolean that indicates whether the file created or not
      * @throws exceptions.DatabaseException
@@ -280,7 +283,7 @@ public class ExcelManager {
             strFormula1 = "IF(OR(SUM(X3:X22)>0,SUM(W3:W22)>0),(SUM(X3:X22))+(QUOTIENT(SUM(W3:W22),1000)),\" \")";
             cell.setCellFormula(strFormula1);
 
-            ///
+            //
             cell = sheet.getRow(22).getCell(25);
             strFormula1 = "IF(MOD(SUM(Z3:Z22),1000)>0,MOD(SUM(Z3:Z22),1000),IF(COUNTBLANK(Z3:Z22)=20,\" \",0))";
             cell.setCellFormula(strFormula1);
@@ -297,7 +300,7 @@ public class ExcelManager {
             strFormula1 = "IF(OR(SUM(AD3:AD22)>0,SUM(AC3:AC22)>0),(SUM(AD3:AD22))+(QUOTIENT(SUM(AC3:AC22),1000)),\" \")";
             cell.setCellFormula(strFormula1);
 
-            ///
+            //
             cell = sheet.getRow(26).getCell(21);
             strFormula1 = "MOD((SUM(A23,E23,H23,K23,N23,Q23,T23,W23,Z23,AC23)),1000)";
             cell.setCellFormula(strFormula1);
@@ -333,7 +336,8 @@ public class ExcelManager {
             cell = sheet.getRow(23).getCell(21);
             cell.setCellValue((product.isBox() ? "عدد الصناديق :          " : "عدد الشكاير :          ")
                     + NumberUtils.ToArb(bags.size() + "")
-                    + (product.isBox() ? " صندوق" : "  شيكاره") + "\n" + "الــــــــــــــــــــــوزن :       " + NumberUtils.ToArb(TotalWeight) + "");
+                    + (product.isBox() ? " صندوق" : "  شيكاره") + "\n" + "الــــــــــــــــــــــوزن :       "
+                    + NumberUtils.ToArb(TotalWeight) + "");
 
             create_excel_in_path(ClientName, workbook, excelBackupPath);
             return true;
@@ -347,16 +351,16 @@ public class ExcelManager {
     /**
      * this method it used to creating a permit with 120 unit space
      *
-     * @param fOrderBags list< Bag > Bags of First order
-     * @param sOrderBags list< Bag > Bags of Second order
-     * @param ClientName String that contain Client name
-     * @param fOrderProduct Product object used in First order
-     * @param sOrderProduct Product object used in Second order
+     * @param fOrderBags      list< Bag > Bags of First order
+     * @param sOrderBags      list< Bag > Bags of Second order
+     * @param ClientName      String that contain Client name
+     * @param fOrderProduct   Product object used in First order
+     * @param sOrderProduct   Product object used in Second order
      * @param excelBackupPath String the shows the path for backup location
-     * @param fHighLight Boolean to check is highlight for first permit needed
-     * or not
-     * @param sHighLight Boolean to check is highlight for second permit needed
-     * or not
+     * @param fHighLight      Boolean to check is highlight for first permit needed
+     *                        or not
+     * @param sHighLight      Boolean to check is highlight for second permit needed
+     *                        or not
      *
      * @return Boolean that indicates whether the file created or not
      * @throws exceptions.DatabaseException
@@ -364,8 +368,8 @@ public class ExcelManager {
      */
     public boolean excel_60_60(List<Bag> fOrderBags, List<Bag> sOrderBags,
             String ClientName, Product fOrderProduct, Product sOrderProduct,
-            String excelBackupPath, boolean fHighLight, boolean sHighLight
-    ) throws DatabaseException, BusinessException {
+            String excelBackupPath, boolean fHighLight, boolean sHighLight)
+            throws DatabaseException, BusinessException {
 
         try (FileInputStream file = new FileInputStream(new File("Donot_Change\\60-60.xlsx"))) {
             date_now = LocalDate.now();
@@ -510,8 +514,8 @@ public class ExcelManager {
 
                     if (RowIndex >= 6) {
                         CellCopyPolicy poli = new CellCopyPolicy();
-                        //poli.setCopyCellStyle(true);
-                        //poli.setCopyCellValue(true);
+                        // poli.setCopyCellStyle(true);
+                        // poli.setCopyCellValue(true);
                         sheet.copyRows(RowIndex - 1, RowIndex, RowIndex, poli);
                     }
                     if (prevname.equalsIgnoreCase(row[0])) {
@@ -550,9 +554,6 @@ public class ExcelManager {
                         cell.setCellStyle(baseStyle);
                     }
                     cell.setCellValue(NumberUtils.ToArb(row[3]));
-
-//                    cell = sheet.getRow(RowIndex).getCell(5);
-//                    cell.setCellValue(NumberUtils.ToArb(row[4]));
                     RowIndex++;
                 }
                 if (reg.size() > 1) {
@@ -565,6 +566,7 @@ public class ExcelManager {
                 workbook.write(fileOut);
             }
             Desktop.getDesktop().open(new File(System.getProperty("user.dir") + "\\Temp\\"));
+            workbook.close();
             return true;
         } catch (IOException ex) {
             Logger.getLogger(ExcelManager.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
@@ -576,8 +578,8 @@ public class ExcelManager {
      * this method it used to creating a Excel with stock
      *
      * @param statstic list< string[] > result of query from SQL
-     * @param date1 starting date
-     * @param date2 ending date
+     * @param date1    starting date
+     * @param date2    ending date
      * @return Boolean that indicates whether the file created or not
      * @throws exceptions.BusinessException
      */
@@ -644,6 +646,7 @@ public class ExcelManager {
                 workbook.write(fileOut);
             }
             Desktop.getDesktop().open(new File(System.getProperty("user.dir") + "\\Temp\\"));
+            workbook.close();
             return true;
         } catch (IOException ex) {
             Logger.getLogger(ExcelManager.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
@@ -655,7 +658,7 @@ public class ExcelManager {
      * this method it used to creating a permits and it setts formulas to the
      * last cell in column to calculate sum of the cells above
      *
-     * @param cell Cell object
+     * @param cell  Cell object
      * @param sheet XSSFSheet object
      */
     private void cell_functions(Cell cell, XSSFSheet sheet) {
@@ -711,19 +714,21 @@ public class ExcelManager {
     /**
      * this method it used to create excel in path with client and date
      *
-     * @param ClientName String with client name
-     * @param workbook XSSFWorkbook object
+     * @param ClientName      String with client name
+     * @param workbook        XSSFWorkbook object
      * @param excelBackupPath String with backup path
      *
      * @throws exceptions.DatabaseException
      * @throws exceptions.BusinessException
      */
-    private void create_excel_in_path(String ClientName, XSSFWorkbook workbook, String excelBackupPath) throws DatabaseException, BusinessException {
+    private void create_excel_in_path(String ClientName, XSSFWorkbook workbook, String excelBackupPath)
+            throws DatabaseException, BusinessException {
         try {
             date_now = LocalDate.now();
 
             Files.createDirectories(Paths.get(System.getProperty("user.dir") + "\\querys"));
-            File file = utils.NewName(System.getProperty("user.dir") + "\\querys\\" + ClientName + "~" + date_now + ".xlsx");
+            File file = utils
+                    .NewName(System.getProperty("user.dir") + "\\querys\\" + ClientName + "~" + date_now + ".xlsx");
             try (FileOutputStream outFile = new FileOutputStream(file)) {
                 try (workbook) {
                     workbook.write(outFile);
@@ -755,7 +760,8 @@ public class ExcelManager {
     public void excel_TicketR(ArrayList<String> values) throws BusinessException {
         try {
 
-            try (FileInputStream EX = new FileInputStream(new File("Donot_Change\\Ticket.xlsx")); XSSFWorkbook workbook = new XSSFWorkbook(EX)) {
+            try (FileInputStream EX = new FileInputStream(new File("Donot_Change\\Ticket.xlsx"));
+                    XSSFWorkbook workbook = new XSSFWorkbook(EX)) {
 
                 XSSFSheet sheet = workbook.getSheetAt(0);
 

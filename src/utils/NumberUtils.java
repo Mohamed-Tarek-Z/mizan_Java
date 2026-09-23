@@ -18,7 +18,7 @@ public final class NumberUtils {
     public static String ToEng(String input) {
 
         if (input == null || input.isBlank()) {
-            return "";
+            return " ";
         }
 
         StringBuilder text = new StringBuilder();
@@ -43,14 +43,6 @@ public final class NumberUtils {
             if (isThousandsSeparator(c)) {
                 continue;
             }
-
-            if (i + 1 < input.length()) {
-                if (c == 'ز' && isDigit(input.charAt(i + 1)) && !foundDecimal && foundDigit) {
-                    text.append('.');
-                    foundDecimal = true;
-                    continue;
-                }
-            }
             text.append(c);
         }
         return text.toString();
@@ -59,7 +51,7 @@ public final class NumberUtils {
     public static String ToArb(String input) {
 
         if (input == null || input.isBlank()) {
-            return "";
+            return " ";
         }
 
         StringBuilder text = new StringBuilder();
@@ -83,6 +75,13 @@ public final class NumberUtils {
             }
             if (isThousandsSeparator(c)) {
                 continue;
+            }
+            if (i + 1 < input.length()) {
+                if (c == 'ز' && isDigit(input.charAt(i + 1)) && !foundDecimal && foundDigit) {
+                    text.append('٫');
+                    foundDecimal = true;
+                    continue;
+                }
             }
             text.append(c);
         }
