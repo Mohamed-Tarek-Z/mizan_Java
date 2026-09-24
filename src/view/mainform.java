@@ -70,7 +70,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
 
     private short tick10x10;
     private int BagMax = 2, repDiff;
-    private final String Version = "V 3.8.7";
+    private final String Version = "V 3.8.9";
     private String ticketPrinterName;
 
     private long lastInputTime;
@@ -85,7 +85,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
     public void onError(Exception ex) {
         // Safely update UI here
         SwingUtilities.invokeLater(() -> {
-            showExceptionAndLog(ex);
+            showException(ex);
         });
     }
 
@@ -2602,7 +2602,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
             open_panel(products_panel);
             fill_pro_table();
         } catch (DatabaseException ex) {
-            showExceptionAndLog(ex);
+            showException(ex);
         }
     }//GEN-LAST:event_jButton_addPro_openerActionPerformed
 
@@ -2644,7 +2644,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
                 jTextField_storage_coneNumber.requestFocusInWindow();
             }
         } catch (DatabaseException ex) {
-            showExceptionAndLog(ex);
+            showException(ex);
         }
     }//GEN-LAST:event_jTextField_storage_palletNumberKeyTyped
 
@@ -2739,7 +2739,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
             fill_storage_table();
             showMessageInlable(false);
         } catch (DatabaseException ex) {
-            showExceptionAndLog(ex);
+            showException(ex);
         } catch (BusinessException ex) {
             showMessageInlable(true);
         }
@@ -2767,7 +2767,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
                 }
             }
         } catch (DatabaseException | BusinessException ex) {
-            showExceptionAndLog(ex);
+            showException(ex);
         }
     }//GEN-LAST:event_jButton_storage_delDataActionPerformed
 
@@ -2810,7 +2810,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
                 }
             }
         } catch (DatabaseException ex) {
-            showExceptionAndLog(ex);
+            showException(ex);
         }
     }//GEN-LAST:event_jButton_add_proActionPerformed
 
@@ -2836,7 +2836,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
             jCheckBox_Pros_IsBox.setSelected(model.getValueAt(jTable_pro.getSelectedRow(), 4).toString().equals("true"));
             pro_Table_SelectedID = Integer.parseInt(model.getValueAt(jTable_pro.getSelectedRow(), 0).toString());
         } catch (NumberFormatException e) {
-            showExceptionAndLog(e);
+            showException(e);
         }
     }//GEN-LAST:event_jTable_proMouseClicked
 
@@ -2855,7 +2855,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
                     showMessage("لا يمكن حذف هذا الصنف ", "إنتبه");
                 }
             } catch (DatabaseException | BusinessException ex) {
-                showExceptionAndLog(ex);
+                showException(ex);
             }
         } else {
             showMessage(" برجاء أختيار صنف من الجدول أولا", "إنتبه");
@@ -2887,7 +2887,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
                 calc_pallet_weight();
             }
         } catch (DatabaseException | BusinessException ex) {
-            showExceptionAndLog(ex);
+            showException(ex);
         }
     }//GEN-LAST:event_jComboBox_storage_productsItemStateChanged
 
@@ -2898,7 +2898,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
                 fill_Table_rep_select();
             }
         } catch (DatabaseException | BusinessException ex) {
-            showExceptionAndLog(ex);
+            showException(ex);
         }
     }//GEN-LAST:event_jComboBox_rep_ProsItemStateChanged
 
@@ -2919,7 +2919,9 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
 
                 if (JOptionPane.showConfirmDialog(this, utils.addStyle("سيتم التصدير للأكسل "), "تنبيه",
                         JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-                    String name = jTextField_rep_clientName.getText().split("تسليم")[0].strip();
+
+                    Client client = ClientNaming(jTextField_rep_clientName.getText().split("تسليم")[0].strip());
+                    boolean useNameFeild = jTextField_rep_clientName.getText().split("تسليم")[0].strip().equalsIgnoreCase(client.getName());
 
                     if (jTable_rep_preview.getRowCount() > 60 && jCheckBox_rep_2n1.isSelected()) {
                         showMessage("لا يمن عمل إذنين و عدد الشكائر أكثر من ٦٠ في الإذن الواحد", "إنتبه");
@@ -2949,10 +2951,11 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
                                 jFileChooser1.showOpenDialog(this);
                                 String excelBackupPath = jFileChooser1.getSelectedFile().getAbsolutePath();
                                 if (excelManager.excel_60_60(fOrderBags, orderBags,
-                                        jTextField_rep_clientName.getText(), typeFOrder, (Product) jComboBox_rep_Pros.getSelectedItem(),
+                                        useNameFeild ? jTextField_rep_clientName.getText() : client.getName(),
+                                        typeFOrder, (Product) jComboBox_rep_Pros.getSelectedItem(),
                                         excelBackupPath, highLightFirst, jCheckBox_rep_highLightMarked.isSelected())) {
-                                    accessDataBase(name, orderBags);
-                                    accessDataBase(name, fOrderBags);
+                                    accessDataBase(client, orderBags);
+                                    accessDataBase(client, fOrderBags);
 
                                     ((DefaultTableModel) jTable_rep_preview.getModel()).setRowCount(0);
                                     fOrderBags.clear();
@@ -2975,10 +2978,10 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
                         jFileChooser1.showOpenDialog(this);
                         String excelBackupPath = jFileChooser1.getSelectedFile().getAbsolutePath();
                         if (excelManager.excel_120(orderBags,
-                                jTextField_rep_clientName.getText(),
+                                useNameFeild ? jTextField_rep_clientName.getText() : client.getName(),
                                 (Product) jComboBox_rep_Pros.getSelectedItem(),
                                 excelBackupPath, jCheckBox_rep_highLightMarked.isSelected())) {
-                            accessDataBase(name, orderBags);
+                            accessDataBase(client, orderBags);
                             ((DefaultTableModel) jTable_rep_preview.getModel()).setRowCount(0);
 
                             jTextField_rep_clientName.setText("");
@@ -2996,10 +2999,10 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
                         jFileChooser1.showOpenDialog(this);
                         String excelBackupPath = jFileChooser1.getSelectedFile().getAbsolutePath();
                         if (excelManager.excel_160(orderBags,
-                                jTextField_rep_clientName.getText(),
+                                useNameFeild ? jTextField_rep_clientName.getText() : client.getName(),
                                 (Product) jComboBox_rep_Pros.getSelectedItem(),
                                 excelBackupPath, jCheckBox_rep_highLightMarked.isSelected())) {
-                            accessDataBase(name, orderBags);
+                            accessDataBase(client, orderBags);
                             ((DefaultTableModel) jTable_rep_preview.getModel()).setRowCount(0);
                             jTextField_rep_clientName.setText("");
                             jTextField_rep_numOfBag.setText("");
@@ -3015,10 +3018,10 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
                         jFileChooser1.showOpenDialog(this);
                         String excelBackupPath = jFileChooser1.getSelectedFile().getAbsolutePath();
                         if (excelManager.excel_200(orderBags,
-                                jTextField_rep_clientName.getText(),
+                                useNameFeild ? jTextField_rep_clientName.getText() : client.getName(),
                                 (Product) jComboBox_rep_Pros.getSelectedItem(),
                                 excelBackupPath, jCheckBox_rep_highLightMarked.isSelected())) {
-                            accessDataBase(name, orderBags);
+                            accessDataBase(client, orderBags);
                             ((DefaultTableModel) jTable_rep_preview.getModel()).setRowCount(0);
                             jTextField_rep_clientName.setText("");
                             jTextField_rep_numOfBag.setText("");
@@ -3036,7 +3039,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
                 showMessage(" تدخل البيانات كامله أولا", "إنتبه");
             }
         } catch (DatabaseException | BusinessException ex) {
-            showExceptionAndLog(ex);
+            showException(ex);
         }
     }//GEN-LAST:event_jButton_rep_printRepActionPerformed
 
@@ -3050,7 +3053,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
         try {
             fill_Table_rep_select();
         } catch (DatabaseException | BusinessException ex) {
-            showExceptionAndLog(ex);
+            showException(ex);
         }
     }//GEN-LAST:event_jTextField_rep_numOfBagKeyReleased
 
@@ -3240,7 +3243,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
                 showMessage("برجاء ادخال عدد الشكاير", "إنتبه");
             }
         } catch (DatabaseException ex) {
-            showExceptionAndLog(ex);
+            showException(ex);
         }
     }//GEN-LAST:event_jTable_rep_selectMouseClicked
 
@@ -3264,7 +3267,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
                 showMessage("Back up faild ", "faild");
             }
         } catch (SQLException ex) {
-            showExceptionAndLog(ex);
+            showException(ex);
         }
     }//GEN-LAST:event_jButton_DoBackActionPerformed
 
@@ -3289,7 +3292,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
             ((DefaultTableModel) jTable_stock.getModel()).setRowCount(0);
             combox_fill_with(jComboBox_stock_Pros, productController.getAvailableStockProductsLike(""));
         } catch (DatabaseException ex) {
-            showExceptionAndLog(ex);
+            showException(ex);
         }
     }//GEN-LAST:event_jButton_Stock_openerActionPerformed
 
@@ -3307,7 +3310,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
                 }
             }
         } catch (DatabaseException ex) {
-            showExceptionAndLog(ex);
+            showException(ex);
         }
     }//GEN-LAST:event_jComboBox_stock_ProsItemStateChanged
 
@@ -3335,7 +3338,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
         try {
             combox_fill_with(jComboBox_statistics_products, productController.getAvailableProductsLike(""));
         } catch (DatabaseException ex) {
-            showExceptionAndLog(ex);
+            showException(ex);
         }
     }//GEN-LAST:event_jButton_Statics_openerActionPerformed
 
@@ -3349,7 +3352,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
         try {
             combox_fill_with(jComboBox_youm_products, productController.getAvailableProductsLike(""));
         } catch (DatabaseException ex) {
-            showExceptionAndLog(ex);
+            showException(ex);
         }
     }//GEN-LAST:event_jButton_youm_openerActionPerformed
 
@@ -3379,7 +3382,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
                 }
             }
         } catch (DatabaseException ex) {
-            showExceptionAndLog(ex);
+            showException(ex);
         }
     }//GEN-LAST:event_jButton_youm_searchActionPerformed
 
@@ -3389,7 +3392,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
             saveConfig();
             System.exit(NORMAL);
         } catch (BusinessException ex) {
-            showExceptionAndLog(ex);
+            showException(ex);
         }
     }//GEN-LAST:event_formWindowClosing
 
@@ -3415,7 +3418,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
                 showMessage("لا يمكن اجراء العمليه ", "إنتبه");
             }
         } catch (DatabaseException | BusinessException ex) {
-            showExceptionAndLog(ex);
+            showException(ex);
         }
     }//GEN-LAST:event_jButton_youm_refundActionPerformed
 
@@ -3442,7 +3445,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
                 showMessage("برجاء ادخال البيانات صحيحه ", "إنتبه");
             }
         } catch (DatabaseException | BusinessException ex) {
-            showExceptionAndLog(ex);
+            showException(ex);
         }
     }//GEN-LAST:event_jButton_E_EditActionPerformed
 
@@ -3532,7 +3535,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
                 }
             }
         } catch (DatabaseException | BusinessException ex) {
-            showExceptionAndLog(ex);
+            showException(ex);
         }
     }//GEN-LAST:event_jTable_storageMouseReleased
 
@@ -3600,7 +3603,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
             saveConfig();
             jLabel_Ticket10x10Counter.setText("" + tick10x10);
         } catch (BusinessException ex) {
-            showExceptionAndLog(ex);
+            showException(ex);
         }
     }//GEN-LAST:event_jButton_Reset_TicketCount10x10ActionPerformed
 
@@ -3665,7 +3668,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
             excelManager.stockExcel(storageController.getAllStock());
             showMessage("please print the Execl", "Done");
         } catch (DatabaseException | BusinessException ex) {
-            showExceptionAndLog(ex);
+            showException(ex);
         }
     }//GEN-LAST:event_jButton_stock_createExclActionPerformed
 
@@ -3676,7 +3679,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
             incTicketCounters();
             this.jTextField_storage_coneNumber.requestFocusInWindow();
         } catch (BusinessException ex) {
-            showExceptionAndLog(ex);
+            showException(ex);
         }
     }//GEN-LAST:event_jButton_storage_RePrintLastTicketActionPerformed
 
@@ -3690,7 +3693,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
                 model.addRow(new Object[]{client.getId(), client.getName()});
             }
         } catch (DatabaseException ex) {
-            showExceptionAndLog(ex);
+            showException(ex);
         }
     }//GEN-LAST:event_jButton_youm_getClientsActionPerformed
 
@@ -3742,7 +3745,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
             }
             showMessage("please print the Execl", "Done");
         } catch (IOException ex) {
-            showExceptionAndLog(ex);
+            showException(ex);
         }
     }//GEN-LAST:event_jButton_youm_createExcelActionPerformed
 
@@ -3754,7 +3757,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
                 showMessage(temp, "Exported Pallets");
             }
         } catch (DatabaseException ex) {
-            showExceptionAndLog(ex);
+            showException(ex);
         }
 
     }//GEN-LAST:event_jTable_yumiaMouseReleased
@@ -3788,7 +3791,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
                     showMessage("please print the Execl", "Done");
                 }
             } catch (DatabaseException | BusinessException ex) {
-                showExceptionAndLog(ex);
+                showException(ex);
             }
         }
     }//GEN-LAST:event_jButton_statistics_createExclActionPerformed
@@ -3799,7 +3802,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
             fill_Table_rep_select();
             jLabel_Order_num.setText(!jCheckBox_rep_wzn.isSelected() ? "عدد الشكاير" : "الوزن المطلوب");
         } catch (DatabaseException | BusinessException ex) {
-            showExceptionAndLog(ex);
+            showException(ex);
         }
     }//GEN-LAST:event_jCheckBox_rep_wznActionPerformed
 
@@ -3817,7 +3820,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
             }
             combox_fill_with(jComboBox_storage_products, productController.getAvailableProductsLike(jTextField_storage_SearchProducts.getText()));
         } catch (DatabaseException ex) {
-            showExceptionAndLog(ex);
+            showException(ex);
         }
     }//GEN-LAST:event_jTextField_storage_SearchProductsKeyTyped
 
@@ -3869,7 +3872,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
                 fill_machine();
             }
         } catch (DatabaseException ex) {
-            showExceptionAndLog(ex);
+            showException(ex);
         }
     }//GEN-LAST:event_jTabbedPane_settingsMouseClicked
 
@@ -3877,7 +3880,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
         try {
             readConfig();
         } catch (BusinessException ex) {
-            showExceptionAndLog(ex);
+            showException(ex);
         }
     }//GEN-LAST:event_jButton_set_reloadSettingFileActionPerformed
 
@@ -3901,7 +3904,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
                 jComboBox_mach_pros.setSelectedIndex(-1);
             }
         } catch (DatabaseException | BusinessException ex) {
-            showExceptionAndLog(ex);
+            showException(ex);
         }
     }//GEN-LAST:event_jButton_mach_addMachActionPerformed
 
@@ -3933,7 +3936,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
                     showMessage("لا يمكن حذف هذا الصنف ", "إنتبه");
                 }
             } catch (DatabaseException ex) {
-                showExceptionAndLog(ex);
+                showException(ex);
             }
         } else {
             showMessage(" برجاء أختيار من الجدول أولا", "إنتبه");
@@ -3974,7 +3977,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
                 jTextField_storage_palletNumber.setText("");
             }
         } catch (DatabaseException ex) {
-            showExceptionAndLog(ex);
+            showException(ex);
         }
     }//GEN-LAST:event_jTable_machinesMouseClicked
 
@@ -3988,7 +3991,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
             }
             combox_fill_with(jComboBox_rep_Pros, productController.getAvailableProductsLike(jTextField_Ezn_Search_pros.getText()));
         } catch (DatabaseException ex) {
-            showExceptionAndLog(ex);
+            showException(ex);
         }
     }//GEN-LAST:event_jTextField_Ezn_Search_prosKeyTyped
 
@@ -3999,7 +4002,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
             saveConfig();
             readConfig();
         } catch (BusinessException ex) {
-            showExceptionAndLog(ex);
+            showException(ex);
         }
     }//GEN-LAST:event_jButton_Settings_openerActionPerformed
 
@@ -4013,7 +4016,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
             }
             combox_fill_with(jComboBox_stock_Pros, productController.getAvailableProductsLike(jTextField_stock_SearchProducts.getText()));
         } catch (DatabaseException ex) {
-            showExceptionAndLog(ex);
+            showException(ex);
         }
     }//GEN-LAST:event_jTextField_stock_SearchProductsKeyTyped
 
@@ -4026,7 +4029,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
                     printServices, printServices[0])).getName();
             saveConfig();
         } catch (BusinessException ex) {
-            showExceptionAndLog(ex);
+            showException(ex);
         }
     }//GEN-LAST:event_jButton_set_TicketPrinterActionPerformed
 
@@ -4040,7 +4043,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
             }
             combox_fill_with(jComboBox_statistics_products, productController.getAvailableProductsLike(jTextField_statistics_Search_pros.getText()));
         } catch (DatabaseException ex) {
-            showExceptionAndLog(ex);
+            showException(ex);
         }
     }//GEN-LAST:event_jTextField_statistics_Search_prosKeyTyped
 
@@ -4055,7 +4058,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
             combox_fill_with(jComboBox_youm_products,
                     productController.getAvailableProductsLike(jTextField_youm_Search_pros.getText()));
         } catch (DatabaseException ex) {
-            showExceptionAndLog(ex);
+            showException(ex);
         }
     }//GEN-LAST:event_jTextField_youm_Search_prosKeyTyped
 
@@ -4134,7 +4137,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
             );
 
         } catch (BusinessException e) {
-            showExceptionAndLog(e);
+            showException(e);
             return null;
         }
 
@@ -4188,10 +4191,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
         JOptionPane.showMessageDialog(this, utils.addStyle(msg), title, JOptionPane.INFORMATION_MESSAGE);
     }
 
-    private void showExceptionAndLog(Exception ex) {
-        if (!(ex instanceof BusinessException)) {
-            Logger.getLogger(mainform.class.getName()).log(Level.SEVERE, null, ex);
-        }
+    private void showException(Exception ex) {
         if (ex instanceof SQLException) {
             showError(ex.getLocalizedMessage(), "SQL Exception");
         } else {
@@ -4443,7 +4443,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
                 jComboBox_rep_palletsNrep.removeAllItems();
             }
         } catch (DatabaseException ex) {
-            showExceptionAndLog(ex);
+            showException(ex);
         }
     }
 
@@ -4467,26 +4467,56 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
                 }
                 jTextField_statis_tot.setText(NumberUtils.ToArb(tot));
             } catch (DatabaseException ex) {
-                showExceptionAndLog(ex);
+                showException(ex);
             }
 
         }
     }
 
-    private void accessDataBase(String clientName, List<Bag> FromStorageToExport) throws DatabaseException {
+    private Client ClientNaming(String name) throws DatabaseException, BusinessException {
         try {
-            clientController.addClientByName(clientName);
+            if (clientController.clientExists(name)) {
+                return clientController.getClientLike(name).getFirst();
+            }
+            if (JOptionPane.showConfirmDialog(this, utils.addStyle("سيتم إضافة عميل جديد "), "تنبيه", JOptionPane.YES_NO_OPTION) == JOptionPane.NO_OPTION) {
+                List<Client> clients = clientController.getClients();
+                JComboBox<Client> comboBox = new JComboBox<>();
+                for (Client c : clients) {
+                    comboBox.addItem(c);
+                }
+                int result = JOptionPane.showConfirmDialog(this, comboBox, utils.addStyle("إختر عميل"), JOptionPane.OK_CANCEL_OPTION);
+
+                if (result == JOptionPane.OK_OPTION) {
+                    if (comboBox.getSelectedItem() != null) {
+                        return (Client) comboBox.getSelectedItem();
+                    }
+                }
+            } else {
+                return clientController.addClientByName(name);
+            }
+            throw new BusinessException("تم إلغاء الإذن رجاء إدخال/إختيار عميل");
+        } catch (DatabaseException | BusinessException ex) {
+            showException(ex);
+            throw new DatabaseException("حدث خطأ أثناء عمل الأكسل", ex);
+        }
+    }
+
+    private void accessDataBase(Client client, List<Bag> FromStorageToExport) throws DatabaseException {
+        try {
+            if (client == null) {
+                throw new BusinessException("تم إلغاء الإذن رجاء إدخال/إختيار عميل");
+            }
             String ordId = orderController.addOrder();
             double totalWeight = 0.0;
             for (Bag bag : FromStorageToExport) {
                 totalWeight += bag.getWeight();
-                exportController.moveBagFromStorageToExport(bag.getId() + "", clientName, ordId);
+                exportController.moveBagFromStorageToExport(bag.getId(), client.getId(), ordId);
                 storageController.removeBag(bag.getId() + "");
             }
             orderController.updateOrder(ordId, totalWeight);
-        } catch (DatabaseException ex) {
-            Logger.getLogger(mainform.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
-            throw new DatabaseException("حدث خطأ أثناء عمل الأكسل", ex);
+        } catch (DatabaseException | BusinessException ex) {
+            showException(ex);
+            throw new DatabaseException("حدث خطأ أثناء النقل من المخزن", ex);
         }
     }
 
@@ -4561,37 +4591,6 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
 
     }
 
-//    private void startRecognition(JTextField RecognitionTo) throws IOException, LineUnavailableException {
-//
-//        try (
-//                Model model = new Model("models/vosk-model-ar")) {
-//            Recognizer recognizer = new Recognizer(model, 48000, new ArabicNumberGrammarBuilder().generateArabicNumbers());
-//
-//            byte[] buffer = new byte[4096];
-//
-//            new Thread(() -> {
-//                try {
-//                    AudioFormat format = new AudioFormat(48000, 16, 1, true, false);
-//                    DataLine.Info info = new DataLine.Info(TargetDataLine.class, format);
-//                    try (TargetDataLine microphone = (TargetDataLine) AudioSystem.getLine(info)) {
-//                        microphone.open(format);
-//                        microphone.start();
-//                        while (RecognitionTo.hasFocus()) {
-//
-//                            int bytesRead = microphone.read(buffer, 0, buffer.length);
-//                            if (recognizer.acceptWaveForm(buffer, bytesRead)) {
-//                                RecognitionTo.setText(recognizer.getFinalResult());
-//                            }
-//                        }
-//                        System.out.println("out");
-//                        microphone.stop();
-//                    }
-//                } catch (LineUnavailableException ex) {
-//                    Logger.getLogger(mainform.class.getName()).log(Level.SEVERE, null, ex);
-//                }
-//            }).start();
-//        }
-//    }
     /**
      * @param args the command line arguments
      */

@@ -42,11 +42,11 @@ public class ExportRepository {
         }
     }
 
-    public void moveBagFromStorageToExport(String storageId, String clientName, String ord_id) throws DatabaseException {
+    public void moveBagFromStorageToExport(int storageId, int clientId, String ord_id) throws DatabaseException {
         try {
             dbConnection.inData("export", "pro_id,cli_id,tot_wight,weight_,lot,inserted_date,exported_date,num_of_con,pallet_numb,used,ord_id,empty_pack,storageID",
                     "(select pro_id from storage where storage_id=" + storageId + ")"
-                    + ",(select  top(1) cli_id from clients where cli_name=N'" + clientName + "')"
+                    + "," + clientId
                     + ",(select tot_wight from storage where storage_id=" + storageId + ")"
                     + ",(select weight_ from storage where storage_id=" + storageId + ")"
                     + ",(select lot from storage where storage_id= " + storageId + " )"

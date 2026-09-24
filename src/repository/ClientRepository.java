@@ -18,15 +18,20 @@ public class ClientRepository {
         this.dbConnection = dbConnection;
     }
 
-    public void addClientByName(String clientName) throws DatabaseException {
+    public Client addClientByName(String clientName) throws DatabaseException {
         try {
-            if (!dbConnection.dataRead("*", "clients", "cli_name=N'" + clientName + "'").next()) {
+            if (!clientExists(clientName)) {
                 dbConnection.inData("clients", "cli_name", "N'" + clientName + "'");
+            }
+            ResultSet rs = dbConnection.dataRead("cli_id,cli_name", "clients", "cli_name = N'" + clientName + "'");
+            if (rs.next()) {
+                return new Client(rs.getInt("cli_id"), rs.getString("cli_name"));
             }
         } catch (SQLException ex) {
             Logger.getLogger(ClientRepository.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
-            throw new DatabaseException("حدث خطأ أثناءعرض الشكارة", ex);
+            throw new DatabaseException("حدث خطأ في إضافة عميل", ex);
         }
+        return null;
     }
 
     public List<Client> getClientLike(String subName) throws DatabaseException {
@@ -39,9 +44,30 @@ public class ClientRepository {
             return clients;
         } catch (SQLException ex) {
             Logger.getLogger(ClientRepository.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
-            throw new DatabaseException("حدث خطأ أثناءعرض الشكارة", ex);
+            throw new DatabaseException("حدث خطأ أثناءعرض العملاء", ex);
         }
     }
-    
-    // add func to remove Dublicates
+
+    public List<Client> getClients() throws DatabaseException {
+        try {
+            List<Client> clients = new ArrayList<>();
+            ResultSet rs = dbConnection.dataRead("cli_id,cli_name", "clients");
+            while (rs.next()) {
+                clients.add(new Client(rs.getInt("cli_id"), rs.getString("cli_name")));
+            }
+            return clients;
+        } catch (SQLException ex) {
+            Logger.getLogger(ClientRepository.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
+            throw new DatabaseException("حدث خطأ أثناءعرض العملاء", ex);
+        }
+    }
+
+    public boolean clientExists(String name) throws DatabaseException {
+        try {
+            return dbConnection.dataRead("*", "clients", "cli_name=N'" + name + "'").next();
+        } catch (SQLException ex) {
+            Logger.getLogger(ClientRepository.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
+            throw new DatabaseException("حدث خطأ أثناءعرض عميل", ex);
+        }
+    }
 }

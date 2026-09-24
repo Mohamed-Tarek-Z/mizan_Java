@@ -23,8 +23,8 @@ public class ExportController {
         return exportRepo.getstatistics(date1, date2, p);
     }
 
-    public void moveBagFromStorageToExport(String storageId, String clientName, String ord_id) throws DatabaseException {
-        exportRepo.moveBagFromStorageToExport(storageId, clientName, ord_id);
+    public void moveBagFromStorageToExport(int storageId, int clientId, String ord_id) throws DatabaseException {
+        exportRepo.moveBagFromStorageToExport(storageId, clientId, ord_id);
     }
 
     public void removeExportByOrderId(String Ord_id) throws DatabaseException {

@@ -13,11 +13,19 @@ public class ClientController {
         this.clientRepo = clientRepo;
     }
 
-    public void addClientByName(String clientName) throws DatabaseException {
-        clientRepo.addClientByName(clientName);
+    public Client addClientByName(String clientName) throws DatabaseException {
+        return clientRepo.addClientByName(clientName);
     }
 
     public List<Client> getClientLike(String subName) throws DatabaseException {
         return clientRepo.getClientLike(subName);
+    }
+
+    public List<Client> getClients() throws DatabaseException {
+        return clientRepo.getClients();
+    }
+
+    public boolean clientExists(String name) throws DatabaseException {
+        return clientRepo.clientExists(name);
     }
 }
