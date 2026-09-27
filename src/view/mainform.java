@@ -41,7 +41,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
-import javax.swing.Timer;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
@@ -52,8 +51,6 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class mainform extends javax.swing.JFrame implements ErrorListener {
-
-    private final String MizanPattern = "[0-9\u0660-\u0669]{1,2}[.,٫,\u060C,\u0632][0-9\u0660-\u0669]{2}";
 
     private final sqlcon opj;
     private final ProductController productController;
@@ -69,17 +66,11 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
     private int pro_Table_SelectedID = 0;
 
     private short tick10x10;
-    private int BagMax = 2, repDiff;
-    private final String Version = "V 3.8.9";
+    private int repDiff;
+    private final String Version = "V 3.9.0";
     private String ticketPrinterName;
 
-    private long lastInputTime;
-    private final StringBuilder mizanInputBuilder = new StringBuilder();
-    private String savedText = "";
-    private boolean enterFromMizan = false;
     private String IP;
-
-    private final Timer clearTimer;
 
     @Override
     public void onError(Exception ex) {
@@ -105,16 +96,94 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
         this.orderController = new OrderController(new OrderRepository(this.opj));
         this.machineController = new MachineController(new MachineRepository(this.opj), new ProductRepository(this.opj));
 
-        clearTimer = new Timer(100, e -> {
-            mizanInputBuilder.setLength(0);
-            lastInputTime = -1;
-        });
-        clearTimer.setRepeats(false);
+        JTextField[] line = {jTextField_storage_coneNumber, jTextField_storage_EmptyBagWeight, jTextField_storage_TotalWeight}; // shift del clears 
+        TextFieldRules.apply(jTextField_storage_lot, 15, false, false, jTextField_storage_palletNumber, (JTextField[]) null);
+        TextFieldRules.apply(jTextField_storage_coneNumber, 3, true, false, jTextField_storage_EmptyBagWeight, line);
+        TextFieldRules.apply(jTextField_storage_EmptyBagWeight, 2, true, false, jTextField_storage_TotalWeight, line);
+        TextFieldRules.apply(jTextField_storage_palletNumber, 3, true, false, () -> {
+            TextFieldRules.goAndSelect(jTextField_storage_coneNumber);
+            try {
+                calc_pallet_weight();
+            } catch (DatabaseException ex) {
+                showException(ex);
+            }
+        }, (JTextField[]) null);
+        TextFieldRules.apply(jTextField_storage_TotalWeight, 8, true, true, () -> {
+            jTextField_storage_NetWeight.requestFocusInWindow();
+            try {
+                calc_net_weight();
+            } catch (BusinessException e) {
+                showMessageInlable(true);
+            }
+        }, line);
+        TextFieldRules.apply(jTextField_storage_NetWeight, 8, true, true, jTextField_storage_coneNumber, line);
+        TextFieldRules.apply(jTextField_storage_EmptyConeWeight, 4, true, false, jTextField_storage_coneNumber, (JTextField[]) null);
+
+        TextFieldRules.apply(jTextField_pro_name, 35, false, false, () -> {
+        }, (JTextField[]) null);
+        TextFieldRules.apply(jTextField_Pros_conWight, 4, true, false, () -> {
+        }, (JTextField[]) null);
+        TextFieldRules.apply(jTextField_rep_numOfBag, 3, true, false, () -> {
+        }, (JTextField[]) null);
+        TextFieldRules.apply(jTextField_E_Wight, 8, true, true, () -> {
+        }, (JTextField[]) null);
+        TextFieldRules.apply(jTextField_E_PaltNum, 3, true, false, () -> {
+        }, (JTextField[]) null);
+        TextFieldRules.apply(jTextField_E_ConNum, 3, true, false, () -> {
+        }, (JTextField[]) null);
+        TextFieldRules.apply(jTextField_E_lot, 15, false, false, () -> {
+        }, (JTextField[]) null);
+        TextFieldRules.apply(jTextField_E_TotWight, 8, true, true, () -> {
+        }, (JTextField[]) null);
+        TextFieldRules.apply(jTextField_ME_lot, 15, false, false, () -> {
+        }, (JTextField[]) null);
+        TextFieldRules.apply(jTextField_ME_PaltNum, 3, true, false, () -> {
+        }, (JTextField[]) null);
+
+        TextFieldRules.apply(jTextField_storage_SearchProducts, 20, false, false, () -> {
+            try {
+                combox_fill_with(jComboBox_storage_products, productController.getAvailableProductsLike(jTextField_storage_SearchProducts.getText()));
+            } catch (DatabaseException ex) {
+                showException(ex);
+            }
+        }, (JTextField[]) null);
+        TextFieldRules.apply(jTextField_stock_SearchProducts, 20, false, false, () -> {
+            try {
+                combox_fill_with(jComboBox_stock_Pros, productController.getAvailableProductsLike(jTextField_stock_SearchProducts.getText()));
+            } catch (DatabaseException ex) {
+                showException(ex);
+            }
+        }, (JTextField[]) null);
+
+        TextFieldRules.apply(jTextField_Ezn_Search_pros, 20, false, false, () -> {
+            try {
+                combox_fill_with(jComboBox_rep_Pros, productController.getAvailableProductsLike(jTextField_Ezn_Search_pros.getText()));
+            } catch (DatabaseException ex) {
+                showException(ex);
+            }
+        }, (JTextField[]) null);
+
+        TextFieldRules.apply(jTextField_statistics_Search_pros, 20, false, false, () -> {
+            try {
+                combox_fill_with(jComboBox_statistics_products, productController.getAvailableProductsLike(jTextField_statistics_Search_pros.getText()));
+            } catch (DatabaseException ex) {
+                showException(ex);
+            }
+        }, (JTextField[]) null);
+
+        TextFieldRules.apply(jTextField_youm_Search_pros, 20, false, false, () -> {
+            try {
+                combox_fill_with(jComboBox_youm_products, productController.getAvailableProductsLike(jTextField_youm_Search_pros.getText()));
+            } catch (DatabaseException ex) {
+                showException(ex);
+            }
+        }, (JTextField[]) null);
 
         populateCombos();
         setupKeyBindings();
         fill_machine();
-//        LibVosk.setLogLevel(LogLevel.WARNINGS);
+
+        new WeightScaleCapture(jTextField_storage_TotalWeight).install();
     }
 
     @SuppressWarnings("unchecked")
@@ -813,38 +882,18 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
 
             jTextField_E_lot.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
             jTextField_E_lot.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-            jTextField_E_lot.addKeyListener(new java.awt.event.KeyAdapter() {
-                public void keyTyped(java.awt.event.KeyEvent evt) {
-                    jTextField_E_lotKeyTyped(evt);
-                }
-            });
             SingleEdit.getContentPane().add(jTextField_E_lot, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 220, 90, -1));
 
             jTextField_E_ConNum.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
             jTextField_E_ConNum.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-            jTextField_E_ConNum.addKeyListener(new java.awt.event.KeyAdapter() {
-                public void keyTyped(java.awt.event.KeyEvent evt) {
-                    jTextField_E_ConNumKeyTyped(evt);
-                }
-            });
             SingleEdit.getContentPane().add(jTextField_E_ConNum, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 220, 90, -1));
 
             jTextField_E_PaltNum.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
             jTextField_E_PaltNum.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-            jTextField_E_PaltNum.addKeyListener(new java.awt.event.KeyAdapter() {
-                public void keyTyped(java.awt.event.KeyEvent evt) {
-                    jTextField_E_PaltNumKeyTyped(evt);
-                }
-            });
             SingleEdit.getContentPane().add(jTextField_E_PaltNum, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 220, 90, -1));
 
             jTextField_E_Wight.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
             jTextField_E_Wight.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-            jTextField_E_Wight.addKeyListener(new java.awt.event.KeyAdapter() {
-                public void keyTyped(java.awt.event.KeyEvent evt) {
-                    jTextField_E_WightKeyTyped(evt);
-                }
-            });
             SingleEdit.getContentPane().add(jTextField_E_Wight, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 220, 90, -1));
 
             jComboBox_E_proName.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
@@ -903,11 +952,6 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
             SingleEdit.getContentPane().add(jButton_E_print, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 270, 100, 40));
 
             jTextField_E_TotWight.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-            jTextField_E_TotWight.addKeyListener(new java.awt.event.KeyAdapter() {
-                public void keyTyped(java.awt.event.KeyEvent evt) {
-                    jTextField_E_TotWightKeyTyped(evt);
-                }
-            });
             SingleEdit.getContentPane().add(jTextField_E_TotWight, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 220, 90, -1));
 
             jLabel43.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
@@ -919,11 +963,6 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
             SingleEdit.getContentPane().add(jCheckBox_E_P, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 150, -1, -1));
 
             jTextField_E_Color.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-            jTextField_E_Color.addKeyListener(new java.awt.event.KeyAdapter() {
-                public void keyTyped(java.awt.event.KeyEvent evt) {
-                    jTextField_E_ColorKeyTyped(evt);
-                }
-            });
             SingleEdit.getContentPane().add(jTextField_E_Color, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 220, 90, -1));
 
             jLabel44.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
@@ -967,20 +1006,10 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
 
             jTextField_ME_lot.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
             jTextField_ME_lot.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-            jTextField_ME_lot.addKeyListener(new java.awt.event.KeyAdapter() {
-                public void keyTyped(java.awt.event.KeyEvent evt) {
-                    jTextField_ME_lotKeyTyped(evt);
-                }
-            });
             MultiEdit.getContentPane().add(jTextField_ME_lot, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 170, 90, -1));
 
             jTextField_ME_PaltNum.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
             jTextField_ME_PaltNum.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-            jTextField_ME_PaltNum.addKeyListener(new java.awt.event.KeyAdapter() {
-                public void keyTyped(java.awt.event.KeyEvent evt) {
-                    jTextField_ME_PaltNumKeyTyped(evt);
-                }
-            });
             MultiEdit.getContentPane().add(jTextField_ME_PaltNum, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 170, 90, -1));
 
             jLabel47.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
@@ -1223,11 +1252,6 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
 
             jTextField_mach_MName.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
             jTextField_mach_MName.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-            jTextField_mach_MName.addKeyListener(new java.awt.event.KeyAdapter() {
-                public void keyTyped(java.awt.event.KeyEvent evt) {
-                    jTextField_mach_MNameKeyTyped(evt);
-                }
-            });
             jPanel_Machines.add(jTextField_mach_MName, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 70, 190, 50));
 
             jComboBox_mach_pros.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
@@ -1235,11 +1259,6 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
 
             jTextField_mach_lot.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
             jTextField_mach_lot.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-            jTextField_mach_lot.addKeyListener(new java.awt.event.KeyAdapter() {
-                public void keyTyped(java.awt.event.KeyEvent evt) {
-                    jTextField_mach_lotKeyTyped(evt);
-                }
-            });
             jPanel_Machines.add(jTextField_mach_lot, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 70, 190, 50));
 
             jLabel51.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
@@ -1645,57 +1664,22 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
             jTextField_storage_lot.setFont(new java.awt.Font("sansserif", 0, 24)); // NOI18N
             jTextField_storage_lot.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
             jTextField_storage_lot.setMaximumSize(new java.awt.Dimension(7, 38));
-            jTextField_storage_lot.addKeyListener(new java.awt.event.KeyAdapter() {
-                public void keyTyped(java.awt.event.KeyEvent evt) {
-                    jTextField_storage_lotKeyTyped(evt);
-                }
-            });
             storage_panel.add(jTextField_storage_lot, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 140, 120, 36));
 
             jTextField_storage_TotalWeight.setBackground(new java.awt.Color(255, 204, 204));
             jTextField_storage_TotalWeight.setFont(new java.awt.Font("sansserif", 0, 24)); // NOI18N
             jTextField_storage_TotalWeight.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
             jTextField_storage_TotalWeight.setMaximumSize(new java.awt.Dimension(7, 38));
-            jTextField_storage_TotalWeight.addFocusListener(new java.awt.event.FocusAdapter() {
-                public void focusGained(java.awt.event.FocusEvent evt) {
-                    jTextField_storage_TotalWeightFocusGained(evt);
-                }
-            });
-            jTextField_storage_TotalWeight.addKeyListener(new java.awt.event.KeyAdapter() {
-                public void keyTyped(java.awt.event.KeyEvent evt) {
-                    jTextField_storage_TotalWeightKeyTyped(evt);
-                }
-            });
             storage_panel.add(jTextField_storage_TotalWeight, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 340, 120, -1));
 
             jTextField_storage_EmptyBagWeight.setFont(new java.awt.Font("sansserif", 0, 24)); // NOI18N
             jTextField_storage_EmptyBagWeight.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
             jTextField_storage_EmptyBagWeight.setMaximumSize(new java.awt.Dimension(7, 38));
-            jTextField_storage_EmptyBagWeight.addFocusListener(new java.awt.event.FocusAdapter() {
-                public void focusGained(java.awt.event.FocusEvent evt) {
-                    jTextField_storage_EmptyBagWeightFocusGained(evt);
-                }
-            });
-            jTextField_storage_EmptyBagWeight.addKeyListener(new java.awt.event.KeyAdapter() {
-                public void keyTyped(java.awt.event.KeyEvent evt) {
-                    jTextField_storage_EmptyBagWeightKeyTyped(evt);
-                }
-            });
             storage_panel.add(jTextField_storage_EmptyBagWeight, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 290, 120, -1));
 
             jTextField_storage_coneNumber.setFont(new java.awt.Font("sansserif", 0, 24)); // NOI18N
             jTextField_storage_coneNumber.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
             jTextField_storage_coneNumber.setMaximumSize(new java.awt.Dimension(7, 38));
-            jTextField_storage_coneNumber.addFocusListener(new java.awt.event.FocusAdapter() {
-                public void focusGained(java.awt.event.FocusEvent evt) {
-                    jTextField_storage_coneNumberFocusGained(evt);
-                }
-            });
-            jTextField_storage_coneNumber.addKeyListener(new java.awt.event.KeyAdapter() {
-                public void keyTyped(java.awt.event.KeyEvent evt) {
-                    jTextField_storage_coneNumberKeyTyped(evt);
-                }
-            });
             storage_panel.add(jTextField_storage_coneNumber, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 240, 120, -1));
 
             jLabel7.setFont(new java.awt.Font("sansserif", 0, 18)); // NOI18N
@@ -1729,26 +1713,11 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
             jTextField_storage_palletNumber.setFont(new java.awt.Font("sansserif", 0, 24)); // NOI18N
             jTextField_storage_palletNumber.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
             jTextField_storage_palletNumber.setMaximumSize(new java.awt.Dimension(7, 38));
-            jTextField_storage_palletNumber.addFocusListener(new java.awt.event.FocusAdapter() {
-                public void focusGained(java.awt.event.FocusEvent evt) {
-                    jTextField_storage_palletNumberFocusGained(evt);
-                }
-            });
-            jTextField_storage_palletNumber.addKeyListener(new java.awt.event.KeyAdapter() {
-                public void keyTyped(java.awt.event.KeyEvent evt) {
-                    jTextField_storage_palletNumberKeyTyped(evt);
-                }
-            });
             storage_panel.add(jTextField_storage_palletNumber, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 180, 120, -1));
 
             jTextField_storage_EmptyConeWeight.setFont(new java.awt.Font("sansserif", 0, 24)); // NOI18N
             jTextField_storage_EmptyConeWeight.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
             jTextField_storage_EmptyConeWeight.setMaximumSize(new java.awt.Dimension(7, 38));
-            jTextField_storage_EmptyConeWeight.addKeyListener(new java.awt.event.KeyAdapter() {
-                public void keyTyped(java.awt.event.KeyEvent evt) {
-                    jTextField_storage_EmptyConeWeightKeyTyped(evt);
-                }
-            });
             storage_panel.add(jTextField_storage_EmptyConeWeight, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 440, 120, -1));
 
             jLabel11.setFont(new java.awt.Font("sansserif", 1, 16)); // NOI18N
@@ -1767,11 +1736,6 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
             jTextField_storage_NetWeight.setFont(new java.awt.Font("sansserif", 0, 24)); // NOI18N
             jTextField_storage_NetWeight.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
             jTextField_storage_NetWeight.setMaximumSize(new java.awt.Dimension(7, 38));
-            jTextField_storage_NetWeight.addKeyListener(new java.awt.event.KeyAdapter() {
-                public void keyTyped(java.awt.event.KeyEvent evt) {
-                    jTextField_storage_NetWeightKeyTyped(evt);
-                }
-            });
             storage_panel.add(jTextField_storage_NetWeight, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 390, 120, -1));
 
             jLabel2.setFont(new java.awt.Font("sansserif", 0, 18)); // NOI18N
@@ -1818,11 +1782,6 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
 
             jTextField_storage_Color.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
             jTextField_storage_Color.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-            jTextField_storage_Color.addKeyListener(new java.awt.event.KeyAdapter() {
-                public void keyTyped(java.awt.event.KeyEvent evt) {
-                    jTextField_storage_ColorKeyTyped(evt);
-                }
-            });
             storage_panel.add(jTextField_storage_Color, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 540, 140, 40));
 
             jLabel41.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
@@ -1880,12 +1839,6 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
             jSeparator7.setMinimumSize(new java.awt.Dimension(37, 3));
             jSeparator7.setPreferredSize(new java.awt.Dimension(37, 55));
             storage_panel.add(jSeparator7, new org.netbeans.lib.awtextra.AbsoluteConstraints(605, 10, 110, 20));
-
-            jTextField_storage_SearchProducts.addKeyListener(new java.awt.event.KeyAdapter() {
-                public void keyTyped(java.awt.event.KeyEvent evt) {
-                    jTextField_storage_SearchProductsKeyTyped(evt);
-                }
-            });
             storage_panel.add(jTextField_storage_SearchProducts, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 40, 150, 20));
 
             jTextField_inputExeption.setEditable(false);
@@ -1927,9 +1880,6 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
             jTextField_rep_numOfBag.addKeyListener(new java.awt.event.KeyAdapter() {
                 public void keyReleased(java.awt.event.KeyEvent evt) {
                     jTextField_rep_numOfBagKeyReleased(evt);
-                }
-                public void keyTyped(java.awt.event.KeyEvent evt) {
-                    jTextField_rep_numOfBagKeyTyped(evt);
                 }
             });
             makePermit.add(jTextField_rep_numOfBag, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 130, 80, -1));
@@ -1983,16 +1933,6 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
 
             jTextField_rep_clientName.setFont(new java.awt.Font("sansserif", 0, 20)); // NOI18N
             jTextField_rep_clientName.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
-            jTextField_rep_clientName.addFocusListener(new java.awt.event.FocusAdapter() {
-                public void focusGained(java.awt.event.FocusEvent evt) {
-                    jTextField_rep_clientNameFocusGained(evt);
-                }
-            });
-            jTextField_rep_clientName.addKeyListener(new java.awt.event.KeyAdapter() {
-                public void keyTyped(java.awt.event.KeyEvent evt) {
-                    jTextField_rep_clientNameKeyTyped(evt);
-                }
-            });
             makePermit.add(jTextField_rep_clientName, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 230, 450, 40));
 
             jLabel5.setFont(new java.awt.Font("sansserif", 0, 20)); // NOI18N
@@ -2088,12 +2028,6 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
                 }
             });
             makePermit.add(jCheckBox_rep_wzn, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 130, -1, -1));
-
-            jTextField_Ezn_Search_pros.addKeyListener(new java.awt.event.KeyAdapter() {
-                public void keyTyped(java.awt.event.KeyEvent evt) {
-                    jTextField_Ezn_Search_prosKeyTyped(evt);
-                }
-            });
             makePermit.add(jTextField_Ezn_Search_pros, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 35, 200, -1));
 
             jCheckBox_rep_highLightMarked.setText("تعليم في الاذن؟");
@@ -2118,11 +2052,6 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
 
             jTextField_pro_name.setFont(new java.awt.Font("sansserif", 0, 18)); // NOI18N
             jTextField_pro_name.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
-            jTextField_pro_name.addKeyListener(new java.awt.event.KeyAdapter() {
-                public void keyTyped(java.awt.event.KeyEvent evt) {
-                    jTextField_pro_nameKeyTyped(evt);
-                }
-            });
             products_panel.add(jTextField_pro_name, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 10, 340, -1));
 
             jButton_add_pro.setFont(new java.awt.Font("sansserif", 0, 24)); // NOI18N
@@ -2188,11 +2117,6 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
 
             jTextField_Pros_conWight.setFont(new java.awt.Font("sansserif", 0, 18)); // NOI18N
             jTextField_Pros_conWight.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
-            jTextField_Pros_conWight.addKeyListener(new java.awt.event.KeyAdapter() {
-                public void keyTyped(java.awt.event.KeyEvent evt) {
-                    jTextField_Pros_conWightKeyTyped(evt);
-                }
-            });
             products_panel.add(jTextField_Pros_conWight, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 90, 140, 30));
 
             jLabel24.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
@@ -2205,11 +2129,6 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
 
             jTextField_Pros_color.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
             jTextField_Pros_color.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-            jTextField_Pros_color.addKeyListener(new java.awt.event.KeyAdapter() {
-                public void keyTyped(java.awt.event.KeyEvent evt) {
-                    jTextField_Pros_colorKeyTyped(evt);
-                }
-            });
             products_panel.add(jTextField_Pros_color, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 90, 140, 30));
 
             jLabel49.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
@@ -2288,11 +2207,6 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
             stock_panel.add(jButton_stock_createExcl, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 600, -1, -1));
 
             jTextField_stock_SearchProducts.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-            jTextField_stock_SearchProducts.addKeyListener(new java.awt.event.KeyAdapter() {
-                public void keyTyped(java.awt.event.KeyEvent evt) {
-                    jTextField_stock_SearchProductsKeyTyped(evt);
-                }
-            });
             stock_panel.add(jTextField_stock_SearchProducts, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 10, 250, 40));
 
             left_panel.add(stock_panel, "stock");
@@ -2373,12 +2287,6 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
 
             jComboBox_statistics_products.setFont(new java.awt.Font("sansserif", 0, 18)); // NOI18N
             statistics_panel.add(jComboBox_statistics_products, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 70, 190, 30));
-
-            jTextField_statistics_Search_pros.addKeyListener(new java.awt.event.KeyAdapter() {
-                public void keyTyped(java.awt.event.KeyEvent evt) {
-                    jTextField_statistics_Search_prosKeyTyped(evt);
-                }
-            });
             statistics_panel.add(jTextField_statistics_Search_pros, new org.netbeans.lib.awtextra.AbsoluteConstraints(31, 40, 140, -1));
 
             left_panel.add(statistics_panel, "statis");
@@ -2523,12 +2431,6 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
 
             jComboBox_youm_products.setFont(new java.awt.Font("sansserif", 0, 18)); // NOI18N
             showPermit_panel.add(jComboBox_youm_products, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 130, 200, 30));
-
-            jTextField_youm_Search_pros.addKeyListener(new java.awt.event.KeyAdapter() {
-                public void keyTyped(java.awt.event.KeyEvent evt) {
-                    jTextField_youm_Search_prosKeyTyped(evt);
-                }
-            });
             showPermit_panel.add(jTextField_youm_Search_pros, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 100, 140, -1));
 
             left_panel.add(showPermit_panel, "yomia");
@@ -2545,11 +2447,6 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
             jTextArea_emp.setColumns(20);
             jTextArea_emp.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
             jTextArea_emp.setRows(5);
-            jTextArea_emp.addKeyListener(new java.awt.event.KeyAdapter() {
-                public void keyTyped(java.awt.event.KeyEvent evt) {
-                    jTextArea_empKeyTyped(evt);
-                }
-            });
             jScrollPane9.setViewportView(jTextArea_emp);
 
             pause_panel.add(jScrollPane9, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 100, 820, 540));
@@ -2611,106 +2508,6 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
         open_panel(makePermit);
     }//GEN-LAST:event_jButton_Ezn_openerActionPerformed
 
-    private void jTextField_storage_lotKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_storage_lotKeyTyped
-        sendToWight(jTextField_storage_lot, jTextField_storage_TotalWeight, evt);
-        textbox_length_limiter(evt, jTextField_storage_lot, 9, () -> jButton_storage_Clear.doClick());
-        char input = evt.getKeyChar();
-        if (Character.isDigit(input)) {
-            evt.setKeyChar(NumberUtils.ToArb(input + "").charAt(0));
-        }
-        if (evt.getKeyChar() == KeyEvent.VK_ENTER && !enterFromMizan) {
-            jTextField_storage_palletNumber.requestFocusInWindow();
-        }
-    }//GEN-LAST:event_jTextField_storage_lotKeyTyped
-
-    private void jTextField_storage_coneNumberKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_storage_coneNumberKeyTyped
-        sendToWight(jTextField_storage_coneNumber, jTextField_storage_TotalWeight, evt);
-        textbox_number(evt, jTextField_storage_coneNumber, 3, false, () -> jButton_storage_Clear.doClick());
-        if (evt.getKeyChar() == KeyEvent.VK_ENTER && !enterFromMizan && !jTextField_storage_coneNumber.getText().isEmpty()) {
-            jTextField_storage_EmptyBagWeight.requestFocusInWindow();
-        }
-    }//GEN-LAST:event_jTextField_storage_coneNumberKeyTyped
-
-    private void jTextField_storage_palletNumberKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_storage_palletNumberKeyTyped
-        try {
-            sendToWight(jTextField_storage_palletNumber, jTextField_storage_TotalWeight, evt);
-            textbox_number(evt, jTextField_storage_palletNumber, 5, false, () -> jButton_storage_Clear.doClick());
-            calc_pallet_weight();
-            jCheckBox_storage_MarkBag.setSelected(false);
-            if (jTextField_storage_palletNumber.getText().isBlank()) {
-                jTextField_storage_PalletWeight.setText("");
-            }
-            if (evt.getKeyChar() == KeyEvent.VK_ENTER && !enterFromMizan) {
-                jTextField_storage_coneNumber.requestFocusInWindow();
-            }
-        } catch (DatabaseException ex) {
-            showException(ex);
-        }
-    }//GEN-LAST:event_jTextField_storage_palletNumberKeyTyped
-
-    private void jTextField_storage_NetWeightKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_storage_NetWeightKeyTyped
-        if (evt.getKeyChar() == KeyEvent.VK_MINUS && (!jTextField_storage_NetWeight.getText().isBlank())) {
-            double x = NumberUtils.ToDEng(jTextField_storage_TotalWeight.getText());
-            if ((evt.getModifiersEx() & KeyEvent.SHIFT_DOWN_MASK) != 0) {
-                jTextField_storage_TotalWeight.setText(NumberUtils.ToArb(x + 0.02));
-            } else {
-                jTextField_storage_TotalWeight.setText(NumberUtils.ToArb(x - 0.02));
-            }
-            try {
-                calc_net_weight();
-            } catch (BusinessException e) {
-                showMessageInlable(true);
-            }
-        }
-        if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
-            jTextField_storage_coneNumber.requestFocusInWindow();
-
-            if (!jTextField_storage_NetWeight.getText().isBlank() && !enterFromMizan) {
-                jButton_storage_addData.doClick();
-            }
-        }
-        if (evt.getKeyChar() == KeyEvent.VK_DELETE) {
-            if ((evt.getModifiersEx() & KeyEvent.SHIFT_DOWN_MASK) != 0) {
-                jButton_storage_Clear.doClick();
-            }
-        }
-    }//GEN-LAST:event_jTextField_storage_NetWeightKeyTyped
-
-    private void jTextField_storage_EmptyBagWeightKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_storage_EmptyBagWeightKeyTyped
-        sendToWight(jTextField_storage_EmptyBagWeight, jTextField_storage_TotalWeight, evt);
-        textbox_number(evt, jTextField_storage_EmptyBagWeight, BagMax, true, () -> jButton_storage_Clear.doClick());
-        if (evt.getKeyChar() == KeyEvent.VK_ENTER && !enterFromMizan && !jTextField_storage_EmptyBagWeight.getText().isEmpty()) {
-            jTextField_storage_TotalWeight.requestFocusInWindow();
-        }
-    }//GEN-LAST:event_jTextField_storage_EmptyBagWeightKeyTyped
-
-    private void jTextField_storage_TotalWeightKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_storage_TotalWeightKeyTyped
-        textbox_number_weight(evt, jTextField_storage_TotalWeight, 8, () -> jButton_storage_Clear.doClick());
-        if (evt.getKeyChar() == KeyEvent.VK_ENTER && !jTextField_storage_TotalWeight.getText().isBlank()) {
-            jTextField_storage_NetWeight.requestFocusInWindow();
-            try {
-                calc_net_weight();
-            } catch (BusinessException e) {
-                showMessageInlable(true);
-            }
-        }
-        if (evt.getKeyChar() == KeyEvent.VK_DELETE) {
-            if ((evt.getModifiersEx() & KeyEvent.CTRL_DOWN_MASK) != 0) {
-                jCheckBox_storage_freezeConeNumber.setSelected(false);
-                jButton_storage_Clear.doClick();
-            }
-
-        }
-    }//GEN-LAST:event_jTextField_storage_TotalWeightKeyTyped
-
-    private void jTextField_storage_EmptyConeWeightKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_storage_EmptyConeWeightKeyTyped
-        sendToWight(jTextField_storage_EmptyConeWeight, jTextField_storage_TotalWeight, evt);
-        textbox_number(evt, jTextField_storage_EmptyConeWeight, 4, false, () -> jButton_storage_Clear.doClick());
-        if (evt.getKeyChar() == KeyEvent.VK_ENTER && !enterFromMizan) {
-            jTextField_storage_lot.requestFocusInWindow();
-        }
-    }//GEN-LAST:event_jTextField_storage_EmptyConeWeightKeyTyped
-
     private void jButton_storage_addDataActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_storage_addDataActionPerformed
         evt.getID();
         try {
@@ -2723,7 +2520,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
 
             int[] result = storageController.addStorage(req, jCheckBox_storage_ignoreLimits.isSelected());
 
-            jTextField_storage_palletNumber.setText(NumberUtils.ToArb(result[0] + ""));
+            jTextField_storage_palletNumber.setText(ArabicDigits.toArabicDigits(result[0]));
             jProgressBar_storage_pallet.setValue(result[1]);
             calc_pallet_weight();
 
@@ -2814,18 +2611,6 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
         }
     }//GEN-LAST:event_jButton_add_proActionPerformed
 
-    private void jTextField_pro_nameKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_pro_nameKeyTyped
-        sendToWight(jTextField_pro_name, null, evt);
-        textbox_length_limiter(evt, jTextField_pro_name, 35, () -> jTextField_pro_name.requestFocusInWindow());
-        char input = evt.getKeyChar();
-        if (Character.isDigit(input)) {
-            evt.setKeyChar(NumberUtils.ToArb(input + "").charAt(0));
-        }
-        if (evt.getKeyChar() == KeyEvent.VK_ENTER && !enterFromMizan) {
-            jButton_add_pro.doClick();
-        }
-    }//GEN-LAST:event_jTextField_pro_nameKeyTyped
-
     private void jTable_proMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable_proMouseClicked
         evt.getID();
         try {
@@ -2877,12 +2662,11 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
                 fill_storage_table();
             }
             if (jTable_storage.getRowCount() != 0) {
-                jTextField_storage_lot.setText(jTable_storage.getValueAt(0, 2) + "");
+                jTextField_storage_lot.setText((String) jTable_storage.getValueAt(0, 2));
                 if (!jTable_storage.getValueAt(0, 5).equals("٢٠")) {
-                    jTextField_storage_palletNumber.setText(jTable_storage.getValueAt(0, 3) + "");
+                    jTextField_storage_palletNumber.setText((String) jTable_storage.getValueAt(0, 3));
                 } else {
-                    jTextField_storage_palletNumber.setText(NumberUtils.ToArb(
-                            (int) (NumberUtils.ToDEng((String) jTable_storage.getValueAt(0, 3)) + 1) + ""));
+                    jTextField_storage_palletNumber.setText(ArabicDigits.toArabicDigits(ArabicDigits.parseInt((String) jTable_storage.getValueAt(0, 3)) + 1));
                 }
                 calc_pallet_weight();
             }
@@ -2911,11 +2695,11 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
         evt.getID();
 
         double ss = jTextField_rep_totweight.getText().isEmpty() ? 0.0
-                : NumberUtils.ToDEng(jTextField_rep_totweight.getText());
+                : ArabicDigits.parseDouble(jTextField_rep_totweight.getText());
         try {
             if (jTable_rep_preview.getRowCount() >= 0 && !jTextField_rep_clientName.getText().isBlank()
-                    && (jTable_rep_preview.getRowCount() == (int) NumberUtils.ToDEng(jTextField_rep_numOfBag.getText())
-                    || !(NumberUtils.ToDEng(jTextField_rep_numOfBag.getText()) >= ss + repDiff))) {
+                    && (jTable_rep_preview.getRowCount() == ArabicDigits.parseInt(jTextField_rep_numOfBag.getText())
+                    || !(ArabicDigits.parseDouble(jTextField_rep_numOfBag.getText()) >= ss + repDiff))) {
 
                 if (JOptionPane.showConfirmDialog(this, utils.addStyle("سيتم التصدير للأكسل "), "تنبيه",
                         JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
@@ -3043,11 +2827,6 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
         }
     }//GEN-LAST:event_jButton_rep_printRepActionPerformed
 
-    private void jTextField_rep_numOfBagKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_rep_numOfBagKeyTyped
-        textbox_number(evt, jTextField_rep_numOfBag, jCheckBox_rep_wzn.isSelected() ? 4 : 3, false, () -> jTextField_rep_numOfBag.requestFocusInWindow());
-        sendToWight(jTextField_rep_numOfBag, null, evt);
-    }//GEN-LAST:event_jTextField_rep_numOfBagKeyTyped
-
     private void jTextField_rep_numOfBagKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_rep_numOfBagKeyReleased
         evt.getID();
         try {
@@ -3065,16 +2844,16 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
             if (!jTextField_rep_numOfBag.getText().isBlank()) {
                 double weight_sum = 0.0;
                 double currentTotalWeight = jTextField_rep_totweight.getText().isEmpty() ? 0.0
-                        : NumberUtils.ToDEng(jTextField_rep_totweight.getText());
+                        : ArabicDigits.parseDouble(jTextField_rep_totweight.getText());
 
                 int coneCount = 0;
                 int currentConeCount = jTextField_rep_ConeCount.getText().isEmpty() ? 0
-                        : (int) NumberUtils.ToDEng(jTextField_rep_ConeCount.getText());
+                        : ArabicDigits.parseInt(jTextField_rep_ConeCount.getText());
 
                 boolean isSameLot = true;
                 int bagsTakenFromPallet = 0;
                 if (jCheckBox_rep_wzn.isSelected()) {
-                    double wantedOrderWeight = NumberUtils.ToDEng(jTextField_rep_numOfBag.getText());
+                    double wantedOrderWeight = ArabicDigits.parseDouble(jTextField_rep_numOfBag.getText());
                     if (wantedOrderWeight > 7000.0) {
                         showMessage("رجاء ادخل  وزن أقل من  ٧٠٠٠", "إنتبه");
                         return;
@@ -3089,7 +2868,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
                         if (isSameLot) {
                             if (JOptionPane.showConfirmDialog(this,
                                     utils.addStyle("هل تريد إضافه البالته رقم  "
-                                            + jTable_rep_select.getValueAt(jTable_rep_select.getSelectedRow(), 3) + ""),
+                                            + jTable_rep_select.getValueAt(jTable_rep_select.getSelectedRow(), 3)),
                                     "تنبيه",
                                     JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
 
@@ -3108,16 +2887,16 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
                                         coneCount += bag.getNum_of_con();
 
                                         ((DefaultTableModel) jTable_rep_preview.getModel()).addRow(new Object[]{
-                                            NumberUtils.ToArb((jTable_rep_preview.getRowCount() + 1) + ""),
-                                            NumberUtils.ToArb(bag.getWeight()), NumberUtils.ToArb(bag.getLot()),
-                                            NumberUtils.ToArb(bag.getPallet_numb() + ""), bag.isUsed()});
+                                            ArabicDigits.toArabicDigits(jTable_rep_preview.getRowCount() + 1),
+                                            ArabicDigits.toArabicDigits(bag.getWeight()), ArabicDigits.toArabicDigits(bag.getLot()),
+                                            ArabicDigits.toArabicDigits(bag.getPallet_numb()), bag.isUsed()});
 
                                         if (((DefaultComboBoxModel<String>) jComboBox_rep_palletsNrep.getModel())
-                                                .getIndexOf(NumberUtils.ToArb(bag.getPallet_numb() + "")) == -1) {
-                                            jComboBox_rep_palletsNrep.addItem(NumberUtils.ToArb(bag.getPallet_numb() + ""));
+                                                .getIndexOf(ArabicDigits.toArabicDigits(bag.getPallet_numb())) == -1) {
+                                            jComboBox_rep_palletsNrep.addItem(ArabicDigits.toArabicDigits(bag.getPallet_numb()));
                                         }
                                         if (bagOutOfOrder) {
-                                            OutOfOrderBags.add(NumberUtils.ToArb(bag.getWeight() + "") + "");
+                                            OutOfOrderBags.add(ArabicDigits.toArabicDigits(bag.getWeight()));
                                         }
                                     } else {
                                         if (!bagOutOfOrder) {
@@ -3141,24 +2920,24 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
                                 }
 
                                 currentTotalWeight += weight_sum;
-                                jTextField_rep_totweight.setText(NumberUtils.ToArb(currentTotalWeight));
+                                jTextField_rep_totweight.setText(ArabicDigits.toArabicDigits(currentTotalWeight));
 
                                 currentConeCount += coneCount;
-                                jTextField_rep_ConeCount.setText(NumberUtils.ToArb("" + currentConeCount));
+                                jTextField_rep_ConeCount.setText(ArabicDigits.toArabicDigits(currentConeCount));
 
-                                if (wantedOrderWeight >= NumberUtils.ToDEng(jTable_rep_select.getModel()
+                                if (wantedOrderWeight >= ArabicDigits.parseDouble(jTable_rep_select.getModel()
                                         .getValueAt(jTable_rep_select.getSelectedRow(), 1).toString()) + currentTotalWeight
                                         || (Integer.parseInt(jTable_rep_select.getModel().getValueAt(jTable_rep_select.getSelectedRow(), 0).toString()) - bagsTakenFromPallet) <= 0
-                                        || NumberUtils.ToDEng(jTable_rep_select.getModel().getValueAt(jTable_rep_select.getSelectedRow(), 1).toString()) - weight_sum <= 0.0) {
+                                        || ArabicDigits.parseDouble(jTable_rep_select.getModel().getValueAt(jTable_rep_select.getSelectedRow(), 1).toString()) - weight_sum <= 0.0) {
 
                                     ((DefaultTableModel) jTable_rep_select.getModel()).removeRow(jTable_rep_select.getSelectedRow());
 
                                 } else {
-                                    jTable_rep_select.getModel().setValueAt(NumberUtils.ToArb(NumberUtils.ToDEng(jTable_rep_select.getModel()
+                                    jTable_rep_select.getModel().setValueAt(ArabicDigits.toArabicDigits(ArabicDigits.parseDouble(jTable_rep_select.getModel()
                                             .getValueAt(jTable_rep_select.getSelectedRow(), 1).toString()) - weight_sum),
                                             jTable_rep_select.getSelectedRow(), 1);
-                                    jTable_rep_select.getModel().setValueAt(NumberUtils.ToArb((Integer.parseInt(jTable_rep_select.getModel()
-                                            .getValueAt(jTable_rep_select.getSelectedRow(), 0).toString()) - bagsTakenFromPallet) + ""), jTable_rep_select.getSelectedRow(), 0);
+                                    jTable_rep_select.getModel().setValueAt(ArabicDigits.toArabicDigits((Integer.parseInt(jTable_rep_select.getModel()
+                                            .getValueAt(jTable_rep_select.getSelectedRow(), 0).toString()) - bagsTakenFromPallet)), jTable_rep_select.getSelectedRow(), 0);
 
                                 }
                                 jTable_rep_preview.changeSelection(jTable_rep_preview.getRowCount() - 1, 0, false, false);
@@ -3170,11 +2949,11 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
                         showMessage("لقد اكتمل الوزن", "إنتبه");
                     }
                 } else {
-                    if ((int) NumberUtils.ToDEng(jTextField_rep_numOfBag.getText()) > 200) {
+                    if (ArabicDigits.parseInt(jTextField_rep_numOfBag.getText()) > 200) {
                         showMessage("رجاء ادخل  عدد أقل من  ٢٠١", "إنتبه");
                         return;
                     }
-                    if ((int) NumberUtils.ToDEng(jTextField_rep_numOfBag.getText()) != jTable_rep_preview.getRowCount()) {
+                    if (ArabicDigits.parseInt(jTextField_rep_numOfBag.getText()) != jTable_rep_preview.getRowCount()) {
                         isSameLot = true;
                         if (jTable_rep_preview.getRowCount() > 0) {
                             if (!jTable_rep_preview.getValueAt(0, 2).toString()
@@ -3185,10 +2964,10 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
                         if (isSameLot) {
                             if (JOptionPane.showConfirmDialog(this,
                                     utils.addStyle("هل تريد إضافه البالته رقم  "
-                                            + jTable_rep_select.getValueAt(jTable_rep_select.getSelectedRow(), 3) + ""),
+                                            + jTable_rep_select.getValueAt(jTable_rep_select.getSelectedRow(), 3)),
                                     "تنبيه",
                                     JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-                                int wantedOrderQuantity = (int) NumberUtils.ToDEng(jTextField_rep_numOfBag.getText());
+                                int wantedOrderQuantity = ArabicDigits.parseInt(jTextField_rep_numOfBag.getText());
                                 if (wantedOrderQuantity > 0 && jTable_rep_preview.getRowCount() < wantedOrderQuantity) {
                                     List<Bag> bags = storageController.getBagsToReport((wantedOrderQuantity - jTable_rep_preview.getRowCount()),
                                             jComboBox_rep_Pros.getSelectedItem().toString(),
@@ -3200,32 +2979,32 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
                                         weight_sum += bag.getWeight();
                                         coneCount += bag.getNum_of_con();
                                         ((DefaultTableModel) jTable_rep_preview.getModel()).addRow(new Object[]{
-                                            NumberUtils.ToArb(jTable_rep_preview.getRowCount() + 1 + ""), NumberUtils.ToArb(bag.getWeight()),
-                                            NumberUtils.ToArb(bag.getLot()), NumberUtils.ToArb(bag.getPallet_numb() + ""), bag.isUsed()});
+                                            ArabicDigits.toArabicDigits(jTable_rep_preview.getRowCount() + 1), ArabicDigits.toArabicDigits(bag.getWeight()),
+                                            ArabicDigits.toArabicDigits(bag.getLot()), ArabicDigits.toArabicDigits(bag.getPallet_numb()), bag.isUsed()});
 
                                         if (((DefaultComboBoxModel<String>) jComboBox_rep_palletsNrep.getModel())
-                                                .getIndexOf(NumberUtils.ToArb(bag.getPallet_numb() + "")) == -1) {
-                                            jComboBox_rep_palletsNrep.addItem(NumberUtils.ToArb(bag.getPallet_numb() + ""));
+                                                .getIndexOf(ArabicDigits.toArabicDigits(bag.getPallet_numb())) == -1) {
+                                            jComboBox_rep_palletsNrep.addItem(ArabicDigits.toArabicDigits(bag.getPallet_numb()));
                                         }
 
                                     }
 
                                     currentTotalWeight += weight_sum;
-                                    jTextField_rep_totweight.setText(NumberUtils.ToArb(currentTotalWeight));
+                                    jTextField_rep_totweight.setText(ArabicDigits.toArabicDigits(currentTotalWeight));
 
                                     currentConeCount += coneCount;
-                                    jTextField_rep_ConeCount.setText(NumberUtils.ToArb("" + currentConeCount));
+                                    jTextField_rep_ConeCount.setText(ArabicDigits.toArabicDigits("" + currentConeCount));
 
-                                    jTable_rep_select.getModel().setValueAt(NumberUtils.ToArb(NumberUtils.ToDEng(jTable_rep_select.getModel()
+                                    jTable_rep_select.getModel().setValueAt(ArabicDigits.toArabicDigits(ArabicDigits.parseDouble(jTable_rep_select.getModel()
                                             .getValueAt(jTable_rep_select.getSelectedRow(), 1).toString()) - weight_sum),
                                             jTable_rep_select.getSelectedRow(), 1);
-                                    jTable_rep_select.getModel().setValueAt(NumberUtils.ToArb((Integer.parseInt(jTable_rep_select.getModel()
-                                            .getValueAt(jTable_rep_select.getSelectedRow(), 0).toString()) - bagsTakenFromPallet) + ""), jTable_rep_select.getSelectedRow(), 0);
+                                    jTable_rep_select.getModel().setValueAt(ArabicDigits.toArabicDigits((Integer.parseInt(jTable_rep_select.getModel()
+                                            .getValueAt(jTable_rep_select.getSelectedRow(), 0).toString()) - bagsTakenFromPallet)), jTable_rep_select.getSelectedRow(), 0);
 
-                                    if (wantedOrderQuantity >= NumberUtils.ToDEng(jTable_rep_select.getModel().getValueAt(jTable_rep_select.getSelectedRow(), 0).toString())
+                                    if (wantedOrderQuantity >= ArabicDigits.parseDouble(jTable_rep_select.getModel().getValueAt(jTable_rep_select.getSelectedRow(), 0).toString())
                                             && jTable_rep_preview.getRowCount() < wantedOrderQuantity
-                                            || NumberUtils.ToDEng(jTable_rep_select.getValueAt(jTable_rep_select.getSelectedRow(), 0).toString()) == 0.0
-                                            || NumberUtils.ToDEng(jTable_rep_select.getValueAt(jTable_rep_select.getSelectedRow(), 1).toString()) == 0.0) {
+                                            || ArabicDigits.parseDouble(jTable_rep_select.getValueAt(jTable_rep_select.getSelectedRow(), 0).toString()) == 0.0
+                                            || ArabicDigits.parseDouble(jTable_rep_select.getValueAt(jTable_rep_select.getSelectedRow(), 1).toString()) == 0.0) {
 
                                         ((DefaultTableModel) jTable_rep_select.getModel()).removeRow(jTable_rep_select.getSelectedRow());
                                     }
@@ -3271,20 +3050,6 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
         }
     }//GEN-LAST:event_jButton_DoBackActionPerformed
 
-    private void jTextField_rep_clientNameKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_rep_clientNameKeyTyped
-        sendToWight(jTextField_rep_clientName, null, evt);
-    }//GEN-LAST:event_jTextField_rep_clientNameKeyTyped
-
-    private void jTextField_rep_clientNameFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextField_rep_clientNameFocusGained
-        evt.getID();
-        jTextField_rep_clientName.selectAll();
-    }//GEN-LAST:event_jTextField_rep_clientNameFocusGained
-
-    private void jTextField_storage_palletNumberFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextField_storage_palletNumberFocusGained
-        evt.getID();
-        jTextField_storage_palletNumber.selectAll();
-    }//GEN-LAST:event_jTextField_storage_palletNumberFocusGained
-
     private void jButton_Stock_openerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_Stock_openerActionPerformed
         evt.getID();
         try {
@@ -3305,28 +3070,14 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
                 List<String[]> stock = storageController.getStockOfProduct(jComboBox_stock_Pros.getSelectedItem().toString());
 
                 for (String[] row : stock) {
-                    model.addRow(new Object[]{NumberUtils.ToArb(row[0]), NumberUtils.ToArb(row[1]),
-                        NumberUtils.ToArb(row[2]), NumberUtils.ToArb(row[3]), Boolean.valueOf(row[4])});
+                    model.addRow(new Object[]{ArabicDigits.toArabicDigits(row[0]), ArabicDigits.toArabicDigits(row[1]),
+                        ArabicDigits.toArabicDigits(row[2]), ArabicDigits.toArabicDigits(row[3]), Boolean.valueOf(row[4])});
                 }
             }
         } catch (DatabaseException ex) {
             showException(ex);
         }
     }//GEN-LAST:event_jComboBox_stock_ProsItemStateChanged
-
-    private void jTextField_storage_coneNumberFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextField_storage_coneNumberFocusGained
-        evt.getID();
-        if (jCheckBox_storage_freezeConeNumber.isSelected())
-            jTextField_storage_EmptyBagWeight.requestFocusInWindow();
-        else {
-            jTextField_storage_coneNumber.selectAll();
-//            try {
-//                startRecognition(jTextField_num_of_con);
-//            } catch (IOException | LineUnavailableException ex) {
-//                Logger.getLogger(mainform.class.getName()).log(Level.SEVERE, null, ex);
-//            }
-        }
-    }//GEN-LAST:event_jTextField_storage_coneNumberFocusGained
 
     private void jButton_Statics_openerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_Statics_openerActionPerformed
         evt.getID();
@@ -3376,9 +3127,9 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
 
                 List<Object[]> yumya = exportController.getYuwmya(dateFrom, dateTo, selectedCIDs, p);
                 for (Object[] row : yumya) {
-                    model.addRow(new Object[]{row[2], NumberUtils.ToArb(row[1].toString()),
-                        NumberUtils.ToArb(row[3].toString()), NumberUtils.ToArb(row[5].toString()),
-                        NumberUtils.ToArb(row[0].toString()), NumberUtils.ToArb(row[4].toString()), row[6]});
+                    model.addRow(new Object[]{row[2], ArabicDigits.toArabicDigits(row[1].toString()),
+                        ArabicDigits.toArabicDigits(row[3].toString()), ArabicDigits.toArabicDigits(row[5].toString()),
+                        ArabicDigits.toArabicDigits(row[0].toString()), ArabicDigits.toArabicDigits(row[4].toString()), row[6]});
                 }
             }
         } catch (DatabaseException ex) {
@@ -3449,51 +3200,12 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
         }
     }//GEN-LAST:event_jButton_E_EditActionPerformed
 
-    private void jTextField_E_WightKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_E_WightKeyTyped
-        sendToWight(jTextField_E_Wight, null, evt);
-        textbox_number_weight(evt, jTextField_E_Wight, 999, () -> jTextField_E_Wight.requestFocusInWindow());
-    }//GEN-LAST:event_jTextField_E_WightKeyTyped
-
-    private void jTextField_E_PaltNumKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_E_PaltNumKeyTyped
-        sendToWight(jTextField_E_PaltNum, null, evt);
-        textbox_number(evt, jTextField_E_PaltNum, 999, false, () -> jTextField_E_PaltNum.requestFocusInWindow());
-    }//GEN-LAST:event_jTextField_E_PaltNumKeyTyped
-
-    private void jTextField_E_ConNumKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_E_ConNumKeyTyped
-        sendToWight(jTextField_E_ConNum, null, evt);
-        textbox_number(evt, jTextField_E_ConNum, 999, false, () -> jTextField_E_ConNum.requestFocusInWindow());
-        jTextField_E_Wight.setText(NumberUtils.ToArb(
-                (((NumberUtils.ToDEng(jTextField_E_O_ConNum.getText()) - NumberUtils.ToDEng(jTextField_E_ConNum.getText()))
-                * (NumberUtils.ToDEng(jTextField_storage_EmptyConeWeight.getText()) / 1000))
-                + NumberUtils.ToDEng(jTextField_E_O_Wight.getText()))));
-    }//GEN-LAST:event_jTextField_E_ConNumKeyTyped
-
-    private void jTextField_E_lotKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_E_lotKeyTyped
-        sendToWight(jTextField_E_lot, null, evt);
-        textbox_length_limiter(evt, jTextField_E_lot, 5, () -> jTextField_E_lot.requestFocusInWindow());
-        char input = evt.getKeyChar();
-        if (Character.isDigit(input)) {
-            evt.setKeyChar(NumberUtils.ToArb(input + "").charAt(0));
-        }
-    }//GEN-LAST:event_jTextField_E_lotKeyTyped
-
-    private void jTextField_Pros_conWightKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_Pros_conWightKeyTyped
-        sendToWight(jTextField_Pros_conWight, null, evt);
-        evt.setKeyChar(NumberUtils.ToArb(evt.getKeyChar() + "").charAt(0));
-        textbox_number(evt, jTextField_Pros_conWight, 4, false, () -> jTextField_Pros_conWight.requestFocusInWindow());
-    }//GEN-LAST:event_jTextField_Pros_conWightKeyTyped
-
     private void jButton_Emp_openerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_Emp_openerActionPerformed
         evt.getID();
         open_panel(pause_panel);
         jTextArea_emp.requestFocusInWindow();
         jTextArea_emp.setText("");
     }//GEN-LAST:event_jButton_Emp_openerActionPerformed
-
-    private void jTextArea_empKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextArea_empKeyTyped
-        evt.getID();
-        evt.setKeyChar(NumberUtils.ToArb(evt.getKeyChar() + "").charAt(0));
-    }//GEN-LAST:event_jTextArea_empKeyTyped
 
     private void jTable_storageMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable_storageMouseReleased
         evt.getID();
@@ -3508,18 +3220,18 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
                     Product product = productController.getProduct(bag.getPro_id());
                     jCheckBox_E_O_Mark.setSelected(bag.isUsed());
                     jCheckBox_E_Mark.setSelected(bag.isUsed());
-                    jTextField_E_O_TotWight.setText(NumberUtils.ToArb(bag.getTot_wight()));
-                    jTextField_E_TotWight.setText(NumberUtils.ToArb(bag.getTot_wight()));
+                    jTextField_E_O_TotWight.setText(ArabicDigits.toArabicDigits(bag.getTot_wight()));
+                    jTextField_E_TotWight.setText(ArabicDigits.toArabicDigits(bag.getTot_wight()));
                     jComboBox_E_O_proName.setSelectedItem(product);
                     jComboBox_E_proName.setSelectedItem(product);
-                    jTextField_E_O_lot.setText(NumberUtils.ToArb(bag.getLot()));
-                    jTextField_E_lot.setText(NumberUtils.ToArb(bag.getLot()));
-                    jTextField_E_O_ConNum.setText(NumberUtils.ToArb(bag.getNum_of_con() + ""));
-                    jTextField_E_ConNum.setText(NumberUtils.ToArb(bag.getNum_of_con() + ""));
-                    jTextField_E_O_PaltNum.setText(NumberUtils.ToArb(bag.getPallet_numb() + ""));
-                    jTextField_E_PaltNum.setText(NumberUtils.ToArb(bag.getPallet_numb() + ""));
-                    jTextField_E_O_Wight.setText(NumberUtils.ToArb(bag.getWeight()));
-                    jTextField_E_Wight.setText(NumberUtils.ToArb(bag.getWeight()));
+                    jTextField_E_O_lot.setText(ArabicDigits.toArabicDigits(bag.getLot()));
+                    jTextField_E_lot.setText(ArabicDigits.toArabicDigits(bag.getLot()));
+                    jTextField_E_O_ConNum.setText(ArabicDigits.toArabicDigits(bag.getNum_of_con()));
+                    jTextField_E_ConNum.setText(ArabicDigits.toArabicDigits(bag.getNum_of_con()));
+                    jTextField_E_O_PaltNum.setText(ArabicDigits.toArabicDigits(bag.getPallet_numb()));
+                    jTextField_E_PaltNum.setText(ArabicDigits.toArabicDigits(bag.getPallet_numb()));
+                    jTextField_E_O_Wight.setText(ArabicDigits.toArabicDigits(bag.getWeight()));
+                    jTextField_E_Wight.setText(ArabicDigits.toArabicDigits(bag.getWeight()));
                     jTextField_E_Color.setText(product.getColor());
 
                 } else if (jTable_storage.getSelectedRowCount() > 1) {
@@ -3552,19 +3264,6 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
         }
     }//GEN-LAST:event_jButton_storage_ClearActionPerformed
 
-    private void jTextField_storage_EmptyBagWeightFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextField_storage_EmptyBagWeightFocusGained
-        evt.getID();
-        if (jCheckBox_storage_FreezeEmptyBagWight.isSelected())
-            jTextField_storage_TotalWeight.requestFocusInWindow();
-        else
-            jTextField_storage_EmptyBagWeight.selectAll();
-    }//GEN-LAST:event_jTextField_storage_EmptyBagWeightFocusGained
-
-    private void jTextField_storage_TotalWeightFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextField_storage_TotalWeightFocusGained
-        evt.getID();
-        jTextField_storage_TotalWeight.selectAll();
-    }//GEN-LAST:event_jTextField_storage_TotalWeightFocusGained
-
     private void jButton_E_printActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_E_printActionPerformed
         evt.getID();
         PreparePrintingPanel(new Ticket(((Product) jComboBox_E_proName.getSelectedItem()).getName(),
@@ -3576,26 +3275,6 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
                 jTextField_E_Wight.getText()), jCheckBox_E_P.isSelected());
     }//GEN-LAST:event_jButton_E_printActionPerformed
 
-    private void jTextField_storage_ColorKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_storage_ColorKeyTyped
-        sendToWight(jTextField_storage_Color, jTextField_storage_TotalWeight, evt);
-        if (Character.isDigit(evt.getKeyChar())) {
-            evt.consume();
-        }
-    }//GEN-LAST:event_jTextField_storage_ColorKeyTyped
-
-    private void jTextField_E_TotWightKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_E_TotWightKeyTyped
-        textbox_number_weight(evt, jTextField_E_TotWight, 999, () -> jTextField_E_TotWight.requestFocusInWindow());
-        try {
-            jTextField_E_Wight.setText(NumberUtils.ToArb(
-                    ((NumberUtils.ToDEng(jTextField_E_O_TotWight.getText())
-                    - NumberUtils.ToDEng(jTextField_E_TotWight.getText()))
-                    + NumberUtils.ToDEng(jTextField_E_O_Wight.getText()))));
-        } catch (Exception e) {
-            System.out.println("exp");
-        }
-
-    }//GEN-LAST:event_jTextField_E_TotWightKeyTyped
-
     private void jButton_Reset_TicketCount10x10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_Reset_TicketCount10x10ActionPerformed
         evt.getID();
         try {
@@ -3606,21 +3285,6 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
             showException(ex);
         }
     }//GEN-LAST:event_jButton_Reset_TicketCount10x10ActionPerformed
-
-    private void jTextField_ME_lotKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_ME_lotKeyTyped
-        sendToWight(jTextField_ME_lot, null, evt);
-
-        textbox_length_limiter(evt, jTextField_ME_lot, 5, () -> jTextField_ME_lot.requestFocusInWindow());
-        char input = evt.getKeyChar();
-        if (Character.isDigit(input)) {
-            evt.setKeyChar(NumberUtils.ToArb(input + "").charAt(0));
-        }
-    }//GEN-LAST:event_jTextField_ME_lotKeyTyped
-
-    private void jTextField_ME_PaltNumKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_ME_PaltNumKeyTyped
-        sendToWight(jTextField_ME_PaltNum, null, evt);
-        textbox_number(evt, jTextField_ME_PaltNum, 999, false, () -> jTextField_ME_PaltNum.requestFocusInWindow());
-    }//GEN-LAST:event_jTextField_ME_PaltNumKeyTyped
 
     private void jButton_ME_EditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_ME_EditActionPerformed
         evt.getID();
@@ -3654,13 +3318,6 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
         evt.getID();
         this.setEnabled(true);
     }//GEN-LAST:event_MultiEditWindowClosing
-
-    private void jTextField_E_ColorKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_E_ColorKeyTyped
-        sendToWight(jTextField_E_Color, null, evt);
-        if (Character.isDigit(evt.getKeyChar())) {
-            evt.consume();
-        }
-    }//GEN-LAST:event_jTextField_E_ColorKeyTyped
 
     private void jButton_stock_createExclActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_stock_createExclActionPerformed
         evt.getID();
@@ -3697,13 +3354,6 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
         }
     }//GEN-LAST:event_jButton_youm_getClientsActionPerformed
 
-    private void jTextField_youm_ClientFilterKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_youm_ClientFilterKeyTyped
-        evt.getID();
-        if (evt.getKeyChar() == '\'') {
-            evt.consume();
-        }
-    }//GEN-LAST:event_jTextField_youm_ClientFilterKeyTyped
-
     private void jButton_youm_createExcelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_youm_createExcelActionPerformed
         evt.getID();
         int RowIndex = 4;
@@ -3712,7 +3362,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
             workbook = new XSSFWorkbook(EX);
             XSSFSheet sheet = workbook.getSheetAt(0);
             Cell cell = sheet.getRow(1).getCell(1);
-            cell.setCellValue("الاستاذ :   " + jTable_yumia.getValueAt(0, 0) + "");
+            cell.setCellValue("الاستاذ :   " + jTable_yumia.getValueAt(0, 0));
             jTable_yumia.selectAll();
             for (int selectedRow : jTable_yumia.getSelectedRows()) {
                 if (RowIndex >= 6) {
@@ -3801,28 +3451,11 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
         try {
             fill_Table_rep_select();
             jLabel_Order_num.setText(!jCheckBox_rep_wzn.isSelected() ? "عدد الشكاير" : "الوزن المطلوب");
+            TextFieldRules.changeMaxLength(jTextField_rep_numOfBag, jCheckBox_rep_wzn.isSelected() ? 4 : 3);
         } catch (DatabaseException | BusinessException ex) {
             showException(ex);
         }
     }//GEN-LAST:event_jCheckBox_rep_wznActionPerformed
-
-    private void jTextField_Pros_colorKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_Pros_colorKeyTyped
-        sendToWight(jTextField_Pros_color, null, evt);
-    }//GEN-LAST:event_jTextField_Pros_colorKeyTyped
-
-    private void jTextField_storage_SearchProductsKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_storage_SearchProductsKeyTyped
-        try {
-            sendToWight(jTextField_storage_SearchProducts, jTextField_storage_TotalWeight, evt);
-            evt.setKeyChar(NumberUtils.ToArb(evt.getKeyChar() + "").charAt(0));
-
-            if (evt.getKeyChar() == KeyEvent.VK_DELETE) {
-                jTextField_storage_SearchProducts.setText("");
-            }
-            combox_fill_with(jComboBox_storage_products, productController.getAvailableProductsLike(jTextField_storage_SearchProducts.getText()));
-        } catch (DatabaseException ex) {
-            showException(ex);
-        }
-    }//GEN-LAST:event_jTextField_storage_SearchProductsKeyTyped
 
     private void jButton_set_changePosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_set_changePosActionPerformed
         switch (jLabel_print_ValPallet.getHorizontalAlignment()) {
@@ -3908,20 +3541,6 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
         }
     }//GEN-LAST:event_jButton_mach_addMachActionPerformed
 
-    private void jTextField_mach_MNameKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_mach_MNameKeyTyped
-        sendToWight(jTextField_mach_MName, null, evt);
-        evt.setKeyChar(NumberUtils.ToArb(evt.getKeyChar() + "").charAt(0));
-    }//GEN-LAST:event_jTextField_mach_MNameKeyTyped
-
-    private void jTextField_mach_lotKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_mach_lotKeyTyped
-        sendToWight(jTextField_mach_lot, null, evt);
-        textbox_length_limiter(evt, jTextField_mach_lot, 5, () -> jTextField_mach_lot.requestFocusInWindow());
-        char input = evt.getKeyChar();
-        if (Character.isDigit(input)) {
-            evt.setKeyChar(NumberUtils.ToArb(input + "").charAt(0));
-        }
-    }//GEN-LAST:event_jTextField_mach_lotKeyTyped
-
     private void jButton_mach_DeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_mach_DeleteActionPerformed
         if (jTable_machines.getSelectedRow() > -1) {
             try {
@@ -3981,20 +3600,6 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
         }
     }//GEN-LAST:event_jTable_machinesMouseClicked
 
-    private void jTextField_Ezn_Search_prosKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_Ezn_Search_prosKeyTyped
-        try {
-            sendToWight(jTextField_Ezn_Search_pros, null, evt);
-            evt.setKeyChar(NumberUtils.ToArb(evt.getKeyChar() + "").charAt(0));
-
-            if (evt.getKeyChar() == KeyEvent.VK_DELETE) {
-                jTextField_Ezn_Search_pros.setText("");
-            }
-            combox_fill_with(jComboBox_rep_Pros, productController.getAvailableProductsLike(jTextField_Ezn_Search_pros.getText()));
-        } catch (DatabaseException ex) {
-            showException(ex);
-        }
-    }//GEN-LAST:event_jTextField_Ezn_Search_prosKeyTyped
-
     private void jButton_Settings_openerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_Settings_openerActionPerformed
         try {
             evt.getID();
@@ -4005,20 +3610,6 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
             showException(ex);
         }
     }//GEN-LAST:event_jButton_Settings_openerActionPerformed
-
-    private void jTextField_stock_SearchProductsKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_stock_SearchProductsKeyTyped
-        try {
-            sendToWight(jTextField_stock_SearchProducts, null, evt);
-            evt.setKeyChar(NumberUtils.ToArb(evt.getKeyChar() + "").charAt(0));
-
-            if (evt.getKeyChar() == KeyEvent.VK_DELETE) {
-                jTextField_stock_SearchProducts.setText("");
-            }
-            combox_fill_with(jComboBox_stock_Pros, productController.getAvailableProductsLike(jTextField_stock_SearchProducts.getText()));
-        } catch (DatabaseException ex) {
-            showException(ex);
-        }
-    }//GEN-LAST:event_jTextField_stock_SearchProductsKeyTyped
 
     private void jButton_set_TicketPrinterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_set_TicketPrinterActionPerformed
         try {
@@ -4033,34 +3624,12 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
         }
     }//GEN-LAST:event_jButton_set_TicketPrinterActionPerformed
 
-    private void jTextField_statistics_Search_prosKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_statistics_Search_prosKeyTyped
-        try {
-            sendToWight(jTextField_statistics_Search_pros, null, evt);
-            evt.setKeyChar(NumberUtils.ToArb(evt.getKeyChar() + "").charAt(0));
-
-            if (evt.getKeyChar() == KeyEvent.VK_DELETE) {
-                jTextField_statistics_Search_pros.setText("");
-            }
-            combox_fill_with(jComboBox_statistics_products, productController.getAvailableProductsLike(jTextField_statistics_Search_pros.getText()));
-        } catch (DatabaseException ex) {
-            showException(ex);
+    private void jTextField_youm_ClientFilterKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_youm_ClientFilterKeyTyped
+        evt.getID();
+        if (evt.getKeyChar() == '\'') {
+            evt.consume();
         }
-    }//GEN-LAST:event_jTextField_statistics_Search_prosKeyTyped
-
-    private void jTextField_youm_Search_prosKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_youm_Search_prosKeyTyped
-        try {
-            sendToWight(jTextField_youm_Search_pros, null, evt);
-            evt.setKeyChar(NumberUtils.ToArb(evt.getKeyChar() + "").charAt(0));
-
-            if (evt.getKeyChar() == KeyEvent.VK_DELETE) {
-                jTextField_youm_Search_pros.setText("");
-            }
-            combox_fill_with(jComboBox_youm_products,
-                    productController.getAvailableProductsLike(jTextField_youm_Search_pros.getText()));
-        } catch (DatabaseException ex) {
-            showException(ex);
-        }
-    }//GEN-LAST:event_jTextField_youm_Search_prosKeyTyped
+    }//GEN-LAST:event_jTextField_youm_ClientFilterKeyTyped
 
     private void setupKeyBindings() {
         InputMap inputMap = rootPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
@@ -4127,12 +3696,12 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
                 throw new BusinessException("يجب إختيار صنف");
             }
             req = new Bag(((Product) jComboBox_storage_products.getSelectedItem()).getId(),
-                    parseInt(jTextField_storage_coneNumber, "عدد الكون"),
-                    parseInt(jTextField_storage_palletNumber, "رقم البالتة"),
-                    parseDouble(jTextField_storage_TotalWeight, "الوزن"),
-                    parseDouble(jTextField_storage_NetWeight, "الوزن الصافي"),
-                    (double) parseInt(jTextField_storage_EmptyBagWeight, "الوزن الفارغ") / 100,
-                    requireText(jTextField_storage_lot, "اللوط"),
+                    ArabicDigits.parseInt(requireText(jTextField_storage_coneNumber, "عدد الكون")),
+                    ArabicDigits.parseInt(requireText(jTextField_storage_palletNumber, "رقم البالتة")),
+                    ArabicDigits.parseInt(requireText(jTextField_storage_TotalWeight, "الوزن")),
+                    ArabicDigits.parseInt(requireText(jTextField_storage_NetWeight, "الوزن الصافي")),
+                    ArabicDigits.parseInt(requireText(jTextField_storage_EmptyBagWeight, "الوزن الفارغ")) / 100,
+                    ArabicDigits.normalizeForParsing(requireText(jTextField_storage_lot, "اللوط")),
                     jCheckBox_storage_MarkBag.isSelected()
             );
 
@@ -4147,40 +3716,9 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
     private String requireText(JTextField field, String name) {
         String value = field.getText().trim();
         if (value.isEmpty()) {
-            throw new BusinessException("برجاء إدخال " + name);
+            throw new BusinessException("برجاء إدخال قيمة صحيحة " + name);
         }
-        return NumberUtils.ToEng(value);
-    }
-
-    private int parseInt(JTextField field, String name) {
-        String value = field.getText().trim();
-
-        if (value.isEmpty()) {
-            throw new BusinessException("برجاء إدخال " + name);
-        }
-
-        try {
-            return (int) NumberUtils.ToDEng(value);
-        } catch (Exception e) {
-            throw new BusinessException(name + " يجب أن يكون رقم صحيح");
-        }
-    }
-
-    private double parseDouble(JTextField field, String name) {
-        String value = field.getText().trim();
-
-        if (value.isEmpty()) {
-            throw new BusinessException("برجاء إدخال " + name);
-        }
-        if (!utils.isInputMatchPattern(value, MizanPattern)) {
-            throw new BusinessException("غير مطابق لل 0.00 " + name);
-        }
-
-        try {
-            return NumberUtils.ToDEng(value);
-        } catch (Exception e) {
-            throw new BusinessException(name + " يجب أن يكون رقم");
-        }
+        return value;
     }
 
     private void showError(String msg, String title) {
@@ -4211,111 +3749,6 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
     ///                                                                                                              ///
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    private void textbox_number_weight(KeyEvent event, JTextField textboxname, int length, Runnable clearFunction) {
-
-        if (event.getKeyChar() == KeyEvent.VK_DELETE) {
-            if ((event.getModifiersEx() & KeyEvent.SHIFT_DOWN_MASK) != 0) {
-                clearFunction.run();
-            }
-            textboxname.setText("");
-        }
-        if (textboxname.getText().length() > length - 1 && event.getKeyChar() != KeyEvent.VK_ENTER
-                && event.getKeyChar() != KeyEvent.VK_BACK_SPACE) {
-            event.consume();
-        } else {
-            if ((!Character.isDigit(event.getKeyChar())
-                    && (event.getKeyChar() == 'ز' || event.getKeyChar() == '.' || event.getKeyChar() == '٫'))
-                    && !(textboxname.getText().contains(".") || textboxname.getText().contains("٫"))) {
-                event.setKeyChar('٫');
-            } else {
-                if (Character.isDigit(event.getKeyChar())) {
-                    if ((textboxname.getText().contains(".")
-                            && (textboxname.getText().indexOf(".") == textboxname.getText().length() - 4))
-                            || (textboxname.getText().contains("٫")
-                            && (textboxname.getText().indexOf("٫") == textboxname.getText().length() - 4))) {
-                        event.consume();
-                    } else {
-                        event.setKeyChar(NumberUtils.ToArb(event.getKeyChar() + "").charAt(0));
-                    }
-                } else {
-                    event.consume();
-                }
-            }
-        }
-    }
-
-    private void textbox_length_limiter(KeyEvent event, JTextField textboxname, int length, Runnable clearFunction) {
-        if (textboxname.getText().length() > length - 1 && event.getKeyChar() != KeyEvent.VK_ENTER
-                && event.getKeyChar() != KeyEvent.VK_BACK_SPACE) {
-            event.consume();
-        }
-        if (event.getKeyChar() == KeyEvent.VK_DELETE) {
-            if ((event.getModifiersEx() & KeyEvent.SHIFT_DOWN_MASK) != 0) {
-                clearFunction.run();
-            }
-            textboxname.setText("");
-        }
-    }
-
-    private void textbox_number(KeyEvent event, JTextField textboxname, int length, boolean lastEven, Runnable clearFunction) {
-
-        if (event.getKeyChar() == KeyEvent.VK_DELETE) {
-            if ((event.getModifiersEx() & KeyEvent.SHIFT_DOWN_MASK) != 0) {
-                clearFunction.run();
-            }
-            textboxname.setText("");
-        }
-        if (textboxname.getText().length() > length - 1 && event.getKeyChar() != KeyEvent.VK_ENTER
-                && event.getKeyChar() != KeyEvent.VK_BACK_SPACE) {
-            event.consume();
-        } else {
-            if (!Character.isDigit(event.getKeyChar())) {
-                event.consume();
-            } else {
-                if (lastEven && textboxname.getText().length() == length - 1
-                        && Integer.parseInt(event.getKeyChar() + "") % 2 != 0) {
-                    event.consume();
-                }
-                event.setKeyChar(NumberUtils.ToArb(event.getKeyChar() + "").charAt(0));
-            }
-        }
-    }
-
-    void sendToWight(JTextField fromTextField, JTextField toTextField, KeyEvent evt) {
-        long now = System.currentTimeMillis();
-        char c = evt.getKeyChar();
-
-        if (lastInputTime == -1 || now - lastInputTime > 100) {
-            mizanInputBuilder.setLength(0); // Reset if too slow
-            enterFromMizan = false;
-            savedText = fromTextField.getText();
-        } else {
-            evt.consume();
-        }
-
-        if (c == '\n') {
-            String mizanInput = mizanInputBuilder.toString().trim();
-            mizanInputBuilder.setLength(0);
-            if (now - lastInputTime < 50) {
-                enterFromMizan = true;
-                if (utils.isInputMatchPattern(mizanInput, MizanPattern)) {
-                    if (toTextField != null) {
-                        toTextField.setText(NumberUtils.ToArb(mizanInput));
-                    }
-                    fromTextField.setText(
-                            fromTextField.getText().length() > savedText.length()
-                            ? savedText.substring(0, fromTextField.getText().length() - 1) : savedText
-                    );
-                    savedText = "";
-                }
-            }
-        } else {
-            mizanInputBuilder.append(c);
-        }
-        lastInputTime = now;
-        clearTimer.restart();
-    }
-
     private void combox_fill_with(JComboBox<Product> Combo, List<Product> products) throws DatabaseException {
         Combo.removeAllItems();
         Combo.setModel(new DefaultComboBoxModel<>(products.toArray(Product[]::new)));
@@ -4338,12 +3771,12 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
 
     private void calc_net_weight() throws BusinessException {
         if (!jTextField_storage_EmptyConeWeight.getText().isBlank()) {
-            int num_of_con = parseInt(jTextField_storage_coneNumber, "عدد الكون");
-            double weight_of_con = (double) parseInt(jTextField_storage_EmptyConeWeight, "وزن الكون") / 1000,
-                    bag_weight = (double) parseInt(jTextField_storage_EmptyBagWeight, "وزن الفارغ") / 100,
-                    weight = parseDouble(jTextField_storage_TotalWeight, "وزن القائم");
+            int num_of_con = ArabicDigits.parseInt(requireText(jTextField_storage_coneNumber, "عدد الكون"));
+            double weight_of_con = ArabicDigits.parseInt(requireText(jTextField_storage_EmptyConeWeight, "وزن الكون")) / 1000.00,
+                    bag_weight = ArabicDigits.parseInt(requireText(jTextField_storage_EmptyBagWeight, "وزن الفارغ")) / 100.00,
+                    weight = ArabicDigits.parseDouble(requireText(jTextField_storage_TotalWeight, "وزن القائم"));
 
-            jTextField_storage_NetWeight.setText(NumberUtils.ToArb(weight - (bag_weight + (num_of_con * weight_of_con))));
+            jTextField_storage_NetWeight.setText(ArabicDigits.toArabicDigits(weight - (bag_weight + (num_of_con * weight_of_con))));
         }
 
     }
@@ -4351,8 +3784,10 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
     private void calc_pallet_weight() throws DatabaseException {
         if (!jTextField_storage_palletNumber.getText().isEmpty() && !jTextField_storage_lot.getText().isEmpty()
                 && jComboBox_storage_products.getSelectedIndex() != -1) {
-            jTextField_storage_PalletWeight.setText(NumberUtils.ToArb(storageController.calc_pallet_weight(jTextField_storage_palletNumber.getText(),
+            jTextField_storage_PalletWeight.setText(ArabicDigits.toArabicDigits(storageController.calc_pallet_weight(jTextField_storage_palletNumber.getText(),
                     jTextField_storage_lot.getText(), jComboBox_storage_products.getSelectedItem().toString())));
+        } else {
+            jTextField_storage_PalletWeight.setText("");
         }
     }
 
@@ -4362,35 +3797,35 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
         List<Bag> bags = storageController.getBags(jComboBox_storage_products.getSelectedItem().toString());
 
         for (Bag bag : bags) {
-            model.addRow(new Object[]{NumberUtils.ToArb(bag.getWeight()), NumberUtils.ToArb(bag.getNum_of_con() + ""),
-                NumberUtils.ToArb(bag.getLot()), NumberUtils.ToArb(bag.getPallet_numb() + ""), bag.getId(), "",
+            model.addRow(new Object[]{ArabicDigits.toArabicDigits(bag.getWeight()), ArabicDigits.toArabicDigits(bag.getNum_of_con()),
+                ArabicDigits.toArabicDigits(bag.getLot()), ArabicDigits.toArabicDigits(bag.getPallet_numb()), bag.getId(), "",
                 bag.isUsed()});
         }
         Product pro = productController.getProduct(jComboBox_storage_products.getSelectedItem().toString());
         if (pro != null) {
             if (!jCheckBox_storage_FreezeConeWeightChange.isSelected()) {
-                jTextField_storage_EmptyConeWeight.setText(NumberUtils.ToArb(pro.getWeight_of_con()));
+                jTextField_storage_EmptyConeWeight.setText(ArabicDigits.toArabicDigits(pro.getWeight_of_con()));
             }
             jTextField_storage_Color.setText(pro.getColor());
             jCheckBox_storage_Box.setSelected(pro.isBox());
-            BagMax = pro.isBox() ? 3 : 2;
+            TextFieldRules.changeMaxLength(jTextField_storage_EmptyBagWeight, pro.isBox() ? 3 : 2);
             jLabel11.setText(!pro.isBox() ? "فارغ الشيكاره" : "فارغ الصندوق");
             jTextField_storage_EmptyBagWeight.setBackground(pro.isBox() ? Color.pink : Color.WHITE);
         }
 
         if (model.getRowCount() != 0) {
-            String lott = NumberUtils.ToEng(model.getValueAt(model.getRowCount() - 1, 2).toString()),
-                    pallet_num = NumberUtils.ToEng(model.getValueAt(model.getRowCount() - 1, 3).toString());
+            String lott = ArabicDigits.normalizeForParsing(model.getValueAt(model.getRowCount() - 1, 2).toString()),
+                    pallet_num = ArabicDigits.normalizeForParsing(model.getValueAt(model.getRowCount() - 1, 3).toString());
             int cunt = 0;
             for (int i = model.getRowCount() - 1; i >= 0; i--) {
-                if (!lott.equals(NumberUtils.ToEng(model.getValueAt(i, 2).toString()))
-                        || !pallet_num.equals(NumberUtils.ToEng(model.getValueAt(i, 3).toString()))) {
-                    lott = NumberUtils.ToEng(model.getValueAt(i, 2).toString());
-                    pallet_num = NumberUtils.ToEng(model.getValueAt(i, 3).toString());
+                if (!lott.equals(ArabicDigits.normalizeForParsing(model.getValueAt(i, 2).toString()))
+                        || !pallet_num.equals(ArabicDigits.normalizeForParsing(model.getValueAt(i, 3).toString()))) {
+                    lott = ArabicDigits.normalizeForParsing(model.getValueAt(i, 2).toString());
+                    pallet_num = ArabicDigits.normalizeForParsing(model.getValueAt(i, 3).toString());
                     cunt = 0;
                 }
 
-                model.setValueAt(NumberUtils.ToArb(++cunt + ""), i, 5);
+                model.setValueAt(ArabicDigits.toArabicDigits(++cunt), i, 5);
             }
         }
     }
@@ -4400,7 +3835,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
         model.setRowCount(0);
         List<Product> pros = productController.getAvailableProductsLike("");
         for (Product pro : pros) {
-            model.addRow(new Object[]{pro.getId(), pro.getName(), NumberUtils.ToArb(pro.getWeight_of_con()),
+            model.addRow(new Object[]{pro.getId(), pro.getName(), ArabicDigits.toArabicDigits(pro.getWeight_of_con()),
                 pro.getColor(), pro.isBox()});
         }
 
@@ -4432,8 +3867,8 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
 
                 for (String[] pallet : pallets) {
                     ((DefaultTableModel) jTable_rep_select.getModel())
-                            .addRow(new Object[]{NumberUtils.ToArb(pallet[0]), NumberUtils.ToArb(pallet[1]),
-                        NumberUtils.ToArb(pallet[2]), NumberUtils.ToArb(pallet[3]),
+                            .addRow(new Object[]{ArabicDigits.toArabicDigits(pallet[0]), ArabicDigits.toArabicDigits(pallet[1]),
+                        ArabicDigits.toArabicDigits(pallet[2]), ArabicDigits.toArabicDigits(pallet[3]),
                         Boolean.valueOf(pallet[4])});
                 }
                 ((DefaultTableModel) jTable_rep_preview.getModel()).setRowCount(0);
@@ -4458,14 +3893,14 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
             try {
                 List<String[]> statistics = exportController.getstatistics(date1, date2, p);
                 for (String[] row : statistics) {
-                    model.addRow(new Object[]{row[0], NumberUtils.ToArb(row[1]),
-                        NumberUtils.ToArb(row[2]), NumberUtils.ToArb(row[3])});
+                    model.addRow(new Object[]{row[0], ArabicDigits.toArabicDigits(row[1]),
+                        ArabicDigits.toArabicDigits(row[2]), ArabicDigits.toArabicDigits(row[3])});
                 }
                 double tot = 0.0;
                 for (int i = 0; i < model.getRowCount(); i++) {
-                    tot += NumberUtils.ToDEng(model.getValueAt(i, 3).toString());
+                    tot += ArabicDigits.parseDouble(model.getValueAt(i, 3).toString());
                 }
-                jTextField_statis_tot.setText(NumberUtils.ToArb(tot));
+                jTextField_statis_tot.setText(ArabicDigits.toArabicDigits(tot));
             } catch (DatabaseException ex) {
                 showException(ex);
             }
