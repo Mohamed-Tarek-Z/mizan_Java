@@ -34,14 +34,14 @@ public final class TextFieldRules {
      * @param onEnter runs when Enter is pressed in this field (e.g. () ->
      * next.requestFocusInWindow(), or () -> compute()); pass null to leave
      * Enter 's default behavior alone
-     * @param clearGroupOnShiftDelete the field(s) to clear when Shift+Delete is
-     * pressed in this field; if empty, only this field is cleared
+     * @param onShiftDelete the field(s) to clear when Shift+Delete is pressed
+     * in this field; if empty, only this field is cleared
      */
     public static void apply(JTextField field,
             int maxLength,
             boolean isDigitsOnly, boolean isDouble,
             Runnable onEnter,
-            JTextField... clearGroupOnShiftDelete) {
+            Runnable onShiftDelete) {
 
         // 1) digits only, length limit, optional forced Arabic-Indic display
         ((AbstractDocument) field.getDocument())
@@ -56,22 +56,20 @@ public final class TextFieldRules {
         clearOnDelet(field);
 
         // 4) Shift+Delete -> clear the given group (defaults to just this field)
-        JTextField[] group = (clearGroupOnShiftDelete != null && clearGroupOnShiftDelete.length > 0)
-                ? clearGroupOnShiftDelete
-                : new JTextField[]{field};
-        bindKey(field, KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, InputEvent.SHIFT_DOWN_MASK), group);
+        if (onShiftDelete != null) {
+            bindKey(field, KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, InputEvent.SHIFT_DOWN_MASK), onShiftDelete);
+        }
     }
 
     public static void apply(JTextField field,
             int maxLength,
             boolean isDigitsOnly, boolean isDouble,
             JComponent next,
-            JTextField... clearGroupOnShiftDelete) {
-        apply(field, maxLength, isDigitsOnly, isDouble,
-                next != null ? () -> {
-                            goAndSelect(next);
-                        } : field::transferFocus,
-                clearGroupOnShiftDelete);
+            Runnable onShiftDelete) {
+        apply(field, maxLength, isDigitsOnly, isDouble, next != null
+                ? () -> {
+                    goAndSelect(next);
+                } : field::transferFocus, onShiftDelete);
     }
 
     private static void clearOnDelet(JTextField field) {
@@ -86,23 +84,13 @@ public final class TextFieldRules {
         });
     }
 
-    private static void bindKey(JTextField field, KeyStroke keyStroke, JTextField... fieldsToClear) {
+    private static void bindKey(JTextField field, KeyStroke keyStroke, Runnable onShiftDelete) {
         String actionKey = field.getName() + "-clear-" + keyStroke;
         field.getInputMap(JComponent.WHEN_FOCUSED).put(keyStroke, actionKey);
         field.getActionMap().put(actionKey, new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                int firsteditable = -1;
-                for (int i = 0; i < fieldsToClear.length; i++) {
-                    if (fieldsToClear[i].isEditable()) {
-                        firsteditable = (firsteditable == -1) ? i : firsteditable;
-                        if (i != 0) {
-                            fieldsToClear[i].setText("");
-                        }
-                    }
-                }
-                fieldsToClear[firsteditable].requestFocus();
-                fieldsToClear[firsteditable].selectAll();
+                onShiftDelete.run();
             }
         });
     }

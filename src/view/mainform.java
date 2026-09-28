@@ -5,6 +5,7 @@ import controller.*;
 import model.*;
 import utils.*;
 import exceptions.*;
+import formController.MachineFormController;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -23,7 +24,6 @@ import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 import java.util.logging.Level;
@@ -80,6 +80,13 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
         });
     }
 
+    @Override
+    public void onWarning(String msg, String title) {
+        SwingUtilities.invokeLater(() -> {
+            showMessage(msg, title);
+        });
+    }
+
     public mainform() throws DatabaseException, BusinessException, SQLException {
 
         initComponents();
@@ -96,10 +103,9 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
         this.orderController = new OrderController(new OrderRepository(this.opj));
         this.machineController = new MachineController(new MachineRepository(this.opj), new ProductRepository(this.opj));
 
-        JTextField[] line = {jTextField_storage_coneNumber, jTextField_storage_EmptyBagWeight, jTextField_storage_TotalWeight}; // shift del clears 
-        TextFieldRules.apply(jTextField_storage_lot, 15, false, false, jTextField_storage_palletNumber, (JTextField[]) null);
-        TextFieldRules.apply(jTextField_storage_coneNumber, 3, true, false, jTextField_storage_EmptyBagWeight, line);
-        TextFieldRules.apply(jTextField_storage_EmptyBagWeight, 2, true, false, jTextField_storage_TotalWeight, line);
+        TextFieldRules.apply(jTextField_storage_lot, 15, false, false, jTextField_storage_palletNumber, this::clearStorageForm);
+        TextFieldRules.apply(jTextField_storage_coneNumber, 3, true, false, jTextField_storage_EmptyBagWeight, this::clearStorageForm);
+        TextFieldRules.apply(jTextField_storage_EmptyBagWeight, 2, true, false, jTextField_storage_TotalWeight, this::clearStorageForm);
         TextFieldRules.apply(jTextField_storage_palletNumber, 3, true, false, () -> {
             TextFieldRules.goAndSelect(jTextField_storage_coneNumber);
             try {
@@ -107,7 +113,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
             } catch (DatabaseException ex) {
                 showException(ex);
             }
-        }, (JTextField[]) null);
+        }, null);
         TextFieldRules.apply(jTextField_storage_TotalWeight, 8, true, true, () -> {
             jTextField_storage_NetWeight.requestFocusInWindow();
             try {
@@ -115,30 +121,30 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
             } catch (BusinessException e) {
                 showMessageInlable(true);
             }
-        }, line);
-        TextFieldRules.apply(jTextField_storage_NetWeight, 8, true, true, jTextField_storage_coneNumber, line);
-        TextFieldRules.apply(jTextField_storage_EmptyConeWeight, 4, true, false, jTextField_storage_coneNumber, (JTextField[]) null);
+        }, this::clearStorageForm);
+        TextFieldRules.apply(jTextField_storage_NetWeight, 8, true, true, jTextField_storage_coneNumber, this::clearStorageForm);
+        TextFieldRules.apply(jTextField_storage_EmptyConeWeight, 4, true, false, jTextField_storage_coneNumber, null);
 
         TextFieldRules.apply(jTextField_pro_name, 35, false, false, () -> {
-        }, (JTextField[]) null);
+        },  null);
         TextFieldRules.apply(jTextField_Pros_conWight, 4, true, false, () -> {
-        }, (JTextField[]) null);
+        }, null);
         TextFieldRules.apply(jTextField_rep_numOfBag, 3, true, false, () -> {
-        }, (JTextField[]) null);
+        }, null);
         TextFieldRules.apply(jTextField_E_Wight, 8, true, true, () -> {
-        }, (JTextField[]) null);
+        }, null);
         TextFieldRules.apply(jTextField_E_PaltNum, 3, true, false, () -> {
-        }, (JTextField[]) null);
+        }, null);
         TextFieldRules.apply(jTextField_E_ConNum, 3, true, false, () -> {
-        }, (JTextField[]) null);
+        }, null);
         TextFieldRules.apply(jTextField_E_lot, 15, false, false, () -> {
-        }, (JTextField[]) null);
+        }, null);
         TextFieldRules.apply(jTextField_E_TotWight, 8, true, true, () -> {
-        }, (JTextField[]) null);
+        }, null);
         TextFieldRules.apply(jTextField_ME_lot, 15, false, false, () -> {
-        }, (JTextField[]) null);
+        }, null);
         TextFieldRules.apply(jTextField_ME_PaltNum, 3, true, false, () -> {
-        }, (JTextField[]) null);
+        }, null);
 
         TextFieldRules.apply(jTextField_storage_SearchProducts, 20, false, false, () -> {
             try {
@@ -146,14 +152,14 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
             } catch (DatabaseException ex) {
                 showException(ex);
             }
-        }, (JTextField[]) null);
+        }, null);
         TextFieldRules.apply(jTextField_stock_SearchProducts, 20, false, false, () -> {
             try {
                 combox_fill_with(jComboBox_stock_Pros, productController.getAvailableProductsLike(jTextField_stock_SearchProducts.getText()));
             } catch (DatabaseException ex) {
                 showException(ex);
             }
-        }, (JTextField[]) null);
+        }, null);
 
         TextFieldRules.apply(jTextField_Ezn_Search_pros, 20, false, false, () -> {
             try {
@@ -161,7 +167,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
             } catch (DatabaseException ex) {
                 showException(ex);
             }
-        }, (JTextField[]) null);
+        }, null);
 
         TextFieldRules.apply(jTextField_statistics_Search_pros, 20, false, false, () -> {
             try {
@@ -169,7 +175,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
             } catch (DatabaseException ex) {
                 showException(ex);
             }
-        }, (JTextField[]) null);
+        }, null);
 
         TextFieldRules.apply(jTextField_youm_Search_pros, 20, false, false, () -> {
             try {
@@ -177,11 +183,14 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
             } catch (DatabaseException ex) {
                 showException(ex);
             }
-        }, (JTextField[]) null);
+        }, null);
 
         populateCombos();
         setupKeyBindings();
-        fill_machine();
+
+        new MachineFormController(this, jTextField_mach_MName, jTextField_mach_lot, jComboBox_mach_pros,
+                jButton_mach_addMach, jButton_mach_editMach, jButton_mach_Delete, jTable_machines, machineController,
+                productController).init();
 
         new WeightScaleCapture(jTextField_storage_TotalWeight).install();
     }
@@ -261,6 +270,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
         jLabel54 = new javax.swing.JLabel();
         jButton_mach_addMach = new javax.swing.JButton();
         jButton_mach_Delete = new javax.swing.JButton();
+        jButton_mach_editMach = new javax.swing.JButton();
         jTab_set_Printing = new javax.swing.JPanel();
         jButton_set_changePos = new javax.swing.JButton();
         jButton_set_printValueToCenter = new javax.swing.JButton();
@@ -1233,11 +1243,6 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
             jTable_machines.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
             jTable_machines.setShowGrid(true);
             jTable_machines.setShowVerticalLines(false);
-            jTable_machines.addMouseListener(new java.awt.event.MouseAdapter() {
-                public void mouseClicked(java.awt.event.MouseEvent evt) {
-                    jTable_machinesMouseClicked(evt);
-                }
-            });
             jScrollPane5.setViewportView(jTable_machines);
             jTable_machines.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
             if (jTable_machines.getColumnModel().getColumnCount() > 0) {
@@ -1277,24 +1282,22 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
             jPanel_Machines.add(jLabel54, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 20, 100, 40));
 
             jButton_mach_addMach.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-            jButton_mach_addMach.setText("Add / Edit");
-            jButton_mach_addMach.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent evt) {
-                    jButton_mach_addMachActionPerformed(evt);
-                }
-            });
-            jPanel_Machines.add(jButton_mach_addMach, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 180, 170, 70));
+            jButton_mach_addMach.setText("Add");
+            jPanel_Machines.add(jButton_mach_addMach, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 180, 170, 70));
 
             jButton_mach_Delete.setBackground(new java.awt.Color(255, 0, 0));
             jButton_mach_Delete.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
             jButton_mach_Delete.setForeground(new java.awt.Color(255, 255, 255));
             jButton_mach_Delete.setText("Delete");
-            jButton_mach_Delete.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent evt) {
-                    jButton_mach_DeleteActionPerformed(evt);
-                }
-            });
-            jPanel_Machines.add(jButton_mach_Delete, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 200, 80, 40));
+            jPanel_Machines.add(jButton_mach_Delete, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 200, 80, 30));
+
+            jButton_mach_editMach.setBackground(new java.awt.Color(102, 204, 255));
+            jButton_mach_editMach.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+            jButton_mach_editMach.setText("Edit");
+            jButton_mach_editMach.setMaximumSize(new java.awt.Dimension(73, 39));
+            jButton_mach_editMach.setMinimumSize(new java.awt.Dimension(73, 39));
+            jButton_mach_editMach.setPreferredSize(new java.awt.Dimension(73, 39));
+            jPanel_Machines.add(jButton_mach_editMach, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 190, 140, 50));
 
             jTabbedPane_settings.addTab("Machine", jPanel_Machines);
 
@@ -3253,15 +3256,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
 
     private void jButton_storage_ClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_storage_ClearActionPerformed
         evt.getID();
-        if (!jCheckBox_storage_FreezeEmptyBagWight.isSelected()) {
-            jTextField_storage_EmptyBagWeight.setText("");
-        }
-        jTextField_storage_TotalWeight.setText("");
-        jTextField_storage_NetWeight.setText("");
-        jTextField_storage_coneNumber.requestFocus();
-        if (!jCheckBox_storage_freezeConeNumber.isSelected()) {
-            jTextField_storage_coneNumber.selectAll();
-        }
+        clearStorageForm();
     }//GEN-LAST:event_jButton_storage_ClearActionPerformed
 
     private void jButton_E_printActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_E_printActionPerformed
@@ -3516,89 +3511,6 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
             showException(ex);
         }
     }//GEN-LAST:event_jButton_set_reloadSettingFileActionPerformed
-
-    private void jButton_mach_addMachActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_mach_addMachActionPerformed
-        try {
-            if (!jTextField_mach_MName.getText().isBlank() && !jTextField_mach_lot.getText().isBlank()
-                    && jComboBox_mach_pros.getSelectedIndex() != -1) {
-                if (jTable_machines.getSelectedRow() > -1) {
-                    machineController.editMachine(new Machine(
-                            (int) jTable_machines.getModel().getValueAt(jTable_machines.getSelectedRow(), 0),
-                            jTextField_mach_MName.getText(),
-                            productController.getProduct(jComboBox_mach_pros.getSelectedItem().toString()).getId(),
-                            jTextField_mach_lot.getText(), new Date()));
-                } else {
-                    machineController.addMachine(jTextField_mach_MName.getText(), jComboBox_mach_pros.getSelectedItem().toString(),
-                            jTextField_mach_lot.getText());
-                }
-                fill_machine();
-                jTextField_mach_MName.setText("");
-                jTextField_mach_lot.setText("");
-                jComboBox_mach_pros.setSelectedIndex(-1);
-            }
-        } catch (DatabaseException | BusinessException ex) {
-            showException(ex);
-        }
-    }//GEN-LAST:event_jButton_mach_addMachActionPerformed
-
-    private void jButton_mach_DeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_mach_DeleteActionPerformed
-        if (jTable_machines.getSelectedRow() > -1) {
-            try {
-                if (machineController.removeMachine((int) jTable_machines.getModel().getValueAt(jTable_machines.getSelectedRow(), 0))) {
-
-                    showMessage("تم الحذف  بنجاح ", "ناجح");
-                    fill_machine();
-                    jTextField_mach_MName.setText("");
-                    jTextField_mach_lot.setText("");
-                    jComboBox_mach_pros.setSelectedIndex(-1);
-                } else {
-                    showMessage("لا يمكن حذف هذا الصنف ", "إنتبه");
-                }
-            } catch (DatabaseException ex) {
-                showException(ex);
-            }
-        } else {
-            showMessage(" برجاء أختيار من الجدول أولا", "إنتبه");
-        }
-    }//GEN-LAST:event_jButton_mach_DeleteActionPerformed
-
-    private void jTable_machinesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable_machinesMouseClicked
-        try {
-            TableModel model = jTable_machines.getModel();
-            if (evt.getClickCount() < 3) {
-                jTextField_mach_MName.setText(((String) model.getValueAt(jTable_machines.getSelectedRow(), 1)).strip());
-                jTextField_mach_lot.setText(((String) model.getValueAt(jTable_machines.getSelectedRow(), 3)).strip());
-                try {
-                    jComboBox_mach_pros.setSelectedItem(productController.getProduct(
-                            (String) jTable_machines.getModel().getValueAt(jTable_machines.getSelectedRow(), 2)));
-                } catch (BusinessException ex) {
-                    jComboBox_mach_pros.setSelectedIndex(-1);
-                }
-            } else {
-                try {
-                    jCheckBox_storage_FreezeConeWeightChange.setSelected(false);
-                    jCheckBox_storage_ignoreLimits.setSelected(false);
-                    jCheckBox_storage_freezeConeNumber.setSelected(false);
-                    jCheckBox_storage_FreezeEmptyBagWight.setSelected(false);
-                    jCheckBox_storage_MarkBag.setSelected(false);
-                    jTextField_storage_SearchProducts.setText("");
-                    combox_fill_with(jComboBox_storage_products, productController.getAvailableProductsLike(jTextField_storage_SearchProducts.getText()));
-
-                    jComboBox_storage_products.setSelectedItem(productController.getProduct(
-                            (String) jTable_machines.getModel().getValueAt(jTable_machines.getSelectedRow(), 2)));
-                    fill_storage_table();
-                } catch (BusinessException ex) {
-                    jComboBox_storage_products.setSelectedIndex(-1);
-                }
-
-                jTextField_storage_lot.setText(((String) model.getValueAt(jTable_machines.getSelectedRow(), 3)).strip());
-                jButton_Mizan_opener.doClick();
-                jTextField_storage_palletNumber.setText("");
-            }
-        } catch (DatabaseException ex) {
-            showException(ex);
-        }
-    }//GEN-LAST:event_jTable_machinesMouseClicked
 
     private void jButton_Settings_openerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_Settings_openerActionPerformed
         try {
@@ -4026,6 +3938,18 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
 
     }
 
+    private void clearStorageForm() {
+        if (!jCheckBox_storage_FreezeEmptyBagWight.isSelected()) {
+            jTextField_storage_EmptyBagWeight.setText("");
+        }
+        jTextField_storage_TotalWeight.setText("");
+        jTextField_storage_NetWeight.setText("");
+        jTextField_storage_coneNumber.requestFocus();
+        if (!jCheckBox_storage_freezeConeNumber.isSelected()) {
+            jTextField_storage_coneNumber.selectAll();
+        }
+    }
+
     /**
      * @param args the command line arguments
      */
@@ -4070,6 +3994,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
     private javax.swing.JButton jButton_del_pro;
     private javax.swing.JButton jButton_mach_Delete;
     private javax.swing.JButton jButton_mach_addMach;
+    private javax.swing.JButton jButton_mach_editMach;
     private javax.swing.JButton jButton_rep_clear;
     private javax.swing.JButton jButton_rep_printRep;
     private javax.swing.JButton jButton_set_TicketPrinter;
