@@ -52,6 +52,7 @@ public class WeightScaleCapture implements KeyEventDispatcher {
     private final char deviceDecimalMarker;
     private final JTextField targetField;
     private static final Pattern WEIGHT_PATTERN = Pattern.compile("\\d+([.\u0632]\\d+{2})?");
+    public static boolean enterFromMizan = false;
 
     private final StringBuilder buffer = new StringBuilder();
     private long lastEventTime = 0L;
@@ -72,7 +73,6 @@ public class WeightScaleCapture implements KeyEventDispatcher {
         KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(this);
     }
 
-
     public void uninstall() {
         KeyboardFocusManager.getCurrentKeyboardFocusManager().removeKeyEventDispatcher(this);
     }
@@ -91,12 +91,15 @@ public class WeightScaleCapture implements KeyEventDispatcher {
         boolean isTerminator = c == '\n';
         boolean isBufferable = Character.isDigit(c) || c == '.' || c == deviceDecimalMarker;
 
-        if (isTerminator) {
+        boolean fastFollowUp = buffer.length() > 0 && gap <= maxGapMs;
+
+        if (isTerminator && fastFollowUp) {
             boolean swallow = confirmed && WEIGHT_PATTERN.matcher(buffer.toString()).matches();
             if (swallow) {
                 deliverToTargetField(buffer.toString());
             }
             reset();
+            enterFromMizan = true;
             return swallow;
         }
 
@@ -104,8 +107,6 @@ public class WeightScaleCapture implements KeyEventDispatcher {
             reset();
             return false;
         }
-
-        boolean fastFollowUp = buffer.length() > 0 && gap <= maxGapMs;
 
         if (!confirmed && fastFollowUp) {
             confirmed = true;
@@ -149,10 +150,13 @@ public class WeightScaleCapture implements KeyEventDispatcher {
         buffer.setLength(0);
         confirmed = false;
         candidateOwner = null;
+        enterFromMizan = false;
     }
 
     private void deliverToTargetField(String raw) {
         String display = ArabicDigits.toArabicDigits(raw.replace(deviceDecimalMarker, ArabicDigits.ARABIC_DECIMAL_SEPARATOR));
-        SwingUtilities.invokeLater(() -> targetField.setText(display));
+        if (WEIGHT_PATTERN.matcher(display).matches()) {
+            SwingUtilities.invokeLater(() -> targetField.setText(display));
+        }
     }
 }

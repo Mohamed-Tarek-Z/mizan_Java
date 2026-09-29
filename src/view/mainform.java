@@ -125,10 +125,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
         TextFieldRules.apply(jTextField_storage_NetWeight, 8, true, true, jTextField_storage_coneNumber, this::clearStorageForm);
         TextFieldRules.apply(jTextField_storage_EmptyConeWeight, 4, true, false, jTextField_storage_coneNumber, null);
 
-        TextFieldRules.apply(jTextField_pro_name, 35, false, false, () -> {
-        },  null);
-        TextFieldRules.apply(jTextField_Pros_conWight, 4, true, false, () -> {
-        }, null);
+        
         TextFieldRules.apply(jTextField_rep_numOfBag, 3, true, false, () -> {
         }, null);
         TextFieldRules.apply(jTextField_E_Wight, 8, true, true, () -> {
@@ -755,6 +752,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
         jTextField_Pros_color = new javax.swing.JTextField();
         jLabel49 = new javax.swing.JLabel();
         jCheckBox_Pros_IsBox = new javax.swing.JCheckBox();
+        jButton_edit_pro = new javax.swing.JButton();
         stock_panel = new javax.swing.JPanel();
         jComboBox_stock_Pros = new javax.swing.JComboBox<>();
         jScrollPane6 = new javax.swing.JScrollPane();
@@ -2058,13 +2056,9 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
             products_panel.add(jTextField_pro_name, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 10, 340, -1));
 
             jButton_add_pro.setFont(new java.awt.Font("sansserif", 0, 24)); // NOI18N
-            jButton_add_pro.setText("إضافه/تعديل");
-            jButton_add_pro.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent evt) {
-                    jButton_add_proActionPerformed(evt);
-                }
-            });
-            products_panel.add(jButton_add_pro, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 20, 130, 60));
+            jButton_add_pro.setLabel("إضافة");
+            products_panel.add(jButton_add_pro, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 20, 80, 60));
+            jButton_add_pro.getAccessibleContext().setAccessibleName("إضافة");
 
             jTable_pro.setFont(new java.awt.Font("Tahoma", 0, 20)); // NOI18N
             jTable_pro.setModel(new javax.swing.table.DefaultTableModel(
@@ -2086,11 +2080,6 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
             jTable_pro.setColumnSelectionAllowed(true);
             jTable_pro.setGridColor(new java.awt.Color(0, 0, 0));
             jTable_pro.setRowHeight(25);
-            jTable_pro.addMouseListener(new java.awt.event.MouseAdapter() {
-                public void mouseClicked(java.awt.event.MouseEvent evt) {
-                    jTable_proMouseClicked(evt);
-                }
-            });
             jScrollPane2.setViewportView(jTable_pro);
             jTable_pro.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION);
             if (jTable_pro.getColumnModel().getColumnCount() > 0) {
@@ -2108,15 +2097,12 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
 
             products_panel.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(76, 126, 740, 470));
 
+            jButton_del_pro.setBackground(new java.awt.Color(255, 0, 0));
             jButton_del_pro.setFont(new java.awt.Font("sansserif", 0, 24)); // NOI18N
+            jButton_del_pro.setForeground(new java.awt.Color(255, 255, 255));
             jButton_del_pro.setText("حذف");
             jButton_del_pro.setPreferredSize(new java.awt.Dimension(75, 28));
-            jButton_del_pro.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent evt) {
-                    jButton_del_proActionPerformed(evt);
-                }
-            });
-            products_panel.add(jButton_del_pro, new org.netbeans.lib.awtextra.AbsoluteConstraints(730, 20, 80, 60));
+            products_panel.add(jButton_del_pro, new org.netbeans.lib.awtextra.AbsoluteConstraints(730, 30, 70, 40));
 
             jTextField_Pros_conWight.setFont(new java.awt.Font("sansserif", 0, 18)); // NOI18N
             jTextField_Pros_conWight.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
@@ -2142,6 +2128,12 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
             jCheckBox_Pros_IsBox.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
             jCheckBox_Pros_IsBox.setText("صندوق");
             products_panel.add(jCheckBox_Pros_IsBox, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 80, 110, -1));
+
+            jButton_edit_pro.setBackground(new java.awt.Color(51, 204, 255));
+            jButton_edit_pro.setFont(new java.awt.Font("SansSerif", 0, 20)); // NOI18N
+            jButton_edit_pro.setText("تعديل");
+            products_panel.add(jButton_edit_pro, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 30, 70, 40));
+            jButton_edit_pro.getAccessibleContext().setAccessibleName("تعديل");
 
             left_panel.add(products_panel, "add Pro");
 
@@ -2570,86 +2562,6 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
             showException(ex);
         }
     }//GEN-LAST:event_jButton_storage_delDataActionPerformed
-
-    private void jButton_add_proActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_add_proActionPerformed
-        evt.getID();
-        try {
-            if (pro_Table_SelectedID == 0) {
-                if (jTextField_pro_name.getText().isBlank() || jTextField_Pros_conWight.getText().isBlank()) {
-                    showMessage("برجاء أدخال البيانات كامله", "إنتبه");
-                } else {
-                    if (productController.getProduct(jTextField_pro_name.getText()) != null) {
-                        showMessage("هذا الصنف موجود بالفعل", "إنتبه");
-                    } else {
-                        productController.addNewProduct(jTextField_pro_name.getText(), jTextField_Pros_conWight.getText(),
-                                jTextField_Pros_color.getText(), jCheckBox_Pros_IsBox.isSelected());
-                        jTextField_pro_name.setText("");
-                        jTextField_Pros_conWight.setText("");
-                        jTextField_Pros_color.setText("");
-                        jCheckBox_Pros_IsBox.setSelected(false);
-                        fill_pro_table();
-                        populateCombos();
-                        showMessage("تم إدخال الصنف بنجاح", "ناجح");
-                    }
-                }
-            } else {
-
-                if (jTextField_pro_name.getText().isBlank()) {
-                    showMessage("برجاء أدخال اسم الصنف", "إنتبه");
-                } else {
-                    productController.updateProduct(pro_Table_SelectedID, jTextField_pro_name.getText(),
-                            jTextField_Pros_conWight.getText(), jTextField_Pros_color.getText(), jCheckBox_Pros_IsBox.isSelected());
-                    pro_Table_SelectedID = 0;
-                    jTextField_pro_name.setText("");
-                    jTextField_Pros_conWight.setText("");
-                    jTextField_Pros_color.setText("");
-                    jCheckBox_Pros_IsBox.setSelected(false);
-                    fill_pro_table();
-                    populateCombos();
-                    showMessage("تم تعديل الصنف بنجاح ", "ناجح");
-                }
-            }
-        } catch (DatabaseException ex) {
-            showException(ex);
-        }
-    }//GEN-LAST:event_jButton_add_proActionPerformed
-
-    private void jTable_proMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable_proMouseClicked
-        evt.getID();
-        try {
-            TableModel model = jTable_pro.getModel();
-            jTextField_pro_name.setText(model.getValueAt(jTable_pro.getSelectedRow(), 1).toString());
-            jTextField_Pros_conWight.setText(model.getValueAt(jTable_pro.getSelectedRow(), 2).toString());
-            jTextField_Pros_color.setText(model.getValueAt(jTable_pro.getSelectedRow(), 3).toString());
-            jCheckBox_Pros_IsBox.setSelected(model.getValueAt(jTable_pro.getSelectedRow(), 4).toString().equals("true"));
-            pro_Table_SelectedID = Integer.parseInt(model.getValueAt(jTable_pro.getSelectedRow(), 0).toString());
-        } catch (NumberFormatException e) {
-            showException(e);
-        }
-    }//GEN-LAST:event_jTable_proMouseClicked
-
-    private void jButton_del_proActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_del_proActionPerformed
-        evt.getID();
-        if (pro_Table_SelectedID != 0) {
-            try {
-                if (productController.removeProduct(pro_Table_SelectedID)) {
-
-                    showMessage("تم حذف الصنف بنجاح ", "ناجح");
-                    jTextField_pro_name.setText("");
-                    pro_Table_SelectedID = 0;
-                    fill_pro_table();
-                    populateCombos();
-                } else {
-                    showMessage("لا يمكن حذف هذا الصنف ", "إنتبه");
-                }
-            } catch (DatabaseException | BusinessException ex) {
-                showException(ex);
-            }
-        } else {
-            showMessage(" برجاء أختيار صنف من الجدول أولا", "إنتبه");
-        }
-
-    }//GEN-LAST:event_jButton_del_proActionPerformed
 
     private void jComboBox_storage_productsItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jComboBox_storage_productsItemStateChanged
         evt.getID();
@@ -3742,34 +3654,9 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
         }
     }
 
-    private void fill_pro_table() throws DatabaseException {
-        DefaultTableModel model = (DefaultTableModel) jTable_pro.getModel();
-        model.setRowCount(0);
-        List<Product> pros = productController.getAvailableProductsLike("");
-        for (Product pro : pros) {
-            model.addRow(new Object[]{pro.getId(), pro.getName(), ArabicDigits.toArabicDigits(pro.getWeight_of_con()),
-                pro.getColor(), pro.isBox()});
-        }
+  
 
-    }
 
-    private void fill_machine() throws DatabaseException {
-        DefaultTableModel model = (DefaultTableModel) jTable_machines.getModel();
-        model.setRowCount(0);
-        List<Machine> machs = machineController.getMachines();
-        for (Machine mach : machs) {
-            Product p;
-            try {
-                p = productController.getProduct(mach.getProId());
-                model.addRow(new Object[]{mach.getMachId(), mach.getMachName(), p.getName(), mach.getLot(),
-                    mach.getUpdatedAt()});
-            } catch (BusinessException ex) {
-                model.addRow(new Object[]{mach.getMachId(), mach.getMachName(), "ممسوح", mach.getLot(),
-                    mach.getUpdatedAt()});
-            }
-        }
-
-    }
 
     private void fill_Table_rep_select() throws DatabaseException, BusinessException {
         try {
@@ -3992,6 +3879,7 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
     private javax.swing.JButton jButton_addPro_opener;
     private javax.swing.JButton jButton_add_pro;
     private javax.swing.JButton jButton_del_pro;
+    private javax.swing.JButton jButton_edit_pro;
     private javax.swing.JButton jButton_mach_Delete;
     private javax.swing.JButton jButton_mach_addMach;
     private javax.swing.JButton jButton_mach_editMach;

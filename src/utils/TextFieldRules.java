@@ -49,7 +49,11 @@ public final class TextFieldRules {
 
         // 2) Enter -> caller-supplied action (typically "go to next field" or "compute")
         if (onEnter != null) {
-            field.addActionListener(e -> onEnter.run());
+            field.addActionListener(e -> {
+                if (!WeightScaleCapture.enterFromMizan) {
+                    onEnter.run();
+                }
+            });
         }
 
         // 3) Delete -> clear just this field
