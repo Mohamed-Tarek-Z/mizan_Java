@@ -108,8 +108,8 @@ public class StorageController {
         return storageRepo.getPalletsForReport(proName);
     }
 
-    public List<String[]> getStockOfProduct(String ProName) throws DatabaseException {
-        return storageRepo.getStockOfProduct(ProName);
+    public List<String[]> getStockOfProduct(int ProID) throws DatabaseException {
+        return storageRepo.getStockOfProduct(ProID);
     }
 
     public List<String[]> getAllStock() throws DatabaseException {

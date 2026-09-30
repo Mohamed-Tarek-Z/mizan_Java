@@ -185,12 +185,11 @@ public class StorageRepository {
         }
     }
 
-    public List<String[]> getStockOfProduct(String ProName) throws DatabaseException {
+    public List<String[]> getStockOfProduct(int ProID) throws DatabaseException {
         try {
             List<String[]> Stock = new ArrayList<>();
             ResultSet st = dbConnection.dataRead("lot, COUNT( distinct pallet_numb), count(weight_), SUM(weight_), used", "storage",
-                    "pro_id=(select pro_id from products where pro_name=N'" + ProName
-                    + "')  group by lot, used");
+                    "pro_id=" + ProID + "  group by lot, used");
 
             while (st.next()) {
                 Stock.add(new String[]{st.getString(1), st.getString(2),

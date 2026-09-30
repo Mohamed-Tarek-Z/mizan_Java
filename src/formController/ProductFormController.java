@@ -17,6 +17,7 @@ import model.Product;
 import utils.ArabicDigits;
 import utils.ErrorListener;
 import utils.TextFieldRules;
+import utils.utils;
 
 public class ProductFormController {
 
@@ -32,11 +33,14 @@ public class ProductFormController {
 
     private final JButton formOpenerBtn;
     private final JPanel proPanel;
+    private final JPanel leftPanel;
 
     private final ProductController prosController;
     private final ErrorListener errorListener;
 
-    public ProductFormController(ErrorListener errorListener, JButton formOpenerBtn, JPanel proPanel, JTextField proName, JTextField proConeWeight, JTextField proConeColor, JCheckBox proIsBox, JTable proTable, JButton addProBtn, JButton editProBtn, JButton delProBtn, ProductController prosController) {
+    public ProductFormController(ErrorListener errorListener, JPanel leftPanel, JPanel proPanel, JButton formOpenerBtn,
+            JTextField proName, JTextField proConeWeight, JTextField proConeColor, JCheckBox proIsBox, JTable proTable,
+            JButton addProBtn, JButton editProBtn, JButton delProBtn, ProductController prosController) {
         this.proName = proName;
         this.proConeWeight = proConeWeight;
         this.proConeColor = proConeColor;
@@ -49,6 +53,7 @@ public class ProductFormController {
         this.errorListener = errorListener;
         this.formOpenerBtn = formOpenerBtn;
         this.proPanel = proPanel;
+        this.leftPanel = leftPanel;
     }
 
     public void init() throws DatabaseException {
@@ -87,7 +92,8 @@ public class ProductFormController {
                 if (prosController.getProduct(proName.getText()) != null) {
                     errorListener.onWarning("هذا الصنف موجود بالفعل", "إنتبه");
                 } else {
-                    prosController.addNewProduct(proName.getText().trim(), proConeWeight.getText(), proConeColor.getText(), proIsBox.isSelected());
+                    prosController.addNewProduct(proName.getText().trim(), proConeWeight.getText(),
+                            proConeColor.getText(), proIsBox.isSelected());
                     errorListener.onWarning("تم الإضافة", "عملية ناجحة");
                     reset();
                 }
@@ -102,7 +108,9 @@ public class ProductFormController {
     private void editPro() {
         try {
             if (!proName.getText().isBlank() && !proConeWeight.getText().isBlank() && proTable.getSelectedRow() > -1) {
-                prosController.updateProduct(Integer.parseInt(proTable.getModel().getValueAt(proTable.getSelectedRow(), 0).toString()), proName.getText().trim(),
+                prosController.updateProduct(
+                        Integer.parseInt(proTable.getModel().getValueAt(proTable.getSelectedRow(), 0).toString()),
+                        proName.getText().trim(),
                         proConeWeight.getText(), proConeColor.getText(), proIsBox.isSelected());
                 errorListener.onWarning("تم التعديل", "عملية ناجحة");
                 reset();
@@ -117,7 +125,8 @@ public class ProductFormController {
     private void deletePro() {
         try {
             if (proTable.getSelectedRow() > -1) {
-                if (prosController.removeProduct(Integer.parseInt(proTable.getModel().getValueAt(proTable.getSelectedRow(), 0).toString()))) {
+                if (prosController.removeProduct(
+                        Integer.parseInt(proTable.getModel().getValueAt(proTable.getSelectedRow(), 0).toString()))) {
                     errorListener.onWarning("تم حذف الصنف بنجاح ", "ناجح");
                     reset();
                 } else {
@@ -136,8 +145,8 @@ public class ProductFormController {
         model.setRowCount(0);
         List<Product> pros = prosController.getAvailableProductsLike("");
         for (Product pro : pros) {
-            model.addRow(new Object[]{pro.getId(), pro.getName(), ArabicDigits.toArabicDigits(pro.getWeight_of_con()),
-                pro.getColor(), pro.isBox()});
+            model.addRow(new Object[] { pro.getId(), pro.getName(), ArabicDigits.toArabicDigits(pro.getWeight_of_con()),
+                    pro.getColor(), pro.isBox() });
         }
     }
 
@@ -150,7 +159,7 @@ public class ProductFormController {
 
     private void openerClicked() {
         try {
-            open_panel(proPanel);
+            utils.openPanel(leftPanel, proPanel);
             fillProTable();
         } catch (DatabaseException ex) {
             errorListener.onError(ex);
@@ -167,5 +176,6 @@ public class ProductFormController {
     private void reset() throws DatabaseException {
         fillProTable();
         clearForm();
+
     }
 }

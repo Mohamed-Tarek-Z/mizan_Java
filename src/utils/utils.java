@@ -1,6 +1,7 @@
 package utils;
 
 import exceptions.*;
+import java.awt.Component;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -10,9 +11,14 @@ import java.util.logging.Logger;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JComboBox;
+import javax.swing.JPanel;
+import model.Product;
 
 public class utils {
 
@@ -84,5 +90,18 @@ public class utils {
         Pattern pattern = Pattern.compile(patternToMatch);
         Matcher matcher = pattern.matcher(input);
         return matcher.matches();
+    }
+
+    public static void openPanel(JPanel panel, Component comp) {
+        panel.removeAll();
+        panel.add(comp);
+        panel.revalidate();
+        panel.repaint();
+    }
+    
+    public static void fillComboBoxWihProducts(JComboBox<Product> Combo, List<Product> products) throws DatabaseException {
+        Combo.removeAllItems();
+        Combo.setModel(new DefaultComboBoxModel<>(products.toArray(Product[]::new)));
+        Combo.setSelectedIndex(-1);
     }
 }

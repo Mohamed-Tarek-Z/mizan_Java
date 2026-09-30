@@ -11,6 +11,7 @@ import java.util.Date;
 import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
@@ -19,12 +20,13 @@ import model.Machine;
 import model.Product;
 import utils.ErrorListener;
 import utils.TextFieldRules;
+import utils.utils;
 
 public final class MachineFormController {
 
     private final JTextField machName;
     private final JTextField machLot;
-    private final JComboBox machPros;
+    private final JComboBox<Product> machPros;
     private final JTable machTable;
     private final JButton addMachBtn;
     private final JButton editMachBtn;
@@ -32,8 +34,10 @@ public final class MachineFormController {
     private final MachineController machController;
     private final ProductController prosController;
     private final ErrorListener errorListener;
+    private final JTabbedPane settingsTapps;
 
-    public MachineFormController(ErrorListener errorListener, JTextField machName, JTextField machLot, JComboBox machPros,
+    public MachineFormController(ErrorListener errorListener, JTabbedPane settingsTapps,
+            JTextField machName, JTextField machLot, JComboBox<Product> machPros,
             JButton addMachBtn, JButton editMachBtn, JButton delMachBtn,
             JTable machTable, MachineController machController, ProductController prosController) {
         this.machName = machName;
@@ -46,6 +50,7 @@ public final class MachineFormController {
         this.machController = machController;
         this.prosController = prosController;
         this.errorListener = errorListener;
+        this.settingsTapps = settingsTapps;
     }
 
     public void init() throws DatabaseException {
@@ -69,6 +74,12 @@ public final class MachineFormController {
         });
         this.delMachBtn.addActionListener((ActionEvent evt) -> {
             deleteMach();
+        });
+        this.settingsTapps.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent evt) {
+                settingsTapsClicked();
+            }
         });
         this.fillMachTable();
     }
@@ -178,10 +189,21 @@ public final class MachineFormController {
         }
     }
 
+    private void settingsTapsClicked() {
+        try {
+            if (settingsTapps.getSelectedIndex() == 0) {
+                fillMachTable();
+            }
+        } catch (DatabaseException ex) {
+            errorListener.onError(ex);
+        }
+    }
+
     private void reset() throws DatabaseException {
         fillMachTable();
         clearForm();
         machPros.setSelectedIndex(-1);
+        utils.fillComboBoxWihProducts(machPros, prosController.getAvailableProductsLike(""));
     }
 
     private void clearForm() {

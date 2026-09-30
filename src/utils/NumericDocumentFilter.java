@@ -58,7 +58,7 @@ public class NumericDocumentFilter extends DocumentFilter {
                 sb.append(c);
             } else {
                 if (!numbersOnly || (isDouble && c == ArabicDigits.ARABIC_DECIMAL_SEPARATOR || c == '.')) {
-                    sb.append(c);
+                    sb.append(ArabicDigits.ARABIC_DECIMAL_SEPARATOR);
                 }
             }
         }
