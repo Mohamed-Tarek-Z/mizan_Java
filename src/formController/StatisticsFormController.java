@@ -52,12 +52,12 @@ public class StatisticsFormController {
         this.statFromDate = statFromDate;
         this.statToDate = statToDate;
         this.statTotalProduced = statTotalProduced;
-        this.formOpenerBtn = formOpenerBtn;
-        this.statPanel = statPanel;
-        this.leftPanel = leftPanel;
         this.exportController = exportController;
         this.proController = proController;
         this.excelManager = excelManager;
+        this.formOpenerBtn = formOpenerBtn;
+        this.statPanel = statPanel;
+        this.leftPanel = leftPanel;
         this.errorListener = errorListener;
     }
 
@@ -92,10 +92,10 @@ public class StatisticsFormController {
             model.setRowCount(0);
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             try {
-                List<String[]> statistics = exportController.getstatistics(dateFormat.format(statFromDate.getCalendar().getTime()), dateFormat.format(statToDate.getCalendar().getTime()), statPros.getSelectedIndex() != -1 ? (Product) statPros.getSelectedItem() : null);
-                for (String[] row : statistics) {
-                    model.addRow(new Object[]{row[0], ArabicDigits.toArabicDigits(row[1]),
-                        ArabicDigits.toArabicDigits(row[2]), ArabicDigits.toArabicDigits(row[3])});
+                List<Object[]> statistics = exportController.getstatistics(dateFormat.format(statFromDate.getCalendar().getTime()), dateFormat.format(statToDate.getCalendar().getTime()), statPros.getSelectedIndex() != -1 ? (Product) statPros.getSelectedItem() : null);
+                for (Object[] row : statistics) {
+                    model.addRow(new Object[]{row[0], ArabicDigits.toArabicDigits(row[1].toString()),
+                        ArabicDigits.toArabicDigits((Double)row[2]), ArabicDigits.toArabicDigits((Double)row[3])});
                 }
                 double tot = 0.0;
                 for (int i = 0; i < model.getRowCount(); i++) {
@@ -119,7 +119,7 @@ public class StatisticsFormController {
                 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
                 String fromDate = dateFormat.format(statFromDate.getCalendar().getTime());
                 String toDate = dateFormat.format(statToDate.getCalendar().getTime());
-                List<String[]> statistics = exportController.getstatistics(fromDate, toDate, statPros.getSelectedIndex() != -1 ? (Product) statPros.getSelectedItem() : null);
+                List<Object[]> statistics = exportController.getstatistics(fromDate, toDate, statPros.getSelectedIndex() != -1 ? (Product) statPros.getSelectedItem() : null);
                 if (excelManager.staticsticsExcel(statistics, fromDate, toDate)) {
                     errorListener.onWarning("please print the Execl", "Done");
                 }

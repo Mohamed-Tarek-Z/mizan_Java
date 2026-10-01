@@ -35,11 +35,11 @@ public class StockFormController {
         this.stockProSearch = stockProSearch;
         this.stockTable = stockTable;
         this.stockPros = stockPros;
+        this.storController = storageController;
+        this.proController = productController;
         this.formOpenerBtn = formOpenerBtn;
         this.stockPanel = stockPanel;
         this.leftPanel = leftPanel;
-        this.storController = storageController;
-        this.proController = productController;
         this.errorListener = errorListener;
     }
 

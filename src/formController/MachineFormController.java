@@ -49,8 +49,8 @@ public final class MachineFormController {
         this.machTable = machTable;
         this.machController = machController;
         this.prosController = prosController;
-        this.errorListener = errorListener;
         this.settingsTapps = settingsTapps;
+        this.errorListener = errorListener;
     }
 
     public void init() throws DatabaseException {

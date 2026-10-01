@@ -19,9 +19,9 @@ public class ExportRepository {
         this.dbConnection = dbConnection;
     }
 
-    public List<String[]> getstatistics(String date1, String date2, Product p) throws DatabaseException {
+    public List<Object[]> getstatistics(String date1, String date2, Product p) throws DatabaseException {
         try {
-            List<String[]> statistics = new ArrayList<>();
+            List<Object[]> statistics = new ArrayList<>();
             ResultSet st = dbConnection.dataRead(
                     "(select pro_name from products where products.pro_id=s.pro_id) as TypeName, lot as Lot, sum(bags) as Bags, sum(total) as Total",
                     "( select pro_id, lot, count(weight_)as bags, sum(weight_) as total from storage where (date_ between '"
@@ -31,8 +31,8 @@ public class ExportRepository {
                     + " group by lot, pro_id )s group by s.lot, s.pro_id order by s.pro_id");
 
             while (st.next()) {
-                statistics.add(new String[]{st.getString(1), st.getString(2),
-                    st.getString(3), st.getString(4)});
+                statistics.add(new Object[]{st.getString(1), st.getString(2),
+                    st.getDouble(3), st.getDouble(4)});
             }
 
             return statistics;

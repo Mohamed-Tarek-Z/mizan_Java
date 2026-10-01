@@ -40,17 +40,17 @@ public class ExcelManager {
     /**
      * this method it used in creating the header for the excels
      *
-     * @param ClientName  String that contain Client name
+     * @param ClientName String that contain Client name
      * @param productName String that contain product name
-     * @param lotNum      String that contain Lot number
+     * @param lotNum String that contain Lot number
      *
      * @return String that contain the right formatted header for excel file
      */
     private String contactForHeader(String ClientName, String productName, String lotNum) {
         date_now = LocalDate.now();
         String _1 = "                                                  إذن تـسليم بضاعة\n";
-        String _2 = "السيد :" + ClientName ;
-        String _3 = "التاريـــخ :" + date_now.format(arabicDateFormatter) ;
+        String _2 = "السيد :" + ClientName;
+        String _3 = "التاريـــخ :" + date_now.format(arabicDateFormatter);
         String _4 = "صنف :" + productName;
         String _5 = "رقم اللـــوط :" + lotNum;
 
@@ -67,7 +67,7 @@ public class ExcelManager {
     /**
      * this method it used to apply HighLight Color to cell
      *
-     * @param cell  Cell cell object to apply color to
+     * @param cell Cell cell object to apply color to
      * @param style CellStyle object just init new CellStyle
      * @param color IndexedColors object select color from saved colors
      */
@@ -81,11 +81,11 @@ public class ExcelManager {
     /**
      * this method it used to creating a permit with 120 unit space
      *
-     * @param bags            list< Bag > Bags of order
-     * @param ClientName      String that contain Client name
-     * @param product         Product object used in order
+     * @param bags list< Bag > Bags of order
+     * @param ClientName String that contain Client name
+     * @param product Product object used in order
      * @param excelBackupPath String the shows the path for backup location
-     * @param highLight       Boolean to check is highlight needed or not
+     * @param highLight Boolean to check is highlight needed or not
      *
      * @return Boolean that indicates whether the file created or not
      * @throws exceptions.DatabaseException
@@ -141,7 +141,7 @@ public class ExcelManager {
             cell.setCellValue((product.isBox() ? "عدد الصناديق :          " : "عدد الشكاير :          ")
                     + ArabicDigits.toArabicDigits(bags.size())
                     + (product.isBox() ? " صندوق" : "  شيكاره") + "\n" + "الــــــــــــــــــــــوزن :       "
-                    + ArabicDigits.toArabicDigits(TotalWeight) );
+                    + ArabicDigits.toArabicDigits(TotalWeight));
 
             create_excel_in_path(ClientName, workbook, excelBackupPath);
             return true;
@@ -155,11 +155,11 @@ public class ExcelManager {
     /**
      * this method it used to creating a permit with 120 unit space
      *
-     * @param bags            list< Bag > Bags of order
-     * @param ClientName      String that contain Client name
-     * @param product         Product object used in order
+     * @param bags list< Bag > Bags of order
+     * @param ClientName String that contain Client name
+     * @param product Product object used in order
      * @param excelBackupPath String the shows the path for backup location
-     * @param highLight       Boolean to check is highlight needed or not
+     * @param highLight Boolean to check is highlight needed or not
      *
      * @return Boolean that indicates whether the file created or not
      * @throws exceptions.DatabaseException
@@ -228,9 +228,9 @@ public class ExcelManager {
             }
             cell = sheet.getRow(23).getCell(16);
             cell.setCellValue((product.isBox() ? "عدد الصناديق :          " : "عدد الشكاير :          ")
-                    + ArabicDigits.toArabicDigits(bags.size() )
+                    + ArabicDigits.toArabicDigits(bags.size())
                     + (product.isBox() ? " صندوق" : "  شيكاره") + "\n" + "الــــــــــــــــــــــوزن :       "
-                    + ArabicDigits.toArabicDigits(TotalWeight) );
+                    + ArabicDigits.toArabicDigits(TotalWeight));
 
             create_excel_in_path(ClientName, workbook, excelBackupPath);
 
@@ -244,11 +244,11 @@ public class ExcelManager {
     /**
      * this method it used to creating a permit with 120 unit space
      *
-     * @param bags            list< Bag > Bags of order
-     * @param ClientName      String that contain Client name
-     * @param product         Product object used in order
+     * @param bags list< Bag > Bags of order
+     * @param ClientName String that contain Client name
+     * @param product Product object used in order
      * @param excelBackupPath String the shows the path for backup location
-     * @param highLight       Boolean to check is highlight needed or not
+     * @param highLight Boolean to check is highlight needed or not
      *
      * @return Boolean that indicates whether the file created or not
      * @throws exceptions.DatabaseException
@@ -335,9 +335,9 @@ public class ExcelManager {
             }
             cell = sheet.getRow(23).getCell(21);
             cell.setCellValue((product.isBox() ? "عدد الصناديق :          " : "عدد الشكاير :          ")
-                    + ArabicDigits.toArabicDigits(bags.size() )
+                    + ArabicDigits.toArabicDigits(bags.size())
                     + (product.isBox() ? " صندوق" : "  شيكاره") + "\n" + "الــــــــــــــــــــــوزن :       "
-                    + ArabicDigits.toArabicDigits(TotalWeight) );
+                    + ArabicDigits.toArabicDigits(TotalWeight));
 
             create_excel_in_path(ClientName, workbook, excelBackupPath);
             return true;
@@ -351,16 +351,16 @@ public class ExcelManager {
     /**
      * this method it used to creating a permit with 120 unit space
      *
-     * @param fOrderBags      list< Bag > Bags of First order
-     * @param sOrderBags      list< Bag > Bags of Second order
-     * @param ClientName      String that contain Client name
-     * @param fOrderProduct   Product object used in First order
-     * @param sOrderProduct   Product object used in Second order
+     * @param fOrderBags list< Bag > Bags of First order
+     * @param sOrderBags list< Bag > Bags of Second order
+     * @param ClientName String that contain Client name
+     * @param fOrderProduct Product object used in First order
+     * @param sOrderProduct Product object used in Second order
      * @param excelBackupPath String the shows the path for backup location
-     * @param fHighLight      Boolean to check is highlight for first permit needed
-     *                        or not
-     * @param sHighLight      Boolean to check is highlight for second permit needed
-     *                        or not
+     * @param fHighLight Boolean to check is highlight for first permit needed
+     * or not
+     * @param sHighLight Boolean to check is highlight for second permit needed
+     * or not
      *
      * @return Boolean that indicates whether the file created or not
      * @throws exceptions.DatabaseException
@@ -380,11 +380,11 @@ public class ExcelManager {
 
                 Cell cell;
                 String _1 = "                                                  إذن تـسليم بضاعة\n";
-                String _2 = "السيد :" + ClientName ;
-                String _3 = "التاريـــخ :" + date_now.format(arabicDateFormatter) ;
-                String _4 = "صنف :" + fOrderProduct.getName() ;
+                String _2 = "السيد :" + ClientName;
+                String _3 = "التاريـــخ :" + date_now.format(arabicDateFormatter);
+                String _4 = "صنف :" + fOrderProduct.getName();
                 String _5 = "رقم اللـــوط :" + fOrderBags.getFirst().getLot();
-                String _6 = "صنف :" + sOrderProduct.getName() ;
+                String _6 = "صنف :" + sOrderProduct.getName();
                 String _7 = "رقم اللـــوط :" + sOrderBags.getFirst().getLot();
                 for (int i = 0; i < 66 - ClientName.length(); i++) {
                     _2 += " ";
@@ -467,13 +467,13 @@ public class ExcelManager {
                     }
                 }
                 String __1 = (fOrderProduct.isBox() ? "عدد الصناديق : " : "عدد الشكاير : ")
-                        + ArabicDigits.toArabicDigits(fOrderBags.size() )
+                        + ArabicDigits.toArabicDigits(fOrderBags.size())
                         + (fOrderProduct.isBox() ? " صندوق" : "  شيكاره");
-                String __2 = "الــوزن :  " + ArabicDigits.toArabicDigits(fTotalWeight) ;
+                String __2 = "الــوزن :  " + ArabicDigits.toArabicDigits(fTotalWeight);
                 String __3 = (sOrderProduct.isBox() ? "عدد الصناديق : " : "عدد الشكاير : ")
-                        + ArabicDigits.toArabicDigits(sOrderBags.size() )
+                        + ArabicDigits.toArabicDigits(sOrderBags.size())
                         + (sOrderProduct.isBox() ? " صندوق" : "  شيكاره");
-                String __4 = "الــوزن :  " + ArabicDigits.toArabicDigits(sTotalWeight) ;
+                String __4 = "الــوزن :  " + ArabicDigits.toArabicDigits(sTotalWeight);
                 cell = sheet.getRow(23).getCell(11);
                 cell.setCellValue(__1 + "  " + __2 + "\n" + __3 + " " + __4);
                 create_excel_in_path(ClientName, workbook, excelBackupPath);
@@ -503,7 +503,7 @@ public class ExcelManager {
                 workbook = new XSSFWorkbook(EX);
                 XSSFSheet sheet = workbook.getSheetAt(0);
                 Cell cell = sheet.getRow(1).getCell(1);
-                cell.setCellValue("التاريـــخ :   " + date_now.format(arabicDateFormatter) );
+                cell.setCellValue("التاريـــخ :   " + date_now.format(arabicDateFormatter));
                 String prevname = "";
                 ArrayList<Integer> reg = new ArrayList<>();
 
@@ -578,12 +578,12 @@ public class ExcelManager {
      * this method it used to creating a Excel with stock
      *
      * @param statstic list< string[] > result of query from SQL
-     * @param date1    starting date
-     * @param date2    ending date
+     * @param date1 starting date
+     * @param date2 ending date
      * @return Boolean that indicates whether the file created or not
      * @throws exceptions.BusinessException
      */
-    public boolean staticsticsExcel(List<String[]> statstic, String date1, String date2) throws BusinessException {
+    public boolean staticsticsExcel(List<Object[]> statstic, String date1, String date2) throws BusinessException {
         try {
             int RowIndex = 4;
             XSSFWorkbook workbook;
@@ -596,7 +596,7 @@ public class ExcelManager {
                 double prevTot = 0.0;
                 String prevName = "";
                 ArrayList<Integer> reg = new ArrayList<>();
-                for (String[] row : statstic) {
+                for (Object[] row : statstic) {
 
                     if (RowIndex >= 6) {
                         CellCopyPolicy poli = new CellCopyPolicy();
@@ -604,9 +604,9 @@ public class ExcelManager {
                         poli.setCopyCellValue(true);
                         sheet.copyRows(RowIndex - 1, RowIndex, RowIndex, poli);
                     }
-                    if (prevName.equalsIgnoreCase(row[0])) {
+                    if (prevName.equalsIgnoreCase(row[0].toString())) {
                         reg.add(RowIndex);
-                        prevTot += Double.parseDouble(row[3]);
+                        prevTot += (Double) row[3];
                     } else {
                         if (reg.size() > 1) {
                             sheet.addMergedRegion(new CellRangeAddress(reg.get(0), reg.get(reg.size() - 1), 1, 1));
@@ -616,22 +616,22 @@ public class ExcelManager {
                         }
                         reg.clear();
                         reg.add(RowIndex);
-                        prevName = row[0];
+                        prevName = row[0].toString();
 
                         cell = sheet.getRow(RowIndex).getCell(1);
-                        cell.setCellValue(row[0]);
+                        cell.setCellValue(row[0].toString());
 
-                        prevTot = Double.parseDouble(row[3]);
+                        prevTot = (Double) row[3];
                     }
 
                     cell = sheet.getRow(RowIndex).getCell(2);
-                    cell.setCellValue(ArabicDigits.toArabicDigits(row[1]));
+                    cell.setCellValue(ArabicDigits.toArabicDigits(row[1].toString()));
 
                     cell = sheet.getRow(RowIndex).getCell(3);
-                    cell.setCellValue(ArabicDigits.toArabicDigits(row[2]));
+                    cell.setCellValue(ArabicDigits.toArabicDigits((Double) row[2]));
 
                     cell = sheet.getRow(RowIndex).getCell(4);
-                    cell.setCellValue(ArabicDigits.toArabicDigits(row[3]));
+                    cell.setCellValue(ArabicDigits.toArabicDigits((Double) row[3]));
 
                     RowIndex++;
                 }
@@ -654,11 +654,57 @@ public class ExcelManager {
         }
     }
 
+    public boolean youmiaExcel(List<Object[]> solds) {
+        int RowIndex = 4;
+        XSSFWorkbook workbook;
+        try (FileInputStream EX = new FileInputStream(new File("Donot_Change\\report.xlsx"))) {
+            workbook = new XSSFWorkbook(EX);
+            XSSFSheet sheet = workbook.getSheetAt(0);
+            Cell cell = sheet.getRow(1).getCell(1);
+            cell.setCellValue("الاستاذ :   " + solds.get(0)[0]);
+            for (Object[] row : solds) {
+                if (RowIndex >= 6) {
+                    CellCopyPolicy poli = new CellCopyPolicy();
+                    poli.setCopyCellStyle(true);
+                    poli.setCopyCellValue(true);
+                    sheet.copyRows(RowIndex - 1, RowIndex, RowIndex, poli);
+                }
+                cell = sheet.getRow(RowIndex).getCell(1);
+                cell.setCellValue(row[1].toString());
+
+                cell = sheet.getRow(RowIndex).getCell(2);
+                cell.setCellValue(row[2].toString());
+
+                cell = sheet.getRow(RowIndex).getCell(3);
+                cell.setCellValue(row[3].toString());
+
+                cell = sheet.getRow(RowIndex).getCell(4);
+                cell.setCellValue(row[4].toString());
+
+                cell = sheet.getRow(RowIndex).getCell(5);
+                cell.setCellValue(row[5].toString());
+
+                RowIndex++;
+            }
+
+            try (FileOutputStream fileOut = new FileOutputStream(
+                    System.getProperty("user.dir") + "\\Temp\\report.xlsx")) {
+                workbook.write(fileOut);
+            }
+            Desktop.getDesktop().open(new File(System.getProperty("user.dir") + "\\Temp\\"));
+            workbook.close();
+            return true;
+        } catch (IOException ex) {
+            Logger.getLogger(ExcelManager.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
+            throw new BusinessException("ملف غير موجود");
+        }
+    }
+
     /**
      * this method it used to creating a permits and it setts formulas to the
      * last cell in column to calculate sum of the cells above
      *
-     * @param cell  Cell object
+     * @param cell Cell object
      * @param sheet XSSFSheet object
      */
     private void cell_functions(Cell cell, XSSFSheet sheet) {
@@ -714,8 +760,8 @@ public class ExcelManager {
     /**
      * this method it used to create excel in path with client and date
      *
-     * @param ClientName      String with client name
-     * @param workbook        XSSFWorkbook object
+     * @param ClientName String with client name
+     * @param workbook XSSFWorkbook object
      * @param excelBackupPath String with backup path
      *
      * @throws exceptions.DatabaseException
@@ -760,8 +806,7 @@ public class ExcelManager {
     public void excel_TicketR(ArrayList<String> values) throws BusinessException {
         try {
 
-            try (FileInputStream EX = new FileInputStream(new File("Donot_Change\\Ticket.xlsx"));
-                    XSSFWorkbook workbook = new XSSFWorkbook(EX)) {
+            try (FileInputStream EX = new FileInputStream(new File("Donot_Change\\Ticket.xlsx")); XSSFWorkbook workbook = new XSSFWorkbook(EX)) {
 
                 XSSFSheet sheet = workbook.getSheetAt(0);
 

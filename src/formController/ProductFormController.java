@@ -31,11 +31,11 @@ public class ProductFormController {
     private final JButton editProBtn;
     private final JButton delProBtn;
 
+    private final ProductController prosController;
+    
     private final JButton formOpenerBtn;
     private final JPanel proPanel;
     private final JPanel leftPanel;
-
-    private final ProductController prosController;
     private final ErrorListener errorListener;
 
     public ProductFormController(ErrorListener errorListener, JPanel leftPanel, JPanel proPanel, JButton formOpenerBtn,

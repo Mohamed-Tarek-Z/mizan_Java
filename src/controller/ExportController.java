@@ -19,7 +19,7 @@ public class ExportController {
         this.orderRepo = orderRepo;
     }
 
-    public List<String[]> getstatistics(String date1, String date2, Product p) throws DatabaseException {
+    public List<Object[]> getstatistics(String date1, String date2, Product p) throws DatabaseException {
         return exportRepo.getstatistics(date1, date2, p);
     }
 

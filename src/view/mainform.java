@@ -7,6 +7,7 @@ import utils.*;
 import exceptions.*;
 import formController.MachineFormController;
 import formController.ProductFormController;
+import formController.SoldFormController;
 import formController.StatisticsFormController;
 import formController.StockFormController;
 
@@ -20,11 +21,9 @@ import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.sql.SQLException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -47,11 +46,6 @@ import javax.swing.SwingUtilities;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
-import javax.swing.table.TableModel;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CellCopyPolicy;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class mainform extends javax.swing.JFrame implements ErrorListener {
 
@@ -187,6 +181,12 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
         new StatisticsFormController(this, left_panel, statistics_panel, jButton_Statics_opener, jTextField_statistics_Search_pros,
                 jComboBox_statistics_products, jButton_statistics_search, jButton_statistics_createExcl, jTable_statis, jDateChooser_statis_fromDate, jDateChooser_statis_toDate,
                 jTextField_statis_tot, exportController, productController, excelManager).init();
+
+        new SoldFormController(this, left_panel, showPermit_panel, jButton_youm_opener, jTextField_youm_ClientFilter,
+                jTextField_youm_Search_pros, jComboBox_youm_products, jButton_youm_search, jButton_youm_refund,
+                jButton_youm_getClients, jButton_youm_createExcel, jTable_yumia, jTable_youm_clinets,
+                jDateChooser_youm_fromDate, jDateChooser_youm_ToDate, exportController, productController,
+                clientController, excelManager).init();
 
         new WeightScaleCapture(jTextField_storage_TotalWeight).install();
     }
@@ -2282,11 +2282,6 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
             jTable_yumia.setColumnSelectionAllowed(true);
             jTable_yumia.setRowHeight(25);
             jTable_yumia.getTableHeader().setReorderingAllowed(false);
-            jTable_yumia.addMouseListener(new java.awt.event.MouseAdapter() {
-                public void mouseReleased(java.awt.event.MouseEvent evt) {
-                    jTable_yumiaMouseReleased(evt);
-                }
-            });
             jScrollPane8.setViewportView(jTable_yumia);
             jTable_yumia.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
             if (jTable_yumia.getColumnModel().getColumnCount() > 0) {
@@ -2315,29 +2310,14 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
 
             jButton_youm_search.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
             jButton_youm_search.setText("بحث");
-            jButton_youm_search.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent evt) {
-                    jButton_youm_searchActionPerformed(evt);
-                }
-            });
             showPermit_panel.add(jButton_youm_search, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 260, -1, -1));
 
             jButton_youm_refund.setBackground(new java.awt.Color(255, 51, 51));
             jButton_youm_refund.setFont(new java.awt.Font("sansserif", 0, 24)); // NOI18N
             jButton_youm_refund.setText("أسترجاع الأزن");
-            jButton_youm_refund.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent evt) {
-                    jButton_youm_refundActionPerformed(evt);
-                }
-            });
             showPermit_panel.add(jButton_youm_refund, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 230, 150, 40));
 
             jTextField_youm_ClientFilter.setToolTipText("client Filter");
-            jTextField_youm_ClientFilter.addKeyListener(new java.awt.event.KeyAdapter() {
-                public void keyTyped(java.awt.event.KeyEvent evt) {
-                    jTextField_youm_ClientFilterKeyTyped(evt);
-                }
-            });
             showPermit_panel.add(jTextField_youm_ClientFilter, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 20, 170, 40));
 
             jTable_youm_clinets.setModel(new javax.swing.table.DefaultTableModel(
@@ -2369,21 +2349,11 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
             jButton_youm_getClients.setBackground(new java.awt.Color(153, 153, 255));
             jButton_youm_getClients.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
             jButton_youm_getClients.setText("عملاء");
-            jButton_youm_getClients.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent evt) {
-                    jButton_youm_getClientsActionPerformed(evt);
-                }
-            });
             showPermit_panel.add(jButton_youm_getClients, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 20, 120, 40));
 
             jButton_youm_createExcel.setBackground(new java.awt.Color(255, 255, 0));
             jButton_youm_createExcel.setFont(new java.awt.Font("SansSerif", 0, 24)); // NOI18N
             jButton_youm_createExcel.setText("طباعة البيان");
-            jButton_youm_createExcel.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent evt) {
-                    jButton_youm_createExcelActionPerformed(evt);
-                }
-            });
             showPermit_panel.add(jButton_youm_createExcel, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 230, 150, 40));
 
             jComboBox_youm_products.setFont(new java.awt.Font("sansserif", 0, 18)); // NOI18N
@@ -2930,36 +2900,6 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
         }
     }//GEN-LAST:event_jButton_youm_openerActionPerformed
 
-    private void jButton_youm_searchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_youm_searchActionPerformed
-        evt.getID();
-        try {
-            String selectedCIDs = "";
-            if (jTable_youm_clinets.getSelectedRowCount() > 0) {
-                for (int selectedRow : jTable_youm_clinets.getSelectedRows()) {
-                    selectedCIDs += jTable_youm_clinets.getValueAt(selectedRow, 0) + ",";
-                }
-                selectedCIDs = selectedCIDs.substring(0, selectedCIDs.length() - 1);
-            }
-            if (jDateChooser_youm_fromDate.getCalendar() != null && jDateChooser_youm_ToDate.getCalendar() != null) {
-                DefaultTableModel model = (DefaultTableModel) jTable_yumia.getModel();
-                model.setRowCount(0);
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                String dateFrom = sdf.format(jDateChooser_youm_fromDate.getCalendar().getTime());
-                String dateTo = sdf.format(jDateChooser_youm_ToDate.getCalendar().getTime());
-                Product p = jComboBox_youm_products.getSelectedItem() != null ? (Product) jComboBox_youm_products.getSelectedItem() : null;
-
-                List<Object[]> yumya = exportController.getYuwmya(dateFrom, dateTo, selectedCIDs, p);
-                for (Object[] row : yumya) {
-                    model.addRow(new Object[]{row[2], ArabicDigits.toArabicDigits(row[1].toString()),
-                        ArabicDigits.toArabicDigits(row[3].toString()), ArabicDigits.toArabicDigits(row[5].toString()),
-                        ArabicDigits.toArabicDigits(row[0].toString()), ArabicDigits.toArabicDigits(row[4].toString()), row[6]});
-                }
-            }
-        } catch (DatabaseException ex) {
-            showException(ex);
-        }
-    }//GEN-LAST:event_jButton_youm_searchActionPerformed
-
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         evt.getID();
         try {
@@ -2969,32 +2909,6 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
             showException(ex);
         }
     }//GEN-LAST:event_formWindowClosing
-
-    private void jButton_youm_refundActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_youm_refundActionPerformed
-        evt.getID();
-        try {
-            if (jButton_Ezn_opener.isEnabled() && jButton_pro_opener.isEnabled()) {
-                if (jTable_yumia.getSelectedRow() != -1) {
-                    if (JOptionPane.showConfirmDialog(this, utils.addStyle(
-                            "هل تريد استرجاع أزن " + jTable_yumia.getValueAt(jTable_yumia.getSelectedRow(), 0) + " لصنف"
-                            + jTable_yumia.getValueAt(jTable_yumia.getSelectedRow(), 1) + " في يوم"
-                            + jTable_yumia.getValueAt(jTable_yumia.getSelectedRow(), 5) + " "),
-                            "تنبيه",
-                            JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-                        exportController.moveBagFromExportToStorage((int) jTable_yumia.getValueAt(jTable_yumia.getSelectedRow(), 6));
-
-                        jButton_youm_search.doClick();
-                    }
-                } else {
-                    showMessage(" يجب اختيار بيان من الجدول ", "إنتبه");
-                }
-            } else {
-                showMessage("لا يمكن اجراء العمليه ", "إنتبه");
-            }
-        } catch (DatabaseException | BusinessException ex) {
-            showException(ex);
-        }
-    }//GEN-LAST:event_jButton_youm_refundActionPerformed
 
     private void SingleEditWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_SingleEditWindowClosing
         evt.getID();
@@ -3155,78 +3069,6 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
         }
     }//GEN-LAST:event_jButton_storage_RePrintLastTicketActionPerformed
 
-    private void jButton_youm_getClientsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_youm_getClientsActionPerformed
-        evt.getID();
-        try {
-            DefaultTableModel model = (DefaultTableModel) jTable_youm_clinets.getModel();
-            model.setRowCount(0);
-            List<Client> clients = clientController.getClientLike(jTextField_youm_ClientFilter.getText());
-            for (Client client : clients) {
-                model.addRow(new Object[]{client.getId(), client.getName()});
-            }
-        } catch (DatabaseException ex) {
-            showException(ex);
-        }
-    }//GEN-LAST:event_jButton_youm_getClientsActionPerformed
-
-    private void jButton_youm_createExcelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_youm_createExcelActionPerformed
-        evt.getID();
-        int RowIndex = 4;
-        XSSFWorkbook workbook;
-        try (FileInputStream EX = new FileInputStream(new File("Donot_Change\\report.xlsx"))) {
-            workbook = new XSSFWorkbook(EX);
-            XSSFSheet sheet = workbook.getSheetAt(0);
-            Cell cell = sheet.getRow(1).getCell(1);
-            cell.setCellValue("الاستاذ :   " + jTable_yumia.getValueAt(0, 0));
-            jTable_yumia.selectAll();
-            for (int selectedRow : jTable_yumia.getSelectedRows()) {
-                if (RowIndex >= 6) {
-                    CellCopyPolicy poli = new CellCopyPolicy();
-                    poli.setCopyCellStyle(true);
-                    poli.setCopyCellValue(true);
-                    sheet.copyRows(RowIndex - 1, RowIndex, RowIndex, poli);
-                }
-                cell = sheet.getRow(RowIndex).getCell(1);
-                cell.setCellValue(jTable_yumia.getValueAt(selectedRow, 1).toString());
-
-                cell = sheet.getRow(RowIndex).getCell(2);
-                cell.setCellValue(jTable_yumia.getValueAt(selectedRow, 2).toString());
-
-                cell = sheet.getRow(RowIndex).getCell(3);
-                cell.setCellValue(jTable_yumia.getValueAt(selectedRow, 3).toString());
-
-                cell = sheet.getRow(RowIndex).getCell(4);
-                cell.setCellValue(jTable_yumia.getValueAt(selectedRow, 4).toString());
-
-                cell = sheet.getRow(RowIndex).getCell(5);
-                cell.setCellValue(jTable_yumia.getValueAt(selectedRow, 5).toString());
-
-                RowIndex++;
-            }
-
-            try (FileOutputStream fileOut = new FileOutputStream(
-                    System.getProperty("user.dir") + "\\Temp\\report.xlsx")) {
-                workbook.write(fileOut);
-            }
-            showMessage("please print the Execl", "Done");
-        } catch (IOException ex) {
-            showException(ex);
-        }
-    }//GEN-LAST:event_jButton_youm_createExcelActionPerformed
-
-    private void jTable_yumiaMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable_yumiaMouseReleased
-        try {
-            if (evt.getClickCount() == 3) {
-                TableModel model = jTable_yumia.getModel();
-                String temp = exportController.getDetailsForOrder(Integer.parseInt(model.getValueAt(jTable_yumia.getSelectedRow(), 6).toString()));
-                showMessage(temp, "Exported Pallets");
-            }
-        } catch (DatabaseException ex) {
-            showException(ex);
-        }
-
-    }//GEN-LAST:event_jTable_yumiaMouseReleased
-
     private void jButton_rep_clearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_rep_clearActionPerformed
         evt.getID();
         ((DefaultTableModel) jTable_rep_select.getModel()).setRowCount(0);
@@ -3311,13 +3153,6 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
             showException(ex);
         }
     }//GEN-LAST:event_jButton_set_TicketPrinterActionPerformed
-
-    private void jTextField_youm_ClientFilterKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_youm_ClientFilterKeyTyped
-        evt.getID();
-        if (evt.getKeyChar() == '\'') {
-            evt.consume();
-        }
-    }//GEN-LAST:event_jTextField_youm_ClientFilterKeyTyped
 
     private void jButton_Settings_openerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_Settings_openerActionPerformed
         try {
@@ -3451,7 +3286,6 @@ public class mainform extends javax.swing.JFrame implements ErrorListener {
         utils.fillComboBoxWihProducts(jComboBox_E_O_proName, pros);
         utils.fillComboBoxWihProducts(jComboBox_E_proName, pros);
         utils.fillComboBoxWihProducts(jComboBox_ME_type, pros);
-        utils.fillComboBoxWihProducts(jComboBox_youm_products, pros);
     }
 
     private void calc_net_weight() throws BusinessException {

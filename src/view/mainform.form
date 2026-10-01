@@ -3906,9 +3906,6 @@
                           <TableHeader reorderingAllowed="false" resizingAllowed="true"/>
                         </Property>
                       </Properties>
-                      <Events>
-                        <EventHandler event="mouseReleased" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jTable_yumiaMouseReleased"/>
-                      </Events>
                     </Component>
                   </SubComponents>
                 </Container>
@@ -3959,9 +3956,6 @@
                     </Property>
                     <Property name="text" type="java.lang.String" value="&#x628;&#x62d;&#x62b;"/>
                   </Properties>
-                  <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton_youm_searchActionPerformed"/>
-                  </Events>
                   <Constraints>
                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
                       <AbsoluteConstraints x="150" y="260" width="-1" height="-1"/>
@@ -3978,9 +3972,6 @@
                     </Property>
                     <Property name="text" type="java.lang.String" value="&#x623;&#x633;&#x62a;&#x631;&#x62c;&#x627;&#x639; &#x627;&#x644;&#x623;&#x632;&#x646;"/>
                   </Properties>
-                  <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton_youm_refundActionPerformed"/>
-                  </Events>
                   <Constraints>
                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
                       <AbsoluteConstraints x="680" y="230" width="150" height="40"/>
@@ -3991,9 +3982,6 @@
                   <Properties>
                     <Property name="toolTipText" type="java.lang.String" value="client Filter"/>
                   </Properties>
-                  <Events>
-                    <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="jTextField_youm_ClientFilterKeyTyped"/>
-                  </Events>
                   <Constraints>
                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
                       <AbsoluteConstraints x="460" y="20" width="170" height="40"/>
@@ -4052,9 +4040,6 @@
                     </Property>
                     <Property name="text" type="java.lang.String" value="&#x639;&#x645;&#x644;&#x627;&#x621;"/>
                   </Properties>
-                  <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton_youm_getClientsActionPerformed"/>
-                  </Events>
                   <Constraints>
                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
                       <AbsoluteConstraints x="700" y="20" width="120" height="40"/>
@@ -4071,9 +4056,6 @@
                     </Property>
                     <Property name="text" type="java.lang.String" value="&#x637;&#x628;&#x627;&#x639;&#x629; &#x627;&#x644;&#x628;&#x64a;&#x627;&#x646;"/>
                   </Properties>
-                  <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton_youm_createExcelActionPerformed"/>
-                  </Events>
                   <Constraints>
                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
                       <AbsoluteConstraints x="470" y="230" width="150" height="40"/>
