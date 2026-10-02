@@ -62,7 +62,7 @@ public class StatisticsFormController {
     }
 
     public void init() {
-        TextFieldRules.apply(statProSearch, 20, false, false, () -> {
+        TextFieldRules.apply(statProSearch, 20, false, () -> {
             try {
                 utils.fillComboBoxWihProducts(statPros, proController.getAvailableProductsLike(statProSearch.getText()));
             } catch (DatabaseException ex) {
@@ -70,7 +70,7 @@ public class StatisticsFormController {
             }
         }, null);
 
-        TextFieldRules.apply(statTotalProduced, 10, true, true, () -> {
+        TextFieldRules.apply(statTotalProduced, 10, true, () -> {
         }, null);
 
         this.formOpenerBtn.addActionListener((ActionEvent evt) -> {
@@ -80,7 +80,7 @@ public class StatisticsFormController {
         this.statSearchBtn.addActionListener((ActionEvent evt) -> {
             fillStatTable();
         });
-        
+
         this.statCreateExcelBtn.addActionListener((ActionEvent evt) -> {
             createExcelClicked();
         });
@@ -95,7 +95,7 @@ public class StatisticsFormController {
                 List<Object[]> statistics = exportController.getstatistics(dateFormat.format(statFromDate.getCalendar().getTime()), dateFormat.format(statToDate.getCalendar().getTime()), statPros.getSelectedIndex() != -1 ? (Product) statPros.getSelectedItem() : null);
                 for (Object[] row : statistics) {
                     model.addRow(new Object[]{row[0], ArabicDigits.toArabicDigits(row[1].toString()),
-                        ArabicDigits.toArabicDigits((Double)row[2]), ArabicDigits.toArabicDigits((Double)row[3])});
+                        ArabicDigits.toArabicDigits((Double) row[2]), ArabicDigits.toArabicDigits((Double) row[3])});
                 }
                 double tot = 0.0;
                 for (int i = 0; i < model.getRowCount(); i++) {

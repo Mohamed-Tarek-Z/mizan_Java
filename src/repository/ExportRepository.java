@@ -61,7 +61,7 @@ public class ExportRepository {
             );
         } catch (SQLException ex) {
             Logger.getLogger(ExportRepository.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
-            throw new DatabaseException("حدث خطأ أثناء حساب المخزن", ex);
+            throw new DatabaseException("حدث خطأ أثناء نقل من المخزن إلى المبيعات", ex);
         }
     }
 

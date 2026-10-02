@@ -55,9 +55,9 @@ public final class MachineFormController {
 
     public void init() throws DatabaseException {
 
-        TextFieldRules.apply(this.machName, 15, false, false, () -> {
+        TextFieldRules.apply(this.machName, 15, false, () -> {
         }, this::clearForm);
-        TextFieldRules.apply(this.machLot, 15, false, false, () -> {
+        TextFieldRules.apply(this.machLot, 15, false, () -> {
         }, this::clearForm);
 
         this.machTable.addMouseListener(new MouseAdapter() {

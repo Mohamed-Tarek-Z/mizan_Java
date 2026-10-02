@@ -30,7 +30,6 @@ public final class TextFieldRules {
      * @param field the field to configure
      * @param maxLength maximum number of characters allowed
      * @param isDigitsOnly true to accept numbers only
-     * @param isDouble true to allow floating point
      * @param onEnter runs when Enter is pressed in this field (e.g. () ->
      * next.requestFocusInWindow(), or () -> compute()); pass null to leave
      * Enter 's default behavior alone
@@ -39,20 +38,18 @@ public final class TextFieldRules {
      */
     public static void apply(JTextField field,
             int maxLength,
-            boolean isDigitsOnly, boolean isDouble,
+            boolean isDigitsOnly,
             Runnable onEnter,
             Runnable onShiftDelete) {
 
         // 1) digits only, length limit, optional forced Arabic-Indic display
         ((AbstractDocument) field.getDocument())
-                .setDocumentFilter(new NumericDocumentFilter(maxLength, isDigitsOnly, isDouble));
+                .setDocumentFilter(new NumericDocumentFilter(maxLength, isDigitsOnly));
 
         // 2) Enter -> caller-supplied action (typically "go to next field" or "compute")
         if (onEnter != null) {
             field.addActionListener(e -> {
-                if (!WeightScaleCapture.enterFromMizan) {
-                    onEnter.run();
-                }
+                onEnter.run();
             });
         }
 
@@ -67,10 +64,10 @@ public final class TextFieldRules {
 
     public static void apply(JTextField field,
             int maxLength,
-            boolean isDigitsOnly, boolean isDouble,
+            boolean isDigitsOnly,
             JComponent next,
             Runnable onShiftDelete) {
-        apply(field, maxLength, isDigitsOnly, isDouble, next != null
+        apply(field, maxLength, isDigitsOnly, next != null
                 ? () -> {
                     goAndSelect(next);
                 } : field::transferFocus, onShiftDelete);

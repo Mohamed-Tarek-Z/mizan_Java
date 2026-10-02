@@ -76,12 +76,12 @@ public class StorageController {
         throw new BusinessException("خطأ في أخذ بيانات الشكارة");
     }
 
-    public List<Bag> getBags(String proName) throws DatabaseException {
-        return storageRepo.getBags(proName);
+    public List<Bag> getBags(int proID) throws DatabaseException {
+        return storageRepo.getBags(proID);
     }
 
-    public List<Bag> getBagsToReport(int topNumber, String proName, String palletNumber, String lotNumber) throws DatabaseException {
-        return storageRepo.getBagsToReport(topNumber, proName, ArabicDigits.normalizeForParsing(palletNumber), ArabicDigits.normalizeForParsing(lotNumber));
+    public List<Bag> getBagsToReport(int topNumber, int proID, String palletNumber, String lotNumber) throws DatabaseException {
+        return storageRepo.getBagsToReport(topNumber, proID, ArabicDigits.normalizeForParsing(palletNumber), ArabicDigits.normalizeForParsing(lotNumber));
     }
 
     public String calc_pallet_weight(String palletNumber, String lotNumber, String productName) throws DatabaseException {
@@ -104,8 +104,8 @@ public class StorageController {
         return (req.isUsed() ? count[0] : count[1]);
     }
 
-    public List<String[]> getPalletsForReport(String proName) throws DatabaseException {
-        return storageRepo.getPalletsForReport(proName);
+    public List<String[]> getPalletsForReport(int proID) throws DatabaseException {
+        return storageRepo.getPalletsForReport(proID);
     }
 
     public List<String[]> getStockOfProduct(int ProID) throws DatabaseException {

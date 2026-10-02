@@ -52,7 +52,7 @@ public class WeightScaleCapture implements KeyEventDispatcher {
     private final char deviceDecimalMarker;
     private final JTextField targetField;
     private static final Pattern WEIGHT_PATTERN = Pattern.compile("\\d+([.\u0632]\\d+{2})?");
-    public static boolean enterFromMizan = false;
+    private boolean suppressEnterRelease = false;
 
     private final StringBuilder buffer = new StringBuilder();
     private long lastEventTime = 0L;
@@ -80,6 +80,16 @@ public class WeightScaleCapture implements KeyEventDispatcher {
     @Override
     public boolean dispatchKeyEvent(KeyEvent e) {
         if (e.getID() != KeyEvent.KEY_TYPED) {
+            if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                if (e.getID() == KeyEvent.KEY_PRESSED && confirmed) {
+                    suppressEnterRelease = true;
+                    return true;
+                }
+                if (e.getID() == KeyEvent.KEY_RELEASED && suppressEnterRelease) {
+                    suppressEnterRelease = false;
+                    return true;
+                }
+            }
             return false;
         }
 
@@ -88,18 +98,15 @@ public class WeightScaleCapture implements KeyEventDispatcher {
         long gap = now - lastEventTime;
         lastEventTime = now;
 
-        boolean isTerminator = c == '\n';
+        boolean isTerminator = c == '\n' || c == '\r';
         boolean isBufferable = Character.isDigit(c) || c == '.' || c == deviceDecimalMarker;
 
-        boolean fastFollowUp = buffer.length() > 0 && gap <= maxGapMs;
-
-        if (isTerminator && fastFollowUp) {
+        if (isTerminator) {
             boolean swallow = confirmed && WEIGHT_PATTERN.matcher(buffer.toString()).matches();
             if (swallow) {
                 deliverToTargetField(buffer.toString());
             }
             reset();
-            enterFromMizan = true;
             return swallow;
         }
 
@@ -107,6 +114,8 @@ public class WeightScaleCapture implements KeyEventDispatcher {
             reset();
             return false;
         }
+
+        boolean fastFollowUp = buffer.length() > 0 && gap <= maxGapMs;
 
         if (!confirmed && fastFollowUp) {
             confirmed = true;
@@ -150,13 +159,10 @@ public class WeightScaleCapture implements KeyEventDispatcher {
         buffer.setLength(0);
         confirmed = false;
         candidateOwner = null;
-        enterFromMizan = false;
     }
 
     private void deliverToTargetField(String raw) {
-        String display = ArabicDigits.toArabicDigits(raw.replace(deviceDecimalMarker, ArabicDigits.ARABIC_DECIMAL_SEPARATOR));
-        if (WEIGHT_PATTERN.matcher(display).matches()) {
-            SwingUtilities.invokeLater(() -> targetField.setText(display));
-        }
+        SwingUtilities.invokeLater(() -> targetField.setText(ArabicDigits.toArabicDigits(
+                raw.replace(deviceDecimalMarker, ArabicDigits.ARABIC_DECIMAL_SEPARATOR))));
     }
 }

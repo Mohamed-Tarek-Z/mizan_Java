@@ -8,12 +8,10 @@ public class NumericDocumentFilter extends DocumentFilter {
 
     private int maxLength;
     private final boolean isDigitsOnly;
-    private final boolean isDouble;
 
-    public NumericDocumentFilter(int maxLength, boolean isDigitsOnly, boolean isDouble) {
+    public NumericDocumentFilter(int maxLength, boolean isDigitsOnly) {
         this.maxLength = maxLength;
         this.isDigitsOnly = isDigitsOnly;
-        this.isDouble = isDouble;
     }
 
     @Override
@@ -30,7 +28,7 @@ public class NumericDocumentFilter extends DocumentFilter {
             return;
         }
 
-        String outputText = applyLimits(text, isDigitsOnly);
+        String outputText = applyLimits(text);
         if (outputText.isEmpty()) {
             return;
         }
@@ -50,18 +48,22 @@ public class NumericDocumentFilter extends DocumentFilter {
         super.replace(fb, offset, length, outputText, attrs);
     }
 
-    private String applyLimits(String text, boolean numbersOnly) {
+    private String applyLimits(String text) {
         StringBuilder sb = new StringBuilder(text.length());
         for (int i = 0; i < text.length(); i++) {
             char c = text.charAt(i);
             if (Character.isDigit(c)) {
                 sb.append(c);
-            } else {
-                if (!numbersOnly || (isDouble && c == ArabicDigits.ARABIC_DECIMAL_SEPARATOR || c == '.')) {
-                    sb.append(ArabicDigits.ARABIC_DECIMAL_SEPARATOR);
-                }
+                continue;
+            } else if (c == ArabicDigits.ARABIC_DECIMAL_SEPARATOR || c == '.') {
+                sb.append(ArabicDigits.ARABIC_DECIMAL_SEPARATOR);
+                continue;
+            }
+            if (!isDigitsOnly) {
+                sb.append(c);
             }
         }
+
         return sb.toString();
     }
 

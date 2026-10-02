@@ -2,6 +2,7 @@ package formController;
 
 import controller.ProductController;
 import controller.StorageController;
+import exceptions.BusinessException;
 import exceptions.DatabaseException;
 import java.awt.event.ActionEvent;
 import java.util.List;
@@ -14,6 +15,7 @@ import javax.swing.table.DefaultTableModel;
 import model.Product;
 import utils.ArabicDigits;
 import utils.ErrorListener;
+import utils.ExcelManager;
 import utils.TextFieldRules;
 import utils.utils;
 
@@ -22,6 +24,7 @@ public class StockFormController {
     private final JTextField stockProSearch;
     private final JTable stockTable;
     private final JComboBox<Product> stockPros;
+    private final JButton stockCreateExcelBtn;
     private final JButton formOpenerBtn;
     private final JPanel stockPanel;
     private final JPanel leftPanel;
@@ -29,22 +32,26 @@ public class StockFormController {
     private final StorageController storController;
     private final ProductController proController;
 
+    private final ExcelManager excelManager;
+
     private final ErrorListener errorListener;
 
-    public StockFormController(ErrorListener errorListener, JPanel leftPanel, JPanel stockPanel, JButton formOpenerBtn, JTextField stockProSearch, JTable stockTable, JComboBox<Product> stockPros, StorageController storageController, ProductController productController) {
+    public StockFormController(ErrorListener errorListener, JPanel leftPanel, JPanel stockPanel, JButton formOpenerBtn, JTextField stockProSearch, JButton stockCreateExcelBtn, JTable stockTable, JComboBox<Product> stockPros, StorageController storageController, ProductController productController, ExcelManager excelManager) {
         this.stockProSearch = stockProSearch;
         this.stockTable = stockTable;
         this.stockPros = stockPros;
         this.storController = storageController;
         this.proController = productController;
+        this.stockCreateExcelBtn = stockCreateExcelBtn;
         this.formOpenerBtn = formOpenerBtn;
         this.stockPanel = stockPanel;
         this.leftPanel = leftPanel;
+        this.excelManager = excelManager;
         this.errorListener = errorListener;
     }
 
     public void init() {
-        TextFieldRules.apply(stockProSearch, 20, false, false, () -> {
+        TextFieldRules.apply(stockProSearch, 20, false, () -> {
             try {
                 utils.fillComboBoxWihProducts(stockPros, proController.getAvailableStockProductsLike(stockProSearch.getText()));
             } catch (DatabaseException ex) {
@@ -56,6 +63,9 @@ public class StockFormController {
             fillStockTable();
         });
 
+        this.stockCreateExcelBtn.addActionListener((ActionEvent evt) -> {
+            createExcel();
+        });
         this.formOpenerBtn.addActionListener((ActionEvent evt) -> {
             try {
                 utils.openPanel(leftPanel, stockPanel);
@@ -79,6 +89,16 @@ public class StockFormController {
                 }
             }
         } catch (DatabaseException ex) {
+            errorListener.onError(ex);
+        }
+    }
+
+    private void createExcel() {
+        try {
+            if (excelManager.stockExcel(storController.getAllStock())) {
+                errorListener.onWarning("please print the Execl", "Done");
+            }
+        } catch (DatabaseException | BusinessException ex) {
             errorListener.onError(ex);
         }
     }

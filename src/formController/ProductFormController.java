@@ -32,7 +32,7 @@ public class ProductFormController {
     private final JButton delProBtn;
 
     private final ProductController prosController;
-    
+
     private final JButton formOpenerBtn;
     private final JPanel proPanel;
     private final JPanel leftPanel;
@@ -58,9 +58,9 @@ public class ProductFormController {
 
     public void init() throws DatabaseException {
 
-        TextFieldRules.apply(proName, 35, false, false, () -> {
+        TextFieldRules.apply(proName, 35, false, () -> {
         }, this::clearForm);
-        TextFieldRules.apply(proConeWeight, 4, true, false, () -> {
+        TextFieldRules.apply(proConeWeight, 4, true, () -> {
         }, this::clearForm);
 
         this.proTable.addMouseListener(new MouseAdapter() {
@@ -145,8 +145,8 @@ public class ProductFormController {
         model.setRowCount(0);
         List<Product> pros = prosController.getAvailableProductsLike("");
         for (Product pro : pros) {
-            model.addRow(new Object[] { pro.getId(), pro.getName(), ArabicDigits.toArabicDigits(pro.getWeight_of_con()),
-                    pro.getColor(), pro.isBox() });
+            model.addRow(new Object[]{pro.getId(), pro.getName(), ArabicDigits.toArabicDigits(pro.getWeight_of_con()),
+                pro.getColor(), pro.isBox()});
         }
     }
 

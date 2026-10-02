@@ -76,7 +76,7 @@ public class SoldFormController {
     }
 
     public void init() {
-        TextFieldRules.apply(soldProSearch, 20, false, false, () -> {
+        TextFieldRules.apply(soldProSearch, 20, false, () -> {
             try {
                 utils.fillComboBoxWihProducts(soldPros, proController.getAvailableProductsLike(soldProSearch.getText()));
             } catch (DatabaseException ex) {
@@ -84,7 +84,7 @@ public class SoldFormController {
             }
         }, null);
 
-        TextFieldRules.apply(soldClientSearch, 20, false, false, () -> {
+        TextFieldRules.apply(soldClientSearch, 20, false, () -> {
         }, null);
 
         this.formOpenerBtn.addActionListener((ActionEvent evt) -> {
@@ -167,12 +167,9 @@ public class SoldFormController {
         try {
 
             if (soldTable.getSelectedRow() != -1) {
-                if (JOptionPane.showConfirmDialog(null, utils.addStyle(
-                        "هل تريد استرجاع أزن " + soldTable.getValueAt(soldTable.getSelectedRow(), 0) + " لصنف"
+                if (errorListener.onQuest("هل تريد استرجاع أزن " + soldTable.getValueAt(soldTable.getSelectedRow(), 0) + " لصنف"
                         + soldTable.getValueAt(soldTable.getSelectedRow(), 1) + " في يوم"
-                        + soldTable.getValueAt(soldTable.getSelectedRow(), 5) + " "),
-                        "تنبيه",
-                        JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+                        + soldTable.getValueAt(soldTable.getSelectedRow(), 5), "تنبيه") == JOptionPane.YES_OPTION) {
                     exportController.moveBagFromExportToStorage((int) soldTable.getValueAt(soldTable.getSelectedRow(), 6));
                     soldSearchBtn.doClick();
                 }

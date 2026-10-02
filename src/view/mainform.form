@@ -850,9 +850,6 @@
                 <Property name="text" type="java.lang.String" value="&#x625;&#x630;&#x646; &#x63a;&#x632;&#x644;"/>
                 <Property name="toolTipText" type="java.lang.String" value="&#x627;&#x636;&#x63a;&#x637; &#x639;&#x644;&#x649; F2 &#x644;&#x641;&#x62a;&#x62d; &#x627;&#x644;&#x644;&#x648;&#x62d;&#x629;"/>
               </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton_Ezn_openerActionPerformed"/>
-              </Events>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
                   <AbsoluteConstraints x="20" y="70" width="110" height="40"/>
@@ -909,9 +906,6 @@
                 </Property>
                 <Property name="text" type="java.lang.String" value="&#x64a;&#x648;&#x645;&#x64a;&#x647;"/>
               </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton_youm_openerActionPerformed"/>
-              </Events>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
                   <AbsoluteConstraints x="20" y="370" width="110" height="40"/>
@@ -1467,7 +1461,7 @@
                         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                           <Font name="Segoe UI" size="24" style="0"/>
                         </Property>
-                        <Property name="text" type="java.lang.String" value="reload Setting File"/>
+                        <Property name="text" type="java.lang.String" value="Reload Setting File"/>
                       </Properties>
                       <Events>
                         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton_set_reloadSettingFileActionPerformed"/>
@@ -2791,7 +2785,7 @@
                 <Property name="useNullLayout" type="boolean" value="false"/>
               </Layout>
               <SubComponents>
-                <Component class="javax.swing.JComboBox" name="jComboBox_rep_Pros">
+                <Component class="javax.swing.JComboBox" name="jComboBox_permit_Pros">
                   <Properties>
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                       <Font name="sansserif" size="20" style="0"/>
@@ -2800,9 +2794,6 @@
                       <StringArray count="0"/>
                     </Property>
                   </Properties>
-                  <Events>
-                    <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="jComboBox_rep_ProsItemStateChanged"/>
-                  </Events>
                   <AuxValues>
                     <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;Product&gt;"/>
                   </AuxValues>
@@ -2839,32 +2830,26 @@
                     </Constraint>
                   </Constraints>
                 </Component>
-                <Component class="javax.swing.JTextField" name="jTextField_rep_numOfBag">
+                <Component class="javax.swing.JTextField" name="jTextField_permit_numOfBag">
                   <Properties>
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                       <Font name="Tahoma" size="18" style="0"/>
                     </Property>
                     <Property name="horizontalAlignment" type="int" value="4"/>
                   </Properties>
-                  <Events>
-                    <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="jTextField_rep_numOfBagKeyReleased"/>
-                  </Events>
                   <Constraints>
                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
                       <AbsoluteConstraints x="130" y="130" width="80" height="-1"/>
                     </Constraint>
                   </Constraints>
                 </Component>
-                <Component class="javax.swing.JButton" name="jButton_rep_printRep">
+                <Component class="javax.swing.JButton" name="jButton_permit_printRep">
                   <Properties>
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                       <Font name="sansserif" size="24" style="0"/>
                     </Property>
                     <Property name="text" type="java.lang.String" value="&#x637;&#x628;&#x627;&#x639;&#x629;"/>
                   </Properties>
-                  <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton_rep_printRepActionPerformed"/>
-                  </Events>
                   <Constraints>
                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
                       <AbsoluteConstraints x="640" y="500" width="120" height="50"/>
@@ -2941,7 +2926,7 @@
                     </Component>
                   </SubComponents>
                 </Container>
-                <Component class="javax.swing.JTextField" name="jTextField_rep_clientName">
+                <Component class="javax.swing.JTextField" name="jTextField_permit_clientName">
                   <Properties>
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                       <Font name="sansserif" size="20" style="0"/>
@@ -3034,16 +3019,13 @@
                           <TableHeader reorderingAllowed="false" resizingAllowed="true"/>
                         </Property>
                       </Properties>
-                      <Events>
-                        <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jTable_rep_selectMouseClicked"/>
-                      </Events>
                       <AuxValues>
                         <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new javax.swing.JTable()&#xa;{&#xa;    @Override&#xa;&#xa;    public Component prepareRenderer(TableCellRenderer renderer, int rowIndex, int columnIndex) {&#xa;        Component componenet = super.prepareRenderer(renderer, rowIndex, columnIndex);&#xa;&#xa;        boolean value = (boolean) getModel().getValueAt(rowIndex, 4);&#xa;&#xa;        if (value) {&#xa;            componenet.setBackground(isRowSelected(rowIndex) ? Color.YELLOW : Color.GREEN);&#xa;            componenet.setForeground(Color.BLACK);&#xa;&#xa;        } else {&#xa;&#xa;            componenet.setBackground(isRowSelected(rowIndex) ? componenet.getBackground() : Color.WHITE);&#xa;            //componenet.setForeground(Color.BLACK);&#xa;        }&#xa;&#xa;        return componenet;&#xa;    }&#xa;&#xa;}&#xa;&#xa;"/>
                       </AuxValues>
                     </Component>
                   </SubComponents>
                 </Container>
-                <Component class="javax.swing.JTextField" name="jTextField_rep_totweight">
+                <Component class="javax.swing.JTextField" name="jTextField_permit_totweight">
                   <Properties>
                     <Property name="editable" type="boolean" value="false"/>
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
@@ -3083,7 +3065,7 @@
                     </Constraint>
                   </Constraints>
                 </Component>
-                <Component class="javax.swing.JCheckBox" name="jCheckBox_rep_2n1">
+                <Component class="javax.swing.JCheckBox" name="jCheckBox_permit_2n1">
                   <Properties>
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                       <Font name="Tahoma" size="18" style="0"/>
@@ -3096,7 +3078,7 @@
                     </Constraint>
                   </Constraints>
                 </Component>
-                <Component class="javax.swing.JComboBox" name="jComboBox_rep_palletsNrep">
+                <Component class="javax.swing.JComboBox" name="jComboBox_permit_palletsNrep">
                   <Properties>
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                       <Font name="Tahoma" size="24" style="0"/>
@@ -3127,7 +3109,7 @@
                     </Constraint>
                   </Constraints>
                 </Component>
-                <Component class="javax.swing.JButton" name="jButton_rep_clear">
+                <Component class="javax.swing.JButton" name="jButton_permit_clear">
                   <Properties>
                     <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                       <Color blue="0" green="0" red="ff" type="rgb"/>
@@ -3140,36 +3122,30 @@
                     </Property>
                     <Property name="text" type="java.lang.String" value="Clear All"/>
                   </Properties>
-                  <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton_rep_clearActionPerformed"/>
-                  </Events>
                   <Constraints>
                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
                       <AbsoluteConstraints x="640" y="580" width="130" height="40"/>
                     </Constraint>
                   </Constraints>
                 </Component>
-                <Component class="javax.swing.JCheckBox" name="jCheckBox_rep_wzn">
+                <Component class="javax.swing.JCheckBox" name="jCheckBox_permit_wzn">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="&#x648;&#x632;&#x646;"/>
                   </Properties>
-                  <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jCheckBox_rep_wznActionPerformed"/>
-                  </Events>
                   <Constraints>
                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
                       <AbsoluteConstraints x="260" y="130" width="-1" height="-1"/>
                     </Constraint>
                   </Constraints>
                 </Component>
-                <Component class="javax.swing.JTextField" name="jTextField_Ezn_Search_pros">
+                <Component class="javax.swing.JTextField" name="jTextField_permit_Search_pros">
                   <Constraints>
                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
                       <AbsoluteConstraints x="70" y="35" width="200" height="-1"/>
                     </Constraint>
                   </Constraints>
                 </Component>
-                <Component class="javax.swing.JCheckBox" name="jCheckBox_rep_highLightMarked">
+                <Component class="javax.swing.JCheckBox" name="jCheckBox_permit_highLightMarked">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="&#x62a;&#x639;&#x644;&#x64a;&#x645; &#x641;&#x64a; &#x627;&#x644;&#x627;&#x630;&#x646;&#x61f;"/>
                   </Properties>
@@ -3179,7 +3155,7 @@
                     </Constraint>
                   </Constraints>
                 </Component>
-                <Component class="javax.swing.JTextField" name="jTextField_rep_ConeCount">
+                <Component class="javax.swing.JTextField" name="jTextField_permit_ConeCount">
                   <Properties>
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                       <Font name="Tahoma" size="18" style="0"/>
@@ -3279,10 +3255,10 @@
                         <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
                           <Table columnCount="5" rowCount="0">
                             <Column editable="false" title="&#x645;&#x633;&#x644;&#x633;&#x644;" type="java.lang.Object"/>
-                            <Column editable="false" title="&#x623;&#x633;&#x645; &#x627;&#x644;&#x635;&#x646;&#x641;" type="java.lang.Object"/>
-                            <Column editable="false" title="&#x648;&#x632;&#x646; &#x627;&#x644;&#x643;&#x648;&#x646;&#x647;" type="java.lang.Object"/>
-                            <Column editable="false" title="&#x627;&#x644;&#x644;&#x648;&#x646;" type="java.lang.Object"/>
-                            <Column editable="false" title="&#x635;&#x646;&#x62f;&#x648;&#x642;" type="java.lang.Object"/>
+                            <Column editable="false" title="&#x623;&#x633;&#x645; &#x627;&#x644;&#x635;&#x646;&#x641;" type="java.lang.String"/>
+                            <Column editable="false" title="&#x648;&#x632;&#x646; &#x627;&#x644;&#x643;&#x648;&#x646;&#x647;" type="java.lang.String"/>
+                            <Column editable="false" title="&#x627;&#x644;&#x644;&#x648;&#x646;" type="java.lang.String"/>
+                            <Column editable="false" title="&#x635;&#x646;&#x62f;&#x648;&#x642;" type="java.lang.Boolean"/>
                           </Table>
                         </Property>
                         <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
@@ -3319,10 +3295,14 @@
                           <Color blue="0" green="0" red="0" type="rgb"/>
                         </Property>
                         <Property name="rowHeight" type="int" value="25"/>
+                        <Property name="showGrid" type="boolean" value="true"/>
                         <Property name="tableHeader" type="javax.swing.table.JTableHeader" editor="org.netbeans.modules.form.editors2.JTableHeaderEditor">
-                          <TableHeader reorderingAllowed="true" resizingAllowed="true"/>
+                          <TableHeader reorderingAllowed="false" resizingAllowed="true"/>
                         </Property>
                       </Properties>
+                      <AuxValues>
+                        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new javax.swing.JTable()&#xa;{&#xa;    @Override&#xa;&#xa;    public Component prepareRenderer(TableCellRenderer renderer, int rowIndex, int columnIndex) {&#xa;        Component componenet = super.prepareRenderer(renderer, rowIndex, columnIndex);&#xa;&#xa;        boolean value = (boolean) getModel().getValueAt(rowIndex, 4);&#xa;&#xa;        if (value) {&#xa;            componenet.setBackground(isRowSelected(rowIndex) ? Color.YELLOW : Color.GREEN);&#xa;            componenet.setForeground(Color.BLACK);&#xa;&#xa;        } else {&#xa;&#xa;            componenet.setBackground(isRowSelected(rowIndex) ? componenet.getBackground() : Color.WHITE);&#xa;            //componenet.setForeground(Color.BLACK);&#xa;        }&#xa;&#xa;        return componenet;&#xa;    }&#xa;&#xa;}"/>
+                      </AuxValues>
                     </Component>
                   </SubComponents>
                 </Container>
@@ -3572,9 +3552,6 @@
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Create Excel"/>
                   </Properties>
-                  <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton_stock_createExclActionPerformed"/>
-                  </Events>
                   <Constraints>
                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
                       <AbsoluteConstraints x="640" y="600" width="-1" height="-1"/>

@@ -18,13 +18,12 @@ public class StorageRepository {
         this.dbConnection = dbConnection;
     }
 
-    public List<Bag> getBags(String proName) throws DatabaseException {
+    public List<Bag> getBags(int proID) throws DatabaseException {
         try {
             List<Bag> Bags = new ArrayList<>();
             ResultSet rs = dbConnection.dataRead("*",
                     "storage ",
-                    "storage.pro_id=(select pro_id from products where pro_name=N'"
-                    + proName + "') order by "
+                    "storage.pro_id=" + proID + " order by "
                     + "CASE WHEN ISNUMERIC(lot) = 1 AND lot NOT LIKE '%[^0-9]%' THEN 0 ELSE 1 END, CASE WHEN "
                     + "ISNUMERIC(lot) = 1 AND lot NOT LIKE '%[^0-9]%' THEN CAST(lot AS bigint) ELSE NULL END DESC, lot"
                     + ", used, pallet_numb DESC, storage_id DESC");
@@ -40,12 +39,11 @@ public class StorageRepository {
         }
     }
 
-    public List<Bag> getBagsToReport(int topNumber, String proName, String palletNumber, String lotNumber) throws DatabaseException {
+    public List<Bag> getBagsToReport(int topNumber, int proID, String palletNumber, String lotNumber) throws DatabaseException {
         try {
             List<Bag> Bags = new ArrayList<>();
             ResultSet rs = dbConnection.dataRead("TOP(" + (topNumber <= 0 ? 20 : topNumber) + ") storage_id,pro_id,tot_wight,weight_,lot,num_of_con,pallet_numb,used,date_,empty_pack", "storage",
-                    " pro_id=(select pro_id from products where pro_name=N'"
-                    + proName + "' ) and pallet_numb=" + palletNumber + " and lot=N'" + lotNumber + "' order by pallet_numb ,storage_id DESC ");
+                    " pro_id=" + proID + " and pallet_numb=" + palletNumber + " and lot=N'" + lotNumber + "' order by pallet_numb ,storage_id DESC ");
             while (rs.next()) {
                 Bags.add(new Bag(rs.getInt("storage_id"), rs.getInt("pro_id"), rs.getDouble("tot_wight"), rs.getDouble("weight_"), rs.getString("lot"),
                         rs.getInt("num_of_con"), rs.getInt("pallet_numb"), rs.getBoolean("used"), rs.getDate("date_"), rs.getDouble("empty_pack")));
@@ -58,12 +56,11 @@ public class StorageRepository {
         }
     }
 
-    public List<String[]> getPalletsForReport(String proName) throws DatabaseException {
+    public List<String[]> getPalletsForReport(int proID) throws DatabaseException {
         try {
             List<String[]> pallets = new ArrayList<>();
             ResultSet st = dbConnection.dataRead("count(*),sum(weight_),lot,pallet_numb,used", "storage",
-                    "pro_id=(select pro_id from products where pro_name=N'"
-                    + proName + "' )  GROUP BY lot,pallet_numb,used");
+                    "pro_id=" + proID + "  GROUP BY lot,pallet_numb,used");
 
             while (st.next()) {
                 pallets.add(new String[]{st.getString(1), st.getString(2),
