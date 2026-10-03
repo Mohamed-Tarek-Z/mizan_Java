@@ -56,8 +56,7 @@ public class ProductFormController {
         this.leftPanel = leftPanel;
     }
 
-    public void init() throws DatabaseException {
-
+    public void init() {
         TextFieldRules.apply(proName, 35, false, () -> {
         }, this::clearForm);
         TextFieldRules.apply(proConeWeight, 4, true, () -> {
@@ -82,8 +81,6 @@ public class ProductFormController {
         this.formOpenerBtn.addActionListener((ActionEvent evt) -> {
             openerClicked();
         });
-
-        this.fillProTable();
     }
 
     private void addPro() {

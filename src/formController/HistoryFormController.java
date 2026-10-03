@@ -27,7 +27,7 @@ import utils.ExcelManager;
 import utils.TextFieldRules;
 import utils.utils;
 
-public class SoldFormController {
+public class HistoryFormController {
 
     private final JTextField soldClientSearch;
     private final JTextField soldProSearch;
@@ -53,7 +53,11 @@ public class SoldFormController {
 
     private final ErrorListener errorListener;
 
-    public SoldFormController(ErrorListener errorListener, JPanel leftPanel, JPanel soldPanel, JButton formOpenerBtn, JTextField soldClientSearch, JTextField soldProSearch, JComboBox<Product> soldPros, JButton soldSearchBtn, JButton soldDeleteBtn, JButton soldClientSearchBtn, JButton soldCreateExcelBtn, JTable soldTable, JTable soldClientTable, JDateChooser soldFromDate, JDateChooser soldToDate, ExportController exportController, ProductController proController, ClientController cliController, ExcelManager excelManager) {
+    public HistoryFormController(ErrorListener errorListener, JPanel leftPanel, JPanel soldPanel, JButton formOpenerBtn,
+            JTextField soldClientSearch, JTextField soldProSearch, JComboBox<Product> soldPros, JButton soldSearchBtn,
+            JButton soldDeleteBtn, JButton soldClientSearchBtn, JButton soldCreateExcelBtn, JTable soldTable, JTable soldClientTable,
+            JDateChooser soldFromDate, JDateChooser soldToDate, ExportController exportController, ProductController proController,
+            ClientController cliController, ExcelManager excelManager) {
         this.soldClientSearch = soldClientSearch;
         this.soldProSearch = soldProSearch;
         this.soldPros = soldPros;
