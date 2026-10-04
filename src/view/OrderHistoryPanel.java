@@ -3,7 +3,7 @@ package view;
 import controller.ClientController;
 import controller.ExportController;
 import controller.ProductController;
-import formController.HistoryFormController;
+import formController.OrderHistoryFormController;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import model.Product;
@@ -16,7 +16,7 @@ public class OrderHistoryPanel extends javax.swing.JPanel {
     public OrderHistoryPanel(ErrorListener errorListener, JPanel leftPanel, JButton panelOpener, ExportController exportController, ProductController productController, ClientController clientController, ExcelManager excelManager) {
         initComponents();
 
-        new HistoryFormController(errorListener, leftPanel, this, panelOpener, jTextField_youm_ClientFilter,
+        new OrderHistoryFormController(errorListener, leftPanel, this, panelOpener, jTextField_youm_ClientFilter,
                 jTextField_youm_Search_pros, jComboBox_youm_products, jButton_youm_search, jButton_youm_refund,
                 jButton_youm_getClients, jButton_youm_createExcel, jTable_yumia, jTable_youm_clinets,
                 jDateChooser_youm_fromDate, jDateChooser_youm_ToDate, exportController, productController,

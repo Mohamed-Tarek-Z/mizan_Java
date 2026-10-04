@@ -27,7 +27,7 @@ import utils.ExcelManager;
 import utils.TextFieldRules;
 import utils.utils;
 
-public class HistoryFormController {
+public class OrderHistoryFormController {
 
     private final JTextField soldClientSearch;
     private final JTextField soldProSearch;
@@ -53,7 +53,7 @@ public class HistoryFormController {
 
     private final ErrorListener errorListener;
 
-    public HistoryFormController(ErrorListener errorListener, JPanel leftPanel, JPanel soldPanel, JButton formOpenerBtn,
+    public OrderHistoryFormController(ErrorListener errorListener, JPanel leftPanel, JPanel soldPanel, JButton formOpenerBtn,
             JTextField soldClientSearch, JTextField soldProSearch, JComboBox<Product> soldPros, JButton soldSearchBtn,
             JButton soldDeleteBtn, JButton soldClientSearchBtn, JButton soldCreateExcelBtn, JTable soldTable, JTable soldClientTable,
             JDateChooser soldFromDate, JDateChooser soldToDate, ExportController exportController, ProductController proController,

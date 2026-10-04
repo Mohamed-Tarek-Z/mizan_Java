@@ -35,7 +35,7 @@ import utils.ExcelManager;
 import utils.TextFieldRules;
 import utils.utils;
 
-public class PermitFormController {
+public class CreatePermitFormController {
 
     private final JTextField permitClientName;
     private final JTextField permitOrderWeight;
@@ -61,8 +61,6 @@ public class PermitFormController {
     private final JPanel permitPanel;
     private final JPanel leftPanel;
 
-    private final JFileChooser fileChooser;
-
     private final StorageController storController;
     private final ProductController proController;
     private final ClientController cliController;
@@ -80,12 +78,12 @@ public class PermitFormController {
     private Product typeFOrder;
     private boolean second = false, highLightFirst = false;
 
-    public PermitFormController(ErrorListener errorListener, JPanel leftPanel, JPanel permitPanel, JButton formOpenerBtn,
+    public CreatePermitFormController(ErrorListener errorListener, JPanel leftPanel, JPanel permitPanel, JButton formOpenerBtn,
             JTextField permitClientName, JTextField permitOrderWeight, JTextField permitProSearch, JTextField permitConeCount,
             JTextField permitTotalWeight, JComboBox<Product> permitPros, JComboBox<String> permitPallets, JLabel permitOrderCountLabel,
             JCheckBox permit2in1, JCheckBox permitMark, JCheckBox permitByWeight, JButton permitCreateBtn, JButton permitClearFormBtn,
             JTable permitPerviewTable, JTable permitPalletsTable, StorageController storController, ProductController proController,
-            ClientController cliController, OrderController orderController, ExportController exportController, ExcelManager excelManager, int permitAllowedDifference, JFileChooser fileChooser) {
+            ClientController cliController, OrderController orderController, ExportController exportController, ExcelManager excelManager, int permitAllowedDifference) {
         this.permitClientName = permitClientName;
         this.permitOrderWeight = permitOrderWeight;
         this.permitProSearch = permitProSearch;
@@ -112,7 +110,7 @@ public class PermitFormController {
         this.leftPanel = leftPanel;
         this.errorListener = errorListener;
         this.permitAllowedDifference = permitAllowedDifference;
-        this.fileChooser = fileChooser;
+
     }
 
     public void init() {
@@ -368,6 +366,10 @@ public class PermitFormController {
     }
 
     private void createPermit() {
+        JFileChooser fileChooser = new JFileChooser("P:\\");
+        fileChooser.setFileSelectionMode(javax.swing.JFileChooser.FILES_AND_DIRECTORIES);
+        fileChooser.setDialogType(JFileChooser.CUSTOM_DIALOG);
+        fileChooser.setFont(new java.awt.Font("Tahoma", 0, 14));
 
         double ss = permitTotalWeight.getText().isEmpty() ? 0.0
                 : ArabicDigits.parseDouble(permitTotalWeight.getText());
