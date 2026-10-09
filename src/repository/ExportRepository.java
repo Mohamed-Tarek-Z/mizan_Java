@@ -32,7 +32,7 @@ public class ExportRepository {
 
             while (st.next()) {
                 statistics.add(new Object[]{st.getString(1), st.getString(2),
-                    st.getDouble(3), st.getDouble(4)});
+                    st.getInt(3), st.getDouble(4)});
             }
 
             return statistics;

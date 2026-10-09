@@ -30,6 +30,7 @@ import model.Bag;
 import model.Client;
 import model.Product;
 import utils.ArabicDigits;
+import utils.Config;
 import utils.ErrorListener;
 import utils.ExcelManager;
 import utils.TextFieldRules;
@@ -71,7 +72,7 @@ public class CreatePermitFormController {
 
     private final ErrorListener errorListener;
 
-    private final int permitAllowedDifference;
+    private final int orderDifference;
 
     private final List<Bag> orderBags = new ArrayList<>();
     private List<Bag> fOrderBags = new ArrayList<>();
@@ -83,7 +84,7 @@ public class CreatePermitFormController {
             JTextField permitTotalWeight, JComboBox<Product> permitPros, JComboBox<String> permitPallets, JLabel permitOrderCountLabel,
             JCheckBox permit2in1, JCheckBox permitMark, JCheckBox permitByWeight, JButton permitCreateBtn, JButton permitClearFormBtn,
             JTable permitPerviewTable, JTable permitPalletsTable, StorageController storController, ProductController proController,
-            ClientController cliController, OrderController orderController, ExportController exportController, ExcelManager excelManager, int permitAllowedDifference) {
+            ClientController cliController, OrderController orderController, ExportController exportController, ExcelManager excelManager) {
         this.permitClientName = permitClientName;
         this.permitOrderWeight = permitOrderWeight;
         this.permitProSearch = permitProSearch;
@@ -109,7 +110,7 @@ public class CreatePermitFormController {
         this.permitPanel = permitPanel;
         this.leftPanel = leftPanel;
         this.errorListener = errorListener;
-        this.permitAllowedDifference = permitAllowedDifference;
+        this.orderDifference = Config.getInt("orderDifference", 15);
 
     }
 
@@ -187,7 +188,7 @@ public class CreatePermitFormController {
                         errorListener.onWarning("رجاء ادخل  وزن أقل من  ٧٠٠٠", "إنتبه");
                         return;
                     }
-                    if (wantedOrderWeight >= currentTotalWeight + permitAllowedDifference) {
+                    if (wantedOrderWeight >= currentTotalWeight + orderDifference) {
                         if (permitPreviewTable.getRowCount() > 0) {
                             if (!permitPreviewTable.getValueAt(0, 2).toString()
                                     .equals(permitPalletsTable.getValueAt(permitPalletsTable.getSelectedRow(), 2))) {
@@ -205,7 +206,7 @@ public class CreatePermitFormController {
                                 boolean bagOutOfOrder = false;
                                 ArrayList<String> OutOfOrderBags = new ArrayList<>();
                                 for (Bag bag : bags) {
-                                    if (wantedOrderWeight + permitAllowedDifference > currentTotalWeight + weight_sum + bag.getWeight()) {
+                                    if (wantedOrderWeight + orderDifference > currentTotalWeight + weight_sum + bag.getWeight()) {
 
                                         orderBags.add(bag);
                                         bagsTakenFromPallet++;
@@ -376,7 +377,7 @@ public class CreatePermitFormController {
         try {
             if (permitPreviewTable.getRowCount() >= 0 && !permitClientName.getText().isBlank()
                     && (permitPreviewTable.getRowCount() == ArabicDigits.parseInt(permitOrderWeight.getText())
-                    || !(ArabicDigits.parseDouble(permitOrderWeight.getText()) >= ss + permitAllowedDifference))) {
+                    || !(ArabicDigits.parseDouble(permitOrderWeight.getText()) >= ss + orderDifference))) {
 
                 if (errorListener.onQuest("سيتم التصدير للأكسل ", "تنبيه") == JOptionPane.YES_OPTION) {
 
@@ -528,25 +529,18 @@ public class CreatePermitFormController {
     private Client ClientNaming(String name) throws DatabaseException, BusinessException {
         try {
             if (cliController.clientExists(name)) {
-                return cliController.getClientLike(name).getFirst();
+                return cliController.getClient(name);
             }
             if (errorListener.onQuest("سيتم إضافة عميل جديد ", "تنبيه") == JOptionPane.NO_OPTION) {
-                List<Client> clients = cliController.getClients();
-                JComboBox<Client> comboBox = new JComboBox<>();
-                for (Client c : clients) {
-                    comboBox.addItem(c);
-                }
 
-                if (errorListener.onQuest(comboBox, utils.addStyle("إختر عميل")) == JOptionPane.OK_OPTION) {
-                    if (comboBox.getSelectedItem() != null) {
-                        return (Client) comboBox.getSelectedItem();
-                    }
-                    throw new BusinessException("تم إلغاء الإذن رجاء إدخال/إختيار عميل");
+                Client c = (Client) errorListener.onQuest(cliController.getClients().toArray(), "إختر عميل", "إختر عميل");
+                if (c != null) {
+                    return c;
                 }
+                throw new BusinessException("تم إلغاء الإذن رجاء إدخال/إختيار عميل");
             } else {
                 return cliController.addClientByName(name);
             }
-            throw new BusinessException("تم إلغاء الإذن رجاء إدخال/إختيار عميل");
         } catch (DatabaseException | BusinessException ex) {
             errorListener.onError(ex);
         }

@@ -1,6 +1,5 @@
 package utils;
 
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -25,13 +24,21 @@ public final class Config {
         try (InputStream input = Files.newInputStream(configFile)) {
             properties.load(input);
         } catch (IOException e) {
-            throw new RuntimeException("Could not load configuration file: " + configFile, e);
+            save();
+            //throw new RuntimeException("Could not load configuration file: " + configFile, e);
         }
     }
 
     public static void save() {
         try (OutputStream output = Files.newOutputStream(configFile)) {
+            properties.setProperty("ip", properties.getProperty("ip", "localhost"));
+            properties.setProperty("ticketPrinterName", properties.getProperty("ticketPrinterName", "Microsoft Print"));
+            properties.setProperty("ticketCount", properties.getProperty("ticketCount", "0"));
+            properties.setProperty("ticketWarning", properties.getProperty("ticketWarning", "500"));
+            properties.setProperty("orderDifference", properties.getProperty("orderDifference", "15"));
+            properties.setProperty("isPrintTicket", properties.getProperty("isPrintTicket", "True"));
             properties.store(output, "Application Configuration");
+            load();
         } catch (IOException e) {
             throw new RuntimeException("Could not save configuration", e);
         }

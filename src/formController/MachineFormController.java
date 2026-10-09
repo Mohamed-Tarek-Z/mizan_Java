@@ -81,7 +81,7 @@ public final class MachineFormController {
                 settingsTapsClicked();
             }
         });
-        this.fillMachTable();
+        reset();
     }
 
     private void addMach() {
@@ -193,6 +193,7 @@ public final class MachineFormController {
         try {
             if (settingsTapps.getSelectedIndex() == 0) {
                 fillMachTable();
+                utils.fillComboBoxWihProducts(machPros, prosController.getAvailableProductsLike(""));
             }
         } catch (DatabaseException ex) {
             errorListener.onError(ex);

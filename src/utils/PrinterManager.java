@@ -84,14 +84,14 @@ public class PrinterManager {
                     }
                     Graphics2D g2 = (Graphics2D) graphics.create();
                     try {
-                        
+
                         double scaleX = pf.getImageableWidth() / panel.getWidth();
                         double scaleY = pf.getImageableHeight() / panel.getHeight();
-                        
+
                         g2.translate(pf.getImageableX(), pf.getImageableY());
                         g2.scale(scaleX, scaleY);
                         panel.printAll(g2);
-                        
+
                     } finally {
                         g2.dispose();
                     }
@@ -104,11 +104,24 @@ public class PrinterManager {
                         errorListener.onError(ex);
                     }
                 }).start();
-
+                Config.set("ticketCount", Config.getInt("ticketCount", 0) + 1 + "");
+                if (Config.getInt("ticketCount", 0) == Config.getInt("ticketWarning", 500)) {
+                    errorListener.onWarning("Tickets", "Tickets");
+                }
             } catch (PrinterException ex) {
                 errorListener.onError(ex);
             }
         });
+    }
+
+    public void changePrinter() {
+        try {
+            PrintService[] printServices = PrintServiceLookup.lookupPrintServices(null, null);
+            String ticketPrinterName = ((PrintService) errorListener.onQuest(printServices, "Select Printer For Tickets:", "Printer Selection")).getName();
+            Config.set("ticketPrinterName", ticketPrinterName);
+        } catch (BusinessException ex) {
+            errorListener.onError(ex);
+        }
     }
 
 }

@@ -48,6 +48,20 @@ public class ClientRepository {
         }
     }
 
+    public Client getClient(String Name) throws DatabaseException {
+        try {
+
+            ResultSet rs = dbConnection.dataRead("cli_id,cli_name", "clients", "cli_name = N'" + Name + "' ");
+            if (rs.next()) {
+                return new Client(rs.getInt("cli_id"), rs.getString("cli_name"));
+            }
+            return null;
+        } catch (SQLException ex) {
+            Logger.getLogger(ClientRepository.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
+            throw new DatabaseException("حدث خطأ أثناءعرض العملاء", ex);
+        }
+    }
+
     public List<Client> getClients() throws DatabaseException {
         try {
             List<Client> clients = new ArrayList<>();

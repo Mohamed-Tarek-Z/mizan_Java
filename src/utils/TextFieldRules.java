@@ -98,7 +98,7 @@ public final class TextFieldRules {
 
     public static void goAndSelect(JComponent next) {
         if (((JTextField) next).isEditable()) {
-            next.requestFocus();
+            next.requestFocusInWindow();
             ((JTextField) next).selectAll();
         } else {
             next.transferFocus();

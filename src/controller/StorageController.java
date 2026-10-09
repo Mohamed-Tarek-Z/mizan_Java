@@ -84,8 +84,8 @@ public class StorageController {
         return storageRepo.getBagsToReport(topNumber, proID, ArabicDigits.normalizeForParsing(palletNumber), ArabicDigits.normalizeForParsing(lotNumber));
     }
 
-    public String calc_pallet_weight(String palletNumber, String lotNumber, String productName) throws DatabaseException {
-        return storageRepo.calc_pallet_weight(ArabicDigits.parseInt(palletNumber), ArabicDigits.normalizeForParsing(lotNumber), productName);
+    public String calc_pallet_weight(String palletNumber, String lotNumber, int proID) throws DatabaseException {
+        return storageRepo.calc_pallet_weight(ArabicDigits.parseInt(palletNumber), ArabicDigits.normalizeForParsing(lotNumber), proID);
     }
 
     public int countpallet(int palletNumber, String lotNumber, String productName, boolean IsUsed) throws DatabaseException, BusinessException {
@@ -124,15 +124,14 @@ public class StorageController {
             throw new BusinessException("برجاء إدخال رقم اللوط ");
         }
 
-        if (req.getNum_of_con() < 1) {
-            throw new BusinessException("برجاء إدخال عدد الكون ");
-        }
-
         if (!IgnoreLimit) {
-            if (req.getTot_wight() >= 60.0 && req.getTot_wight() < 0.0) {
+            if (req.getNum_of_con() < 1 || req.getNum_of_con() > 18) {
+                throw new BusinessException("برجاء إدخال عدد الكون ");
+            }
+            if (req.getTot_wight() >= 60.0 && req.getTot_wight() < 15.0) {
                 throw new BusinessException("خطأ في وزن الشيكاره");
             }
-            if (req.getWeight() >= 60.0 && req.getWeight() < 0.0) {
+            if (req.getWeight() >= 60.0 && req.getWeight() < 10.0) {
                 throw new BusinessException("خطأ في وزن الشيكاره");
             }
         }

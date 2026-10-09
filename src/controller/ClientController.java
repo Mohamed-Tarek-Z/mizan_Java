@@ -21,6 +21,10 @@ public class ClientController {
         return clientRepo.getClientLike(subName);
     }
 
+    public Client getClient(String Name) throws DatabaseException {
+        return clientRepo.getClient(Name);
+    }
+
     public List<Client> getClients() throws DatabaseException {
         return clientRepo.getClients();
     }

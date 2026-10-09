@@ -1,11 +1,15 @@
 package view;
 
+import utils.ErrorListener;
+
 public class NavPanel extends javax.swing.JPanel {
 
     private final String Version;
+    private final ErrorListener errorListener;
 
-    public NavPanel(String v) {
-        Version = v;
+    public NavPanel(ErrorListener errorListener, String v) {
+        this.Version = v;
+        this.errorListener = errorListener;
         initComponents();
     }
 
@@ -34,11 +38,6 @@ public class NavPanel extends javax.swing.JPanel {
         jButton_Mizan_opener.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jButton_Mizan_opener.setText("ميزان");
         jButton_Mizan_opener.setToolTipText("اضغط على F1 لفتح اللوحة");
-        jButton_Mizan_opener.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton_Mizan_openerActionPerformed(evt);
-            }
-        });
         add(jButton_Mizan_opener, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 10, 110, 40));
 
         jButton_pro_opener.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
@@ -94,24 +93,10 @@ public class NavPanel extends javax.swing.JPanel {
         jButton_Settings_opener.setMaximumSize(new java.awt.Dimension(72, 29));
         jButton_Settings_opener.setMinimumSize(new java.awt.Dimension(72, 29));
         jButton_Settings_opener.setPreferredSize(new java.awt.Dimension(72, 29));
-        jButton_Settings_opener.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton_Settings_openerActionPerformed(evt);
-            }
-        });
         add(jButton_Settings_opener, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 520, 110, 40));
 
         getAccessibleContext().setAccessibleParent(this);
     }// </editor-fold>//GEN-END:initComponents
-
-    private void jButton_Mizan_openerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_Mizan_openerActionPerformed
-        evt.getID();
-//        utils.openPanel(left_panel, storage_panel);
-//        if (jComboBox_storage_products.getSelectedIndex() == -1) {
-//            DefaultTableModel model = (DefaultTableModel) jTable_storage.getModel();
-//            model.setRowCount(0);
-//        }
-    }//GEN-LAST:event_jButton_Mizan_openerActionPerformed
 
     private void jButton_DoBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_DoBackActionPerformed
         evt.getID();
@@ -130,17 +115,6 @@ public class NavPanel extends javax.swing.JPanel {
 //            this.onError(ex);
 //        }
     }//GEN-LAST:event_jButton_DoBackActionPerformed
-
-    private void jButton_Settings_openerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_Settings_openerActionPerformed
-//        try {
-//            evt.getID();
-//            utils.openPanel(left_panel, jTabbedPane_settings);
-//            saveConfig();
-//            readConfig();
-//        } catch (BusinessException ex) {
-//            this.onError(ex);
-//        }
-    }//GEN-LAST:event_jButton_Settings_openerActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

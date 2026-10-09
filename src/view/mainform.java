@@ -5,26 +5,16 @@ import controller.*;
 import model.*;
 import utils.*;
 import exceptions.*;
-import formController.*;
 
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.ComponentOrientation;
 import java.awt.Font;
-import java.awt.FontMetrics;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.print.PrintService;
-import javax.print.PrintServiceLookup;
 import javax.swing.AbstractAction;
 import javax.swing.ActionMap;
 import javax.swing.InputMap;
@@ -53,12 +43,7 @@ public class Mainform extends javax.swing.JFrame implements ErrorListener {
     private final ExcelManager excelManager;
     private final PrinterManager printerManager;
 
-    private short tick10x10;
-    private int repDiff;
-    private final String Version = "V 3.9.0";
-    private String ticketPrinterName;
-
-    private String IP;
+    private final String Version = "V 4.0.0";
 
     @Override
     public void onError(Exception ex) {
@@ -75,16 +60,24 @@ public class Mainform extends javax.swing.JFrame implements ErrorListener {
     }
 
     @Override
-    public int onQuest(Object quest, String title) {
-        return showQuest(quest, title);
+    public int onQuest(String msg, String title) {
+        return showQuest(msg, title);
+    }
+
+    @Override
+    public Object onQuest(Object[] quest, String msg, String title) {
+        return showQuest(quest, msg, title);
     }
 
     public Mainform() throws DatabaseException, BusinessException, SQLException {
 
         initComponents();
 
-        readConfig();
-        this.opj = new sqlcon(IP);
+        Config.load();
+        if (!Config.get("ip", "localhost").equalsIgnoreCase("localhost")) {
+            showMessage("your DB IP :" + Config.get("ip"), "Not localHost");
+        }
+        this.opj = new sqlcon(Config.get("ip", "localhost"));
 
         this.excelManager = new ExcelManager();
         this.printerManager = new PrinterManager(this);
@@ -103,32 +96,9 @@ public class Mainform extends javax.swing.JFrame implements ErrorListener {
         new OrderHistoryPanel(this, left_panel, navPanel.jButton_youm_opener, exportController, productController, clientController, excelManager);
         new StatisticsPanel(this, left_panel, navPanel.jButton_Statics_opener, exportController, productController, excelManager);
         new ProductPanel(this, left_panel, navPanel.jButton_pro_opener, productController);
-        new CreatePermitPanel(this, left_panel, navPanel.jButton_Ezn_opener, storageController, productController, clientController, orderController, exportController, excelManager, repDiff);
+        new CreatePermitPanel(this, left_panel, navPanel.jButton_Ezn_opener, storageController, productController, clientController, orderController, exportController, excelManager);
 
-        TextFieldRules.apply(jTextField_storage_lot, 15, false, jTextField_storage_palletNumber, this::clearStorageForm);
-        TextFieldRules.apply(jTextField_storage_coneNumber, 3, true, jTextField_storage_EmptyBagWeight, this::clearStorageForm);
-        TextFieldRules.apply(jTextField_storage_EmptyBagWeight, 2, true, jTextField_storage_TotalWeight, this::clearStorageForm);
-        TextFieldRules.apply(jTextField_storage_palletNumber, 3, true, () -> {
-            TextFieldRules.goAndSelect(jTextField_storage_coneNumber);
-            try {
-                calc_pallet_weight();
-            } catch (DatabaseException ex) {
-                this.onError(ex);
-            }
-        }, null);
-        TextFieldRules.apply(jTextField_storage_TotalWeight, 8, true, () -> {
-            jTextField_storage_NetWeight.requestFocusInWindow();
-            try {
-                calc_net_weight();
-            } catch (BusinessException e) {
-                showMessageInlable(true);
-            }
-        }, this::clearStorageForm);
-        TextFieldRules.apply(jTextField_storage_NetWeight, 8, true, () -> {
-            jButton_storage_addData.doClick();
-            jTextField_storage_coneNumber.requestFocusInWindow();
-        }, this::clearStorageForm);
-        TextFieldRules.apply(jTextField_storage_EmptyConeWeight, 4, true, jTextField_storage_coneNumber, null);
+        new SettingsPanel(this, left_panel, navPanel.jButton_Settings_opener, machineController, productController, printerManager, Version);
 
         TextFieldRules.apply(jTextField_E_Wight, 8, true, () -> {
         }, null);
@@ -145,21 +115,8 @@ public class Mainform extends javax.swing.JFrame implements ErrorListener {
         TextFieldRules.apply(jTextField_ME_PaltNum, 3, true, () -> {
         }, null);
 
-        TextFieldRules.apply(jTextField_storage_SearchProducts, 20, false, () -> {
-            try {
-                utils.fillComboBoxWihProducts(jComboBox_storage_products,
-                        productController.getAvailableProductsLike(jTextField_storage_SearchProducts.getText()));
-            } catch (DatabaseException ex) {
-                this.onError(ex);
-            }
-        }, null);
-
         populateCombos();
         setupKeyBindings();
-
-        new MachineFormController(this, jTabbedPane_settings, jTextField_mach_MName, jTextField_mach_lot, jComboBox_mach_pros,
-                jButton_mach_addMach, jButton_mach_editMach, jButton_mach_Delete, jTable_machines, machineController,
-                productController).init();
 
         new WeightScaleCapture(jTextField_storage_TotalWeight).install();
     }
@@ -216,353 +173,6 @@ public class Mainform extends javax.swing.JFrame implements ErrorListener {
         jCheckBox_ME_MarkBag = new javax.swing.JCheckBox();
         jSplitPane1 = new javax.swing.JSplitPane();
         left_panel = new javax.swing.JPanel();
-        jTabbedPane_settings = new javax.swing.JTabbedPane();
-        jPanel_Machines = new javax.swing.JPanel();
-        jScrollPane5 = new javax.swing.JScrollPane();
-        jTable_machines = new javax.swing.JTable();
-        jTextField_mach_MName = new javax.swing.JTextField();
-        jComboBox_mach_pros = new javax.swing.JComboBox<>();
-        jTextField_mach_lot = new javax.swing.JTextField();
-        jLabel51 = new javax.swing.JLabel();
-        jLabel52 = new javax.swing.JLabel();
-        jLabel54 = new javax.swing.JLabel();
-        jButton_mach_addMach = new javax.swing.JButton();
-        jButton_mach_Delete = new javax.swing.JButton();
-        jButton_mach_editMach = new javax.swing.JButton();
-        jTab_set_Printing = new javax.swing.JPanel();
-        jButton_set_changePos = new javax.swing.JButton();
-        jButton_set_printValueToCenter = new javax.swing.JButton();
-        jButton_set_TicketPrinter = new javax.swing.JButton();
-        jButton_Reset_TicketCount10x10 = new javax.swing.JButton();
-        jLabel_Ticket10x10Counter = new javax.swing.JLabel();
-        jSeparator1 = new javax.swing.JSeparator();
-        jTab_set_about = new javax.swing.JPanel();
-        jLabel40 = new javax.swing.JLabel();
-        jLabel_ip = new javax.swing.JLabel();
-        jButton_set_reloadSettingFile = new javax.swing.JButton();
-        jPanel_print = new javax.swing.JPanel();
-        jLabel_print_header = new javax.swing.JLabel();
-        jLabel_print_ValPallet = new javax.swing.JLabel()
-        {
-            @Override
-            protected void paintComponent(Graphics g) {
-                adjustFontSize(g);
-                super.paintComponent(g);
-            }
-
-            private void adjustFontSize(Graphics g) {
-                if (getText() == null || getText().isEmpty()) {
-                    return;
-                }
-
-                int labelWidth = getWidth();
-                int labelHeight = getHeight();
-
-                if (labelWidth <= 0 || labelHeight <= 0) {
-                    return;
-                }
-
-                Graphics2D g2d = (Graphics2D) g;
-                Font font = getFont();
-                FontMetrics fm;
-                int fontSize = font.getSize();
-                int textWidth;
-                int textHeight;
-
-                do {
-                    font = font.deriveFont((float) fontSize);
-                    fm = g2d.getFontMetrics(font);
-                    textWidth = fm.stringWidth(getText());
-                    textHeight = fm.getHeight();
-                    fontSize--;
-                } while (textWidth > labelWidth && fontSize > 5); // Stop at minimum font size of 5
-
-                setFont(font);
-            }
-        };
-        jLabel_print_pallet = new javax.swing.JLabel();
-        jSeparator_print_pallet = new javax.swing.JSeparator();
-        jLabel_print_ValColor = new javax.swing.JLabel()
-        {
-            @Override
-            protected void paintComponent(Graphics g) {
-                adjustFontSize(g);
-                super.paintComponent(g);
-            }
-
-            private void adjustFontSize(Graphics g) {
-                if (getText() == null || getText().isEmpty()) {
-                    return;
-                }
-
-                int labelWidth = getWidth();
-                int labelHeight = getHeight();
-
-                if (labelWidth <= 0 || labelHeight <= 0) {
-                    return;
-                }
-
-                Graphics2D g2d = (Graphics2D) g;
-                Font font = getFont();
-                FontMetrics fm;
-                int fontSize = font.getSize();
-                int textWidth;
-                int textHeight;
-
-                do {
-                    font = font.deriveFont((float) fontSize);
-                    fm = g2d.getFontMetrics(font);
-                    textWidth = fm.stringWidth(getText());
-                    textHeight = fm.getHeight();
-                    fontSize--;
-                } while (textWidth > labelWidth && fontSize > 5); // Stop at minimum font size of 5
-
-                setFont(font);
-            }
-        };
-        jSeparator_print_color = new javax.swing.JSeparator();
-        jLabel_print_ValNCone = new javax.swing.JLabel()
-        {
-            @Override
-            protected void paintComponent(Graphics g) {
-                adjustFontSize(g);
-                super.paintComponent(g);
-            }
-
-            private void adjustFontSize(Graphics g) {
-                if (getText() == null || getText().isEmpty()) {
-                    return;
-                }
-
-                int labelWidth = getWidth();
-                int labelHeight = getHeight();
-
-                if (labelWidth <= 0 || labelHeight <= 0) {
-                    return;
-                }
-
-                Graphics2D g2d = (Graphics2D) g;
-                Font font = getFont();
-                FontMetrics fm;
-                int fontSize = font.getSize();
-                int textWidth;
-                int textHeight;
-
-                do {
-                    font = font.deriveFont((float) fontSize);
-                    fm = g2d.getFontMetrics(font);
-                    textWidth = fm.stringWidth(getText());
-                    textHeight = fm.getHeight();
-                    fontSize--;
-                } while (textWidth > labelWidth && fontSize > 5); // Stop at minimum font size of 5
-
-                setFont(font);
-            }
-        };
-        jLabel_print_NCone = new javax.swing.JLabel();
-        jSeparator_print_nCone = new javax.swing.JSeparator();
-        jLabel_print_ValType = new javax.swing.JLabel()
-        {
-            @Override
-            protected void paintComponent(Graphics g) {
-                adjustFontSize(g);
-                super.paintComponent(g);
-            }
-
-            private void adjustFontSize(Graphics g) {
-                if (getText() == null || getText().isEmpty()) {
-                    return;
-                }
-
-                int labelWidth = getWidth();
-                int labelHeight = getHeight();
-
-                if (labelWidth <= 0 || labelHeight <= 0) {
-                    return;
-                }
-
-                Graphics2D g2d = (Graphics2D) g;
-                Font font = getFont();
-                FontMetrics fm;
-                int fontSize = font.getSize();
-                int textWidth;
-                int textHeight;
-
-                do {
-                    font = font.deriveFont((float) fontSize);
-                    fm = g2d.getFontMetrics(font);
-                    textWidth = fm.stringWidth(getText());
-                    textHeight = fm.getHeight();
-                    fontSize--;
-                } while (textWidth > labelWidth && fontSize > 5); // Stop at minimum font size of 5
-
-                setFont(font);
-            }
-        };
-        jLabel_print_ValTypeDenir = new javax.swing.JLabel()
-        {
-            @Override
-            protected void paintComponent(Graphics g) {
-                adjustFontSize(g);
-                super.paintComponent(g);
-            }
-
-            private void adjustFontSize(Graphics g) {
-                if (getText() == null || getText().isEmpty()) {
-                    return;
-                }
-
-                int labelWidth = getWidth();
-                int labelHeight = getHeight();
-
-                if (labelWidth <= 0 || labelHeight <= 0) {
-                    return;
-                }
-
-                Graphics2D g2d = (Graphics2D) g;
-                Font font = getFont();
-                FontMetrics fm;
-                int fontSize = font.getSize();
-                int textWidth;
-                int textHeight;
-
-                do {
-                    font = font.deriveFont((float) fontSize);
-                    fm = g2d.getFontMetrics(font);
-                    textWidth = fm.stringWidth(getText());
-                    textHeight = fm.getHeight();
-                    fontSize--;
-                } while (textWidth > labelWidth && fontSize > 5); // Stop at minimum font size of 5
-
-                setFont(font);
-            }
-        };
-        jLabel_print_type = new javax.swing.JLabel();
-        jSeparator_print_type = new javax.swing.JSeparator();
-        jLabel_print_ValLot = new javax.swing.JLabel()
-        {
-            @Override
-            protected void paintComponent(Graphics g) {
-                adjustFontSize(g);
-                super.paintComponent(g);
-            }
-
-            private void adjustFontSize(Graphics g) {
-                if (getText() == null || getText().isEmpty()) {
-                    return;
-                }
-
-                int labelWidth = getWidth();
-                int labelHeight = getHeight();
-
-                if (labelWidth <= 0 || labelHeight <= 0) {
-                    return;
-                }
-
-                Graphics2D g2d = (Graphics2D) g;
-                Font font = getFont();
-                FontMetrics fm;
-                int fontSize = font.getSize();
-                int textWidth;
-                int textHeight;
-
-                do {
-                    font = font.deriveFont((float) fontSize);
-                    fm = g2d.getFontMetrics(font);
-                    textWidth = fm.stringWidth(getText());
-                    textHeight = fm.getHeight();
-                    fontSize--;
-                } while (textWidth > labelWidth && fontSize > 5); // Stop at minimum font size of 5
-
-                setFont(font);
-            }
-        };
-        jLabel_print_lot = new javax.swing.JLabel();
-        jSeparator_print_lot = new javax.swing.JSeparator();
-        jLabel_print_ValTotalWeight = new javax.swing.JLabel()
-        {
-            @Override
-            protected void paintComponent(Graphics g) {
-                adjustFontSize(g);
-                super.paintComponent(g);
-            }
-
-            private void adjustFontSize(Graphics g) {
-                if (getText() == null || getText().isEmpty()) {
-                    return;
-                }
-
-                int labelWidth = getWidth();
-                int labelHeight = getHeight();
-
-                if (labelWidth <= 0 || labelHeight <= 0) {
-                    return;
-                }
-
-                Graphics2D g2d = (Graphics2D) g;
-                Font font = getFont();
-                FontMetrics fm;
-                int fontSize = font.getSize();
-                int textWidth;
-                int textHeight;
-
-                do {
-                    font = font.deriveFont((float) fontSize);
-                    fm = g2d.getFontMetrics(font);
-                    textWidth = fm.stringWidth(getText());
-                    textHeight = fm.getHeight();
-                    fontSize--;
-                } while (textWidth > labelWidth && fontSize > 5); // Stop at minimum font size of 5
-
-                setFont(font);
-            }
-        };
-        jLabel_print_TotalWeight = new javax.swing.JLabel();
-        jSeparator_print_totWeight = new javax.swing.JSeparator();
-        jLabel_print_ValNetWeight = new javax.swing.JLabel()
-        {
-            @Override
-            protected void paintComponent(Graphics g) {
-                adjustFontSize(g);
-                super.paintComponent(g);
-            }
-
-            private void adjustFontSize(Graphics g) {
-                if (getText() == null || getText().isEmpty()) {
-                    return;
-                }
-
-                int labelWidth = getWidth();
-                int labelHeight = getHeight();
-
-                if (labelWidth <= 0 || labelHeight <= 0) {
-                    return;
-                }
-
-                Graphics2D g2d = (Graphics2D) g;
-                Font font = getFont();
-                FontMetrics fm;
-                int fontSize = font.getSize();
-                int textWidth;
-                int textHeight;
-
-                do {
-                    font = font.deriveFont((float) fontSize);
-                    fm = g2d.getFontMetrics(font);
-                    textWidth = fm.stringWidth(getText());
-                    textHeight = fm.getHeight();
-                    fontSize--;
-                } while (textWidth > labelWidth && fontSize > 5); // Stop at minimum font size of 5
-
-                setFont(font);
-            }
-        };
-        jLabel_print_NetWeight = new javax.swing.JLabel();
-        jLabel_print_footer = new javax.swing.JLabel();
-        jLabel_print_number = new javax.swing.JLabel();
-        jSeparator_print_main = new javax.swing.JSeparator();
-        jSeparator_print_valBox = new javax.swing.JSeparator();
-        jSeparator_print_Double = new javax.swing.JSeparator();
         storage_panel = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable_storage = new javax.swing.JTable()
@@ -901,374 +511,6 @@ public class Mainform extends javax.swing.JFrame implements ErrorListener {
             left_panel.setPreferredSize(new java.awt.Dimension(840, 645));
             left_panel.setLayout(new java.awt.CardLayout());
 
-            jTabbedPane_settings.setBorder(javax.swing.BorderFactory.createTitledBorder("Settings"));
-            jTabbedPane_settings.setMaximumSize(new java.awt.Dimension(835, 640));
-            jTabbedPane_settings.setMinimumSize(new java.awt.Dimension(835, 640));
-            jTabbedPane_settings.setPreferredSize(new java.awt.Dimension(835, 640));
-
-            jPanel_Machines.setMaximumSize(new java.awt.Dimension(830, 635));
-            jPanel_Machines.setMinimumSize(new java.awt.Dimension(830, 635));
-            jPanel_Machines.setPreferredSize(new java.awt.Dimension(830, 635));
-            jPanel_Machines.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-            jTable_machines.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-            jTable_machines.setModel(new javax.swing.table.DefaultTableModel(
-                new Object [][] {
-
-                },
-                new String [] {
-                    "id", "Name", "Type", "Lot", "Date"
-                }
-            ) {
-                Class[] types = new Class [] {
-                    java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
-                };
-                boolean[] canEdit = new boolean [] {
-                    false, false, false, false, false
-                };
-
-                public Class getColumnClass(int columnIndex) {
-                    return types [columnIndex];
-                }
-
-                public boolean isCellEditable(int rowIndex, int columnIndex) {
-                    return canEdit [columnIndex];
-                }
-            });
-            jTable_machines.setColumnSelectionAllowed(true);
-            jTable_machines.setRowHeight(30);
-            jTable_machines.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-            jTable_machines.setShowGrid(true);
-            jTable_machines.setShowVerticalLines(false);
-            jScrollPane5.setViewportView(jTable_machines);
-            jTable_machines.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-            if (jTable_machines.getColumnModel().getColumnCount() > 0) {
-                jTable_machines.getColumnModel().getColumn(0).setMinWidth(0);
-                jTable_machines.getColumnModel().getColumn(0).setPreferredWidth(0);
-                jTable_machines.getColumnModel().getColumn(0).setMaxWidth(0);
-                jTable_machines.getColumnModel().getColumn(3).setResizable(false);
-                jTable_machines.getColumnModel().getColumn(4).setResizable(false);
-            }
-
-            jPanel_Machines.add(jScrollPane5, new org.netbeans.lib.awtextra.AbsoluteConstraints(6, 285, 760, 302));
-
-            jTextField_mach_MName.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-            jTextField_mach_MName.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-            jPanel_Machines.add(jTextField_mach_MName, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 70, 190, 50));
-
-            jComboBox_mach_pros.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-            jPanel_Machines.add(jComboBox_mach_pros, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 70, 210, 50));
-
-            jTextField_mach_lot.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-            jTextField_mach_lot.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-            jPanel_Machines.add(jTextField_mach_lot, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 70, 190, 50));
-
-            jLabel51.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-            jLabel51.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-            jLabel51.setText("أسم الماكينة");
-            jPanel_Machines.add(jLabel51, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 20, 110, 40));
-
-            jLabel52.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-            jLabel52.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-            jLabel52.setText("صنف التشغيل");
-            jPanel_Machines.add(jLabel52, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 20, 140, 40));
-
-            jLabel54.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-            jLabel54.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-            jLabel54.setText("اللوط");
-            jPanel_Machines.add(jLabel54, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 20, 100, 40));
-
-            jButton_mach_addMach.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-            jButton_mach_addMach.setText("Add");
-            jPanel_Machines.add(jButton_mach_addMach, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 180, 170, 70));
-
-            jButton_mach_Delete.setBackground(new java.awt.Color(255, 0, 0));
-            jButton_mach_Delete.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-            jButton_mach_Delete.setForeground(new java.awt.Color(255, 255, 255));
-            jButton_mach_Delete.setText("Delete");
-            jPanel_Machines.add(jButton_mach_Delete, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 200, 80, 30));
-
-            jButton_mach_editMach.setBackground(new java.awt.Color(102, 204, 255));
-            jButton_mach_editMach.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-            jButton_mach_editMach.setText("Edit");
-            jButton_mach_editMach.setMaximumSize(new java.awt.Dimension(73, 39));
-            jButton_mach_editMach.setMinimumSize(new java.awt.Dimension(73, 39));
-            jButton_mach_editMach.setPreferredSize(new java.awt.Dimension(73, 39));
-            jPanel_Machines.add(jButton_mach_editMach, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 190, 140, 50));
-
-            jTabbedPane_settings.addTab("Machine", jPanel_Machines);
-
-            jTab_set_Printing.setMaximumSize(new java.awt.Dimension(835, 640));
-            jTab_set_Printing.setMinimumSize(new java.awt.Dimension(835, 640));
-            jTab_set_Printing.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-            jButton_set_changePos.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-            jButton_set_changePos.setText("تغيير أماكن القيم في الطابعة");
-            jButton_set_changePos.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent evt) {
-                    jButton_set_changePosActionPerformed(evt);
-                }
-            });
-            jTab_set_Printing.add(jButton_set_changePos, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 40, -1, 70));
-
-            jButton_set_printValueToCenter.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-            jButton_set_printValueToCenter.setText("تغيير أماكن القيم في الطابعة إلي المنتصف");
-            jButton_set_printValueToCenter.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent evt) {
-                    jButton_set_printValueToCenterActionPerformed(evt);
-                }
-            });
-            jTab_set_Printing.add(jButton_set_printValueToCenter, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 40, 370, 70));
-
-            jButton_set_TicketPrinter.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-            jButton_set_TicketPrinter.setText("Select Ticket Printer");
-            jButton_set_TicketPrinter.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent evt) {
-                    jButton_set_TicketPrinterActionPerformed(evt);
-                }
-            });
-            jTab_set_Printing.add(jButton_set_TicketPrinter, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 160, 250, 70));
-
-            jButton_Reset_TicketCount10x10.setFont(new java.awt.Font("Tahoma", 3, 18)); // NOI18N
-            jButton_Reset_TicketCount10x10.setText("Reset 10 X 10");
-            jButton_Reset_TicketCount10x10.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent evt) {
-                    jButton_Reset_TicketCount10x10ActionPerformed(evt);
-                }
-            });
-            jTab_set_Printing.add(jButton_Reset_TicketCount10x10, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 380, 160, 60));
-            jTab_set_Printing.add(jLabel_Ticket10x10Counter, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 380, 170, 60));
-
-            jSeparator1.setForeground(new java.awt.Color(0, 0, 0));
-            jTab_set_Printing.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 270, 830, 10));
-
-            jTabbedPane_settings.addTab("Printing Options", jTab_set_Printing);
-
-            jTab_set_about.setMaximumSize(new java.awt.Dimension(830, 635));
-            jTab_set_about.setMinimumSize(new java.awt.Dimension(830, 635));
-            jTab_set_about.setPreferredSize(new java.awt.Dimension(830, 635));
-            jTab_set_about.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-            jLabel40.setBackground(new java.awt.Color(204, 255, 204));
-            jLabel40.setFont(new java.awt.Font("Segoe UI", 3, 48)); // NOI18N
-            jLabel40.setText(Version);
-            jLabel40.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(102, 255, 255)));
-            jLabel40.setFocusable(false);
-            jLabel40.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-            jLabel40.setName("setting_version"); // NOI18N
-            jLabel40.setRequestFocusEnabled(false);
-            jLabel40.setVerifyInputWhenFocusTarget(false);
-            jTab_set_about.add(jLabel40, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 140, 690, 140));
-            jLabel40.getAccessibleContext().setAccessibleDescription("Setting page Version");
-
-            jLabel_ip.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-            jTab_set_about.add(jLabel_ip, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 370, 560, 90));
-
-            jButton_set_reloadSettingFile.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-            jButton_set_reloadSettingFile.setText("Reload Setting File");
-            jButton_set_reloadSettingFile.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent evt) {
-                    jButton_set_reloadSettingFileActionPerformed(evt);
-                }
-            });
-            jTab_set_about.add(jButton_set_reloadSettingFile, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 460, 240, 90));
-
-            jTabbedPane_settings.addTab("About", jTab_set_about);
-
-            jPanel_print.setBackground(new java.awt.Color(255, 255, 255));
-            jPanel_print.setEnabled(false);
-            jPanel_print.setFocusable(false);
-            jPanel_print.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
-            jPanel_print.setMaximumSize(new java.awt.Dimension(300, 350));
-            jPanel_print.setMinimumSize(new java.awt.Dimension(300, 350));
-            jPanel_print.setName("printingPanel"); // NOI18N
-            jPanel_print.setPreferredSize(new java.awt.Dimension(300, 350));
-            jPanel_print.setRequestFocusEnabled(false);
-            jPanel_print.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-            jLabel_print_header.setFont(new java.awt.Font("Arial", 1, 16)); // NOI18N
-            jLabel_print_header.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-            jLabel_print_header.setText("الصفا و المروه للغزل و النسيج");
-            jLabel_print_header.setFocusable(false);
-            jLabel_print_header.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-            jPanel_print.add(jLabel_print_header, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 0, -1, -1));
-
-            jLabel_print_ValPallet.setFont(new java.awt.Font("Arial", 0, 30)); // NOI18N
-            jLabel_print_ValPallet.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-            jLabel_print_ValPallet.setText("Label");
-            jLabel_print_ValPallet.setFocusable(false);
-            jLabel_print_ValPallet.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-            jPanel_print.add(jLabel_print_ValPallet, new org.netbeans.lib.awtextra.AbsoluteConstraints(15, 24, 190, 25));
-
-            jLabel_print_pallet.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
-            jLabel_print_pallet.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-            jLabel_print_pallet.setText("رقم البالتة");
-            jLabel_print_pallet.setFocusable(false);
-            jLabel_print_pallet.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-            jPanel_print.add(jLabel_print_pallet, new org.netbeans.lib.awtextra.AbsoluteConstraints(212, 25, 75, 20));
-
-            jSeparator_print_pallet.setForeground(new java.awt.Color(255, 255, 255));
-            jSeparator_print_pallet.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, new java.awt.Color(0, 0, 0)));
-            jSeparator_print_pallet.setMaximumSize(new java.awt.Dimension(50, 100));
-            jSeparator_print_pallet.setMinimumSize(new java.awt.Dimension(50, 100));
-            jSeparator_print_pallet.setPreferredSize(new java.awt.Dimension(50, 100));
-            jPanel_print.add(jSeparator_print_pallet, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 48, 280, 3));
-
-            jLabel_print_ValColor.setFont(new java.awt.Font("Arial", 0, 26)); // NOI18N
-            jLabel_print_ValColor.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-            jLabel_print_ValColor.setText("Label");
-            jLabel_print_ValColor.setFocusable(false);
-            jLabel_print_ValColor.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-            jPanel_print.add(jLabel_print_ValColor, new org.netbeans.lib.awtextra.AbsoluteConstraints(15, 51, 90, 35));
-
-            jSeparator_print_color.setForeground(new java.awt.Color(255, 255, 255));
-            jSeparator_print_color.setOrientation(javax.swing.SwingConstants.VERTICAL);
-            jSeparator_print_color.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 0, 2, new java.awt.Color(0, 0, 0)));
-            jSeparator_print_color.setMaximumSize(new java.awt.Dimension(50, 100));
-            jSeparator_print_color.setMinimumSize(new java.awt.Dimension(50, 100));
-            jSeparator_print_color.setPreferredSize(new java.awt.Dimension(50, 100));
-            jPanel_print.add(jSeparator_print_color, new org.netbeans.lib.awtextra.AbsoluteConstraints(105, 50, 5, 40));
-
-            jLabel_print_ValNCone.setFont(new java.awt.Font("Arial", 0, 28)); // NOI18N
-            jLabel_print_ValNCone.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-            jLabel_print_ValNCone.setText("Label");
-            jLabel_print_ValNCone.setFocusable(false);
-            jLabel_print_ValNCone.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-            jPanel_print.add(jLabel_print_ValNCone, new org.netbeans.lib.awtextra.AbsoluteConstraints(115, 51, 90, 35));
-
-            jLabel_print_NCone.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
-            jLabel_print_NCone.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-            jLabel_print_NCone.setText("الكون");
-            jLabel_print_NCone.setFocusable(false);
-            jLabel_print_NCone.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-            jPanel_print.add(jLabel_print_NCone, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 51, 75, 35));
-
-            jSeparator_print_nCone.setForeground(new java.awt.Color(255, 255, 255));
-            jSeparator_print_nCone.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, new java.awt.Color(0, 0, 0)));
-            jSeparator_print_nCone.setMaximumSize(new java.awt.Dimension(50, 100));
-            jSeparator_print_nCone.setMinimumSize(new java.awt.Dimension(50, 100));
-            jSeparator_print_nCone.setPreferredSize(new java.awt.Dimension(50, 100));
-            jPanel_print.add(jSeparator_print_nCone, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 90, 280, 2));
-
-            jLabel_print_ValType.setFont(new java.awt.Font("Arial", 0, 30)); // NOI18N
-            jLabel_print_ValType.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-            jLabel_print_ValType.setText("Label");
-            jLabel_print_ValType.setFocusable(false);
-            jLabel_print_ValType.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-            jPanel_print.add(jLabel_print_ValType, new org.netbeans.lib.awtextra.AbsoluteConstraints(15, 125, 190, 28));
-
-            jLabel_print_ValTypeDenir.setFont(new java.awt.Font("Arial", 0, 35)); // NOI18N
-            jLabel_print_ValTypeDenir.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-            jLabel_print_ValTypeDenir.setText("Label");
-            jLabel_print_ValTypeDenir.setFocusable(false);
-            jLabel_print_ValTypeDenir.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-            jPanel_print.add(jLabel_print_ValTypeDenir, new org.netbeans.lib.awtextra.AbsoluteConstraints(15, 95, 190, 28));
-
-            jLabel_print_type.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
-            jLabel_print_type.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-            jLabel_print_type.setText("الصنف");
-            jLabel_print_type.setFocusable(false);
-            jLabel_print_type.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-            jPanel_print.add(jLabel_print_type, new org.netbeans.lib.awtextra.AbsoluteConstraints(212, 95, 75, 60));
-
-            jSeparator_print_type.setForeground(new java.awt.Color(255, 255, 255));
-            jSeparator_print_type.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, new java.awt.Color(0, 0, 0)));
-            jSeparator_print_type.setMaximumSize(new java.awt.Dimension(50, 100));
-            jSeparator_print_type.setMinimumSize(new java.awt.Dimension(50, 100));
-            jSeparator_print_type.setPreferredSize(new java.awt.Dimension(50, 100));
-            jPanel_print.add(jSeparator_print_type, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 155, 280, 3));
-
-            jLabel_print_ValLot.setFont(new java.awt.Font("Arial", 0, 40)); // NOI18N
-            jLabel_print_ValLot.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-            jLabel_print_ValLot.setText("Label");
-            jLabel_print_ValLot.setFocusable(false);
-            jLabel_print_ValLot.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-            jPanel_print.add(jLabel_print_ValLot, new org.netbeans.lib.awtextra.AbsoluteConstraints(15, 162, 190, 30));
-
-            jLabel_print_lot.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
-            jLabel_print_lot.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-            jLabel_print_lot.setText("اللوط");
-            jLabel_print_lot.setFocusable(false);
-            jLabel_print_lot.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-            jPanel_print.add(jLabel_print_lot, new org.netbeans.lib.awtextra.AbsoluteConstraints(212, 165, 75, 25));
-
-            jSeparator_print_lot.setForeground(new java.awt.Color(255, 255, 255));
-            jSeparator_print_lot.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, new java.awt.Color(0, 0, 0)));
-            jSeparator_print_lot.setMaximumSize(new java.awt.Dimension(50, 100));
-            jSeparator_print_lot.setMinimumSize(new java.awt.Dimension(50, 100));
-            jSeparator_print_lot.setPreferredSize(new java.awt.Dimension(50, 100));
-            jPanel_print.add(jSeparator_print_lot, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 194, 280, 3));
-
-            jLabel_print_ValTotalWeight.setFont(new java.awt.Font("Arial", 0, 32)); // NOI18N
-            jLabel_print_ValTotalWeight.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-            jLabel_print_ValTotalWeight.setText("Label");
-            jLabel_print_ValTotalWeight.setFocusable(false);
-            jLabel_print_ValTotalWeight.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-            jPanel_print.add(jLabel_print_ValTotalWeight, new org.netbeans.lib.awtextra.AbsoluteConstraints(15, 200, 190, 35));
-
-            jLabel_print_TotalWeight.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
-            jLabel_print_TotalWeight.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-            jLabel_print_TotalWeight.setText("وزن قائم");
-            jLabel_print_TotalWeight.setFocusable(false);
-            jLabel_print_TotalWeight.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-            jPanel_print.add(jLabel_print_TotalWeight, new org.netbeans.lib.awtextra.AbsoluteConstraints(212, 195, 75, 40));
-
-            jSeparator_print_totWeight.setForeground(new java.awt.Color(255, 255, 255));
-            jSeparator_print_totWeight.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, new java.awt.Color(0, 0, 0)));
-            jSeparator_print_totWeight.setMaximumSize(new java.awt.Dimension(50, 100));
-            jSeparator_print_totWeight.setMinimumSize(new java.awt.Dimension(50, 100));
-            jSeparator_print_totWeight.setPreferredSize(new java.awt.Dimension(50, 100));
-            jPanel_print.add(jSeparator_print_totWeight, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 238, 280, 3));
-
-            jLabel_print_ValNetWeight.setFont(new java.awt.Font("Arial", 0, 48)); // NOI18N
-            jLabel_print_ValNetWeight.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-            jLabel_print_ValNetWeight.setText("Label");
-            jLabel_print_ValNetWeight.setFocusable(false);
-            jLabel_print_ValNetWeight.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-            jPanel_print.add(jLabel_print_ValNetWeight, new org.netbeans.lib.awtextra.AbsoluteConstraints(15, 243, 190, 50));
-
-            jLabel_print_NetWeight.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
-            jLabel_print_NetWeight.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-            jLabel_print_NetWeight.setText("وزن صافي");
-            jLabel_print_NetWeight.setFocusable(false);
-            jLabel_print_NetWeight.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-            jPanel_print.add(jLabel_print_NetWeight, new org.netbeans.lib.awtextra.AbsoluteConstraints(212, 243, 75, 50));
-
-            jLabel_print_footer.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
-            jLabel_print_footer.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-            jLabel_print_footer.setText("أ / وجيه عماره");
-            jLabel_print_footer.setFocusable(false);
-            jLabel_print_footer.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-            jPanel_print.add(jLabel_print_footer, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 302, 100, 20));
-
-            jLabel_print_number.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
-            jLabel_print_number.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-            jLabel_print_number.setText("ت / ٠١١٤٨٠٥٥٥٥٨");
-            jPanel_print.add(jLabel_print_number, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 302, 150, -1));
-
-            jSeparator_print_main.setForeground(new java.awt.Color(255, 255, 255));
-            jSeparator_print_main.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2));
-            jSeparator_print_main.setMaximumSize(new java.awt.Dimension(50, 100));
-            jSeparator_print_main.setMinimumSize(new java.awt.Dimension(50, 100));
-            jSeparator_print_main.setPreferredSize(new java.awt.Dimension(50, 100));
-            jPanel_print.add(jSeparator_print_main, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 20, 280, 280));
-
-            jSeparator_print_valBox.setForeground(new java.awt.Color(255, 255, 255));
-            jSeparator_print_valBox.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2));
-            jSeparator_print_valBox.setMaximumSize(new java.awt.Dimension(50, 100));
-            jSeparator_print_valBox.setMinimumSize(new java.awt.Dimension(50, 100));
-            jSeparator_print_valBox.setPreferredSize(new java.awt.Dimension(50, 100));
-            jPanel_print.add(jSeparator_print_valBox, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 20, 200, 280));
-
-            jSeparator_print_Double.setForeground(new java.awt.Color(255, 255, 255));
-            jSeparator_print_Double.setOrientation(javax.swing.SwingConstants.VERTICAL);
-            jSeparator_print_Double.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 1, 0, 0, new java.awt.Color(0, 0, 0)));
-            jPanel_print.add(jSeparator_print_Double, new org.netbeans.lib.awtextra.AbsoluteConstraints(205, 20, 10, 280));
-
-            jTabbedPane_settings.addTab("print", jPanel_print);
-
-            left_panel.add(jTabbedPane_settings, "Settings");
-
             storage_panel.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
             storage_panel.setMaximumSize(new java.awt.Dimension(835, 640));
             storage_panel.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -1592,14 +834,14 @@ public class Mainform extends javax.swing.JFrame implements ErrorListener {
             jProgressBar_storage_pallet.setValue(result[1]);
             calc_pallet_weight();
 
-            PreparePrintingPanel(new Ticket(((Product) jComboBox_storage_products.getSelectedItem()).getName(),
-                    jTextField_storage_palletNumber.getText(),
-                    ((Product) jComboBox_storage_products.getSelectedItem()).getColor(),
-                    jTextField_storage_lot.getText(),
-                    jTextField_storage_coneNumber.getText(),
-                    jTextField_storage_TotalWeight.getText(),
-                    jTextField_storage_NetWeight.getText()
-            ), jCheckBox_storage_printLTicket.isSelected());
+//            PreparePrintingPanel(new Ticket(((Product) jComboBox_storage_products.getSelectedItem()).getName(),
+//                    jTextField_storage_palletNumber.getText(),
+//                    ((Product) jComboBox_storage_products.getSelectedItem()).getColor(),
+//                    jTextField_storage_lot.getText(),
+//                    jTextField_storage_coneNumber.getText(),
+//                    jTextField_storage_TotalWeight.getText(),
+//                    jTextField_storage_NetWeight.getText()
+//            ), jCheckBox_storage_printLTicket.isSelected());
             jButton_storage_Clear.doClick();
             fill_storage_table();
             showMessageInlable(false);
@@ -1672,7 +914,7 @@ public class Mainform extends javax.swing.JFrame implements ErrorListener {
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         evt.getID();
         try {
-            saveConfig();
+            Config.save();
             System.exit(NORMAL);
         } catch (BusinessException ex) {
             this.onError(ex);
@@ -1757,25 +999,14 @@ public class Mainform extends javax.swing.JFrame implements ErrorListener {
 
     private void jButton_E_printActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_E_printActionPerformed
         evt.getID();
-        PreparePrintingPanel(new Ticket(((Product) jComboBox_E_proName.getSelectedItem()).getName(),
-                jTextField_E_PaltNum.getText(),
-                ((Product) jComboBox_E_proName.getSelectedItem()).getColor(),
-                jTextField_E_lot.getText(),
-                jTextField_E_ConNum.getText(),
-                jTextField_E_TotWight.getText(),
-                jTextField_E_Wight.getText()), jCheckBox_E_P.isSelected());
+//        PreparePrintingPanel(new Ticket(((Product) jComboBox_E_proName.getSelectedItem()).getName(),
+//                jTextField_E_PaltNum.getText(),
+//                ((Product) jComboBox_E_proName.getSelectedItem()).getColor(),
+//                jTextField_E_lot.getText(),
+//                jTextField_E_ConNum.getText(),
+//                jTextField_E_TotWight.getText(),
+//                jTextField_E_Wight.getText()), jCheckBox_E_P.isSelected());
     }//GEN-LAST:event_jButton_E_printActionPerformed
-
-    private void jButton_Reset_TicketCount10x10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_Reset_TicketCount10x10ActionPerformed
-        evt.getID();
-        try {
-            tick10x10 = 0;
-            saveConfig();
-            jLabel_Ticket10x10Counter.setText("" + tick10x10);
-        } catch (BusinessException ex) {
-            this.onError(ex);
-        }
-    }//GEN-LAST:event_jButton_Reset_TicketCount10x10ActionPerformed
 
     private void jButton_ME_EditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_ME_EditActionPerformed
         evt.getID();
@@ -1813,77 +1044,12 @@ public class Mainform extends javax.swing.JFrame implements ErrorListener {
     private void jButton_storage_RePrintLastTicketActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_storage_RePrintLastTicketActionPerformed
         evt.getID();
         try {
-            printerManager.printPanelToImage(jPanel_print);
-            incTicketCounters();
+            // printerManager.printPanelToImage(jPanel_print);
             this.jTextField_storage_coneNumber.requestFocusInWindow();
         } catch (BusinessException ex) {
             this.onError(ex);
         }
     }//GEN-LAST:event_jButton_storage_RePrintLastTicketActionPerformed
-
-    private void jButton_set_changePosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_set_changePosActionPerformed
-        switch (jLabel_print_ValPallet.getHorizontalAlignment()) {
-            case javax.swing.SwingConstants.CENTER ->
-                jLabel_print_ValPallet.setHorizontalAlignment(javax.swing.SwingConstants.LEADING);
-            case javax.swing.SwingConstants.LEADING ->
-                jLabel_print_ValPallet.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
-            case javax.swing.SwingConstants.TRAILING ->
-                jLabel_print_ValPallet.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-            default ->
-                jLabel_print_ValPallet.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        }
-
-        switch (jLabel_print_ValLot.getHorizontalAlignment()) {
-            case javax.swing.SwingConstants.CENTER ->
-                jLabel_print_ValLot.setHorizontalAlignment(javax.swing.SwingConstants.LEADING);
-            case javax.swing.SwingConstants.LEADING ->
-                jLabel_print_ValLot.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
-            case javax.swing.SwingConstants.TRAILING ->
-                jLabel_print_ValLot.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-            default ->
-                jLabel_print_ValLot.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        }
-
-        switch (jLabel_print_ValNetWeight.getHorizontalAlignment()) {
-            case javax.swing.SwingConstants.CENTER ->
-                jLabel_print_ValNetWeight.setHorizontalAlignment(javax.swing.SwingConstants.LEADING);
-            case javax.swing.SwingConstants.LEADING ->
-                jLabel_print_ValNetWeight.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
-            case javax.swing.SwingConstants.TRAILING ->
-                jLabel_print_ValNetWeight.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-            default ->
-                jLabel_print_ValNetWeight.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        }
-
-    }//GEN-LAST:event_jButton_set_changePosActionPerformed
-
-    private void jButton_set_printValueToCenterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_set_printValueToCenterActionPerformed
-        jLabel_print_ValPallet.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel_print_ValNetWeight.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel_print_ValLot.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-    }//GEN-LAST:event_jButton_set_printValueToCenterActionPerformed
-
-    private void jButton_set_reloadSettingFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_set_reloadSettingFileActionPerformed
-        try {
-            readConfig();
-        } catch (BusinessException ex) {
-            this.onError(ex);
-        }
-    }//GEN-LAST:event_jButton_set_reloadSettingFileActionPerformed
-
-    private void jButton_set_TicketPrinterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_set_TicketPrinterActionPerformed
-        try {
-            PrintService[] printServices = PrintServiceLookup.lookupPrintServices(null, null);
-            ticketPrinterName = ((PrintService) javax.swing.JOptionPane.showInputDialog(
-                    null, "Select Printer For Tickets:", "Printer Selection",
-                    javax.swing.JOptionPane.QUESTION_MESSAGE, null,
-                    printServices, printServices[0])).getName();
-            saveConfig();
-            readConfig();
-        } catch (BusinessException ex) {
-            this.onError(ex);
-        }
-    }//GEN-LAST:event_jButton_set_TicketPrinterActionPerformed
 
     private void setupKeyBindings() {
         InputMap inputMap = rootPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
@@ -1894,7 +1060,7 @@ public class Mainform extends javax.swing.JFrame implements ErrorListener {
             @Override
             public void actionPerformed(java.awt.event.ActionEvent e) {
                 navPanel.jButton_Mizan_opener.doClick();
-                jTextField_storage_TotalWeight.requestFocus();
+                jTextField_storage_TotalWeight.requestFocusInWindow();
             }
         });
 
@@ -1976,11 +1142,12 @@ public class Mainform extends javax.swing.JFrame implements ErrorListener {
         JOptionPane.showMessageDialog(this, utils.addStyle(msg), title, JOptionPane.INFORMATION_MESSAGE);
     }
 
-    private int showQuest(Object quest, String title) {
-        if (quest instanceof String) {
-            return JOptionPane.showConfirmDialog(this, utils.addStyle(quest.toString()), title, JOptionPane.YES_NO_OPTION);
-        }
-        return JOptionPane.showConfirmDialog(this, quest, title, JOptionPane.YES_NO_OPTION);
+    private int showQuest(String msg, String title) {
+        return JOptionPane.showConfirmDialog(this, utils.addStyle(msg), title, JOptionPane.YES_NO_OPTION);
+    }
+
+    private Object showQuest(Object[] quest, String msg, String title) {
+        return JOptionPane.showInputDialog(this, utils.addStyle(msg), title, JOptionPane.QUESTION_MESSAGE, null, quest, null);
     }
 
     private void showException(Exception ex) {
@@ -1993,9 +1160,6 @@ public class Mainform extends javax.swing.JFrame implements ErrorListener {
         }
     }
 
-    private void showMessageInlable(boolean red) {
-        jTextField_inputExeption.setBackground(red ? Color.red : Color.white);
-    }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ///                                                                                                              ///
@@ -2011,150 +1175,6 @@ public class Mainform extends javax.swing.JFrame implements ErrorListener {
         utils.fillComboBoxWihProducts(jComboBox_E_O_proName, pros);
         utils.fillComboBoxWihProducts(jComboBox_E_proName, pros);
         utils.fillComboBoxWihProducts(jComboBox_ME_type, pros);
-    }
-
-    private void calc_net_weight() throws BusinessException {
-        if (!jTextField_storage_EmptyConeWeight.getText().isBlank()) {
-            int num_of_con = ArabicDigits.parseInt(requireText(jTextField_storage_coneNumber, "عدد الكون"));
-            double weight_of_con = ArabicDigits.parseInt(requireText(jTextField_storage_EmptyConeWeight, "وزن الكون")) / 1000.00,
-                    bag_weight = ArabicDigits.parseInt(requireText(jTextField_storage_EmptyBagWeight, "وزن الفارغ")) / 100.00,
-                    weight = ArabicDigits.parseDouble(requireText(jTextField_storage_TotalWeight, "وزن القائم"));
-
-            jTextField_storage_NetWeight.setText(ArabicDigits.toArabicDigits(weight - (bag_weight + (num_of_con * weight_of_con))));
-        }
-
-    }
-
-    private void calc_pallet_weight() throws DatabaseException {
-        if (!jTextField_storage_palletNumber.getText().isEmpty() && !jTextField_storage_lot.getText().isEmpty()
-                && jComboBox_storage_products.getSelectedIndex() != -1) {
-            jTextField_storage_PalletWeight.setText(ArabicDigits.toArabicDigits(storageController.calc_pallet_weight(jTextField_storage_palletNumber.getText(),
-                    jTextField_storage_lot.getText(), jComboBox_storage_products.getSelectedItem().toString())));
-        } else {
-            jTextField_storage_PalletWeight.setText("");
-        }
-    }
-
-    private void fill_storage_table() throws DatabaseException {
-        DefaultTableModel model = (DefaultTableModel) jTable_storage.getModel();
-        model.setRowCount(0);
-        List<Bag> bags = storageController.getBags(((Product) jComboBox_storage_products.getSelectedItem()).getId());
-
-        for (Bag bag : bags) {
-            model.addRow(new Object[]{ArabicDigits.toArabicDigits(bag.getWeight()), ArabicDigits.toArabicDigits(bag.getNum_of_con()),
-                ArabicDigits.toArabicDigits(bag.getLot()), ArabicDigits.toArabicDigits(bag.getPallet_numb()), bag.getId(), "",
-                bag.isUsed()});
-        }
-        Product pro = productController.getProduct(jComboBox_storage_products.getSelectedItem().toString());
-        if (pro != null) {
-            if (!jCheckBox_storage_FreezeConeWeightChange.isSelected()) {
-                jTextField_storage_EmptyConeWeight.setText(ArabicDigits.toArabicDigits(pro.getWeight_of_con()));
-            }
-            jTextField_storage_Color.setText(pro.getColor());
-            jCheckBox_storage_Box.setSelected(pro.isBox());
-            TextFieldRules.changeMaxLength(jTextField_storage_EmptyBagWeight, pro.isBox() ? 3 : 2);
-            jLabel11.setText(!pro.isBox() ? "فارغ الشيكاره" : "فارغ الصندوق");
-            jTextField_storage_EmptyBagWeight.setBackground(pro.isBox() ? Color.pink : Color.WHITE);
-        }
-
-        if (model.getRowCount() != 0) {
-            String lott = ArabicDigits.normalizeForParsing(model.getValueAt(model.getRowCount() - 1, 2).toString()),
-                    pallet_num = ArabicDigits.normalizeForParsing(model.getValueAt(model.getRowCount() - 1, 3).toString());
-            int cunt = 0;
-            for (int i = model.getRowCount() - 1; i >= 0; i--) {
-                if (!lott.equals(ArabicDigits.normalizeForParsing(model.getValueAt(i, 2).toString()))
-                        || !pallet_num.equals(ArabicDigits.normalizeForParsing(model.getValueAt(i, 3).toString()))) {
-                    lott = ArabicDigits.normalizeForParsing(model.getValueAt(i, 2).toString());
-                    pallet_num = ArabicDigits.normalizeForParsing(model.getValueAt(i, 3).toString());
-                    cunt = 0;
-                }
-
-                model.setValueAt(ArabicDigits.toArabicDigits(++cunt), i, 5);
-            }
-        }
-    }
-
-    private void readConfig() throws BusinessException {
-        Properties properties = utils.CheckConfigFileAndFolder();
-
-        ticketPrinterName = properties.getProperty("ticketPrinterName", "Microsoft Print");
-        tick10x10 = Short.parseShort(properties.getProperty("ticket10x10", "0"));
-        repDiff = Integer.parseInt(properties.getProperty("repdiff", "15"));
-        IP = properties.getProperty("ip", "localhost");
-        if (!IP.equalsIgnoreCase("localhost")) {
-            JOptionPane.showMessageDialog(null, "conneting to remote DataBase Ip:" + properties.getProperty("ip", "localhost"), "انتبه", JOptionPane.INFORMATION_MESSAGE);
-        }
-        jLabel_ip.setText("Connected To: " + IP);
-        boolean print10x10 = Boolean.parseBoolean(properties.getProperty("print10x10", "true"));
-        //set in gui after read
-        jLabel_Ticket10x10Counter.setText("" + tick10x10);
-        jCheckBox_storage_printLTicket.setSelected(print10x10);
-    }
-
-    private void saveConfig() throws BusinessException {
-        Properties properties = utils.CheckConfigFileAndFolder();
-
-        // Set properties (key-value pairs)
-        properties.setProperty("ip", IP);
-        properties.setProperty("ticketPrinterName", ticketPrinterName);
-        properties.setProperty("ticket10x10", "" + tick10x10);
-        properties.setProperty("repdiff", "" + repDiff);
-        properties.setProperty("print10x10", jCheckBox_storage_printLTicket.isSelected() ? "True" : "False");
-
-        utils.CheckConfigFileAndFolder(); // Save the properties to a file
-        this.printerManager.reInitPrinters();
-        try (FileOutputStream output = new FileOutputStream(new File(System.getProperty("user.dir") + "\\Temp\\config.properties"))) {
-            // Save the properties with a comment header
-            properties.store(output, "Application Configuration");
-        } catch (IOException ex) {
-            throw new BusinessException("file not found");
-        }
-    }
-
-    private void incTicketCounters() throws BusinessException {
-        tick10x10++;
-        saveConfig();
-    }
-
-    private void PreparePrintingPanel(Ticket t, boolean doPrint) {
-
-        try {
-            jLabel_print_ValType.setFont(new Font("Arial", Font.PLAIN, 30));
-            jLabel_print_ValTypeDenir.setFont(new Font("Arial", Font.PLAIN, 30));
-            jLabel_print_ValTypeDenir.setSize(190, 28);
-            jLabel_print_ValTypeDenir.setText(t.getProductName().split(" ", 2)[0]);
-            jLabel_print_ValType.setText(t.getProductName().split(" ", 2)[1]);
-
-        } catch (java.lang.ArrayIndexOutOfBoundsException ex) {
-            jLabel_print_ValTypeDenir.setText(t.getProductName());
-            jLabel_print_ValTypeDenir.setSize(190, 60);
-            jLabel_print_ValType.setText(" ");
-        }
-
-        jLabel_print_ValPallet.setText(t.getPalletNumber());
-        jLabel_print_ValColor.setText(t.getColor());
-        jLabel_print_ValLot.setText(t.getLot());
-        jLabel_print_ValNCone.setText(t.getConeNumber());
-        jLabel_print_ValTotalWeight.setText(t.getTotalWeight());
-        jLabel_print_ValNetWeight.setText(t.getNetWeight());
-
-        if (doPrint) {
-            printerManager.printPanelToImage(jPanel_print);
-            incTicketCounters();
-        }
-
-    }
-
-    private void clearStorageForm() {
-        if (!jCheckBox_storage_FreezeEmptyBagWight.isSelected()) {
-            jTextField_storage_EmptyBagWeight.setText("");
-        }
-        jTextField_storage_TotalWeight.setText("");
-        jTextField_storage_NetWeight.setText("");
-        jTextField_storage_coneNumber.requestFocus();
-        if (!jCheckBox_storage_freezeConeNumber.isSelected()) {
-            jTextField_storage_coneNumber.selectAll();
-        }
     }
 
     /**
@@ -2183,14 +1203,6 @@ public class Mainform extends javax.swing.JFrame implements ErrorListener {
     private javax.swing.JButton jButton_E_Edit;
     private javax.swing.JButton jButton_E_print;
     private javax.swing.JButton jButton_ME_Edit;
-    private javax.swing.JButton jButton_Reset_TicketCount10x10;
-    private javax.swing.JButton jButton_mach_Delete;
-    private javax.swing.JButton jButton_mach_addMach;
-    private javax.swing.JButton jButton_mach_editMach;
-    private javax.swing.JButton jButton_set_TicketPrinter;
-    private javax.swing.JButton jButton_set_changePos;
-    private javax.swing.JButton jButton_set_printValueToCenter;
-    private javax.swing.JButton jButton_set_reloadSettingFile;
     private javax.swing.JButton jButton_storage_Clear;
     private javax.swing.JButton jButton_storage_RePrintLastTicket;
     private javax.swing.JButton jButton_storage_addData;
@@ -2209,7 +1221,6 @@ public class Mainform extends javax.swing.JFrame implements ErrorListener {
     private javax.swing.JComboBox<Product> jComboBox_E_O_proName;
     private javax.swing.JComboBox<Product> jComboBox_E_proName;
     private javax.swing.JComboBox<Product> jComboBox_ME_type;
-    private javax.swing.JComboBox<Product> jComboBox_mach_pros;
     private javax.swing.JComboBox<Product> jComboBox_storage_products;
     private javax.swing.JFileChooser jFileChooser1;
     private javax.swing.JLabel jLabel10;
@@ -2232,63 +1243,23 @@ public class Mainform extends javax.swing.JFrame implements ErrorListener {
     private javax.swing.JLabel jLabel35;
     private javax.swing.JLabel jLabel36;
     private javax.swing.JLabel jLabel39;
-    private javax.swing.JLabel jLabel40;
     private javax.swing.JLabel jLabel41;
     private javax.swing.JLabel jLabel43;
     private javax.swing.JLabel jLabel44;
     private javax.swing.JLabel jLabel47;
     private javax.swing.JLabel jLabel48;
-    private javax.swing.JLabel jLabel51;
-    private javax.swing.JLabel jLabel52;
     private javax.swing.JLabel jLabel53;
-    private javax.swing.JLabel jLabel54;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
-    private javax.swing.JLabel jLabel_Ticket10x10Counter;
-    private javax.swing.JLabel jLabel_ip;
-    private javax.swing.JLabel jLabel_print_NCone;
-    private javax.swing.JLabel jLabel_print_NetWeight;
-    private javax.swing.JLabel jLabel_print_TotalWeight;
-    private javax.swing.JLabel jLabel_print_ValColor;
-    private javax.swing.JLabel jLabel_print_ValLot;
-    private javax.swing.JLabel jLabel_print_ValNCone;
-    private javax.swing.JLabel jLabel_print_ValNetWeight;
-    private javax.swing.JLabel jLabel_print_ValPallet;
-    private javax.swing.JLabel jLabel_print_ValTotalWeight;
-    private javax.swing.JLabel jLabel_print_ValType;
-    private javax.swing.JLabel jLabel_print_ValTypeDenir;
-    private javax.swing.JLabel jLabel_print_footer;
-    private javax.swing.JLabel jLabel_print_header;
-    private javax.swing.JLabel jLabel_print_lot;
-    private javax.swing.JLabel jLabel_print_number;
-    private javax.swing.JLabel jLabel_print_pallet;
-    private javax.swing.JLabel jLabel_print_type;
-    private javax.swing.JPanel jPanel_Machines;
-    private javax.swing.JPanel jPanel_print;
     private javax.swing.JProgressBar jProgressBar_storage_pallet;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane5;
-    private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator4;
     private javax.swing.JSeparator jSeparator5;
     private javax.swing.JSeparator jSeparator6;
     private javax.swing.JSeparator jSeparator7;
-    private javax.swing.JSeparator jSeparator_print_Double;
-    private javax.swing.JSeparator jSeparator_print_color;
-    private javax.swing.JSeparator jSeparator_print_lot;
-    private javax.swing.JSeparator jSeparator_print_main;
-    private javax.swing.JSeparator jSeparator_print_nCone;
-    private javax.swing.JSeparator jSeparator_print_pallet;
-    private javax.swing.JSeparator jSeparator_print_totWeight;
-    private javax.swing.JSeparator jSeparator_print_type;
-    private javax.swing.JSeparator jSeparator_print_valBox;
     private javax.swing.JSplitPane jSplitPane1;
-    private javax.swing.JPanel jTab_set_Printing;
-    private javax.swing.JPanel jTab_set_about;
-    private javax.swing.JTabbedPane jTabbedPane_settings;
-    private javax.swing.JTable jTable_machines;
     private javax.swing.JTable jTable_storage;
     private javax.swing.JTextField jTextField_E_Color;
     private javax.swing.JTextField jTextField_E_ConNum;
@@ -2304,8 +1275,6 @@ public class Mainform extends javax.swing.JFrame implements ErrorListener {
     private javax.swing.JTextField jTextField_ME_PaltNum;
     private javax.swing.JTextField jTextField_ME_lot;
     private javax.swing.JTextField jTextField_inputExeption;
-    private javax.swing.JTextField jTextField_mach_MName;
-    private javax.swing.JTextField jTextField_mach_lot;
     private javax.swing.JTextField jTextField_storage_Color;
     private javax.swing.JTextField jTextField_storage_EmptyBagWeight;
     private javax.swing.JTextField jTextField_storage_EmptyConeWeight;

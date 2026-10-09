@@ -165,14 +165,13 @@ public class StorageRepository {
         }
     }
 
-    public String calc_pallet_weight(int palletNumber, String lotNumber, String productName) throws DatabaseException {
+    public String calc_pallet_weight(int palletNumber, String lotNumber, int proID) throws DatabaseException {
         try {
 
             ResultSet st = dbConnection.dataRead("sum(weight_)", "storage",
                     "lot=N'" + lotNumber + "' and pallet_numb="
                     + palletNumber
-                    + " and pro_id=(select pro_id from products where pro_name=N'"
-                    + productName + "')");
+                    + " and pro_id=" + proID + "')");
             st.next();
             return st.getString(1);
 

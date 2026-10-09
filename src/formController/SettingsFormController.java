@@ -1,17 +1,24 @@
 package formController;
 
+import controller.MachineController;
+import controller.ProductController;
 import exceptions.BusinessException;
+import exceptions.DatabaseException;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
-import javax.print.PrintService;
-import javax.print.PrintServiceLookup;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTabbedPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import model.Product;
 import model.Ticket;
 import utils.PrinterManager;
 import utils.Config;
 import utils.ErrorListener;
+import utils.utils;
 
 public class SettingsFormController {
 
@@ -23,6 +30,9 @@ public class SettingsFormController {
     private final JButton settingsTicketCounterResetBtn;
     private final JButton settingsReloadSettingsBtn;
 
+    private final JLabel settingsTicketCounter;
+    private final JLabel settingsIP;
+
     private final JLabel printPalletValue;
     private final JLabel printConeCountValue;
     private final JLabel printConeColorValue;
@@ -32,16 +42,30 @@ public class SettingsFormController {
     private final JLabel printTotalWeightValue;
     private final JLabel printNetWeightValue;
 
+    private final JButton formOpenerBtn;
+    private final JPanel settingsPanel;
+    private final JPanel leftPanel;
+
     private final ErrorListener errorListener;
 
     private final PrinterManager printerManager;
 
-    public SettingsFormController(ErrorListener errorListener, JPanel printPanel, PrinterManager printerManager, JButton settingsCenterPrintBtn, JButton settingsChangePrintpostionBtn, JButton settingsSelectPrinterBtn, JButton settingsTicketCounterResetBtn, JButton settingsReloadSettingsBtn, JLabel printPalletValue, JLabel printConeCountValue, JLabel printConeColorValue, JLabel printTypeDenierValue, JLabel printTypeNameValue, JLabel printLotValue, JLabel printTotalWeightValue, JLabel printNetWeightValue) {
+    public SettingsFormController(ErrorListener errorListener, JPanel leftPanel, JPanel settingsPanel, JButton formOpenerBtn, JTabbedPane settingsTapps, JTextField machName, JTextField machLot,
+            JComboBox<Product> machPros, JButton addMachBtn, JButton editMachBtn, JButton delMachBtn,
+            JTable machTable,
+            JPanel printPanel, JButton settingsCenterPrintBtn, JButton settingsChangePrintpostionBtn,
+            JButton settingsSelectPrinterBtn, JButton settingsTicketCounterResetBtn, JButton settingsReloadSettingsBtn,
+            JLabel settingsTicketCounter, JLabel settingsIP, JLabel printPalletValue, JLabel printConeCountValue, JLabel printConeColorValue,
+            JLabel printTypeDenierValue, JLabel printTypeNameValue, JLabel printLotValue, JLabel printTotalWeightValue, JLabel printNetWeightValue,
+            MachineController machController, ProductController prosController, PrinterManager printerManager
+    ) {
         this.settingsCenterPrintBtn = settingsCenterPrintBtn;
         this.settingsChangePrintpostionBtn = settingsChangePrintpostionBtn;
         this.settingsSelectPrinterBtn = settingsSelectPrinterBtn;
         this.settingsTicketCounterResetBtn = settingsTicketCounterResetBtn;
         this.settingsReloadSettingsBtn = settingsReloadSettingsBtn;
+        this.settingsTicketCounter = settingsTicketCounter;
+        this.settingsIP = settingsIP;
         this.printPalletValue = printPalletValue;
         this.printConeCountValue = printConeCountValue;
         this.printConeColorValue = printConeColorValue;
@@ -52,7 +76,19 @@ public class SettingsFormController {
         this.printNetWeightValue = printNetWeightValue;
         this.printPanel = printPanel;
         this.printerManager = printerManager;
+
+        this.formOpenerBtn = formOpenerBtn;
+        this.settingsPanel = settingsPanel;
+        this.leftPanel = leftPanel;
         this.errorListener = errorListener;
+
+        try {
+            new MachineFormController(errorListener, settingsTapps, machName, machLot, machPros,
+                    addMachBtn, editMachBtn, delMachBtn, machTable, machController,
+                    prosController).init();
+        } catch (DatabaseException ex) {
+            errorListener.onError(ex);
+        }
     }
 
     public void init() {
@@ -71,6 +107,10 @@ public class SettingsFormController {
         settingsReloadSettingsBtn.addActionListener((ActionEvent evt) -> {
             reloadSettingsFile();
         });
+
+        this.formOpenerBtn.addActionListener((ActionEvent evt) -> {
+            openerClicked();
+        });
     }
 
     private void centerPrint() {
@@ -86,23 +126,14 @@ public class SettingsFormController {
     }
 
     private void changePrinter() {
-        try {
-            PrintService[] printServices = PrintServiceLookup.lookupPrintServices(null, null);
-            String ticketPrinterName = ((PrintService) javax.swing.JOptionPane.showInputDialog(
-                    null, "Select Printer For Tickets:", "Printer Selection",
-                    javax.swing.JOptionPane.QUESTION_MESSAGE, null,
-                    printServices, printServices[0])).getName();
-            Config.set("ticketPrinterName", ticketPrinterName);
-        } catch (BusinessException ex) {
-            errorListener.onError(ex);
-        }
+        printerManager.changePrinter();
     }
 
     private void resetTicketCounter() {
         try {
-            Config.set("ticket10x10", "0");
-            saveConfig();
-            jLabel_Ticket10x10Counter.setText("" + tick10x10);
+            Config.set("ticketCount", "0");
+            Config.save();
+            settingsTicketCounter.setText("" + 0);
         } catch (BusinessException ex) {
             errorListener.onError(ex);
         }
@@ -129,8 +160,7 @@ public class SettingsFormController {
         }
     }
 
-    private void PreparePrintingPanel(Ticket t, boolean doPrint) {
-
+    public void PreparePrintingPanel(Ticket t, boolean doPrint) {
         try {
             printTypeNameValue.setFont(new Font("Arial", Font.PLAIN, 30));
             printTypeDenierValue.setFont(new Font("Arial", Font.PLAIN, 30));
@@ -153,9 +183,14 @@ public class SettingsFormController {
 
         if (doPrint) {
             printerManager.printPanelToImage(printPanel);
-            Config.set("ticket10x10", Config.getInt("ticket10x10", 0) + 1 + "");
         }
+    }
 
+    private void openerClicked() {
+        utils.openPanel(leftPanel, settingsPanel);
+        settingsTicketCounter.setText(Config.get("ticketCount"));
+        settingsIP.setText(Config.get("ip"));
+        Config.save();
     }
 
 }

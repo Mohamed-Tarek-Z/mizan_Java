@@ -95,7 +95,7 @@ public class StatisticsFormController {
                 List<Object[]> statistics = exportController.getstatistics(dateFormat.format(statFromDate.getCalendar().getTime()), dateFormat.format(statToDate.getCalendar().getTime()), statPros.getSelectedIndex() != -1 ? (Product) statPros.getSelectedItem() : null);
                 for (Object[] row : statistics) {
                     model.addRow(new Object[]{row[0], ArabicDigits.toArabicDigits(row[1].toString()),
-                        ArabicDigits.toArabicDigits((Double) row[2]), ArabicDigits.toArabicDigits((Double) row[3])});
+                        ArabicDigits.toArabicDigits((int) row[2]), ArabicDigits.toArabicDigits((Double) row[3])});
                 }
                 double tot = 0.0;
                 for (int i = 0; i < model.getRowCount(); i++) {

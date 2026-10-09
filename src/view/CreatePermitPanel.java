@@ -18,13 +18,13 @@ import utils.ExcelManager;
 public class CreatePermitPanel extends javax.swing.JPanel {
 
     public CreatePermitPanel(ErrorListener errorListener, JPanel leftPanel, JButton panelOpener, StorageController storageController, ProductController productController,
-            ClientController clientController, OrderController orderController, ExportController exportController, ExcelManager excelManager, int permitAllowedDifference) {
+            ClientController clientController, OrderController orderController, ExportController exportController, ExcelManager excelManager) {
         initComponents();
         new CreatePermitFormController(errorListener, leftPanel, this, panelOpener, jTextField_permit_clientName, jTextField_permit_numOfBag,
                 jTextField_permit_Search_pros, jTextField_permit_ConeCount, jTextField_permit_totweight, jComboBox_permit_Pros,
                 jComboBox_permit_palletsNrep, jLabel_Order_num, jCheckBox_permit_2n1, jCheckBox_permit_highLightMarked, jCheckBox_permit_wzn,
                 jButton_permit_printRep, jButton_permit_clear, jTable_rep_preview, jTable_rep_select, storageController, productController,
-                clientController, orderController, exportController, excelManager, permitAllowedDifference).init();
+                clientController, orderController, exportController, excelManager).init();
     }
 
     @SuppressWarnings("unchecked")
