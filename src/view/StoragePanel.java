@@ -1,9 +1,35 @@
 package view;
 
+import controller.ProductController;
+import controller.StorageController;
+import formController.SettingsFormController;
+import formController.StorageFormController;
+import java.awt.Color;
+import java.awt.Component;
+import javax.swing.JButton;
+import javax.swing.JPanel;
+import javax.swing.table.TableCellRenderer;
+import model.Product;
+import utils.ErrorListener;
+import utils.PrinterManager;
+
 public class StoragePanel extends javax.swing.JPanel {
 
-    public StoragePanel() {
+    protected final StorageFormController formController;
+
+    public StoragePanel(ErrorListener errorListener, JPanel leftPanel, JPanel printPanel, SettingsFormController sfc, JButton formOpenerBtn,
+            StorageController storageController, ProductController productController, PrinterManager printerManager) {
         initComponents();
+        formController = new StorageFormController(errorListener, leftPanel, printPanel, sfc, this, formOpenerBtn, jTextField_storage_Color,
+                jTextField_storage_PalletWeight, jTextField_storage_EmptyConeWeight, jTextField_storage_NetWeight,
+                jTextField_storage_TotalWeight, jTextField_storage_EmptyBagWeight, jTextField_storage_coneNumber,
+                jTextField_storage_palletNumber, jTextField_storage_lot, jTextField_storage_SearchProducts, jTextField_storage_Error,
+                jLabel_storage_EmptyBag, jCheckBox_storage_printLTicket, jCheckBox_storage_ignoreLimits, jCheckBox_storage_Box,
+                jCheckBox_storage_MarkBag, jCheckBox_storage_freezeConeNumber, jCheckBox_storage_FreezeEmptyBagWight,
+                jCheckBox_storage_FreezeConeWeightChange, jComboBox_storage_products, jButton_storage_addData, jButton_storage_delData,
+                jButton_storage_RePrintLastTicket, jButton_storage_Clear, jTable_storage, jProgressBar_storage_pallet, storageController,
+                productController, printerManager);
+        formController.init();
     }
 
     @SuppressWarnings("unchecked")
@@ -74,7 +100,7 @@ public class StoragePanel extends javax.swing.JPanel {
         jCheckBox_storage_ignoreLimits = new javax.swing.JCheckBox();
         jSeparator7 = new javax.swing.JSeparator();
         jTextField_storage_SearchProducts = new javax.swing.JTextField();
-        jTextField_inputExeption = new javax.swing.JTextField();
+        jTextField_storage_Error = new javax.swing.JTextField();
 
         setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
@@ -88,7 +114,7 @@ public class StoragePanel extends javax.swing.JPanel {
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Boolean.class
+                java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Integer.class, java.lang.Object.class, java.lang.Boolean.class
             };
             boolean[] canEdit = new boolean [] {
                 false, false, false, false, false, false, false
@@ -126,11 +152,6 @@ public class StoragePanel extends javax.swing.JPanel {
 
         jButton_storage_addData.setFont(new java.awt.Font("sansserif", 0, 24)); // NOI18N
         jButton_storage_addData.setText("إضافة");
-        jButton_storage_addData.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton_storage_addDataActionPerformed(evt);
-            }
-        });
         add(jButton_storage_addData, new org.netbeans.lib.awtextra.AbsoluteConstraints(745, 590, 90, 50));
 
         jButton_storage_delData.setFont(new java.awt.Font("sansserif", 0, 24)); // NOI18N
@@ -138,11 +159,6 @@ public class StoragePanel extends javax.swing.JPanel {
         add(jButton_storage_delData, new org.netbeans.lib.awtextra.AbsoluteConstraints(605, 590, 80, 50));
 
         jComboBox_storage_products.setFont(new java.awt.Font("sansserif", 0, 18)); // NOI18N
-        jComboBox_storage_products.addItemListener(new java.awt.event.ItemListener() {
-            public void itemStateChanged(java.awt.event.ItemEvent evt) {
-                jComboBox_storage_productsItemStateChanged(evt);
-            }
-        });
         add(jComboBox_storage_products, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 100, 210, 30));
 
         jLabel6.setFont(new java.awt.Font("sansserif", 0, 24)); // NOI18N
@@ -319,76 +335,15 @@ public class StoragePanel extends javax.swing.JPanel {
         add(jSeparator7, new org.netbeans.lib.awtextra.AbsoluteConstraints(605, 10, 110, 20));
         add(jTextField_storage_SearchProducts, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 40, 150, 20));
 
-        jTextField_inputExeption.setEditable(false);
-        jTextField_inputExeption.setBackground(new java.awt.Color(255, 255, 255));
-        jTextField_inputExeption.setAutoscrolls(false);
-        jTextField_inputExeption.setBorder(null);
-        jTextField_inputExeption.setFocusable(false);
-        jTextField_inputExeption.setRequestFocusEnabled(false);
-        jTextField_inputExeption.setVerifyInputWhenFocusTarget(false);
-        add(jTextField_inputExeption, new org.netbeans.lib.awtextra.AbsoluteConstraints(780, 40, 40, 30));
+        jTextField_storage_Error.setEditable(false);
+        jTextField_storage_Error.setBackground(new java.awt.Color(255, 255, 255));
+        jTextField_storage_Error.setAutoscrolls(false);
+        jTextField_storage_Error.setBorder(null);
+        jTextField_storage_Error.setFocusable(false);
+        jTextField_storage_Error.setRequestFocusEnabled(false);
+        jTextField_storage_Error.setVerifyInputWhenFocusTarget(false);
+        add(jTextField_storage_Error, new org.netbeans.lib.awtextra.AbsoluteConstraints(780, 40, 40, 30));
     }// </editor-fold>//GEN-END:initComponents
-
-    private void jButton_storage_addDataActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_storage_addDataActionPerformed
-        evt.getID();
-        try {
-            calc_net_weight();
-            Bag req = buildRequestFromUI();
-
-            if (req == null) {
-                return;
-            }
-
-            int[] result = storageController.addStorage(req, jCheckBox_storage_ignoreLimits.isSelected());
-
-            jTextField_storage_palletNumber.setText(ArabicDigits.toArabicDigits(result[0]));
-            jProgressBar_storage_pallet.setValue(result[1]);
-            calc_pallet_weight();
-
-            //            PreparePrintingPanel(new Ticket(((Product) jComboBox_storage_products.getSelectedItem()).getName(),
-                //                    jTextField_storage_palletNumber.getText(),
-                //                    ((Product) jComboBox_storage_products.getSelectedItem()).getColor(),
-                //                    jTextField_storage_lot.getText(),
-                //                    jTextField_storage_coneNumber.getText(),
-                //                    jTextField_storage_TotalWeight.getText(),
-                //                    jTextField_storage_NetWeight.getText()
-                //            ), jCheckBox_storage_printLTicket.isSelected());
-        jButton_storage_Clear.doClick();
-        fill_storage_table();
-        showMessageInlable(false);
-        } catch (DatabaseException ex) {
-            this.onError(ex);
-        } catch (BusinessException ex) {
-            showMessageInlable(true);
-        }
-    }//GEN-LAST:event_jButton_storage_addDataActionPerformed
-
-    private void jComboBox_storage_productsItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jComboBox_storage_productsItemStateChanged
-        evt.getID();
-        try {
-            jTextField_storage_lot.setText("");
-
-            if (jComboBox_storage_products.hasFocus()) {
-                jCheckBox_storage_FreezeConeWeightChange.setSelected(false);
-                jCheckBox_storage_ignoreLimits.setSelected(false);
-                jCheckBox_storage_freezeConeNumber.setSelected(false);
-                jCheckBox_storage_FreezeEmptyBagWight.setSelected(false);
-                jCheckBox_storage_MarkBag.setSelected(false);
-                fill_storage_table();
-            }
-            if (jTable_storage.getRowCount() != 0) {
-                jTextField_storage_lot.setText((String) jTable_storage.getValueAt(0, 2));
-                if (!jTable_storage.getValueAt(0, 5).equals("٢٠")) {
-                    jTextField_storage_palletNumber.setText((String) jTable_storage.getValueAt(0, 3));
-                } else {
-                    jTextField_storage_palletNumber.setText(ArabicDigits.toArabicDigits(ArabicDigits.parseInt((String) jTable_storage.getValueAt(0, 3)) + 1));
-                }
-                calc_pallet_weight();
-            }
-        } catch (DatabaseException | BusinessException ex) {
-            this.onError(ex);
-        }
-    }//GEN-LAST:event_jComboBox_storage_productsItemStateChanged
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -421,10 +376,10 @@ public class StoragePanel extends javax.swing.JPanel {
     private javax.swing.JSeparator jSeparator6;
     private javax.swing.JSeparator jSeparator7;
     private javax.swing.JTable jTable_storage;
-    private javax.swing.JTextField jTextField_inputExeption;
     private javax.swing.JTextField jTextField_storage_Color;
     private javax.swing.JTextField jTextField_storage_EmptyBagWeight;
     private javax.swing.JTextField jTextField_storage_EmptyConeWeight;
+    private javax.swing.JTextField jTextField_storage_Error;
     private javax.swing.JTextField jTextField_storage_NetWeight;
     private javax.swing.JTextField jTextField_storage_PalletWeight;
     private javax.swing.JTextField jTextField_storage_SearchProducts;

@@ -16,19 +16,20 @@ import utils.PrinterManager;
 public class SettingsPanel extends javax.swing.JPanel {
 
     private final String Version;
+    protected final SettingsFormController formController;
 
     public SettingsPanel(ErrorListener errorListener, JPanel leftPanel, JButton panelOpener,
             MachineController machController, ProductController prosController, PrinterManager printerManager, String v) {
         Version = v;
         initComponents();
-        new SettingsFormController(errorListener, leftPanel, this, panelOpener, jTabbedPane_settings,
+        formController = new SettingsFormController(errorListener, leftPanel, this, panelOpener, jTabbedPane_settings,
                 jTextField_mach_MName, jTextField_mach_lot, jComboBox_mach_pros, jButton_mach_addMach,
                 jButton_mach_editMach, jButton_mach_Delete, jTable_machines, jPanel_print,
                 jButton_set_printValueToCenter, jButton_set_changePos, jButton_set_TicketPrinter, jButton_Reset_TicketCount10x10,
                 jButton_set_reloadSettingFile, jLabel_Ticket10x10Counter, jLabel_ip, jLabel_print_ValPallet, jLabel_print_ValNCone, jLabel_print_ValColor,
                 jLabel_print_ValTypeDenir, jLabel_print_ValType, jLabel_print_ValLot, jLabel_print_ValTotalWeight, jLabel_print_ValNetWeight,
-                machController, prosController, printerManager).init();
-
+                machController, prosController, printerManager);
+        formController.init();
     }
 
     @SuppressWarnings("unchecked")
@@ -763,7 +764,7 @@ public class SettingsPanel extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel_print_pallet;
     private javax.swing.JLabel jLabel_print_type;
     private javax.swing.JPanel jPanel_Machines;
-    private javax.swing.JPanel jPanel_print;
+    protected javax.swing.JPanel jPanel_print;
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator_print_Double;

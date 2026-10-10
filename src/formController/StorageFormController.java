@@ -6,9 +6,7 @@ import exceptions.BusinessException;
 import exceptions.DatabaseException;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
@@ -29,8 +27,13 @@ import model.Product;
 import model.Ticket;
 import utils.ArabicDigits;
 import utils.ErrorListener;
+import utils.PrinterManager;
 import utils.TextFieldRules;
+import utils.WeightScaleCapture;
 import utils.utils;
+import view.Mainform;
+import view.MultiEdit;
+import view.SingleEdit;
 
 public class StorageFormController {
 
@@ -69,19 +72,22 @@ public class StorageFormController {
 
     private final StorageController storageController;
     private final ProductController productController;
+    private final PrinterManager printerManager;
 
     private final JButton formOpenerBtn;
     private final JPanel stPanel;
     private final JPanel leftPanel;
+    private final JPanel printPanel;
+    private final SettingsFormController sfc;
     private final ErrorListener errorListener;
 
-    public StorageFormController(ErrorListener errorListener, JPanel leftPanel, JPanel stPanel, JButton formOpenerBtn,
+    public StorageFormController(ErrorListener errorListener, JPanel leftPanel, JPanel printPanel, SettingsFormController sfc, JPanel stPanel, JButton formOpenerBtn,
             JTextField stConeColor, JTextField stPalletWeight, JTextField stConeWeight, JTextField stNetWeight, JTextField stTotalWeight,
             JTextField stEmptyBag, JTextField stConeCount, JTextField stPalletNumber, JTextField stLot, JTextField stFilterPros,
             JTextField stError, JLabel stEmptyBagLabel, JCheckBox stPrintTicket, JCheckBox stIgnoreLimit, JCheckBox stIsBox, JCheckBox stMarkBag,
             JCheckBox stDisableNumberOfCone, JCheckBox stDisableEmptyBagWeight, JCheckBox stDonotReadConeWeight, JComboBox<Product> stPros,
             JButton stAdd, JButton stDelete, JButton stReprint, JButton stClear, JTable stTable, JProgressBar stPalletCount,
-            StorageController storageController, ProductController productController) {
+            StorageController storageController, ProductController productController, PrinterManager printerManager) {
         this.stConeColor = stConeColor;
         this.stPalletWeight = stPalletWeight;
         this.stConeWeight = stConeWeight;
@@ -110,9 +116,12 @@ public class StorageFormController {
         this.stPalletCount = stPalletCount;
         this.storageController = storageController;
         this.productController = productController;
+        this.printerManager = printerManager;
         this.formOpenerBtn = formOpenerBtn;
         this.stPanel = stPanel;
         this.leftPanel = leftPanel;
+        this.printPanel = printPanel;
+        this.sfc = sfc;
         this.errorListener = errorListener;
     }
 
@@ -167,7 +176,7 @@ public class StorageFormController {
 
         stReprint.addActionListener((ActionEvent evt) -> {
             try {
-                printerManager.printPanelToImage(jPanel_print);
+                printerManager.printPanelToImage(printPanel);
                 stConeCount.requestFocusInWindow();
             } catch (BusinessException ex) {
                 errorListener.onError(ex);
@@ -195,6 +204,7 @@ public class StorageFormController {
                 model.setRowCount(0);
             }
         });
+        new WeightScaleCapture(stTotalWeight).install();
 
     }
 
@@ -220,7 +230,7 @@ public class StorageFormController {
         }
     }
 
-    private void fill_storage_table() throws DatabaseException {
+    protected void fill_storage_table() throws DatabaseException {
         DefaultTableModel model = (DefaultTableModel) stTable.getModel();
         model.setRowCount(0);
         List<Bag> bags = storageController.getBags(((Product) stPros.getSelectedItem()).getId());
@@ -295,40 +305,22 @@ public class StorageFormController {
 
     private void tableMouseClicked(MouseEvent evt) {
         try {
-            if (evt.getClickCount() == 3 && jTable_storage.getSelectedRowCount() > 0) {
-                if (jTable_storage.getSelectedRowCount() == 1) {
-                    SingleEdit.setVisible(true);
-                    SingleEdit.setSize(780, 400);
-                    this.setEnabled(false);
-                    Bag bag = storageController.getBagById(
-                            Integer.parseInt(jTable_storage.getModel().getValueAt(jTable_storage.getSelectedRow(), 4).toString()));
+            if (evt.getClickCount() == 3 && stTable.getSelectedRowCount() > 0) {
+                if (stTable.getSelectedRowCount() == 1) {
+                    Bag bag = storageController.getBagById((int) stTable.getModel().getValueAt(stTable.getSelectedRow(), 4));
                     Product product = productController.getProduct(bag.getPro_id());
-                    jCheckBox_E_O_Mark.setSelected(bag.isUsed());
-                    jCheckBox_E_Mark.setSelected(bag.isUsed());
-                    jTextField_E_O_TotWight.setText(ArabicDigits.toArabicDigits(bag.getTot_wight()));
-                    jTextField_E_TotWight.setText(ArabicDigits.toArabicDigits(bag.getTot_wight()));
-                    jComboBox_E_O_proName.setSelectedItem(product);
-                    jComboBox_E_proName.setSelectedItem(product);
-                    jTextField_E_O_lot.setText(ArabicDigits.toArabicDigits(bag.getLot()));
-                    jTextField_E_lot.setText(ArabicDigits.toArabicDigits(bag.getLot()));
-                    jTextField_E_O_ConNum.setText(ArabicDigits.toArabicDigits(bag.getNum_of_con()));
-                    jTextField_E_ConNum.setText(ArabicDigits.toArabicDigits(bag.getNum_of_con()));
-                    jTextField_E_O_PaltNum.setText(ArabicDigits.toArabicDigits(bag.getPallet_numb()));
-                    jTextField_E_PaltNum.setText(ArabicDigits.toArabicDigits(bag.getPallet_numb()));
-                    jTextField_E_O_Wight.setText(ArabicDigits.toArabicDigits(bag.getWeight()));
-                    jTextField_E_Wight.setText(ArabicDigits.toArabicDigits(bag.getWeight()));
-                    jTextField_E_Color.setText(product.getColor());
+                    new SingleEdit(bag, product, storageController, sfc, this, errorListener);
 
-                } else if (jTable_storage.getSelectedRowCount() > 1) {
-                    MultiEdit.setVisible(true);
-                    this.setEnabled(false);
-                    jComboBox_ME_type.setSelectedItem(jComboBox_storage_products.getSelectedItem());
-                    jTextField_ME_PaltNum
-                            .setText(jTable_storage.getModel().getValueAt(jTable_storage.getSelectedRow(), 3).toString());
-                    jTextField_ME_lot
-                            .setText(jTable_storage.getModel().getValueAt(jTable_storage.getSelectedRow(), 2).toString());
-                    jCheckBox_ME_MarkBag.setSelected((boolean) jTable_storage.getModel()
-                            .getValueAt(jTable_storage.getSelectedRow(), 6));
+                    ((Mainform) errorListener).setEnabled(false);
+
+                } else if (stTable.getSelectedRowCount() > 1) {
+                    MultiEdit me = new MultiEdit((Product) stPros.getSelectedItem(),
+                            stTable.getModel().getValueAt(stTable.getSelectedRow(), 3).toString(),
+                            stTable.getModel().getValueAt(stTable.getSelectedRow(), 2).toString(),
+                            (boolean) stTable.getModel().getValueAt(stTable.getSelectedRow(), 6)
+                    );
+                    
+                    ((Mainform) errorListener).setEnabled(false);
                 }
             }
         } catch (DatabaseException | BusinessException ex) {
@@ -407,7 +399,7 @@ public class StorageFormController {
             stPalletCount.setValue(result[1]);
             calc_pallet_weight();
 
-            PreparePrintingPanel(new Ticket(((Product) stPros.getSelectedItem()).getName(),
+            sfc.PreparePrintingPanel(new Ticket(((Product) stPros.getSelectedItem()).getName(),
                     stPalletNumber.getText(),
                     ((Product) stPros.getSelectedItem()).getColor(),
                     stLot.getText(),

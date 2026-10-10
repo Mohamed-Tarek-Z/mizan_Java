@@ -11,11 +11,15 @@ import utils.ErrorListener;
 
 public class ProductPanel extends javax.swing.JPanel {
 
+    protected final ProductFormController formController;
+
     public ProductPanel(ErrorListener errorListener, JPanel leftPanel, JButton panelOpener, ProductController productController) {
         initComponents();
-        new ProductFormController(errorListener, leftPanel, this, panelOpener, jTextField_pro_name,
+        formController = new ProductFormController(errorListener, leftPanel, this, panelOpener, jTextField_pro_name,
                 jTextField_pro_conWight, jTextField_pro_color, jCheckBox_pro_IsBox, jTable_pro, jButton_pro_add,
-                jButton_pro_edit, jButton_pro_del, productController).init();
+                jButton_pro_edit, jButton_pro_del, productController);
+
+        formController.init();
     }
 
     @SuppressWarnings("unchecked")

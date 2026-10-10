@@ -14,10 +14,13 @@ import utils.ExcelManager;
 
 public class StockPanel extends javax.swing.JPanel {
 
+    protected final StockFormController formController;
+
     public StockPanel(ErrorListener errorListener, JPanel leftPanel, JButton panelOpener, StorageController storageController, ProductController productController, ExcelManager excelManager) {
         initComponents();
-        new StockFormController(errorListener, leftPanel, this, panelOpener, jTextField_stock_SearchProducts,
-                jButton_stock_createExcl, jTable_stock, jComboBox_stock_Pros, storageController, productController, excelManager).init();
+        formController = new StockFormController(errorListener, leftPanel, this, panelOpener, jTextField_stock_SearchProducts,
+                jButton_stock_createExcl, jTable_stock, jComboBox_stock_Pros, storageController, productController, excelManager);
+        formController.init();
     }
 
     @SuppressWarnings("unchecked")

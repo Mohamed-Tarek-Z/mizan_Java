@@ -10,17 +10,19 @@ import model.Product;
 import utils.ErrorListener;
 import utils.ExcelManager;
 
-
 public class OrderHistoryPanel extends javax.swing.JPanel {
+
+    protected final OrderHistoryFormController formController;
 
     public OrderHistoryPanel(ErrorListener errorListener, JPanel leftPanel, JButton panelOpener, ExportController exportController, ProductController productController, ClientController clientController, ExcelManager excelManager) {
         initComponents();
 
-        new OrderHistoryFormController(errorListener, leftPanel, this, panelOpener, jTextField_youm_ClientFilter,
+        formController = new OrderHistoryFormController(errorListener, leftPanel, this, panelOpener, jTextField_youm_ClientFilter,
                 jTextField_youm_Search_pros, jComboBox_youm_products, jButton_youm_search, jButton_youm_refund,
                 jButton_youm_getClients, jButton_youm_createExcel, jTable_yumia, jTable_youm_clinets,
                 jDateChooser_youm_fromDate, jDateChooser_youm_ToDate, exportController, productController,
-                clientController, excelManager).init();
+                clientController, excelManager);
+        formController.init();
     }
 
     @SuppressWarnings("unchecked")

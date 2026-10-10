@@ -6,9 +6,12 @@ import javax.swing.JPanel;
 
 public class PausePanel extends javax.swing.JPanel {
 
+    protected final PauseFormController formController;
+
     public PausePanel(JButton panelOpener, JPanel leftPanel) {
         initComponents();
-        new PauseFormController(panelOpener, this, leftPanel, jTextArea_emp).init();
+        formController = new PauseFormController(panelOpener, this, leftPanel, jTextArea_emp);
+        formController.init();
     }
 
     @SuppressWarnings("unchecked")

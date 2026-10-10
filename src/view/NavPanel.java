@@ -1,15 +1,22 @@
 package view;
 
+import java.sql.SQLException;
+import java.time.LocalDate;
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import model.sqlcon;
 import utils.ErrorListener;
 
 public class NavPanel extends javax.swing.JPanel {
 
     private final String Version;
+    private final sqlcon opj;
     private final ErrorListener errorListener;
 
-    public NavPanel(ErrorListener errorListener, String v) {
+    public NavPanel(ErrorListener errorListener, String v, sqlcon opj) {
         this.Version = v;
         this.errorListener = errorListener;
+        this.opj = opj;
         initComponents();
     }
 
@@ -100,20 +107,21 @@ public class NavPanel extends javax.swing.JPanel {
 
     private void jButton_DoBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_DoBackActionPerformed
         evt.getID();
-//        try {
-//            jFileChooser1.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-//            jFileChooser1.setFileFilter(new FileNameExtensionFilter("BAK file", "bak"));
-//            if (jFileChooser1.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
-//                if (jFileChooser1.getSelectedFile() != null) {
-//                    opj.backup(jFileChooser1.getSelectedFile().getAbsolutePath() + " " + LocalDate.now() + ".bak");
-//                    this.onWarning("Back up succes ", "succes");
-//                }
-//            } else {
-//                this.onWarning("Back up faild ", "faild");
-//            }
-//        } catch (SQLException ex) {
-//            this.onError(ex);
-//        }
+        try {
+            JFileChooser fileChooser = new JFileChooser("P:\\");
+            fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+            fileChooser.setFileFilter(new FileNameExtensionFilter("BAK file", "bak"));
+            if (fileChooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
+                if (fileChooser.getSelectedFile() != null) {
+                    opj.backup(fileChooser.getSelectedFile().getAbsolutePath() + " " + LocalDate.now() + ".bak");
+                    errorListener.onWarning("Back up succes ", "succes");
+                }
+            } else {
+                errorListener.onWarning("Back up faild ", "faild");
+            }
+        } catch (SQLException ex) {
+            errorListener.onError(ex);
+        }
     }//GEN-LAST:event_jButton_DoBackActionPerformed
 
 

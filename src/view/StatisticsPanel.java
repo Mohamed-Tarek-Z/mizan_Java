@@ -11,11 +11,15 @@ import utils.ExcelManager;
 
 public class StatisticsPanel extends javax.swing.JPanel {
 
+    protected final StatisticsFormController formController;
+
     public StatisticsPanel(ErrorListener errorListener, JPanel leftPanel, JButton panelOpener, ExportController exportController, ProductController productController, ExcelManager excelManager) {
         initComponents();
-        new StatisticsFormController(errorListener, leftPanel, this, panelOpener, jTextField_statistics_Search_pros,
+        formController = new StatisticsFormController(errorListener, leftPanel, this, panelOpener, jTextField_statistics_Search_pros,
                 jComboBox_statistics_products, jButton_statistics_search, jButton_statistics_createExcl, jTable_statis, jDateChooser_statis_fromDate, jDateChooser_statis_toDate,
-                jTextField_statis_tot, exportController, productController, excelManager).init();
+                jTextField_statis_tot, exportController, productController, excelManager);
+        
+        formController.init();
     }
 
     @SuppressWarnings("unchecked")
