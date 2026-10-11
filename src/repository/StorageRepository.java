@@ -171,7 +171,7 @@ public class StorageRepository {
             ResultSet st = dbConnection.dataRead("sum(weight_)", "storage",
                     "lot=N'" + lotNumber + "' and pallet_numb="
                     + palletNumber
-                    + " and pro_id=" + proID + "')");
+                    + " and pro_id=" + proID );
             st.next();
             return st.getString(1);
 

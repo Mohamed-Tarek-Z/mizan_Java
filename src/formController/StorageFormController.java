@@ -81,14 +81,16 @@ public class StorageFormController {
     private final JPanel printPanel;
     private final SettingsFormController sfc;
     private final ErrorListener errorListener;
+    private final Mainform mainform;
 
-    public StorageFormController(ErrorListener errorListener, JPanel leftPanel, JPanel printPanel, SettingsFormController sfc, JPanel stPanel, JButton formOpenerBtn,
+    public StorageFormController(ErrorListener errorListener, Mainform mainform, JPanel leftPanel, JPanel printPanel, SettingsFormController sfc, JPanel stPanel, JButton formOpenerBtn,
             JTextField stConeColor, JTextField stPalletWeight, JTextField stConeWeight, JTextField stNetWeight, JTextField stTotalWeight,
             JTextField stEmptyBag, JTextField stConeCount, JTextField stPalletNumber, JTextField stLot, JTextField stFilterPros,
             JTextField stError, JLabel stEmptyBagLabel, JCheckBox stPrintTicket, JCheckBox stIgnoreLimit, JCheckBox stIsBox, JCheckBox stMarkBag,
             JCheckBox stDisableNumberOfCone, JCheckBox stDisableEmptyBagWeight, JCheckBox stDonotReadConeWeight, JComboBox<Product> stPros,
             JButton stAdd, JButton stDelete, JButton stReprint, JButton stClear, JTable stTable, JProgressBar stPalletCount,
             StorageController storageController, ProductController productController, PrinterManager printerManager) {
+        this.mainform = mainform;
         this.stConeColor = stConeColor;
         this.stPalletWeight = stPalletWeight;
         this.stConeWeight = stConeWeight;
@@ -200,6 +202,13 @@ public class StorageFormController {
 
         formOpenerBtn.addActionListener((ActionEvent evt) -> {
             utils.openPanel(leftPanel, stPanel);
+            if (stPros.getItemCount() == 0) {
+                try {
+                    utils.fillComboBoxWihProducts(stPros, productController.getAvailableProductsLike(stFilterPros.getText()));
+                } catch (DatabaseException ex) {
+                    errorListener.onError(ex);
+                }
+            }
             if (stPros.getSelectedIndex() == -1) {
                 DefaultTableModel model = (DefaultTableModel) stTable.getModel();
                 model.setRowCount(0);
@@ -237,8 +246,8 @@ public class StorageFormController {
         List<Bag> bags = storageController.getBags(((Product) stPros.getSelectedItem()).getId());
 
         for (Bag bag : bags) {
-            model.addRow(new Object[]{ArabicDigits.toArabicDigits(bag.getWeight()), ArabicDigits.toArabicDigits(bag.getNum_of_con()),
-                ArabicDigits.toArabicDigits(bag.getLot()), ArabicDigits.toArabicDigits(bag.getPallet_numb()), bag.getId(), "",
+            model.addRow(new Object[]{"", ArabicDigits.toArabicDigits(bag.getPallet_numb()), ArabicDigits.toArabicDigits(bag.getLot()),
+                ArabicDigits.toArabicDigits(bag.getNum_of_con()), ArabicDigits.toArabicDigits(bag.getWeight()), bag.getId(),
                 bag.isUsed()});
         }
         Product pro = productController.getProduct(stPros.getSelectedItem().toString());
@@ -255,17 +264,17 @@ public class StorageFormController {
 
         if (model.getRowCount() != 0) {
             String lott = ArabicDigits.normalizeForParsing(model.getValueAt(model.getRowCount() - 1, 2).toString()),
-                    pallet_num = ArabicDigits.normalizeForParsing(model.getValueAt(model.getRowCount() - 1, 3).toString());
+                    pallet_num = ArabicDigits.normalizeForParsing(model.getValueAt(model.getRowCount() - 1, 1).toString());
             int cunt = 0;
             for (int i = model.getRowCount() - 1; i >= 0; i--) {
                 if (!lott.equals(ArabicDigits.normalizeForParsing(model.getValueAt(i, 2).toString()))
-                        || !pallet_num.equals(ArabicDigits.normalizeForParsing(model.getValueAt(i, 3).toString()))) {
+                        || !pallet_num.equals(ArabicDigits.normalizeForParsing(model.getValueAt(i, 1).toString()))) {
                     lott = ArabicDigits.normalizeForParsing(model.getValueAt(i, 2).toString());
-                    pallet_num = ArabicDigits.normalizeForParsing(model.getValueAt(i, 3).toString());
+                    pallet_num = ArabicDigits.normalizeForParsing(model.getValueAt(i, 1).toString());
                     cunt = 0;
                 }
 
-                model.setValueAt(ArabicDigits.toArabicDigits(++cunt), i, 5);
+                model.setValueAt(ArabicDigits.toArabicDigits(++cunt), i, 0);
             }
         }
     }
@@ -308,26 +317,26 @@ public class StorageFormController {
         try {
             if (evt.getClickCount() == 3 && stTable.getSelectedRowCount() > 0) {
                 if (stTable.getSelectedRowCount() == 1) {
-                    Bag bag = storageController.getBagById((int) stTable.getModel().getValueAt(stTable.getSelectedRow(), 4));
-                    new SingleEdit(bag, (Product) stPros.getSelectedItem(), storageController, sfc, this, errorListener);
+                    Bag bag = storageController.getBagById((int) stTable.getModel().getValueAt(stTable.getSelectedRow(), 5));
+                    new SingleEdit(bag, mainform, (Product) stPros.getSelectedItem(), storageController, sfc, this, errorListener);
 
-                    ((Mainform) errorListener).setEnabled(false);
+                    mainform.setEnabled(false);
 
                 } else if (stTable.getSelectedRowCount() > 1) {
                     List<Bag> bags = new ArrayList<>();
                     for (int i = stTable.getSelectedRows().length - 1; i > -1; i--) {
-                        Bag bag = storageController.getBagById((int) stTable.getModel().getValueAt(stTable.getSelectedRows()[i], 4));
+                        Bag bag = storageController.getBagById((int) stTable.getModel().getValueAt(stTable.getSelectedRows()[i], 5));
                         if (bag != null) {
                             bags.add(bag);
                         }
                     }
-                    new MultiEdit(bags, (Product) stPros.getSelectedItem(),
-                            stTable.getModel().getValueAt(stTable.getSelectedRow(), 3).toString(),
+                    new MultiEdit(mainform, bags, (Product) stPros.getSelectedItem(),
+                            stTable.getModel().getValueAt(stTable.getSelectedRow(), 1).toString(),
                             stTable.getModel().getValueAt(stTable.getSelectedRow(), 2).toString(),
                             (boolean) stTable.getModel().getValueAt(stTable.getSelectedRow(), 6), storageController,
                             this, errorListener);
 
-                    ((Mainform) errorListener).setEnabled(false);
+                    mainform.setEnabled(false);
                 }
             }
         } catch (DatabaseException | BusinessException ex) {
@@ -378,7 +387,7 @@ public class StorageFormController {
             if (errorListener.onQuest("هل تريد الحذف ؟", "تنبيه") == JOptionPane.YES_OPTION) {
                 if (stTable.getSelectedRowCount() > 0) {
                     for (int row : stTable.getSelectedRows()) {
-                        storageController.removeBag(stTable.getModel().getValueAt(row, 4).toString());
+                        storageController.removeBag(stTable.getModel().getValueAt(row, 5).toString());
                     }
                     fill_storage_table();
                     errorListener.onWarning("تم حذف البيــانات بنجاح", "ناجح");

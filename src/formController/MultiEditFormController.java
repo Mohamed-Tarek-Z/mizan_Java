@@ -35,8 +35,10 @@ public class MultiEditFormController {
     private final boolean Omark;
 
     private final List<Bag> bags;
+    private final Mainform mainform;
 
-    public MultiEditFormController(List<Bag> bags, JComboBox<Product> mePros, JTextField mePalletNumber, JTextField meLot, JCheckBox meMark, JButton meEdit, MultiEdit me, Product oProduct, StorageFormController storageFormController, StorageController storageController, ErrorListener errorListener, String OLot, String OPallet, boolean Omark) {
+    public MultiEditFormController(Mainform mainform, List<Bag> bags, JComboBox<Product> mePros, JTextField mePalletNumber, JTextField meLot, JCheckBox meMark, JButton meEdit, MultiEdit me, Product oProduct, StorageFormController storageFormController, StorageController storageController, ErrorListener errorListener, String OLot, String OPallet, boolean Omark) {
+        this.mainform = mainform;
         this.bags = bags;
         this.mePros = mePros;
         this.mePalletNumber = mePalletNumber;
@@ -85,7 +87,7 @@ public class MultiEditFormController {
             } else {
                 errorListener.onWarning("رجاء أدخل بيانات كاملة", "إنتبه");
             }
-            ((Mainform) errorListener).setEnabled(true);
+            mainform.setEnabled(true);
             storageFormController.fill_storage_table();
             me.dispose();
         } catch (DatabaseException | BusinessException ex) {

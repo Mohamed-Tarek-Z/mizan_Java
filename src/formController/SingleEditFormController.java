@@ -46,12 +46,14 @@ public class SingleEditFormController {
     private final StorageController storageController;
     private final SingleEdit se;
     private final ErrorListener errorListener;
+    private final Mainform mainform;
 
-    public SingleEditFormController(SingleEdit se, Bag bag, Product product, JButton seEdit, JButton sePrint, JCheckBox seMark, JCheckBox seOMark,
+    public SingleEditFormController(SingleEdit se, Mainform mainform, Bag bag, Product product, JButton seEdit, JButton sePrint, JCheckBox seMark, JCheckBox seOMark,
             JCheckBox seDoPrint, JComboBox<Product> seOPros, JComboBox<Product> sePros, JTextField seColor, JTextField seConNum,
             JTextField seOConNum, JTextField seOPaltNum, JTextField seOTotWight, JTextField seOWight, JTextField seOlot, JTextField sePaltNum,
             JTextField seTotWight, JTextField seWight, JTextField seLot, StorageController storageController,
             SettingsFormController settingsFormController, StorageFormController storageFormController, ErrorListener errorListener) {
+        this.mainform = mainform;
         this.se = se;
         this.bag = bag;
         this.product = product;
@@ -126,7 +128,7 @@ public class SingleEditFormController {
                         ((Product) sePros.getSelectedItem()).getId(), seTotWight.getText(),
                         seWight.getText(), seLot.getText(), seConNum.getText(),
                         sePaltNum.getText(), seMark.isSelected(), "0.000");
-                ((Mainform) errorListener).setEnabled(true);
+                mainform.setEnabled(true);
                 storageFormController.fill_storage_table();
                 se.dispose();
                 errorListener.onWarning(" تم تعديل البيانات بنجاح  ", "إنتبه");

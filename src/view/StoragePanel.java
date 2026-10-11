@@ -17,10 +17,10 @@ public class StoragePanel extends javax.swing.JPanel {
 
     protected final StorageFormController formController;
 
-    public StoragePanel(ErrorListener errorListener, JPanel leftPanel, JPanel printPanel, SettingsFormController sfc, JButton formOpenerBtn,
+    public StoragePanel(ErrorListener errorListener, Mainform mainform, JPanel leftPanel, JPanel printPanel, SettingsFormController sfc, JButton formOpenerBtn,
             StorageController storageController, ProductController productController, PrinterManager printerManager) {
         initComponents();
-        formController = new StorageFormController(errorListener, leftPanel, printPanel, sfc, this, formOpenerBtn, jTextField_storage_Color,
+        formController = new StorageFormController(errorListener, mainform, leftPanel, printPanel, sfc, this, formOpenerBtn, jTextField_storage_Color,
                 jTextField_storage_PalletWeight, jTextField_storage_EmptyConeWeight, jTextField_storage_NetWeight,
                 jTextField_storage_TotalWeight, jTextField_storage_EmptyBagWeight, jTextField_storage_coneNumber,
                 jTextField_storage_palletNumber, jTextField_storage_lot, jTextField_storage_SearchProducts, jTextField_storage_Error,
@@ -110,11 +110,11 @@ public class StoragePanel extends javax.swing.JPanel {
 
             },
             new String [] {
-                "الوزن", "عدد الكون", "رقم اللوط", "رقم البالتة", "م", "مسلسل ", "s"
+                "مسلسل ", "رقم البالتة", "رقم اللوط", "عدد الكون", "الوزن", "bagID", "marked"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Integer.class, java.lang.Object.class, java.lang.Boolean.class
+                java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Integer.class, java.lang.Boolean.class
             };
             boolean[] canEdit = new boolean [] {
                 false, false, false, false, false, false, false
@@ -139,10 +139,10 @@ public class StoragePanel extends javax.swing.JPanel {
             jTable_storage.getColumnModel().getColumn(1).setResizable(false);
             jTable_storage.getColumnModel().getColumn(2).setResizable(false);
             jTable_storage.getColumnModel().getColumn(3).setResizable(false);
-            jTable_storage.getColumnModel().getColumn(4).setMinWidth(0);
-            jTable_storage.getColumnModel().getColumn(4).setPreferredWidth(0);
-            jTable_storage.getColumnModel().getColumn(4).setMaxWidth(0);
-            jTable_storage.getColumnModel().getColumn(5).setResizable(false);
+            jTable_storage.getColumnModel().getColumn(4).setResizable(false);
+            jTable_storage.getColumnModel().getColumn(5).setMinWidth(0);
+            jTable_storage.getColumnModel().getColumn(5).setPreferredWidth(0);
+            jTable_storage.getColumnModel().getColumn(5).setMaxWidth(0);
             jTable_storage.getColumnModel().getColumn(6).setMinWidth(0);
             jTable_storage.getColumnModel().getColumn(6).setPreferredWidth(0);
             jTable_storage.getColumnModel().getColumn(6).setMaxWidth(0);

@@ -1,6 +1,5 @@
 package formController;
 
-import static com.sun.java.accessibility.util.AWTEventMonitor.addWindowListener;
 import controller.ClientController;
 import controller.ExportController;
 import controller.MachineController;
@@ -8,9 +7,6 @@ import controller.OrderController;
 import controller.ProductController;
 import controller.StorageController;
 import exceptions.BusinessException;
-import static java.awt.Frame.NORMAL;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.sql.SQLException;
 import javax.swing.AbstractAction;
 import javax.swing.ActionMap;
@@ -86,7 +82,7 @@ public class MainFormController implements ErrorListener {
 
         navPanel = new NavPanel(this, Version, opj);
         splitPane.setRightComponent(navPanel);
-        new PausePanel(navPanel.jButton_Emp_opener, leftPanel).formController.init();
+        new PausePanel(navPanel.jButton_Emp_opener, leftPanel);
         new StockPanel(this, leftPanel, navPanel.jButton_Stock_opener, storageController, productController, excelManager);
         new OrderHistoryPanel(this, leftPanel, navPanel.jButton_youm_opener, exportController, productController, clientController, excelManager);
         new StatisticsPanel(this, leftPanel, navPanel.jButton_Statics_opener, exportController, productController, excelManager);
@@ -95,10 +91,10 @@ public class MainFormController implements ErrorListener {
 
         settingsPanel = new SettingsPanel(this, leftPanel, navPanel.jButton_Settings_opener, machineController, productController, printerManager, Version);
 
-        new StoragePanel(this, leftPanel, settingsPanel.jPanel_print, settingsPanel.formController, navPanel.jButton_Mizan_opener, storageController, productController, printerManager);
+        new StoragePanel(this, this.mainform, leftPanel, settingsPanel.jPanel_print, settingsPanel.formController, navPanel.jButton_Mizan_opener, storageController, productController, printerManager);
 
         setupKeyBindings(rootPane);
-
+        navPanel.jButton_Settings_opener.doClick();
     }
 
     private void setupKeyBindings(JRootPane rootPane) {

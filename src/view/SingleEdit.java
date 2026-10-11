@@ -12,9 +12,9 @@ public class SingleEdit extends javax.swing.JFrame {
 
     protected final SingleEditFormController formController;
 
-    public SingleEdit(Bag bag, Product product, StorageController storageController, SettingsFormController settingsFormController, StorageFormController storageFormController, ErrorListener errorListener) {
+    public SingleEdit(Bag bag, Mainform mainform, Product product, StorageController storageController, SettingsFormController settingsFormController, StorageFormController storageFormController, ErrorListener errorListener) {
         initComponents();
-        formController = new SingleEditFormController(this, bag, product, jButton_E_Edit, jButton_E_print, jCheckBox_E_Mark, jCheckBox_E_O_Mark,
+        formController = new SingleEditFormController(this, mainform, bag, product, jButton_E_Edit, jButton_E_print, jCheckBox_E_Mark, jCheckBox_E_O_Mark,
                 jCheckBox_E_P, jComboBox_E_O_proName, jComboBox_E_proName, jTextField_E_Color, jTextField_E_ConNum, jTextField_E_O_ConNum,
                 jTextField_E_O_PaltNum, jTextField_E_O_Wight, jTextField_E_O_Wight, jTextField_E_O_lot, jTextField_E_PaltNum,
                 jTextField_E_TotWight, jTextField_E_Wight, jTextField_E_lot, storageController, settingsFormController, storageFormController, errorListener);
