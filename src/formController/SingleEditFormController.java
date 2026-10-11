@@ -123,7 +123,7 @@ public class SingleEditFormController {
                     && !seConNum.getText().isBlank() && !seLot.getText().isBlank()) {
 
                 storageController.updateStorage(bag.getId(),
-                        sePros.getSelectedItem().toString(), seTotWight.getText(),
+                        ((Product) sePros.getSelectedItem()).getId(), seTotWight.getText(),
                         seWight.getText(), seLot.getText(), seConNum.getText(),
                         sePaltNum.getText(), seMark.isSelected(), "0.000");
                 ((Mainform) errorListener).setEnabled(true);

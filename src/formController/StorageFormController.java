@@ -11,6 +11,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -308,18 +309,24 @@ public class StorageFormController {
             if (evt.getClickCount() == 3 && stTable.getSelectedRowCount() > 0) {
                 if (stTable.getSelectedRowCount() == 1) {
                     Bag bag = storageController.getBagById((int) stTable.getModel().getValueAt(stTable.getSelectedRow(), 4));
-                    Product product = productController.getProduct(bag.getPro_id());
-                    new SingleEdit(bag, product, storageController, sfc, this, errorListener);
+                    new SingleEdit(bag, (Product) stPros.getSelectedItem(), storageController, sfc, this, errorListener);
 
                     ((Mainform) errorListener).setEnabled(false);
 
                 } else if (stTable.getSelectedRowCount() > 1) {
-                    MultiEdit me = new MultiEdit((Product) stPros.getSelectedItem(),
+                    List<Bag> bags = new ArrayList<>();
+                    for (int i = stTable.getSelectedRows().length - 1; i > -1; i--) {
+                        Bag bag = storageController.getBagById((int) stTable.getModel().getValueAt(stTable.getSelectedRows()[i], 4));
+                        if (bag != null) {
+                            bags.add(bag);
+                        }
+                    }
+                    new MultiEdit(bags, (Product) stPros.getSelectedItem(),
                             stTable.getModel().getValueAt(stTable.getSelectedRow(), 3).toString(),
                             stTable.getModel().getValueAt(stTable.getSelectedRow(), 2).toString(),
-                            (boolean) stTable.getModel().getValueAt(stTable.getSelectedRow(), 6)
-                    );
-                    
+                            (boolean) stTable.getModel().getValueAt(stTable.getSelectedRow(), 6), storageController,
+                            this, errorListener);
+
                     ((Mainform) errorListener).setEnabled(false);
                 }
             }

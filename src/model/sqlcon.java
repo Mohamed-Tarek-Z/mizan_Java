@@ -1,33 +1,15 @@
 package model;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
 public class sqlcon {
 
-    private String ip;
-    private final String url;
     public Statement st;
-    private final Connection conn;
 
-    public sqlcon(String ip) throws SQLException {
-
-        // Access configuration values
-        this.ip = ip;
-        url = "jdbc:sqlserver://" + ip + ":1433;databaseName=mizan;username=sa;password=111;encrypt=true;trustServerCertificate=true";
-        conn = DriverManager.getConnection(url);
-        st = conn.createStatement();
-    }
-
-    public String getIp() {
-        return ip;
-    }
-
-    public void setIp(String ip) {
-        this.ip = ip;
+    public sqlcon(Statement st) throws SQLException {
+        this.st = st;
     }
 
     public void inData(String tableName, String colName, String values) throws SQLException {

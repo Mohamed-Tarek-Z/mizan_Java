@@ -3,6 +3,8 @@ package view;
 import controller.StorageController;
 import formController.MultiEditFormController;
 import formController.StorageFormController;
+import java.util.List;
+import model.Bag;
 import model.Product;
 import utils.ErrorListener;
 
@@ -10,10 +12,10 @@ public class MultiEdit extends javax.swing.JFrame {
 
     protected final MultiEditFormController formController;
 
-    public MultiEdit(Product product, String palletNumber, String lot, boolean marked, StorageController storageController,
+    public MultiEdit(List<Bag> bags, Product product, String palletNumber, String lot, boolean marked, StorageController storageController,
             StorageFormController storageFormController, ErrorListener errorListener) {
         initComponents();
-        formController = new MultiEditFormController(jComboBox_ME_type, jTextField_ME_PaltNum, jTextField_ME_lot,
+        formController = new MultiEditFormController(bags, jComboBox_ME_type, jTextField_ME_PaltNum, jTextField_ME_lot,
                 jCheckBox_ME_MarkBag, jButton_ME_Edit, this, product, storageFormController, storageController, errorListener,
                 lot, palletNumber, marked);
         formController.init();

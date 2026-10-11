@@ -37,6 +37,7 @@ public final class Config {
             properties.setProperty("ticketWarning", properties.getProperty("ticketWarning", "500"));
             properties.setProperty("orderDifference", properties.getProperty("orderDifference", "15"));
             properties.setProperty("isPrintTicket", properties.getProperty("isPrintTicket", "True"));
+            properties.setProperty("SERVICE_NAME", properties.getProperty("SERVICE_NAME", "MSSQLSERVER"));
             properties.store(output, "Application Configuration");
             load();
         } catch (IOException e) {

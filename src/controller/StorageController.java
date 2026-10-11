@@ -38,13 +38,15 @@ public class StorageController {
     }
 
     // edite and delete
-    public boolean updateStorage(int storage_id, String productName, String totalWeight, String netWeight, String lotNumber,
+    public boolean updateStorage(int storage_id, int productId, String totalWeight, String netWeight, String lotNumber,
             String numOfCon, String palletNumber, boolean isUsed, String empty_pack) throws DatabaseException, BusinessException {
-        Product product = productRepo.getProductByName(productName);
+        if (productId == 0) {
+            throw new BusinessException("خطأ في تعديل الشكارة");
+        }
 
-        int[] storageCount = storageRepo.getStorageCount(ArabicDigits.parseInt(palletNumber), ArabicDigits.normalizeForParsing(lotNumber), product.getId());
+        int[] storageCount = storageRepo.getStorageCount(ArabicDigits.parseInt(palletNumber), ArabicDigits.normalizeForParsing(lotNumber), productId);
         if (storageCount[0] == 0 && storageCount[1] == 0) {
-            Bag bag = new Bag(storage_id, product.getId(), ArabicDigits.parseDouble(totalWeight), ArabicDigits.parseDouble(netWeight),
+            Bag bag = new Bag(storage_id, productId, ArabicDigits.parseDouble(totalWeight), ArabicDigits.parseDouble(netWeight),
                     ArabicDigits.normalizeForParsing(lotNumber), ArabicDigits.parseInt(numOfCon), ArabicDigits.parseInt(palletNumber),
                     isUsed, new Date(), ArabicDigits.parseDouble(empty_pack));
             storageRepo.editBag(bag);
@@ -55,7 +57,7 @@ public class StorageController {
         } else if ((isUsed && storageCount[1] == 0 && storageCount[0] >= 20) || (!isUsed && storageCount[0] == 0 && storageCount[1] >= 20)) {
             throw new BusinessException("البالتة ممتلئة");
         } else if ((isUsed && storageCount[1] == 0 && storageCount[0] < 20) || (!isUsed && storageCount[0] == 0 && storageCount[1] < 20)) {
-            Bag bag = new Bag(storage_id, product.getId(), ArabicDigits.parseDouble(totalWeight), ArabicDigits.parseDouble(netWeight),
+            Bag bag = new Bag(storage_id, productId, ArabicDigits.parseDouble(totalWeight), ArabicDigits.parseDouble(netWeight),
                     ArabicDigits.normalizeForParsing(lotNumber), ArabicDigits.parseInt(numOfCon), ArabicDigits.parseInt(palletNumber),
                     isUsed, new Date(), ArabicDigits.parseDouble(empty_pack));
             storageRepo.editBag(bag);

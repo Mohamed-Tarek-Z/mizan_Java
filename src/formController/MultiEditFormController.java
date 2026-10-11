@@ -1,11 +1,15 @@
 package formController;
 
 import controller.StorageController;
+import exceptions.BusinessException;
+import exceptions.DatabaseException;
 import java.awt.event.ActionEvent;
+import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JTextField;
+import model.Bag;
 import model.Product;
 import utils.ErrorListener;
 import utils.TextFieldRules;
@@ -30,7 +34,10 @@ public class MultiEditFormController {
     private final String OLot, OPallet;
     private final boolean Omark;
 
-    public MultiEditFormController(JComboBox<Product> mePros, JTextField mePalletNumber, JTextField meLot, JCheckBox meMark, JButton meEdit, MultiEdit me, Product oProduct, StorageFormController storageFormController, StorageController storageController, ErrorListener errorListener, String OLot, String OPallet, boolean Omark) {
+    private final List<Bag> bags;
+
+    public MultiEditFormController(List<Bag> bags, JComboBox<Product> mePros, JTextField mePalletNumber, JTextField meLot, JCheckBox meMark, JButton meEdit, MultiEdit me, Product oProduct, StorageFormController storageFormController, StorageController storageController, ErrorListener errorListener, String OLot, String OPallet, boolean Omark) {
+        this.bags = bags;
         this.mePros = mePros;
         this.mePalletNumber = mePalletNumber;
         this.meLot = meLot;
@@ -66,28 +73,23 @@ public class MultiEditFormController {
 
     private void editPressed() {
         try {
-            if (!mePalletNumber.getText().isBlank() || !meLot.getText().isBlank()) {
-                for (int i = jTable_storage.getSelectedRows().length - 1; i > -1; i--) {
-                    Bag bag = storageController.getBagById(Integer.parseInt(jTable_storage.getModel().getValueAt(jTable_storage.getSelectedRows()[i], 4).toString()));
+            if (!mePalletNumber.getText().isBlank() || !meLot.getText().isBlank() || !bags.isEmpty()) {
+                for (Bag bag : bags) {
                     storageController.updateStorage(bag.getId(),
-                            jComboBox_ME_type.getSelectedItem().toString(), bag.getTot_wight() + "", bag.getWeight() + "",
-                            jTextField_ME_lot.getText(), bag.getNum_of_con() + "", jTextField_ME_PaltNum.getText(), jCheckBox_ME_MarkBag.isSelected(), "0.000");
+                            ((Product) mePros.getSelectedItem()).getId(), bag.getTot_wight() + "", bag.getWeight() + "",
+                            meLot.getText(), bag.getNum_of_con() + "", mePalletNumber.getText(),
+                            meMark.isSelected(), bag.getEmpty_pack() + "");
                 }
-                MultiEdit.dispose();
-                JOptionPane.showMessageDialog(MultiEdit, utils.addStyle(" تم تعديل البيانات بنجاح  "), "إنتبه",
-                        JOptionPane.INFORMATION_MESSAGE);
+                me.dispose();
+                errorListener.onWarning(" تم تعديل البيانات بنجاح  ", "إنتبه");
             } else {
-                JOptionPane.showMessageDialog(MultiEdit, utils.addStyle("رجاء أدخل بيانات كاملة"), "إنتبه",
-                        JOptionPane.INFORMATION_MESSAGE);
+                errorListener.onWarning("رجاء أدخل بيانات كاملة", "إنتبه");
             }
-            this.setEnabled(true);
-            fill_storage_table();
-            MultiEdit.dispose();
-        } catch (DatabaseException ex) {
-            Logger.getLogger(Mainform.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(MultiEdit, utils.addStyle(ex.getLocalizedMessage()), "exception", JOptionPane.INFORMATION_MESSAGE);
-        } catch (BusinessException ex) {
-            JOptionPane.showMessageDialog(MultiEdit, utils.addStyle(ex.getLocalizedMessage()), "exception", JOptionPane.INFORMATION_MESSAGE);
+            ((Mainform) errorListener).setEnabled(true);
+            storageFormController.fill_storage_table();
+            me.dispose();
+        } catch (DatabaseException | BusinessException ex) {
+            errorListener.onError(ex);
         }
     }
 }

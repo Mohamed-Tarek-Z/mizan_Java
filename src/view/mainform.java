@@ -1,111 +1,28 @@
 package view;
 
-import repository.*;
-import controller.*;
-import model.*;
 import utils.*;
 import exceptions.*;
+import formController.MainFormController;
 
 import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.AbstractAction;
-import javax.swing.ActionMap;
-import javax.swing.InputMap;
-import javax.swing.JComponent;
+import java.sql.Statement;
+import java.util.concurrent.ExecutionException;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
+import javax.swing.SwingWorker;
 import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 
-public class Mainform extends javax.swing.JFrame implements ErrorListener {
-
-    private final sqlcon opj;
-
-    private final ProductController productController;
-    private final StorageController storageController;
-    private final ExportController exportController;
-    private final ClientController clientController;
-    private final OrderController orderController;
-    private final MachineController machineController;
-
-    private final ExcelManager excelManager;
-    private final PrinterManager printerManager;
+public class Mainform extends javax.swing.JFrame {
 
     private final String Version = "V 4.0.0";
+    protected final MainFormController formController;
 
-    private final NavPanel navPanel;
-    private final StoragePanel storagePanel;
-    private final CreatePermitPanel createPermitPanel;
-    private final ProductPanel productPanel;
-    private final StockPanel stockPanel;
-    private final StatisticsPanel statisticsPanel;
-    private final OrderHistoryPanel orderHistoryPanel;
-    private final PausePanel pausePanel;
-    private final SettingsPanel settingsPanel;
-
-    @Override
-    public void onError(Exception ex) {
-        SwingUtilities.invokeLater(() -> {
-            showException(ex);
-        });
-    }
-
-    @Override
-    public void onWarning(String msg, String title) {
-        SwingUtilities.invokeLater(() -> {
-            showMessage(msg, title);
-        });
-    }
-
-    @Override
-    public int onQuest(String msg, String title) {
-        return showQuest(msg, title);
-    }
-
-    @Override
-    public Object onQuest(Object[] quest, String msg, String title) {
-        return showQuest(quest, msg, title);
-    }
-
-    public Mainform() throws DatabaseException, BusinessException, SQLException {
-
+    public Mainform(Statement st) throws DatabaseException, BusinessException, SQLException {
         initComponents();
-
-        Config.load();
-        if (!Config.get("ip", "localhost").equalsIgnoreCase("localhost")) {
-            showMessage("your DB IP :" + Config.get("ip"), "Not localHost");
-        }
-        opj = new sqlcon(Config.get("ip", "localhost"));
-
-        excelManager = new ExcelManager();
-        printerManager = new PrinterManager(this);
-        productController = new ProductController(new ProductRepository(opj));
-        storageController = new StorageController(new StorageRepository(opj), new ProductRepository(opj));
-        exportController = new ExportController(new ExportRepository(opj), new StorageRepository(opj), new OrderRepository(opj));
-        clientController = new ClientController(new ClientRepository(opj));
-        orderController = new OrderController(new OrderRepository(opj));
-        machineController = new MachineController(new MachineRepository(opj), new ProductRepository(opj));
-
-        navPanel = new NavPanel(this, Version, opj);
-        jSplitPane1.setRightComponent(navPanel);
-
-        pausePanel = new PausePanel(navPanel.jButton_Emp_opener, left_panel);
-        stockPanel = new StockPanel(this, left_panel, navPanel.jButton_Stock_opener, storageController, productController, excelManager);
-        orderHistoryPanel = new OrderHistoryPanel(this, left_panel, navPanel.jButton_youm_opener, exportController, productController, clientController, excelManager);
-        statisticsPanel = new StatisticsPanel(this, left_panel, navPanel.jButton_Statics_opener, exportController, productController, excelManager);
-        productPanel = new ProductPanel(this, left_panel, navPanel.jButton_pro_opener, productController);
-        createPermitPanel = new CreatePermitPanel(this, left_panel, navPanel.jButton_Ezn_opener, storageController, productController, clientController, orderController, exportController, excelManager);
-
-        settingsPanel = new SettingsPanel(this, left_panel, navPanel.jButton_Settings_opener, machineController, productController, printerManager, Version);
-        
-        storagePanel = new StoragePanel(this, left_panel, settingsPanel.jPanel_print, settingsPanel.formController, navPanel.jButton_Mizan_opener, storageController, productController, printerManager);
-
-
-
- 
-
-        setupKeyBindings();
+        formController = new MainFormController(this, Version, jSplitPane1, left_panel, rootPane, st);
     }
 
     @SuppressWarnings("unchecked")
@@ -171,103 +88,76 @@ public class Mainform extends javax.swing.JFrame implements ErrorListener {
     }// </editor-fold>//GEN-END:initComponents
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-        evt.getID();
         try {
             Config.save();
             System.exit(NORMAL);
         } catch (BusinessException ex) {
-            this.onError(ex);
+            formController.onError(ex);
         }
     }//GEN-LAST:event_formWindowClosing
-
-    private void setupKeyBindings() {
-        InputMap inputMap = rootPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
-        ActionMap actionMap = rootPane.getActionMap();
-
-        inputMap.put(KeyStroke.getKeyStroke("F1"), "openWznPanel");
-        actionMap.put("openWznPanel", new AbstractAction() {
-            @Override
-            public void actionPerformed(java.awt.event.ActionEvent e) {
-                navPanel.jButton_Mizan_opener.doClick();
-            }
-        });
-
-        inputMap.put(KeyStroke.getKeyStroke("F2"), "OpenReportPanel");
-        actionMap.put("OpenReportPanel", new AbstractAction() {
-            @Override
-            public void actionPerformed(java.awt.event.ActionEvent e) {
-                navPanel.jButton_Ezn_opener.doClick();
-            }
-        });
-
-        inputMap.put(KeyStroke.getKeyStroke("F3"), "OpenAddProPanel");
-        actionMap.put("OpenAddProPanel", new AbstractAction() {
-            @Override
-            public void actionPerformed(java.awt.event.ActionEvent e) {
-                navPanel.jButton_pro_opener.doClick();
-            }
-        });
-
-        inputMap.put(KeyStroke.getKeyStroke("F4"), "OpenEmptyPanel");
-        actionMap.put("OpenEmptyPanel", new AbstractAction() {
-            @Override
-            public void actionPerformed(java.awt.event.ActionEvent e) {
-                navPanel.jButton_Emp_opener.doClick();
-            }
-        });
-
-        inputMap.put(KeyStroke.getKeyStroke("F5"), "OpenStockPanel");
-        actionMap.put("OpenStockPanel", new AbstractAction() {
-            @Override
-            public void actionPerformed(java.awt.event.ActionEvent e) {
-                navPanel.jButton_Stock_opener.doClick();
-            }
-        });
-    }
-
-    private void showError(String msg, String title) {
-        JOptionPane.showMessageDialog(this, utils.addStyle(msg), title, JOptionPane.WARNING_MESSAGE);
-    }
-
-    private void showMessage(String msg, String title) {
-        JOptionPane.showMessageDialog(this, utils.addStyle(msg), title, JOptionPane.INFORMATION_MESSAGE);
-    }
-
-    private int showQuest(String msg, String title) {
-        return JOptionPane.showConfirmDialog(this, utils.addStyle(msg), title, JOptionPane.YES_NO_OPTION);
-    }
-
-    private Object showQuest(Object[] quest, String msg, String title) {
-        return JOptionPane.showInputDialog(this, utils.addStyle(msg), title, JOptionPane.QUESTION_MESSAGE, null, quest, null);
-    }
-
-    private void showException(Exception ex) {
-        if (ex instanceof SQLException) {
-            showError(ex.getLocalizedMessage(), "SQL Exception");
-        } else {
-            if (ex != null) {
-                showMessage(ex.getLocalizedMessage(), "Exception");
-            }
-        }
-    }
 
     /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        try {
-            UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Mainform.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        java.awt.EventQueue.invokeLater(() -> {
-            try {
-                new Mainform().setVisible(true);
-            } catch (BusinessException | DatabaseException | SQLException ex) {
-                Logger.getLogger(Mainform.class.getName()).log(Level.SEVERE, null, ex);
-                JOptionPane.showMessageDialog(null, utils.addStyle(ex.getLocalizedMessage()), "إنتبه", JOptionPane.PLAIN_MESSAGE);
-                System.exit(NORMAL);
-            }
+
+        SwingUtilities.invokeLater(() -> {
+            JFrame loading = new JFrame("Mizan");
+            loading.setDefaultCloseOperation(
+                    JFrame.EXIT_ON_CLOSE
+            );
+
+            JLabel message = new JLabel(
+                    "Starting SQL Server and connecting to database..."
+            );
+
+            loading.add(message);
+            loading.setSize(440, 110);
+            loading.setLocationRelativeTo(null);
+            loading.setVisible(true);
+
+            SwingWorker<Statement, Void> worker = new SwingWorker<>() {
+
+                @Override
+                protected Statement doInBackground()
+                        throws Exception {
+                    return SqlServerStartup.connectWhenReady();
+                }
+
+                @Override
+                protected void done() {
+                    loading.dispose();
+
+                    try {
+                        Statement st = get();
+
+                        UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
+
+                        Mainform mainFrame = new Mainform(st);
+                        mainFrame.setLocationRelativeTo(null);
+                        mainFrame.setVisible(true);
+
+                    } catch (BusinessException | DatabaseException | InterruptedException | SQLException | ExecutionException e) {
+                        Throwable cause = e.getCause();
+
+                        String error = cause != null
+                                ? cause.getMessage()
+                                : e.getMessage();
+
+                        JOptionPane.showMessageDialog(
+                                null,
+                                "Unable to connect to SQL Server.\n\n"
+                                + error,
+                                "Database Startup Error",
+                                JOptionPane.ERROR_MESSAGE
+                        );
+                    } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) {
+                        System.getLogger(Mainform.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+                    }
+                }
+            };
+
+            worker.execute();
         });
     }
 

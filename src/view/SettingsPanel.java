@@ -16,7 +16,7 @@ import utils.PrinterManager;
 public class SettingsPanel extends javax.swing.JPanel {
 
     private final String Version;
-    protected final SettingsFormController formController;
+    public final SettingsFormController formController;
 
     public SettingsPanel(ErrorListener errorListener, JPanel leftPanel, JButton panelOpener,
             MachineController machController, ProductController prosController, PrinterManager printerManager, String v) {
@@ -764,7 +764,7 @@ public class SettingsPanel extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel_print_pallet;
     private javax.swing.JLabel jLabel_print_type;
     private javax.swing.JPanel jPanel_Machines;
-    protected javax.swing.JPanel jPanel_print;
+    public javax.swing.JPanel jPanel_print;
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator_print_Double;

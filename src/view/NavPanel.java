@@ -126,15 +126,15 @@ public class NavPanel extends javax.swing.JPanel {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    protected javax.swing.JButton jButton_DoBack;
-    protected javax.swing.JButton jButton_Emp_opener;
-    protected javax.swing.JButton jButton_Ezn_opener;
-    protected javax.swing.JButton jButton_Mizan_opener;
-    protected javax.swing.JButton jButton_Settings_opener;
-    protected javax.swing.JButton jButton_Statics_opener;
-    protected javax.swing.JButton jButton_Stock_opener;
-    protected javax.swing.JButton jButton_pro_opener;
-    protected javax.swing.JButton jButton_youm_opener;
+    public javax.swing.JButton jButton_DoBack;
+    public javax.swing.JButton jButton_Emp_opener;
+    public javax.swing.JButton jButton_Ezn_opener;
+    public javax.swing.JButton jButton_Mizan_opener;
+    public javax.swing.JButton jButton_Settings_opener;
+    public javax.swing.JButton jButton_Statics_opener;
+    public javax.swing.JButton jButton_Stock_opener;
+    public javax.swing.JButton jButton_pro_opener;
+    public javax.swing.JButton jButton_youm_opener;
     protected javax.swing.JLabel jLabel_version;
     // End of variables declaration//GEN-END:variables
 }
