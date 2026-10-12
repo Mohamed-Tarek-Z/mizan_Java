@@ -628,7 +628,7 @@ public class ExcelManager {
                     cell.setCellValue(ArabicDigits.toArabicDigits(row[1].toString()));
 
                     cell = sheet.getRow(RowIndex).getCell(3);
-                    cell.setCellValue(ArabicDigits.toArabicDigits((Double) row[2]));
+                    cell.setCellValue(ArabicDigits.toArabicDigits((int) row[2]));
 
                     cell = sheet.getRow(RowIndex).getCell(4);
                     cell.setCellValue(ArabicDigits.toArabicDigits((Double) row[3]));
@@ -655,6 +655,9 @@ public class ExcelManager {
     }
 
     public boolean youmiaExcel(List<Object[]> solds) {
+        if (solds.isEmpty()) {
+            return false;
+        }
         int RowIndex = 4;
         XSSFWorkbook workbook;
         try (FileInputStream EX = new FileInputStream(new File("Donot_Change\\report.xlsx"))) {
@@ -688,7 +691,7 @@ public class ExcelManager {
             }
 
             try (FileOutputStream fileOut = new FileOutputStream(
-                    System.getProperty("user.dir") + "\\Temp\\report.xlsx")) {
+                    System.getProperty("user.dir") + "\\Temp\\report-" + solds.get(0)[0] + ".xlsx")) {
                 workbook.write(fileOut);
             }
             Desktop.getDesktop().open(new File(System.getProperty("user.dir") + "\\Temp\\"));

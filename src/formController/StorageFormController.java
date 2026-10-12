@@ -34,6 +34,7 @@ import utils.WeightScaleCapture;
 import utils.utils;
 import view.Mainform;
 import view.MultiEdit;
+import view.PrintPanel;
 import view.SingleEdit;
 
 public class StorageFormController {
@@ -78,12 +79,11 @@ public class StorageFormController {
     private final JButton formOpenerBtn;
     private final JPanel stPanel;
     private final JPanel leftPanel;
-    private final JPanel printPanel;
-    private final SettingsFormController sfc;
+    private final PrintPanel printPanel;
     private final ErrorListener errorListener;
     private final Mainform mainform;
 
-    public StorageFormController(ErrorListener errorListener, Mainform mainform, JPanel leftPanel, JPanel printPanel, SettingsFormController sfc, JPanel stPanel, JButton formOpenerBtn,
+    public StorageFormController(ErrorListener errorListener, Mainform mainform, JPanel leftPanel, PrintPanel printPanel, JPanel stPanel, JButton formOpenerBtn,
             JTextField stConeColor, JTextField stPalletWeight, JTextField stConeWeight, JTextField stNetWeight, JTextField stTotalWeight,
             JTextField stEmptyBag, JTextField stConeCount, JTextField stPalletNumber, JTextField stLot, JTextField stFilterPros,
             JTextField stError, JLabel stEmptyBagLabel, JCheckBox stPrintTicket, JCheckBox stIgnoreLimit, JCheckBox stIsBox, JCheckBox stMarkBag,
@@ -124,7 +124,6 @@ public class StorageFormController {
         this.stPanel = stPanel;
         this.leftPanel = leftPanel;
         this.printPanel = printPanel;
-        this.sfc = sfc;
         this.errorListener = errorListener;
     }
 
@@ -179,6 +178,9 @@ public class StorageFormController {
 
         stReprint.addActionListener((ActionEvent evt) -> {
             try {
+                if (printPanel == null) {
+                    throw new BusinessException("print panel is null");
+                }
                 printerManager.printPanelToImage(printPanel);
                 stConeCount.requestFocusInWindow();
             } catch (BusinessException ex) {
@@ -318,7 +320,7 @@ public class StorageFormController {
             if (evt.getClickCount() == 3 && stTable.getSelectedRowCount() > 0) {
                 if (stTable.getSelectedRowCount() == 1) {
                     Bag bag = storageController.getBagById((int) stTable.getModel().getValueAt(stTable.getSelectedRow(), 5));
-                    new SingleEdit(bag, mainform, (Product) stPros.getSelectedItem(), storageController, sfc, this, errorListener);
+                    new SingleEdit(bag, mainform, (Product) stPros.getSelectedItem(), storageController, printPanel.formController, this, errorListener);
 
                     mainform.setEnabled(false);
 
@@ -415,7 +417,7 @@ public class StorageFormController {
             stPalletCount.setValue(result[1]);
             calc_pallet_weight();
 
-            sfc.PreparePrintingPanel(new Ticket(((Product) stPros.getSelectedItem()).getName(),
+            printPanel.formController.PreparePrintingPanel(new Ticket(((Product) stPros.getSelectedItem()).getName(),
                     stPalletNumber.getText(),
                     ((Product) stPros.getSelectedItem()).getColor(),
                     stLot.getText(),
@@ -431,5 +433,27 @@ public class StorageFormController {
         } catch (BusinessException ex) {
             showMessageInlable(true);
         }
+    }
+
+    public void setFromMachine(String ProName, String Lot) {
+        try {
+            stDonotReadConeWeight.setSelected(false);
+            stIgnoreLimit.setSelected(false);
+            stDisableNumberOfCone.setSelected(false);
+            stDisableEmptyBagWeight.setSelected(false);
+            stMarkBag.setSelected(false);
+            stFilterPros.setText("");
+            utils.fillComboBoxWihProducts(stPros, productController.getAvailableProductsLike(stFilterPros.getText()));
+            stPros.setSelectedItem(productController.getProduct(ProName));
+            fill_storage_table();
+        } catch (BusinessException ex) {
+            stPros.setSelectedIndex(-1);
+        } catch (DatabaseException ex) {
+            errorListener.onError(ex);
+        }
+
+        stLot.setText(Lot);
+        formOpenerBtn.doClick();
+        stPalletNumber.setText("");
     }
 }

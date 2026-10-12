@@ -35,11 +35,12 @@ public final class MachineFormController {
     private final ProductController prosController;
     private final ErrorListener errorListener;
     private final JTabbedPane settingsTapps;
+    private final StorageFormController sfc;
 
     public MachineFormController(ErrorListener errorListener, JTabbedPane settingsTapps,
             JTextField machName, JTextField machLot, JComboBox<Product> machPros,
             JButton addMachBtn, JButton editMachBtn, JButton delMachBtn,
-            JTable machTable, MachineController machController, ProductController prosController) {
+            JTable machTable, MachineController machController, ProductController prosController, StorageFormController sfc) {
         this.machName = machName;
         this.machLot = machLot;
         this.machPros = machPros;
@@ -50,6 +51,7 @@ public final class MachineFormController {
         this.machController = machController;
         this.prosController = prosController;
         this.settingsTapps = settingsTapps;
+        this.sfc = sfc;
         this.errorListener = errorListener;
     }
 
@@ -163,26 +165,8 @@ public final class MachineFormController {
                     machPros.setSelectedIndex(-1);
                 }
             } else {
-                // toDO: in storage Form Controller made function to set form with  
-//                try {
-//                    jCheckBox_storage_FreezeConeWeightChange.setSelected(false);
-//                    jCheckBox_storage_ignoreLimits.setSelected(false);
-//                    jCheckBox_storage_freezeConeNumber.setSelected(false);
-//                    jCheckBox_storage_FreezeEmptyBagWight.setSelected(false);
-//                    jCheckBox_storage_MarkBag.setSelected(false);
-//                    jTextField_storage_SearchProducts.setText("");
-//                    combox_fill_with(jComboBox_storage_products, productController.getAvailableProductsLike(jTextField_storage_SearchProducts.getText()));
-//
-//                    jComboBox_storage_products.setSelectedItem(productController.getProduct(
-//                            (String) machTable.getModel().getValueAt(machTable.getSelectedRow(), 2)));
-//                    fill_storage_table();
-//                } catch (BusinessException ex) {
-//                    jComboBox_storage_products.setSelectedIndex(-1);
-//                }
-//
-//                jTextField_storage_lot.setText(((String) model.getValueAt(machTable.getSelectedRow(), 3)).strip());
-//                jButton_Mizan_opener.doClick();
-//                jTextField_storage_palletNumber.setText("");
+                sfc.setFromMachine((String) machTable.getModel().getValueAt(machTable.getSelectedRow(), 2),
+                        ((String) model.getValueAt(machTable.getSelectedRow(), 3)).strip());
             }
         } catch (DatabaseException ex) {
             errorListener.onError(ex);

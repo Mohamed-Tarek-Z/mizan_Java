@@ -41,6 +41,7 @@ import view.StatisticsPanel;
 import view.StockPanel;
 import view.StoragePanel;
 import java.sql.Statement;
+import view.PrintPanel;
 
 public class MainFormController implements ErrorListener {
 
@@ -58,7 +59,9 @@ public class MainFormController implements ErrorListener {
 
     private final NavPanel navPanel;
 
+    private final StoragePanel storagePanel;
     private final SettingsPanel settingsPanel;
+    private final PrintPanel printPanel;
 
     private final Mainform mainform;
 
@@ -89,9 +92,10 @@ public class MainFormController implements ErrorListener {
         new ProductPanel(this, leftPanel, navPanel.jButton_pro_opener, productController);
         new CreatePermitPanel(this, leftPanel, navPanel.jButton_Ezn_opener, storageController, productController, clientController, orderController, exportController, excelManager);
 
-        settingsPanel = new SettingsPanel(this, leftPanel, navPanel.jButton_Settings_opener, machineController, productController, printerManager, Version);
+        printPanel = new PrintPanel(printerManager);
 
-        new StoragePanel(this, this.mainform, leftPanel, settingsPanel.jPanel_print, settingsPanel.formController, navPanel.jButton_Mizan_opener, storageController, productController, printerManager);
+        storagePanel = new StoragePanel(this, this.mainform, leftPanel, printPanel, navPanel.jButton_Mizan_opener, storageController, productController, printerManager);
+        settingsPanel = new SettingsPanel(this, leftPanel, printPanel, navPanel.jButton_Settings_opener, machineController, productController, printerManager, Version, storagePanel.formController);
 
         setupKeyBindings(rootPane);
         navPanel.jButton_Settings_opener.doClick();

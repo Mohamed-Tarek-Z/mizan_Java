@@ -188,7 +188,11 @@ public class OrderHistoryFormController {
 
     private void createExcelClicked() {
         if (soldClientTable.getSelectedRowCount() > 0) {
-            if (excelManager.youmiaExcel(getRows((DefaultTableModel) soldClientTable.getModel()))) {
+            if (excelManager.youmiaExcel(
+                    getRows(
+                            (DefaultTableModel) soldTable.getModel(),
+                            soldClientTable.getModel().getValueAt(soldClientTable.getSelectedRow(), 1).toString()
+                    ))) {
                 errorListener.onWarning("please print the Execl", "Done");
             }
         } else {
@@ -213,14 +217,16 @@ public class OrderHistoryFormController {
         reset();
     }
 
-    private List<Object[]> getRows(DefaultTableModel model) {
+    private List<Object[]> getRows(DefaultTableModel model, String clinetName) {
         List<Object[]> data = new ArrayList<>();
         Object[] rw = new Object[model.getColumnCount()];
         for (int row = 0; row < model.getRowCount(); row++) {
-            for (int col = 0; col < model.getColumnCount(); col++) {
-                rw[col] = model.getValueAt(row, col);
+            if (model.getValueAt(row, 0).toString().equalsIgnoreCase(clinetName)) {
+                for (int col = 0; col < model.getColumnCount(); col++) {
+                    rw[col] = model.getValueAt(row, col);
+                }
+                data.add(rw.clone());
             }
-            data.add(rw);
         }
         return data;
     }

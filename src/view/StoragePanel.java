@@ -15,12 +15,12 @@ import utils.PrinterManager;
 
 public class StoragePanel extends javax.swing.JPanel {
 
-    protected final StorageFormController formController;
+    public final StorageFormController formController;
 
-    public StoragePanel(ErrorListener errorListener, Mainform mainform, JPanel leftPanel, JPanel printPanel, SettingsFormController sfc, JButton formOpenerBtn,
+    public StoragePanel(ErrorListener errorListener, Mainform mainform, JPanel leftPanel, PrintPanel printPanel, JButton formOpenerBtn,
             StorageController storageController, ProductController productController, PrinterManager printerManager) {
         initComponents();
-        formController = new StorageFormController(errorListener, mainform, leftPanel, printPanel, sfc, this, formOpenerBtn, jTextField_storage_Color,
+        formController = new StorageFormController(errorListener, mainform, leftPanel, printPanel, this, formOpenerBtn, jTextField_storage_Color,
                 jTextField_storage_PalletWeight, jTextField_storage_EmptyConeWeight, jTextField_storage_NetWeight,
                 jTextField_storage_TotalWeight, jTextField_storage_EmptyBagWeight, jTextField_storage_coneNumber,
                 jTextField_storage_palletNumber, jTextField_storage_lot, jTextField_storage_SearchProducts, jTextField_storage_Error,

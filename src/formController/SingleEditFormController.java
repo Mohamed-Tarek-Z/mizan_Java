@@ -27,7 +27,7 @@ public class SingleEditFormController {
     private final JCheckBox seMark;
     private final JCheckBox seOMark;
     private final JCheckBox seDoPrint;
-    private final SettingsFormController settingsFormController;
+    private final PrintFormController settingsFormController;
     private final StorageFormController storageFormController;
     private final JComboBox<Product> seOPros;
     private final JComboBox<Product> sePros;
@@ -52,7 +52,7 @@ public class SingleEditFormController {
             JCheckBox seDoPrint, JComboBox<Product> seOPros, JComboBox<Product> sePros, JTextField seColor, JTextField seConNum,
             JTextField seOConNum, JTextField seOPaltNum, JTextField seOTotWight, JTextField seOWight, JTextField seOlot, JTextField sePaltNum,
             JTextField seTotWight, JTextField seWight, JTextField seLot, StorageController storageController,
-            SettingsFormController settingsFormController, StorageFormController storageFormController, ErrorListener errorListener) {
+            PrintFormController settingsFormController, StorageFormController storageFormController, ErrorListener errorListener) {
         this.mainform = mainform;
         this.se = se;
         this.bag = bag;
