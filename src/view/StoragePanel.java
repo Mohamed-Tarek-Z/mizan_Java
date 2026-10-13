@@ -129,6 +129,7 @@ public class StoragePanel extends javax.swing.JPanel {
             }
         });
         jTable_storage.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        jTable_storage.setFocusable(false);
         jTable_storage.setRowHeight(25);
         jTable_storage.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION);
         jTable_storage.setShowGrid(true);
@@ -152,10 +153,12 @@ public class StoragePanel extends javax.swing.JPanel {
 
         jButton_storage_addData.setFont(new java.awt.Font("sansserif", 0, 24)); // NOI18N
         jButton_storage_addData.setText("إضافة");
+        jButton_storage_addData.setFocusable(false);
         add(jButton_storage_addData, new org.netbeans.lib.awtextra.AbsoluteConstraints(745, 590, 90, 50));
 
         jButton_storage_delData.setFont(new java.awt.Font("sansserif", 0, 24)); // NOI18N
         jButton_storage_delData.setText("حذف");
+        jButton_storage_delData.setFocusable(false);
         add(jButton_storage_delData, new org.netbeans.lib.awtextra.AbsoluteConstraints(605, 590, 80, 50));
 
         jComboBox_storage_products.setFont(new java.awt.Font("sansserif", 0, 18)); // NOI18N
@@ -163,6 +166,7 @@ public class StoragePanel extends javax.swing.JPanel {
 
         jLabel6.setFont(new java.awt.Font("sansserif", 0, 24)); // NOI18N
         jLabel6.setText("الصنف");
+        jLabel6.setFocusable(false);
         add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(690, 70, -1, 20));
 
         jTextField_storage_lot.setFont(new java.awt.Font("sansserif", 0, 24)); // NOI18N
@@ -188,6 +192,7 @@ public class StoragePanel extends javax.swing.JPanel {
 
         jLabel7.setFont(new java.awt.Font("sansserif", 0, 18)); // NOI18N
         jLabel7.setText("الوزن القائم");
+        jLabel7.setFocusable(false);
         jLabel7.setMaximumSize(new java.awt.Dimension(82, 24));
         jLabel7.setMinimumSize(new java.awt.Dimension(82, 24));
         jLabel7.setPreferredSize(new java.awt.Dimension(82, 24));
@@ -195,6 +200,7 @@ public class StoragePanel extends javax.swing.JPanel {
 
         jLabel8.setFont(new java.awt.Font("sansserif", 0, 18)); // NOI18N
         jLabel8.setText("اللوط");
+        jLabel8.setFocusable(false);
         jLabel8.setMaximumSize(new java.awt.Dimension(82, 24));
         jLabel8.setMinimumSize(new java.awt.Dimension(82, 24));
         jLabel8.setPreferredSize(new java.awt.Dimension(82, 24));
@@ -202,6 +208,7 @@ public class StoragePanel extends javax.swing.JPanel {
 
         jLabel9.setFont(new java.awt.Font("sansserif", 0, 18)); // NOI18N
         jLabel9.setText("عدد الكون");
+        jLabel9.setFocusable(false);
         jLabel9.setMaximumSize(new java.awt.Dimension(82, 24));
         jLabel9.setMinimumSize(new java.awt.Dimension(82, 24));
         jLabel9.setPreferredSize(new java.awt.Dimension(82, 24));
@@ -209,6 +216,7 @@ public class StoragePanel extends javax.swing.JPanel {
 
         jLabel10.setFont(new java.awt.Font("sansserif", 0, 18)); // NOI18N
         jLabel10.setText("وزن الكونه");
+        jLabel10.setFocusable(false);
         jLabel10.setMaximumSize(new java.awt.Dimension(82, 24));
         jLabel10.setMinimumSize(new java.awt.Dimension(82, 24));
         jLabel10.setPreferredSize(new java.awt.Dimension(82, 24));
@@ -226,6 +234,7 @@ public class StoragePanel extends javax.swing.JPanel {
 
         jLabel_storage_EmptyBag.setFont(new java.awt.Font("sansserif", 1, 16)); // NOI18N
         jLabel_storage_EmptyBag.setText("فارغ الشيكاره");
+        jLabel_storage_EmptyBag.setFocusable(false);
         jLabel_storage_EmptyBag.setMaximumSize(new java.awt.Dimension(82, 24));
         jLabel_storage_EmptyBag.setMinimumSize(new java.awt.Dimension(82, 24));
         jLabel_storage_EmptyBag.setPreferredSize(new java.awt.Dimension(82, 24));
@@ -233,6 +242,7 @@ public class StoragePanel extends javax.swing.JPanel {
 
         jLabel12.setFont(new java.awt.Font("sansserif", 0, 18)); // NOI18N
         jLabel12.setText("الوزن الصافي");
+        jLabel12.setFocusable(false);
         add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(735, 390, -1, 30));
 
         jTextField_storage_NetWeight.setEditable(false);
@@ -244,6 +254,7 @@ public class StoragePanel extends javax.swing.JPanel {
 
         jLabel2.setFont(new java.awt.Font("sansserif", 0, 18)); // NOI18N
         jLabel2.setText("رقم البالتة");
+        jLabel2.setFocusable(false);
         jLabel2.setMaximumSize(new java.awt.Dimension(82, 24));
         jLabel2.setMinimumSize(new java.awt.Dimension(82, 24));
         jLabel2.setPreferredSize(new java.awt.Dimension(82, 24));
@@ -251,6 +262,7 @@ public class StoragePanel extends javax.swing.JPanel {
 
         jLabel14.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel14.setText("وزن البالتة");
+        jLabel14.setFocusable(false);
         add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 490, -1, 30));
 
         jTextField_storage_PalletWeight.setEditable(false);
@@ -286,6 +298,7 @@ public class StoragePanel extends javax.swing.JPanel {
         jLabel41.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel41.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel41.setText("اللون");
+        jLabel41.setFocusable(false);
         add(jLabel41, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 540, 70, 40));
 
         jCheckBox_storage_Box.setText("صندوق");

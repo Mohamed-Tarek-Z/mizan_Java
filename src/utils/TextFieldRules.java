@@ -6,21 +6,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 
-/**
- * One place to wire up all the per-field rules discussed: - digits only
- * (Western and/or Arabic-Indic), optionally forced to display as Arabic-Indic -
- * a maximum length - Enter moves on (to the next field, or runs whatever action
- * you give it, e.g. "compute") - Delete clears just this field (replaces the
- * default "delete next character" behavior -- that's intentional, per the
- * requested behavior) - Shift+Delete clears a whole group of fields you specify
- * (can be a different group per field)
- *
- * Uses Swing's Key Bindings API (InputMap/ActionMap) rather than a KeyListener,
- * which is the recommended way to bind specific keystrokes to actions: it's not
- * affected by focus traversal quirks and doesn't conflict with
- * WeightScaleCapture's KeyEventDispatcher, which only inspects KEY_TYPED events
- * and leaves Delete/Shift+Delete (KEY_PRESSED) untouched.
- */
 public final class TextFieldRules {
 
     private TextFieldRules() {
@@ -30,6 +15,7 @@ public final class TextFieldRules {
      * @param field the field to configure
      * @param maxLength maximum number of characters allowed
      * @param isDigitsOnly true to accept numbers only
+     * @param isEven true to accept even numbers only
      * @param onEnter runs when Enter is pressed in this field (e.g. () ->
      * next.requestFocusInWindow(), or () -> compute()); pass null to leave
      * Enter 's default behavior alone
@@ -39,24 +25,21 @@ public final class TextFieldRules {
     public static void apply(JTextField field,
             int maxLength,
             boolean isDigitsOnly,
+            boolean isEven,
             Runnable onEnter,
             Runnable onShiftDelete) {
 
-        // 1) digits only, length limit, optional forced Arabic-Indic display
         ((AbstractDocument) field.getDocument())
-                .setDocumentFilter(new NumericDocumentFilter(maxLength, isDigitsOnly));
+                .setDocumentFilter(new NumericDocumentFilter(maxLength, isDigitsOnly, isEven));
 
-        // 2) Enter -> caller-supplied action (typically "go to next field" or "compute")
         if (onEnter != null) {
             field.addActionListener(e -> {
                 onEnter.run();
             });
         }
 
-        // 3) Delete -> clear just this field
         clearOnDelet(field);
 
-        // 4) Shift+Delete -> clear the given group (defaults to just this field)
         if (onShiftDelete != null) {
             bindKey(field, KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, InputEvent.SHIFT_DOWN_MASK), onShiftDelete);
         }
@@ -65,9 +48,30 @@ public final class TextFieldRules {
     public static void apply(JTextField field,
             int maxLength,
             boolean isDigitsOnly,
+            Runnable onEnter,
+            Runnable onShiftDelete) {
+
+        apply(field, maxLength, isDigitsOnly, false, onEnter, onShiftDelete);
+    }
+
+    public static void apply(JTextField field,
+            int maxLength,
+            boolean isDigitsOnly,
             JComponent next,
             Runnable onShiftDelete) {
-        apply(field, maxLength, isDigitsOnly, next != null
+        apply(field, maxLength, isDigitsOnly, false, next != null
+                ? () -> {
+                    goAndSelect(next);
+                } : field::transferFocus, onShiftDelete);
+    }
+
+    public static void apply(JTextField field,
+            int maxLength,
+            boolean isDigitsOnly,
+            boolean isEven,
+            JComponent next,
+            Runnable onShiftDelete) {
+        apply(field, maxLength, isDigitsOnly, isEven, next != null
                 ? () -> {
                     goAndSelect(next);
                 } : field::transferFocus, onShiftDelete);

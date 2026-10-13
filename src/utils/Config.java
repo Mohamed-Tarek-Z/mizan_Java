@@ -1,5 +1,6 @@
 package utils;
 
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -20,12 +21,19 @@ public final class Config {
     }
 
     public static void load() {
-
-        try (InputStream input = Files.newInputStream(configFile)) {
-            properties.load(input);
-        } catch (IOException e) {
+        try {
+            Files.createDirectories(configDirectory);
+            if (!Files.exists(configFile)) {
+                FileOutputStream fileOutputStream = new FileOutputStream(System.getProperty("user.dir") + "\\Temp\\config.properties");
+                save();
+                fileOutputStream.close();
+            }
+            try (InputStream input = Files.newInputStream(configFile)) {
+                properties.load(input);
+            }
+        } catch (IOException ex) {
             save();
-            //throw new RuntimeException("Could not load configuration file: " + configFile, e);
+            System.getLogger(Config.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
         }
     }
 

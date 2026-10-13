@@ -131,7 +131,7 @@ public class StorageFormController {
 
         TextFieldRules.apply(stLot, 15, false, stPalletNumber, this::clearStorageForm);
         TextFieldRules.apply(stConeCount, 3, true, stEmptyBag, this::clearStorageForm);
-        TextFieldRules.apply(stEmptyBag, 2, true, stTotalWeight, this::clearStorageForm);
+        TextFieldRules.apply(stEmptyBag, 2, true, true, stTotalWeight, this::clearStorageForm);
         TextFieldRules.apply(stPalletNumber, 3, true, () -> {
             TextFieldRules.goAndSelect(stConeCount);
             try {
@@ -140,7 +140,7 @@ public class StorageFormController {
                 errorListener.onError(ex);
             }
         }, null);
-        TextFieldRules.apply(stTotalWeight, 8, true, () -> {
+        TextFieldRules.apply(stTotalWeight, 8, true, true, () -> {
             stNetWeight.requestFocusInWindow();
             try {
                 calc_net_weight();
@@ -148,7 +148,7 @@ public class StorageFormController {
                 showMessageInlable(true);
             }
         }, this::clearStorageForm);
-        TextFieldRules.apply(stNetWeight, 8, true, () -> {
+        TextFieldRules.apply(stNetWeight, 8, true, true, () -> {
             stAdd.doClick();
             stConeCount.requestFocusInWindow();
         }, this::clearStorageForm);
@@ -216,6 +216,16 @@ public class StorageFormController {
                 model.setRowCount(0);
             }
         });
+        stDisableEmptyBagWeight.addActionListener((ActionEvent evt) -> {
+            stEmptyBag.setEnabled(!stDisableEmptyBagWeight.isSelected());
+        });
+        stDisableNumberOfCone.addActionListener((ActionEvent evt) -> {
+            stConeCount.setEnabled(!stDisableNumberOfCone.isSelected());
+        });
+        stDonotReadConeWeight.addActionListener((ActionEvent evt) -> {
+            stConeWeight.setEnabled(!stDonotReadConeWeight.isSelected());
+        });
+
         new WeightScaleCapture(stTotalWeight).install();
 
     }
@@ -361,9 +371,9 @@ public class StorageFormController {
             if (stTable.getRowCount() != 0) {
                 stLot.setText((String) stTable.getValueAt(0, 2));
                 if (!stTable.getValueAt(0, 5).equals("٢٠")) {
-                    stPalletNumber.setText((String) stTable.getValueAt(0, 3));
+                    stPalletNumber.setText((String) stTable.getValueAt(0, 1));
                 } else {
-                    stPalletNumber.setText(ArabicDigits.toArabicDigits(ArabicDigits.parseInt((String) stTable.getValueAt(0, 3)) + 1));
+                    stPalletNumber.setText(ArabicDigits.toArabicDigits(ArabicDigits.parseInt((String) stTable.getValueAt(0, 1)) + 1));
                 }
                 calc_pallet_weight();
             }

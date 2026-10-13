@@ -8,10 +8,18 @@ public class NumericDocumentFilter extends DocumentFilter {
 
     private int maxLength;
     private final boolean isDigitsOnly;
+    private final boolean isEven;
 
     public NumericDocumentFilter(int maxLength, boolean isDigitsOnly) {
         this.maxLength = maxLength;
         this.isDigitsOnly = isDigitsOnly;
+        this.isEven = false;
+    }
+
+    public NumericDocumentFilter(int maxLength, boolean isDigitsOnly, boolean isEven) {
+        this.maxLength = maxLength;
+        this.isDigitsOnly = isDigitsOnly;
+        this.isEven = isEven;
     }
 
     @Override
@@ -41,6 +49,10 @@ public class NumericDocumentFilter extends DocumentFilter {
                 return;
             }
             outputText = outputText.substring(0, Math.min(room, outputText.length()));
+        }
+        // we may add if here to allow even only 
+        if (isEven && currentLength == maxLength - 1 && (text.length() == 1 && ("1".equals(text) || "3".equals(text) || "5".equals(text) || "7".equals(text) || "9".equals(text)))) {
+            return;
         }
 
         outputText = ArabicDigits.toArabicDigits(outputText);
