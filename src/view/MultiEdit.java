@@ -1,5 +1,6 @@
 package view;
 
+import controller.ProductController;
 import controller.StorageController;
 import formController.MultiEditFormController;
 import formController.StorageFormController;
@@ -12,11 +13,11 @@ public class MultiEdit extends javax.swing.JFrame {
 
     protected final MultiEditFormController formController;
 
-    public MultiEdit(Mainform mainform, List<Bag> bags, Product product, String palletNumber, String lot, boolean marked, StorageController storageController,
+    public MultiEdit(Mainform mainform, List<Bag> bags, Product product, String palletNumber, String lot, boolean marked, ProductController productController, StorageController storageController,
             StorageFormController storageFormController, ErrorListener errorListener) {
         initComponents();
         formController = new MultiEditFormController(mainform, bags, jComboBox_ME_type, jTextField_ME_PaltNum, jTextField_ME_lot,
-                jCheckBox_ME_MarkBag, jButton_ME_Edit, this, product, storageFormController, storageController, errorListener,
+                jCheckBox_ME_MarkBag, jButton_ME_Edit, this, product, storageFormController, productController, storageController, errorListener,
                 lot, palletNumber, marked);
         formController.init();
     }
@@ -35,7 +36,15 @@ public class MultiEdit extends javax.swing.JFrame {
         jComboBox_ME_type = new javax.swing.JComboBox<>();
         jCheckBox_ME_MarkBag = new javax.swing.JCheckBox();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("MultiEdit");
+        setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        setLocation(new java.awt.Point(100, 100));
+        setLocationByPlatform(true);
+        setMaximumSize(new java.awt.Dimension(480, 320));
+        setName("MultiEdit"); // NOI18N
+        setResizable(false);
+        setType(java.awt.Window.Type.POPUP);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jTextField_ME_lot.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
@@ -72,6 +81,8 @@ public class MultiEdit extends javax.swing.JFrame {
         jCheckBox_ME_MarkBag.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         jCheckBox_ME_MarkBag.setText("تعليم الشائر");
         getContentPane().add(jCheckBox_ME_MarkBag, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 140, -1, -1));
+
+        getAccessibleContext().setAccessibleParent(this);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents

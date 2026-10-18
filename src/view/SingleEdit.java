@@ -1,5 +1,6 @@
 package view;
 
+import controller.ProductController;
 import controller.StorageController;
 import formController.PrintFormController;
 import formController.SingleEditFormController;
@@ -12,12 +13,12 @@ public class SingleEdit extends javax.swing.JFrame {
 
     protected final SingleEditFormController formController;
 
-    public SingleEdit(Bag bag, Mainform mainform, Product product, StorageController storageController, PrintFormController settingsFormController, StorageFormController storageFormController, ErrorListener errorListener) {
+    public SingleEdit(Bag bag, Mainform mainform, Product product, ProductController productController, StorageController storageController, PrintFormController settingsFormController, StorageFormController storageFormController, ErrorListener errorListener) {
         initComponents();
         formController = new SingleEditFormController(this, mainform, bag, product, jButton_E_Edit, jButton_E_print, jCheckBox_E_Mark, jCheckBox_E_O_Mark,
                 jCheckBox_E_P, jComboBox_E_O_proName, jComboBox_E_proName, jTextField_E_Color, jTextField_E_ConNum, jTextField_E_O_ConNum,
-                jTextField_E_O_PaltNum, jTextField_E_O_Wight, jTextField_E_O_Wight, jTextField_E_O_lot, jTextField_E_PaltNum,
-                jTextField_E_TotWight, jTextField_E_Wight, jTextField_E_lot, storageController, settingsFormController, storageFormController, errorListener);
+                jTextField_E_O_PaltNum, jTextField_E_O_TotWight, jTextField_E_O_Wight, jTextField_E_O_lot, jTextField_E_PaltNum,
+                jTextField_E_TotWight, jTextField_E_Wight, jTextField_E_lot, storageController, productController, settingsFormController, storageFormController, errorListener);
         formController.init();
 
     }
@@ -63,7 +64,6 @@ public class SingleEdit extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Single Edit");
-        setAlwaysOnTop(true);
         setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         setLocation(new java.awt.Point(100, 100));
         setLocationByPlatform(true);

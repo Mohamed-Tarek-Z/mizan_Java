@@ -330,9 +330,7 @@ public class StorageFormController {
             if (evt.getClickCount() == 3 && stTable.getSelectedRowCount() > 0) {
                 if (stTable.getSelectedRowCount() == 1) {
                     Bag bag = storageController.getBagById((int) stTable.getModel().getValueAt(stTable.getSelectedRow(), 5));
-                    new SingleEdit(bag, mainform, (Product) stPros.getSelectedItem(), storageController, printPanel.formController, this, errorListener);
-
-                    mainform.setEnabled(false);
+                    new SingleEdit(bag, mainform, (Product) stPros.getSelectedItem(), productController, storageController, printPanel.formController, this, errorListener);
 
                 } else if (stTable.getSelectedRowCount() > 1) {
                     List<Bag> bags = new ArrayList<>();
@@ -345,10 +343,8 @@ public class StorageFormController {
                     new MultiEdit(mainform, bags, (Product) stPros.getSelectedItem(),
                             stTable.getModel().getValueAt(stTable.getSelectedRow(), 1).toString(),
                             stTable.getModel().getValueAt(stTable.getSelectedRow(), 2).toString(),
-                            (boolean) stTable.getModel().getValueAt(stTable.getSelectedRow(), 6), storageController,
+                            (boolean) stTable.getModel().getValueAt(stTable.getSelectedRow(), 6), productController, storageController,
                             this, errorListener);
-
-                    mainform.setEnabled(false);
                 }
             }
         } catch (DatabaseException | BusinessException ex) {

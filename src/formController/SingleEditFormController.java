@@ -1,5 +1,6 @@
 package formController;
 
+import controller.ProductController;
 import controller.StorageController;
 import exceptions.BusinessException;
 import exceptions.DatabaseException;
@@ -14,6 +15,7 @@ import model.Ticket;
 import utils.ArabicDigits;
 import utils.ErrorListener;
 import utils.TextFieldRules;
+import utils.utils;
 import view.Mainform;
 import view.SingleEdit;
 
@@ -44,6 +46,7 @@ public class SingleEditFormController {
     private final JTextField seLot;
 
     private final StorageController storageController;
+    private final ProductController productController;
     private final SingleEdit se;
     private final ErrorListener errorListener;
     private final Mainform mainform;
@@ -51,7 +54,7 @@ public class SingleEditFormController {
     public SingleEditFormController(SingleEdit se, Mainform mainform, Bag bag, Product product, JButton seEdit, JButton sePrint, JCheckBox seMark, JCheckBox seOMark,
             JCheckBox seDoPrint, JComboBox<Product> seOPros, JComboBox<Product> sePros, JTextField seColor, JTextField seConNum,
             JTextField seOConNum, JTextField seOPaltNum, JTextField seOTotWight, JTextField seOWight, JTextField seOlot, JTextField sePaltNum,
-            JTextField seTotWight, JTextField seWight, JTextField seLot, StorageController storageController,
+            JTextField seTotWight, JTextField seWight, JTextField seLot, StorageController storageController, ProductController productController,
             PrintFormController settingsFormController, StorageFormController storageFormController, ErrorListener errorListener) {
         this.mainform = mainform;
         this.se = se;
@@ -76,47 +79,54 @@ public class SingleEditFormController {
         this.seWight = seWight;
         this.seLot = seLot;
         this.storageController = storageController;
+        this.productController = productController;
         this.storageFormController = storageFormController;
         this.settingsFormController = settingsFormController;
         this.errorListener = errorListener;
     }
 
     public void init() {
-        se.setVisible(true);
-        se.setSize(780, 400);
-        seOMark.setSelected(bag.isUsed());
-        seMark.setSelected(bag.isUsed());
-        seOTotWight.setText(ArabicDigits.toArabicDigits(bag.getTot_wight()));
-        seTotWight.setText(ArabicDigits.toArabicDigits(bag.getTot_wight()));
-        seOPros.setSelectedItem(product);
-        sePros.setSelectedItem(product);
-        seOLot.setText(ArabicDigits.toArabicDigits(bag.getLot()));
-        seLot.setText(ArabicDigits.toArabicDigits(bag.getLot()));
-        seOConNum.setText(ArabicDigits.toArabicDigits(bag.getNum_of_con()));
-        seConNum.setText(ArabicDigits.toArabicDigits(bag.getNum_of_con()));
-        seOPaltNum.setText(ArabicDigits.toArabicDigits(bag.getPallet_numb()));
-        sePaltNum.setText(ArabicDigits.toArabicDigits(bag.getPallet_numb()));
-        seOWight.setText(ArabicDigits.toArabicDigits(bag.getWeight()));
-        seWight.setText(ArabicDigits.toArabicDigits(bag.getWeight()));
-        seColor.setText(product.getColor());
+        try {
+            se.setVisible(true);
+            se.setSize(780, 400);
+            seOMark.setSelected(bag.isUsed());
+            seMark.setSelected(bag.isUsed());
+            seOTotWight.setText(ArabicDigits.toArabicDigits(bag.getTot_wight()));
+            seTotWight.setText(ArabicDigits.toArabicDigits(bag.getTot_wight()));
+            utils.fillComboBoxWihProducts(seOPros, productController.getAvailableProductsLike(""));
+            utils.fillComboBoxWihProducts(sePros, productController.getAvailableProductsLike(""));
+            seOPros.setSelectedItem(product);
+            sePros.setSelectedItem(product);
+            seOLot.setText(ArabicDigits.toArabicDigits(bag.getLot()));
+            seLot.setText(ArabicDigits.toArabicDigits(bag.getLot()));
+            seOConNum.setText(ArabicDigits.toArabicDigits(bag.getNum_of_con()));
+            seConNum.setText(ArabicDigits.toArabicDigits(bag.getNum_of_con()));
+            seOPaltNum.setText(ArabicDigits.toArabicDigits(bag.getPallet_numb()));
+            sePaltNum.setText(ArabicDigits.toArabicDigits(bag.getPallet_numb()));
+            seOWight.setText(ArabicDigits.toArabicDigits(bag.getWeight()));
+            seWight.setText(ArabicDigits.toArabicDigits(bag.getWeight()));
+            seColor.setText(product.getColor());
 
-        TextFieldRules.apply(seWight, 8, true, () -> {
-        }, null);
-        TextFieldRules.apply(sePaltNum, 3, true, () -> {
-        }, null);
-        TextFieldRules.apply(seConNum, 3, true, () -> {
-        }, null);
-        TextFieldRules.apply(seLot, 15, false, () -> {
-        }, null);
-        TextFieldRules.apply(seTotWight, 8, true, () -> {
-        }, null);
+            TextFieldRules.apply(seWight, 8, true, () -> {
+            }, null);
+            TextFieldRules.apply(sePaltNum, 3, true, () -> {
+            }, null);
+            TextFieldRules.apply(seConNum, 3, true, () -> {
+            }, null);
+            TextFieldRules.apply(seLot, 15, false, () -> {
+            }, null);
+            TextFieldRules.apply(seTotWight, 8, true, () -> {
+            }, null);
 
-        seEdit.addActionListener((ActionEvent evt) -> {
-            editPressed();
-        });
-        sePrint.addActionListener((ActionEvent evt) -> {
-            printPressed();
-        });
+            seEdit.addActionListener((ActionEvent evt) -> {
+                editPressed();
+            });
+            sePrint.addActionListener((ActionEvent evt) -> {
+                printPressed();
+            });
+        } catch (DatabaseException ex) {
+            errorListener.onError(ex);
+        }
     }
 
     private void editPressed() {
