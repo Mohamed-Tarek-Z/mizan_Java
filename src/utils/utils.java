@@ -74,7 +74,7 @@ public class utils {
             return properties;
 
         } catch (IOException ex) {
-            Logger.getLogger(utils.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
+            Logger.getLogger(utils.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
             throw new BusinessException("ملف غير موجود");
         }
     }

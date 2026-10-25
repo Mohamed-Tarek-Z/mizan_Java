@@ -27,7 +27,7 @@ public class UserRepository {
 
             return null;
         } catch (SQLException ex) {
-            Logger.getLogger(UserRepository.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
+            Logger.getLogger(UserRepository.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
             throw new DatabaseException("حدث خطأ أثناء التسجيل الدخول", ex);
         }
     }

@@ -34,7 +34,7 @@ public class StorageRepository {
 
             return Bags;
         } catch (SQLException ex) {
-            Logger.getLogger(StorageRepository.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
+            Logger.getLogger(StorageRepository.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
             throw new DatabaseException("حدث خطأ أثناء طلب بيانات المخزن", ex);
         }
     }
@@ -51,7 +51,7 @@ public class StorageRepository {
 
             return Bags;
         } catch (SQLException ex) {
-            Logger.getLogger(StorageRepository.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
+            Logger.getLogger(StorageRepository.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
             throw new DatabaseException("حدث خطأ أثناء طلب بيانات المخزن", ex);
         }
     }
@@ -70,7 +70,7 @@ public class StorageRepository {
 
             return pallets;
         } catch (SQLException ex) {
-            Logger.getLogger(StorageRepository.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
+            Logger.getLogger(StorageRepository.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
             throw new DatabaseException("حدث خطأ أثناء طلب بيانات المخزن", ex);
         }
     }
@@ -99,7 +99,7 @@ public class StorageRepository {
                 );
             }
         } catch (SQLException ex) {
-            Logger.getLogger(StorageRepository.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
+            Logger.getLogger(StorageRepository.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
             throw new DatabaseException("حدث خطأ أثناء إضافة الشكارة", ex);
         }
     }
@@ -117,7 +117,7 @@ public class StorageRepository {
                     "storage_id=" + bag.getId() + ""
             );
         } catch (SQLException ex) {
-            Logger.getLogger(StorageRepository.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
+            Logger.getLogger(StorageRepository.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
             throw new DatabaseException("حدث خطأ أثناء تعديل الشكارة", ex);
         }
     }
@@ -127,7 +127,7 @@ public class StorageRepository {
             dbConnection.delData("storage", "storage_id=" + bagId + "");
             return true;
         } catch (SQLException ex) {
-            Logger.getLogger(StorageRepository.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
+            Logger.getLogger(StorageRepository.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
             throw new DatabaseException("حدث خطأ أثناء حذف الشكارة", ex);
         }
     }
@@ -144,7 +144,7 @@ public class StorageRepository {
             int nUsedC = rs.getInt(1);
             return new int[]{usedC, nUsedC};
         } catch (SQLException ex) {
-            Logger.getLogger(StorageRepository.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
+            Logger.getLogger(StorageRepository.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
             throw new DatabaseException("حدث خطأ أثناء عد الشكارة", ex);
         }
     }
@@ -160,7 +160,7 @@ public class StorageRepository {
             }
             return bag;
         } catch (SQLException ex) {
-            Logger.getLogger(StorageRepository.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
+            Logger.getLogger(StorageRepository.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
             throw new DatabaseException("حدث خطأ أثناءعرض الشكارة", ex);
         }
     }
@@ -176,7 +176,7 @@ public class StorageRepository {
             return st.getString(1);
 
         } catch (SQLException ex) {
-            Logger.getLogger(StorageRepository.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
+            Logger.getLogger(StorageRepository.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
             throw new DatabaseException("حدث خطأ أثناءحساب مجموع البالتة", ex);
         }
     }
@@ -194,7 +194,7 @@ public class StorageRepository {
 
             return Stock;
         } catch (SQLException ex) {
-            Logger.getLogger(StorageRepository.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
+            Logger.getLogger(StorageRepository.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
             throw new DatabaseException("حدث خطأ أثناء حساب المخزن", ex);
         }
     }
@@ -212,7 +212,7 @@ public class StorageRepository {
 
             return Stock;
         } catch (SQLException ex) {
-            Logger.getLogger(StorageRepository.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
+            Logger.getLogger(StorageRepository.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
             throw new DatabaseException("حدث خطأ أثناء حساب المخزن", ex);
         }
     }

@@ -37,7 +37,7 @@ public class ExportRepository {
 
             return statistics;
         } catch (SQLException ex) {
-            Logger.getLogger(ExportRepository.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
+            Logger.getLogger(ExportRepository.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
             throw new DatabaseException("حدث خطأ أثناء حساب المخزن", ex);
         }
     }
@@ -60,7 +60,7 @@ public class ExportRepository {
                     + storageId
             );
         } catch (SQLException ex) {
-            Logger.getLogger(ExportRepository.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
+            Logger.getLogger(ExportRepository.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
             throw new DatabaseException("حدث خطأ أثناء نقل من المخزن إلى المبيعات", ex);
         }
     }
@@ -69,7 +69,7 @@ public class ExportRepository {
         try {
             dbConnection.delData("export", "ord_id=" + Ord_id);
         } catch (SQLException ex) {
-            Logger.getLogger(ExportRepository.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
+            Logger.getLogger(ExportRepository.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
             throw new DatabaseException("حدث خطأ أثناء حساب المخزن", ex);
         }
     }
@@ -78,7 +78,7 @@ public class ExportRepository {
         try {
             return !dbConnection.dataRead("*", "export", "ord_id=" + Ord_id).next();
         } catch (SQLException ex) {
-            Logger.getLogger(ExportRepository.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
+            Logger.getLogger(ExportRepository.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
             throw new DatabaseException("حدث خطأ أثناء حساب المخزن", ex);
         }
     }
@@ -94,7 +94,7 @@ public class ExportRepository {
             }
             return temp;
         } catch (SQLException ex) {
-            Logger.getLogger(ExportRepository.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
+            Logger.getLogger(ExportRepository.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
             throw new DatabaseException("حدث خطأ أثناء حساب المخزن", ex);
         }
     }
@@ -111,7 +111,7 @@ public class ExportRepository {
             }
             return temp;
         } catch (SQLException ex) {
-            Logger.getLogger(ExportRepository.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
+            Logger.getLogger(ExportRepository.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
             throw new DatabaseException("حدث خطأ أثناء حساب المخزن", ex);
         }
     }
@@ -135,7 +135,7 @@ public class ExportRepository {
 
             return youmya;
         } catch (SQLException ex) {
-            Logger.getLogger(ExportRepository.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
+            Logger.getLogger(ExportRepository.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
             throw new DatabaseException("حدث خطأ أثناء حساب المخزن", ex);
         }
     }
@@ -152,7 +152,7 @@ public class ExportRepository {
             }
             return exports;
         } catch (SQLException ex) {
-            Logger.getLogger(ExportRepository.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
+            Logger.getLogger(ExportRepository.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
             throw new DatabaseException("حدث خطأ أثناء حساب المخزن", ex);
         }
     }

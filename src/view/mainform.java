@@ -137,17 +137,12 @@ public class Mainform extends javax.swing.JFrame {
                         mainFrame.setLocationRelativeTo(null);
                         mainFrame.setVisible(true);
 
-                    } catch (BusinessException | DatabaseException | InterruptedException | SQLException | ExecutionException e) {
-                        Throwable cause = e.getCause();
-
-                        String error = cause != null
-                                ? cause.getMessage()
-                                : e.getMessage();
+                    } catch (BusinessException | DatabaseException | InterruptedException | SQLException | ExecutionException ex) {
 
                         JOptionPane.showMessageDialog(
                                 null,
                                 "Unable to connect to SQL Server.\n\n"
-                                + error,
+                                + ex.getLocalizedMessage(),
                                 "Database Startup Error",
                                 JOptionPane.ERROR_MESSAGE
                         );

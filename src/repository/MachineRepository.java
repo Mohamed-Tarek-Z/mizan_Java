@@ -29,7 +29,7 @@ public class MachineRepository {
             }
             return machines;
         } catch (SQLException ex) {
-            Logger.getLogger(MachineRepository.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
+            Logger.getLogger(MachineRepository.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
             throw new DatabaseException("حدث خطأ أثناء طلب البيانات", ex);
         }
     }
@@ -41,7 +41,7 @@ public class MachineRepository {
                     + " ,Lot=N'" + machine.getLot() + "'",
                     "MachID=" + machine.getMachId());
         } catch (SQLException ex) {
-            Logger.getLogger(MachineRepository.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
+            Logger.getLogger(MachineRepository.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
             throw new DatabaseException("حدث خطأ أثناء تعديل بيانات الصنف: " + machine.getMachName(), ex);
         }
     }
@@ -52,7 +52,7 @@ public class MachineRepository {
                     "N'" + machine.getMachName() + "',"
                     + machine.getProId() + ",N'" + machine.getLot() + "'");
         } catch (SQLException ex) {
-            Logger.getLogger(MachineRepository.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
+            Logger.getLogger(MachineRepository.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
             throw new DatabaseException("حدث خطأ أثناء إضافة البيانات", ex);
         }
     }
@@ -64,7 +64,7 @@ public class MachineRepository {
             return true;
 
         } catch (SQLException ex) {
-            Logger.getLogger(MachineRepository.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
+            Logger.getLogger(MachineRepository.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
             throw new DatabaseException("حدث خطأ أثناء حذف البيانات", ex);
         }
 

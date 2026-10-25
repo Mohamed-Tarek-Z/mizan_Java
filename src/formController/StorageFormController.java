@@ -13,15 +13,18 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.AbstractAction;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.KeyStroke;
 import javax.swing.table.DefaultTableModel;
 import model.Bag;
 import model.Product;
@@ -145,6 +148,7 @@ public class StorageFormController {
             try {
                 calc_net_weight();
             } catch (BusinessException e) {
+                errorListener.onError(e);
                 showMessageInlable(true);
             }
         }, this::clearStorageForm);
@@ -161,14 +165,6 @@ public class StorageFormController {
             }
         }, null);
 
-        stTable.addKeyListener(new KeyAdapter() {
-            @Override
-            public void keyTyped(KeyEvent evt) {
-                if (evt.getKeyChar() == KeyEvent.VK_DELETE && stTable.hasFocus()) {
-                    stDelete.doClick();
-                }
-            }
-        });
         stTable.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseReleased(MouseEvent evt) {
@@ -176,6 +172,16 @@ public class StorageFormController {
             }
         });
 
+        stTable.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT)
+                .put(KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0), "deleteRow");
+
+        stTable.getActionMap().put("deleteRow", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                stDelete.doClick();
+
+            }
+        });
         stReprint.addActionListener((ActionEvent evt) -> {
             try {
                 if (printPanel == null) {
@@ -437,6 +443,7 @@ public class StorageFormController {
         } catch (DatabaseException ex) {
             errorListener.onError(ex);
         } catch (BusinessException ex) {
+            errorListener.onError(ex);
             showMessageInlable(true);
         }
     }

@@ -187,11 +187,17 @@ public class MainFormController implements ErrorListener {
     }
 
     private void showException(Exception ex) {
-        if (ex instanceof SQLException) {
-            showError(ex.getLocalizedMessage(), "SQL Exception");
-        } else {
-            if (ex != null) {
-                showMessage(ex.getLocalizedMessage(), "Exception");
+        if (ex != null) {
+            if (ex.getMessage() != null) {
+                if (ex instanceof SQLException) {
+                    showError(ex.getMessage(), "SQL Exception");
+                } else {
+                    if (!ex.getMessage().isEmpty()) {
+                        showMessage(ex.getMessage(), "Exception");
+                    } 
+                }
+            } else {
+                showMessage("No Message: " + ex.toString(), "Exception");
             }
         }
     }

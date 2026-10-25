@@ -23,7 +23,7 @@ public class OrderRepository {
             }
             return "0";
         } catch (SQLException ex) {
-            Logger.getLogger(OrderRepository.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
+            Logger.getLogger(OrderRepository.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
             throw new DatabaseException("حدث خطأ أثناء طلب بيانات المخزن", ex);
         }
     }
@@ -32,7 +32,7 @@ public class OrderRepository {
         try {
             dbConnection.update("orders", "ord_wight=" + totalWeight, "ord_id=" + id);
         } catch (SQLException ex) {
-            Logger.getLogger(OrderRepository.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
+            Logger.getLogger(OrderRepository.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
             throw new DatabaseException("حدث خطأ أثناء طلب بيانات المخزن", ex);
         }
     }
@@ -41,7 +41,7 @@ public class OrderRepository {
         try {
             dbConnection.delData("orders", "ord_id=" + ordTid);
         } catch (SQLException ex) {
-            Logger.getLogger(OrderRepository.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
+            Logger.getLogger(OrderRepository.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
             throw new DatabaseException("حدث خطأ أثناء طلب بيانات المخزن", ex);
         }
     }

@@ -28,7 +28,7 @@ public class ClientRepository {
                 return new Client(rs.getInt("cli_id"), rs.getString("cli_name"));
             }
         } catch (SQLException ex) {
-            Logger.getLogger(ClientRepository.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
+            Logger.getLogger(ClientRepository.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
             throw new DatabaseException("حدث خطأ في إضافة عميل", ex);
         }
         return null;
@@ -43,7 +43,7 @@ public class ClientRepository {
             }
             return clients;
         } catch (SQLException ex) {
-            Logger.getLogger(ClientRepository.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
+            Logger.getLogger(ClientRepository.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
             throw new DatabaseException("حدث خطأ أثناءعرض العملاء", ex);
         }
     }
@@ -57,7 +57,7 @@ public class ClientRepository {
             }
             return null;
         } catch (SQLException ex) {
-            Logger.getLogger(ClientRepository.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
+            Logger.getLogger(ClientRepository.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
             throw new DatabaseException("حدث خطأ أثناءعرض العملاء", ex);
         }
     }
@@ -71,7 +71,7 @@ public class ClientRepository {
             }
             return clients;
         } catch (SQLException ex) {
-            Logger.getLogger(ClientRepository.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
+            Logger.getLogger(ClientRepository.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
             throw new DatabaseException("حدث خطأ أثناءعرض العملاء", ex);
         }
     }
@@ -80,7 +80,7 @@ public class ClientRepository {
         try {
             return dbConnection.dataRead("*", "clients", "cli_name=N'" + name + "'").next();
         } catch (SQLException ex) {
-            Logger.getLogger(ClientRepository.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
+            Logger.getLogger(ClientRepository.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
             throw new DatabaseException("حدث خطأ أثناءعرض عميل", ex);
         }
     }

@@ -151,7 +151,7 @@ public class WeightScaleCapture implements KeyEventDispatcher {
                 owner.getDocument().remove(pos - 1, 1);
             }
         } catch (BadLocationException ex) {
-            JOptionPane.showMessageDialog(null, ex.getLocalizedMessage(), "ex", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(null, ex.getMessage(), "ex", JOptionPane.INFORMATION_MESSAGE);
         }
     }
 

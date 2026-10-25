@@ -129,7 +129,6 @@ public class StoragePanel extends javax.swing.JPanel {
             }
         });
         jTable_storage.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        jTable_storage.setFocusable(false);
         jTable_storage.setRowHeight(25);
         jTable_storage.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION);
         jTable_storage.setShowGrid(true);

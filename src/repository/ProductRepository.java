@@ -33,7 +33,7 @@ public class ProductRepository {
 
             return products;
         } catch (SQLException ex) {
-            Logger.getLogger(ProductRepository.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
+            Logger.getLogger(ProductRepository.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
             throw new DatabaseException("حدث خطأ أثناء طلب البيانات", ex);
         }
     }
@@ -49,7 +49,7 @@ public class ProductRepository {
 
             return products;
         } catch (SQLException ex) {
-            Logger.getLogger(ProductRepository.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
+            Logger.getLogger(ProductRepository.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
             throw new DatabaseException("حدث خطأ أثناء طلب البيانات التي تشبه " + subOfName, ex);
         }
     }
@@ -61,7 +61,7 @@ public class ProductRepository {
                     + ArabicDigits.normalizeForParsing(pro.getWeight_of_con()) + "',N'"
                     + pro.getColor() + "'," + (pro.isBox() ? "1" : "0"));
         } catch (SQLException ex) {
-            Logger.getLogger(ProductRepository.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
+            Logger.getLogger(ProductRepository.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
             throw new DatabaseException("حدث خطأ أثناء إضافة البيانات", ex);
         }
     }
@@ -74,7 +74,7 @@ public class ProductRepository {
                     + pro.getColor() + "',IsBox = " + (pro.isBox() ? "1" : "0"),
                     "pro_id=" + pro.getId() + " ");
         } catch (SQLException ex) {
-            Logger.getLogger(ProductRepository.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
+            Logger.getLogger(ProductRepository.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
             throw new DatabaseException("حدث خطأ أثناء تعديل بيانات الصنف: " + pro.getName(), ex);
         }
     }
@@ -87,7 +87,7 @@ public class ProductRepository {
             }
             throw new BusinessException("رجاء مسح الشكائر أولا");
         } catch (SQLException ex) {
-            Logger.getLogger(ProductRepository.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
+            Logger.getLogger(ProductRepository.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
             throw new DatabaseException("حدث خطأ أثناء حذف البيانات", ex);
         }
 
@@ -101,7 +101,7 @@ public class ProductRepository {
             }
             return null;
         } catch (SQLException ex) {
-            Logger.getLogger(ProductRepository.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
+            Logger.getLogger(ProductRepository.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
             throw new DatabaseException("حدث خطأ أثناء طلب بيانات صنف بأسم : " + productName, ex);
         }
     }
@@ -114,7 +114,7 @@ public class ProductRepository {
             }
             throw new BusinessException("لايوجد صنف بمسلسل : " + id);
         } catch (SQLException ex) {
-            Logger.getLogger(ProductRepository.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
+            Logger.getLogger(ProductRepository.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
             throw new DatabaseException("حدث خطأ أثناء طلب بيانات صنف بأسم : " + id, ex);
         }
     }

@@ -147,7 +147,7 @@ public class ExcelManager {
             return true;
 
         } catch (IOException ex) {
-            Logger.getLogger(ExcelManager.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
+            Logger.getLogger(ExcelManager.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
             throw new BusinessException("ملف غير موجود");
         }
     }
@@ -236,7 +236,7 @@ public class ExcelManager {
 
             return true;
         } catch (IOException ex) {
-            Logger.getLogger(ExcelManager.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
+            Logger.getLogger(ExcelManager.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
             throw new BusinessException("ملف غير موجود");
         }
     }
@@ -342,7 +342,7 @@ public class ExcelManager {
             create_excel_in_path(ClientName, workbook, excelBackupPath);
             return true;
         } catch (IOException ex) {
-            Logger.getLogger(ExcelManager.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
+            Logger.getLogger(ExcelManager.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
             throw new BusinessException("ملف غير موجود");
         }
 
@@ -481,7 +481,7 @@ public class ExcelManager {
             }
             return true;
         } catch (IOException ex) {
-            Logger.getLogger(ExcelManager.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
+            Logger.getLogger(ExcelManager.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
             throw new BusinessException("ملف غير موجود");
         }
 
@@ -569,7 +569,7 @@ public class ExcelManager {
             workbook.close();
             return true;
         } catch (IOException ex) {
-            Logger.getLogger(ExcelManager.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
+            Logger.getLogger(ExcelManager.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
             throw new BusinessException("ملف غير موجود");
         }
     }
@@ -649,7 +649,7 @@ public class ExcelManager {
             workbook.close();
             return true;
         } catch (IOException ex) {
-            Logger.getLogger(ExcelManager.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
+            Logger.getLogger(ExcelManager.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
             throw new BusinessException("ملف غير موجود");
         }
     }
@@ -698,7 +698,7 @@ public class ExcelManager {
             workbook.close();
             return true;
         } catch (IOException ex) {
-            Logger.getLogger(ExcelManager.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
+            Logger.getLogger(ExcelManager.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
             throw new BusinessException("ملف غير موجود");
         }
     }
@@ -794,7 +794,7 @@ public class ExcelManager {
                 }
             }
         } catch (IOException ex) {
-            Logger.getLogger(ExcelManager.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
+            Logger.getLogger(ExcelManager.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
             throw new BusinessException("ملف غير موجود");
         }
     }
@@ -826,7 +826,7 @@ public class ExcelManager {
                 }
             }
         } catch (IOException ex) {
-            Logger.getLogger(ExcelManager.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
+            Logger.getLogger(ExcelManager.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
             throw new BusinessException("ملف غير موجود");
         }
     }
