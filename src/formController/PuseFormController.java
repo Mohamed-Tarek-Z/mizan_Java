@@ -6,14 +6,14 @@ import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import utils.Helper;
 
-public class PauseFormController {
+public class PuseFormController {
 
     private final JButton formOpenerBtn;
     private final JPanel pausePanel;
     private final JPanel leftPanel;
     private final JTextArea EmptyTextArea;
 
-    public PauseFormController(JButton formOpenerBtn, JPanel pausePanel, JPanel leftPanel, JTextArea EmptyTextArea) {
+    public PuseFormController(JButton formOpenerBtn, JPanel pausePanel, JPanel leftPanel, JTextArea EmptyTextArea) {
         this.formOpenerBtn = formOpenerBtn;
         this.pausePanel = pausePanel;
         this.leftPanel = leftPanel;

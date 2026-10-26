@@ -5,7 +5,6 @@ import controller.ProductController;
 import docFilters.StringDocumentFilter;
 import exceptions.BusinessException;
 import exceptions.DatabaseException;
-import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Date;
@@ -20,7 +19,11 @@ import javax.swing.table.TableModel;
 import model.Machine;
 import model.Product;
 import exceptions.ErrorListener;
-import java.awt.event.ActionListener;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
+import javax.swing.JComponent;
+import javax.swing.JPanel;
+import javax.swing.KeyStroke;
 
 import utils.Helper;
 
@@ -35,12 +38,13 @@ public final class MachineFormController {
     private final JButton delMachBtn;
     private final MachineController machController;
     private final ProductController prosController;
+    private final JPanel machPanel;
     private final ErrorListener errorListener;
     private final JTabbedPane settingsTapps;
     private final StorageFormController sfc;
 
     public MachineFormController(ErrorListener errorListener, JTabbedPane settingsTapps,
-            JTextField machName, JTextField machLot, JComboBox<Product> machPros,
+            JPanel machPanel, JTextField machName, JTextField machLot, JComboBox<Product> machPros,
             JButton addMachBtn, JButton editMachBtn, JButton delMachBtn,
             JTable machTable, MachineController machController, ProductController prosController, StorageFormController sfc) {
         this.machName = machName;
@@ -54,6 +58,7 @@ public final class MachineFormController {
         this.prosController = prosController;
         this.settingsTapps = settingsTapps;
         this.sfc = sfc;
+        this.machPanel = machPanel;
         this.errorListener = errorListener;
     }
 
@@ -62,6 +67,9 @@ public final class MachineFormController {
         //TO DO make global on panrl Shift Del
         Helper.applyDocFilter(machName, new StringDocumentFilter(15));
         Helper.applyDocFilter(machLot, new StringDocumentFilter(15));
+
+        Helper.bindKey(machPanel, JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT,
+                KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, InputEvent.SHIFT_DOWN_MASK), this::clearForm);
 
         machTable.addMouseListener(new MouseAdapter() {
             @Override

@@ -18,6 +18,10 @@ import javax.swing.table.DefaultTableModel;
 import model.Product;
 import utils.ArabicDigits;
 import exceptions.ErrorListener;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
+import javax.swing.JComponent;
+import javax.swing.KeyStroke;
 import utils.Helper;
 
 public class ProductFormController {
@@ -60,6 +64,9 @@ public class ProductFormController {
     public void init() {
         Helper.applyDocFilter(proName, new StringDocumentFilter(35));
         Helper.applyDocFilter(proConeWeight, new IntDocumentFilter(4));
+
+        Helper.bindKey(proPanel, JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT,
+                KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, InputEvent.SHIFT_DOWN_MASK), this::clearForm);
 
         this.proTable.addMouseListener(new MouseAdapter() {
             @Override

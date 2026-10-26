@@ -13,7 +13,7 @@ public class MultiEdit extends javax.swing.JFrame {
 
     protected final MultiEditFormController formController;
 
-    public MultiEdit(Mainform mainform, List<Bag> bags, Product product, String palletNumber, String lot, boolean marked, ProductController productController, StorageController storageController,
+    public MultiEdit(Main mainform, List<Bag> bags, Product product, String palletNumber, String lot, boolean marked, ProductController productController, StorageController storageController,
             StorageFormController storageFormController, ErrorListener errorListener) {
         initComponents();
         formController = new MultiEditFormController(mainform, bags, jComboBox_ME_type, jTextField_ME_PaltNum, jTextField_ME_lot,

@@ -18,7 +18,7 @@ import model.Ticket;
 import utils.ArabicDigits;
 import exceptions.ErrorListener;
 import utils.Helper;
-import view.Mainform;
+import view.Main;
 import view.SingleEdit;
 
 public class SingleEditFormController {
@@ -51,9 +51,9 @@ public class SingleEditFormController {
     private final ProductController productController;
     private final SingleEdit se;
     private final ErrorListener errorListener;
-    private final Mainform mainform;
+    private final Main mainform;
 
-    public SingleEditFormController(SingleEdit se, Mainform mainform, Bag bag, Product product, JButton seEdit, JButton sePrint, JCheckBox seMark, JCheckBox seOMark,
+    public SingleEditFormController(SingleEdit se, Main mainform, Bag bag, Product product, JButton seEdit, JButton sePrint, JCheckBox seMark, JCheckBox seOMark,
             JCheckBox seDoPrint, JComboBox<Product> seOPros, JComboBox<Product> sePros, JTextField seColor, JTextField seConNum,
             JTextField seOConNum, JTextField seOPaltNum, JTextField seOTotWight, JTextField seOWight, JTextField seOlot, JTextField sePaltNum,
             JTextField seTotWight, JTextField seWight, JTextField seLot, StorageController storageController, ProductController productController,

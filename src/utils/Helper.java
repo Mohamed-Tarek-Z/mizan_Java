@@ -4,7 +4,6 @@ import docFilters.IntDocumentFilter;
 import exceptions.*;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
-import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.nio.file.Files;
@@ -87,9 +86,7 @@ public class Helper {
                 onEnter.run();
             });
         }
-
         clearOnDelet(field);
-
     }
 
     /**
@@ -97,7 +94,14 @@ public class Helper {
      * @param documentFilter
      */
     public static void applyDocFilter(JTextField field, DocumentFilter documentFilter) {
-        applyDocFilter(field, documentFilter, null);
+        applyDocFilter(field, documentFilter, () -> {
+        });
+    }
+
+    public static void applyDocFilter(JTextField field, DocumentFilter documentFilter, JComponent next) {
+        applyDocFilter(field, documentFilter, () -> {
+            goAndSelect(next);
+        });
     }
 
     private static void clearOnDelet(JTextField field) {
@@ -112,9 +116,9 @@ public class Helper {
         });
     }
 
-    public static void bindKey(JTextField field, KeyStroke keyStroke, Runnable action) {
+    public static void bindKey(JComponent field, int when, KeyStroke keyStroke, Runnable action) {
         String actionKey = field.getName() + keyStroke;
-        field.getInputMap(JComponent.WHEN_FOCUSED).put(keyStroke, actionKey);
+        field.getInputMap(when).put(keyStroke, actionKey);
         field.getActionMap().put(actionKey, new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -124,12 +128,9 @@ public class Helper {
     }
 
     public static void goAndSelect(JComponent next) {
-        if (((JTextField) next).isEnabled()) {
-            next.requestFocusInWindow();
-            ((JTextField) next).selectAll();
-        } else {
-            next.transferFocus();
-        }
+        next.getName();
+        next.requestFocusInWindow();
+        ((JTextField) next).selectAll();
     }
 
     public static void changeMaxLength(JTextField field, int newMaxLength) {

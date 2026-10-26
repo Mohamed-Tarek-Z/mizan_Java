@@ -16,7 +16,7 @@ import model.Bag;
 import model.Product;
 import exceptions.ErrorListener;
 import utils.Helper;
-import view.Mainform;
+import view.Main;
 import view.MultiEdit;
 
 public class MultiEditFormController {
@@ -39,9 +39,9 @@ public class MultiEditFormController {
     private final boolean Omark;
 
     private final List<Bag> bags;
-    private final Mainform mainform;
+    private final Main mainform;
 
-    public MultiEditFormController(Mainform mainform, List<Bag> bags, JComboBox<Product> mePros, JTextField mePalletNumber, JTextField meLot, JCheckBox meMark, JButton meEdit, MultiEdit me, Product oProduct, StorageFormController storageFormController, ProductController productController, StorageController storageController, ErrorListener errorListener, String OLot, String OPallet, boolean Omark) {
+    public MultiEditFormController(Main mainform, List<Bag> bags, JComboBox<Product> mePros, JTextField mePalletNumber, JTextField meLot, JCheckBox meMark, JButton meEdit, MultiEdit me, Product oProduct, StorageFormController storageFormController, ProductController productController, StorageController storageController, ErrorListener errorListener, String OLot, String OPallet, boolean Omark) {
         this.mainform = mainform;
         this.bags = bags;
         this.mePros = mePros;

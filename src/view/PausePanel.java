@@ -1,16 +1,16 @@
 package view;
 
-import formController.PauseFormController;
+import formController.PuseFormController;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
 public class PausePanel extends javax.swing.JPanel {
 
-    public final PauseFormController formController;
+    public final PuseFormController formController;
 
     public PausePanel(JButton panelOpener, JPanel leftPanel) {
         initComponents();
-        formController = new PauseFormController(panelOpener, this, leftPanel, jTextArea_emp);
+        formController = new PuseFormController(panelOpener, this, leftPanel, jTextArea_emp);
         formController.init();
     }
 

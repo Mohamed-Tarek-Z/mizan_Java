@@ -2,7 +2,6 @@ package view;
 
 import controller.ProductController;
 import controller.StorageController;
-import formController.SettingsFormController;
 import formController.StorageFormController;
 import java.awt.Color;
 import java.awt.Component;
@@ -17,7 +16,7 @@ public class StoragePanel extends javax.swing.JPanel {
 
     public final StorageFormController formController;
 
-    public StoragePanel(ErrorListener errorListener, Mainform mainform, JPanel leftPanel, PrintPanel printPanel, JButton formOpenerBtn,
+    public StoragePanel(ErrorListener errorListener, Main mainform, JPanel leftPanel, PrintPanel printPanel, JButton formOpenerBtn,
             StorageController storageController, ProductController productController, PrinterManager printerManager) {
         initComponents();
         formController = new StorageFormController(errorListener, mainform, leftPanel, printPanel, this, formOpenerBtn, jTextField_storage_Color,
@@ -177,16 +176,19 @@ public class StoragePanel extends javax.swing.JPanel {
         jTextField_storage_TotalWeight.setFont(new java.awt.Font("sansserif", 0, 24)); // NOI18N
         jTextField_storage_TotalWeight.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         jTextField_storage_TotalWeight.setMaximumSize(new java.awt.Dimension(7, 38));
+        jTextField_storage_TotalWeight.setName("totW"); // NOI18N
         add(jTextField_storage_TotalWeight, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 340, 120, -1));
 
         jTextField_storage_EmptyBagWeight.setFont(new java.awt.Font("sansserif", 0, 24)); // NOI18N
         jTextField_storage_EmptyBagWeight.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         jTextField_storage_EmptyBagWeight.setMaximumSize(new java.awt.Dimension(7, 38));
+        jTextField_storage_EmptyBagWeight.setName("bag"); // NOI18N
         add(jTextField_storage_EmptyBagWeight, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 290, 120, -1));
 
         jTextField_storage_coneNumber.setFont(new java.awt.Font("sansserif", 0, 24)); // NOI18N
         jTextField_storage_coneNumber.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         jTextField_storage_coneNumber.setMaximumSize(new java.awt.Dimension(7, 38));
+        jTextField_storage_coneNumber.setName("cone"); // NOI18N
         add(jTextField_storage_coneNumber, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 240, 120, -1));
 
         jLabel7.setFont(new java.awt.Font("sansserif", 0, 18)); // NOI18N
@@ -249,6 +251,7 @@ public class StoragePanel extends javax.swing.JPanel {
         jTextField_storage_NetWeight.setFont(new java.awt.Font("sansserif", 0, 24)); // NOI18N
         jTextField_storage_NetWeight.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         jTextField_storage_NetWeight.setMaximumSize(new java.awt.Dimension(7, 38));
+        jTextField_storage_NetWeight.setName("netw"); // NOI18N
         add(jTextField_storage_NetWeight, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 390, 120, -1));
 
         jLabel2.setFont(new java.awt.Font("sansserif", 0, 18)); // NOI18N

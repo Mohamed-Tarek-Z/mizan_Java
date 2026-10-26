@@ -19,7 +19,7 @@ public class SettingsPanel extends javax.swing.JPanel {
             MachineController machController, ProductController prosController, PrinterManager printerManager, String v, StorageFormController sfc) {
         Version = v;
         initComponents();
-        formController = new SettingsFormController(errorListener, leftPanel, this, printPanel, panelOpener, jTabbedPane_settings,
+        formController = new SettingsFormController(errorListener, leftPanel, this, jPanel_Machines, printPanel, panelOpener, jTabbedPane_settings,
                 jTextField_mach_MName, jTextField_mach_lot, jComboBox_mach_pros, jButton_mach_addMach,
                 jButton_mach_editMach, jButton_mach_Delete, jTable_machines,
                 jButton_set_printValueToCenter, jButton_set_changePos, jButton_set_TicketPrinter, jButton_Reset_TicketCount10x10,

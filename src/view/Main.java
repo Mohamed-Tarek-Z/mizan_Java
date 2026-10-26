@@ -16,12 +16,12 @@ import javax.swing.SwingWorker;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
-public class Mainform extends javax.swing.JFrame {
+public class Main extends javax.swing.JFrame {
 
     private final String Version = "V 4.0.0";
     protected final MainFormController formController;
 
-    public Mainform(Statement st) throws DatabaseException, BusinessException, SQLException {
+    public Main(Statement st) throws DatabaseException, BusinessException, SQLException {
         initComponents();
         formController = new MainFormController(this, Version, jSplitPane1, left_panel, rootPane, st);
     }
@@ -134,7 +134,7 @@ public class Mainform extends javax.swing.JFrame {
 
                         UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
 
-                        Mainform mainFrame = new Mainform(st);
+                        Main mainFrame = new Main(st);
                         mainFrame.setLocationRelativeTo(null);
                         mainFrame.setVisible(true);
 
@@ -148,7 +148,7 @@ public class Mainform extends javax.swing.JFrame {
                                 JOptionPane.ERROR_MESSAGE
                         );
                     } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) {
-                        System.getLogger(Mainform.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+                        System.getLogger(Main.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
                     }
                 }
             };

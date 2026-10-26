@@ -31,7 +31,7 @@ import utils.ExcelManager;
 import utils.PrinterManager;
 import utils.Helper;
 import view.CreatePermitPanel;
-import view.Mainform;
+import view.Main;
 import view.NavPanel;
 import view.OrderHistoryPanel;
 import view.PausePanel;
@@ -63,9 +63,9 @@ public class MainFormController implements ErrorListener {
     private final SettingsPanel settingsPanel;
     private final PrintPanel printPanel;
 
-    private final Mainform mainform;
+    private final Main mainform;
 
-    public MainFormController(Mainform mainform, String Version, JSplitPane splitPane, JPanel leftPanel, JRootPane rootPane, Statement st) throws SQLException, BusinessException {
+    public MainFormController(Main mainform, String Version, JSplitPane splitPane, JPanel leftPanel, JRootPane rootPane, Statement st) throws SQLException, BusinessException {
 
         this.mainform = mainform;
         Config.load();

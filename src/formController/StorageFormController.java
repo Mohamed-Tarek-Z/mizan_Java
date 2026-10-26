@@ -2,18 +2,19 @@ package formController;
 
 import controller.ProductController;
 import controller.StorageController;
+import docFilters.DoubleDocumentFilter;
+import docFilters.IntDocumentFilter;
+import docFilters.StringDocumentFilter;
 import exceptions.BusinessException;
 import exceptions.DatabaseException;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
-import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
-import javax.swing.AbstractAction;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -31,10 +32,12 @@ import model.Product;
 import model.Ticket;
 import utils.ArabicDigits;
 import exceptions.ErrorListener;
+import java.awt.event.InputEvent;
+import utils.Config;
 import utils.PrinterManager;
 import utils.WeightScaleCapture;
 import utils.Helper;
-import view.Mainform;
+import view.Main;
 import view.MultiEdit;
 import view.PrintPanel;
 import view.SingleEdit;
@@ -83,9 +86,9 @@ public class StorageFormController {
     private final JPanel leftPanel;
     private final PrintPanel printPanel;
     private final ErrorListener errorListener;
-    private final Mainform mainform;
+    private final Main mainform;
 
-    public StorageFormController(ErrorListener errorListener, Mainform mainform, JPanel leftPanel, PrintPanel printPanel, JPanel stPanel, JButton formOpenerBtn,
+    public StorageFormController(ErrorListener errorListener, Main mainform, JPanel leftPanel, PrintPanel printPanel, JPanel stPanel, JButton formOpenerBtn,
             JTextField stConeColor, JTextField stPalletWeight, JTextField stConeWeight, JTextField stNetWeight, JTextField stTotalWeight,
             JTextField stEmptyBag, JTextField stConeCount, JTextField stPalletNumber, JTextField stLot, JTextField stFilterPros,
             JTextField stError, JLabel stEmptyBagLabel, JCheckBox stPrintTicket, JCheckBox stIgnoreLimit, JCheckBox stIsBox, JCheckBox stMarkBag,
@@ -131,38 +134,42 @@ public class StorageFormController {
 
     public void init() {
 
-        Helper.applyDocFilter(stLot, 15, false, stPalletNumber, this::clearStorageForm);
-        Helper.applyDocFilter(stConeCount, 3, true, stEmptyBag, this::clearStorageForm);
-        Helper.applyDocFilter(stEmptyBag, 2, true, true, stTotalWeight, this::clearStorageForm);
-        Helper.applyDocFilter(stPalletNumber, 3, true, () -> {
-            TextFieldRules.goAndSelect(stConeCount);
+        Helper.applyDocFilter(stLot, new StringDocumentFilter(15), stPalletNumber);
+        Helper.applyDocFilter(stConeCount, new IntDocumentFilter(3), () -> {
+            Helper.goAndSelect(stDisableEmptyBagWeight.isSelected() ? stTotalWeight : stEmptyBag);
+        });
+        Helper.applyDocFilter(stEmptyBag, new IntDocumentFilter(2, true), stTotalWeight);
+        Helper.applyDocFilter(stPalletNumber, new IntDocumentFilter(3), () -> {
+            Helper.goAndSelect(stDisableNumberOfCone.isSelected() ? (stDisableEmptyBagWeight.isSelected() ? stTotalWeight : stEmptyBag) : stConeCount);
             try {
                 calc_pallet_weight();
             } catch (DatabaseException ex) {
                 errorListener.onError(ex);
             }
-        }, null);
-        Helper.applyDocFilter(stTotalWeight, 8, true, true, () -> {
-            stNetWeight.requestFocusInWindow();
+        });
+        Helper.applyDocFilter(stTotalWeight, new DoubleDocumentFilter(8, true), () -> {
+            Helper.goAndSelect(stNetWeight);
             try {
                 calc_net_weight();
             } catch (BusinessException e) {
                 errorListener.onError(e);
                 showMessageInlable(true);
             }
-        }, this::clearStorageForm);
-        Helper.applyDocFilter(stNetWeight, 8, true, true, () -> {
+        });
+        Helper.applyDocFilter(stNetWeight, new DoubleDocumentFilter(8), () -> {
             stAdd.doClick();
             stConeCount.requestFocusInWindow();
-        }, this::clearStorageForm);
-        Helper.applyDocFilter(stConeWeight, 4, true, stConeCount, null);
-        Helper.applyDocFilter(stFilterPros, 20, false, () -> {
+        });
+        Helper.applyDocFilter(stConeWeight, new IntDocumentFilter(4), () -> {
+            Helper.goAndSelect(stDisableNumberOfCone.isSelected() ? (stDisableEmptyBagWeight.isSelected() ? stTotalWeight : stEmptyBag) : stConeCount);
+        });
+        Helper.applyDocFilter(stFilterPros, new StringDocumentFilter(20), () -> {
             try {
                 Helper.fillComboBoxWihProducts(stPros, productController.getAvailableProductsLike(stFilterPros.getText()));
             } catch (DatabaseException ex) {
                 errorListener.onError(ex);
             }
-        }, null);
+        });
 
         stTable.addMouseListener(new MouseAdapter() {
             @Override
@@ -171,17 +178,9 @@ public class StorageFormController {
             }
         });
 
-        stTable.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT)
-                .put(KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0), "deleteRow");
+        Helper.bindKey(stTable, JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT, KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0), stDelete::doClick);
 
-        stTable.getActionMap().put("deleteRow", new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                stDelete.doClick();
-
-            }
-        });
-        stReprint.addActionListener((ActionEvent evt) -> {
+        stReprint.addActionListener(e -> {
             try {
                 if (printPanel == null) {
                     throw new BusinessException("print panel is null");
@@ -221,16 +220,23 @@ public class StorageFormController {
                 model.setRowCount(0);
             }
         });
-        stDisableEmptyBagWeight.addActionListener((ActionEvent evt) -> {
+        stDisableEmptyBagWeight.addActionListener(e -> {
             stEmptyBag.setEnabled(!stDisableEmptyBagWeight.isSelected());
         });
-        stDisableNumberOfCone.addActionListener((ActionEvent evt) -> {
+        stDisableNumberOfCone.addActionListener(e -> {
             stConeCount.setEnabled(!stDisableNumberOfCone.isSelected());
         });
-        stDonotReadConeWeight.addActionListener((ActionEvent evt) -> {
+        stDonotReadConeWeight.addActionListener(e -> {
             stConeWeight.setEnabled(!stDonotReadConeWeight.isSelected());
         });
+        stPrintTicket.addActionListener(e -> {
+            Config.set("isPrintTicket", stPrintTicket.isSelected() ? "True": "False");
+        });
 
+        Helper.bindKey(stPanel, JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT,
+                KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, InputEvent.SHIFT_DOWN_MASK), this::clearStorageForm);
+
+        stPrintTicket.setSelected(Config.getBoolean("isPrintTicket", true));
         new WeightScaleCapture(stTotalWeight).install();
 
     }
@@ -274,7 +280,7 @@ public class StorageFormController {
             }
             stConeColor.setText(pro.getColor());
             stIsBox.setSelected(pro.isBox());
-            TextFieldRules.changeMaxLength(stEmptyBag, pro.isBox() ? 3 : 2);
+            Helper.changeMaxLength(stEmptyBag, pro.isBox() ? 3 : 2);
             stEmptyBagLabel.setText(!pro.isBox() ? "فارغ الشيكاره" : "فارغ الصندوق");
             stEmptyBag.setBackground(pro.isBox() ? Color.pink : Color.WHITE);
         }
@@ -389,7 +395,7 @@ public class StorageFormController {
         }
         stTotalWeight.setText("");
         stNetWeight.setText("");
-        stConeCount.requestFocusInWindow();
+        Helper.goAndSelect(stDisableNumberOfCone.isSelected() ? (stDisableEmptyBagWeight.isSelected() ? stTotalWeight : stEmptyBag) : stConeCount);
         if (!stDisableNumberOfCone.isSelected()) {
             stConeCount.selectAll();
         }

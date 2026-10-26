@@ -32,6 +32,9 @@ import model.Product;
 import utils.ArabicDigits;
 import utils.Config;
 import exceptions.ErrorListener;
+import java.awt.event.InputEvent;
+import javax.swing.JComponent;
+import javax.swing.KeyStroke;
 import utils.ExcelManager;
 import utils.Helper;
 
@@ -124,6 +127,9 @@ public class CreatePermitFormController {
                 errorListener.onError(ex);
             }
         });
+        
+        Helper.bindKey(permitPanel, JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT,
+                KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, InputEvent.SHIFT_DOWN_MASK), this::reset);
 
         formOpenerBtn.addActionListener(e -> {
             openerClicked();

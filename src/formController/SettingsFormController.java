@@ -4,7 +4,6 @@ import controller.MachineController;
 import controller.ProductController;
 import exceptions.BusinessException;
 import exceptions.DatabaseException;
-import java.awt.Font;
 import java.awt.event.ActionEvent;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -14,7 +13,6 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import model.Product;
-import model.Ticket;
 import utils.PrinterManager;
 import utils.Config;
 import exceptions.ErrorListener;
@@ -42,7 +40,7 @@ public class SettingsFormController {
 
     private final PrinterManager printerManager;
 
-    public SettingsFormController(ErrorListener errorListener, JPanel leftPanel, JPanel settingsPanel, PrintPanel printPanel, JButton formOpenerBtn, JTabbedPane settingsTapps, JTextField machName, JTextField machLot,
+    public SettingsFormController(ErrorListener errorListener, JPanel leftPanel, JPanel settingsPanel, JPanel machPanel, PrintPanel printPanel, JButton formOpenerBtn, JTabbedPane settingsTapps, JTextField machName, JTextField machLot,
             JComboBox<Product> machPros, JButton addMachBtn, JButton editMachBtn, JButton delMachBtn,
             JTable machTable, JButton settingsCenterPrintBtn, JButton settingsChangePrintpostionBtn,
             JButton settingsSelectPrinterBtn, JButton settingsTicketCounterResetBtn, JButton settingsReloadSettingsBtn,
@@ -67,7 +65,7 @@ public class SettingsFormController {
         settingsTapps.addTab("Print", printPanel);
 
         try {
-            new MachineFormController(errorListener, settingsTapps, machName, machLot, machPros,
+            new MachineFormController(errorListener, settingsTapps, machPanel, machName, machLot, machPros,
                     addMachBtn, editMachBtn, delMachBtn, machTable, machController,
                     prosController, sfc).init();
         } catch (DatabaseException ex) {
