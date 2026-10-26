@@ -1,25 +1,16 @@
-package utils;
+package docFilters;
 
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DocumentFilter;
+import utils.ArabicDigits;
 
-public class NumericDocumentFilter extends DocumentFilter {
+public class StringDocumentFilter extends DocumentFilter {
 
     private int maxLength;
-    private final boolean isDigitsOnly;
-    private final boolean isEven;
 
-    public NumericDocumentFilter(int maxLength, boolean isDigitsOnly) {
+    public StringDocumentFilter(int maxLength) {
         this.maxLength = maxLength;
-        this.isDigitsOnly = isDigitsOnly;
-        this.isEven = false;
-    }
-
-    public NumericDocumentFilter(int maxLength, boolean isDigitsOnly, boolean isEven) {
-        this.maxLength = maxLength;
-        this.isDigitsOnly = isDigitsOnly;
-        this.isEven = isEven;
     }
 
     @Override
@@ -50,10 +41,6 @@ public class NumericDocumentFilter extends DocumentFilter {
             }
             outputText = outputText.substring(0, Math.min(room, outputText.length()));
         }
-        // we may add if here to allow even only 
-        if (isEven && currentLength == maxLength - 1 && (text.length() == 1 && ("1".equals(text) || "3".equals(text) || "5".equals(text) || "7".equals(text) || "9".equals(text)))) {
-            return;
-        }
 
         outputText = ArabicDigits.toArabicDigits(outputText);
 
@@ -64,16 +51,12 @@ public class NumericDocumentFilter extends DocumentFilter {
         StringBuilder sb = new StringBuilder(text.length());
         for (int i = 0; i < text.length(); i++) {
             char c = text.charAt(i);
-            if (Character.isDigit(c)) {
-                sb.append(c);
-                continue;
-            } else if (c == ArabicDigits.ARABIC_DECIMAL_SEPARATOR || c == '.') {
+
+            if (c == ArabicDigits.ARABIC_DECIMAL_SEPARATOR || c == '.') {
                 sb.append(ArabicDigits.ARABIC_DECIMAL_SEPARATOR);
                 continue;
             }
-            if (!isDigitsOnly) {
-                sb.append(c);
-            }
+            sb.append(c);
         }
 
         return sb.toString();

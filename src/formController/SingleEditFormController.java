@@ -2,6 +2,9 @@ package formController;
 
 import controller.ProductController;
 import controller.StorageController;
+import docFilters.DoubleDocumentFilter;
+import docFilters.IntDocumentFilter;
+import docFilters.StringDocumentFilter;
 import exceptions.BusinessException;
 import exceptions.DatabaseException;
 import java.awt.event.ActionEvent;
@@ -13,9 +16,8 @@ import model.Bag;
 import model.Product;
 import model.Ticket;
 import utils.ArabicDigits;
-import utils.ErrorListener;
-import utils.TextFieldRules;
-import utils.utils;
+import exceptions.ErrorListener;
+import utils.Helper;
 import view.Mainform;
 import view.SingleEdit;
 
@@ -93,8 +95,8 @@ public class SingleEditFormController {
             seMark.setSelected(bag.isUsed());
             seOTotWight.setText(ArabicDigits.toArabicDigits(bag.getTot_wight()));
             seTotWight.setText(ArabicDigits.toArabicDigits(bag.getTot_wight()));
-            utils.fillComboBoxWihProducts(seOPros, productController.getAvailableProductsLike(""));
-            utils.fillComboBoxWihProducts(sePros, productController.getAvailableProductsLike(""));
+            Helper.fillComboBoxWihProducts(seOPros, productController.getAvailableProductsLike(""));
+            Helper.fillComboBoxWihProducts(sePros, productController.getAvailableProductsLike(""));
             seOPros.setSelectedItem(product);
             sePros.setSelectedItem(product);
             seOLot.setText(ArabicDigits.toArabicDigits(bag.getLot()));
@@ -107,16 +109,11 @@ public class SingleEditFormController {
             seWight.setText(ArabicDigits.toArabicDigits(bag.getWeight()));
             seColor.setText(product.getColor());
 
-            TextFieldRules.apply(seWight, 8, true, () -> {
-            }, null);
-            TextFieldRules.apply(sePaltNum, 3, true, () -> {
-            }, null);
-            TextFieldRules.apply(seConNum, 3, true, () -> {
-            }, null);
-            TextFieldRules.apply(seLot, 15, false, () -> {
-            }, null);
-            TextFieldRules.apply(seTotWight, 8, true, () -> {
-            }, null);
+            Helper.applyDocFilter(seWight, new DoubleDocumentFilter(8));
+            Helper.applyDocFilter(sePaltNum, new IntDocumentFilter(3));
+            Helper.applyDocFilter(seConNum, new IntDocumentFilter(3));
+            Helper.applyDocFilter(seLot, new StringDocumentFilter(15));
+            Helper.applyDocFilter(seTotWight, new DoubleDocumentFilter(8, true));
 
             seEdit.addActionListener((ActionEvent evt) -> {
                 editPressed();

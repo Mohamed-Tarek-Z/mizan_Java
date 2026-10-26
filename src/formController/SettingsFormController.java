@@ -17,8 +17,8 @@ import model.Product;
 import model.Ticket;
 import utils.PrinterManager;
 import utils.Config;
-import utils.ErrorListener;
-import utils.utils;
+import exceptions.ErrorListener;
+import utils.Helper;
 import view.PrintPanel;
 
 public class SettingsFormController {
@@ -120,7 +120,7 @@ public class SettingsFormController {
     }
 
     private void openerClicked() {
-        utils.openPanel(leftPanel, settingsPanel);
+        Helper.openPanel(leftPanel, settingsPanel);
         settingsTicketCounter.setText(Config.get("ticketCount"));
         settingsIP.setText(Config.get("ip"));
         Config.save();

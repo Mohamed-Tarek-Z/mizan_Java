@@ -3,6 +3,8 @@ package formController;
 import com.toedter.calendar.JDateChooser;
 import controller.ExportController;
 import controller.ProductController;
+import docFilters.DoubleDocumentFilter;
+import docFilters.StringDocumentFilter;
 import exceptions.BusinessException;
 import exceptions.DatabaseException;
 import java.awt.event.ActionEvent;
@@ -16,9 +18,8 @@ import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 import model.Product;
 import utils.ArabicDigits;
-import utils.ErrorListener;
-import utils.TextFieldRules;
-import utils.utils;
+import exceptions.ErrorListener;
+import utils.Helper;
 import utils.ExcelManager;
 
 public class StatisticsFormController {
@@ -62,16 +63,15 @@ public class StatisticsFormController {
     }
 
     public void init() {
-        TextFieldRules.apply(statProSearch, 20, false, () -> {
+        Helper.applyDocFilter(statProSearch, new StringDocumentFilter(20), () -> {
             try {
-                utils.fillComboBoxWihProducts(statPros, proController.getAvailableProductsLike(statProSearch.getText()));
+                Helper.fillComboBoxWihProducts(statPros, proController.getAvailableProductsLike(statProSearch.getText()));
             } catch (DatabaseException ex) {
                 errorListener.onError(ex);
             }
-        }, null);
+        });
 
-        TextFieldRules.apply(statTotalProduced, 10, true, () -> {
-        }, null);
+        Helper.applyDocFilter(statTotalProduced, new DoubleDocumentFilter(10));
 
         this.formOpenerBtn.addActionListener((ActionEvent evt) -> {
             openerClicked();
@@ -109,7 +109,7 @@ public class StatisticsFormController {
     }
 
     private void openerClicked() {
-        utils.openPanel(leftPanel, statPanel);
+        Helper.openPanel(leftPanel, statPanel);
         reset();
     }
 
@@ -135,7 +135,7 @@ public class StatisticsFormController {
             statTable.setAutoCreateRowSorter(true);
             statFromDate.setCalendar(null);
             statToDate.setCalendar(null);
-            utils.fillComboBoxWihProducts(statPros, proController.getAvailableProductsLike(""));
+            Helper.fillComboBoxWihProducts(statPros, proController.getAvailableProductsLike(""));
             statTotalProduced.setText("");
         } catch (DatabaseException ex) {
             errorListener.onError(ex);

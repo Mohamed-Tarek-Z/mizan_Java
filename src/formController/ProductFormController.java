@@ -1,6 +1,8 @@
 package formController;
 
 import controller.ProductController;
+import docFilters.IntDocumentFilter;
+import docFilters.StringDocumentFilter;
 import exceptions.BusinessException;
 import exceptions.DatabaseException;
 import java.awt.event.ActionEvent;
@@ -15,9 +17,8 @@ import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 import model.Product;
 import utils.ArabicDigits;
-import utils.ErrorListener;
-import utils.TextFieldRules;
-import utils.utils;
+import exceptions.ErrorListener;
+import utils.Helper;
 
 public class ProductFormController {
 
@@ -57,10 +58,8 @@ public class ProductFormController {
     }
 
     public void init() {
-        TextFieldRules.apply(proName, 35, false, () -> {
-        }, this::clearForm);
-        TextFieldRules.apply(proConeWeight, 4, true, () -> {
-        }, this::clearForm);
+        Helper.applyDocFilter(proName, new StringDocumentFilter(35));
+        Helper.applyDocFilter(proConeWeight, new IntDocumentFilter(4));
 
         this.proTable.addMouseListener(new MouseAdapter() {
             @Override
@@ -156,7 +155,7 @@ public class ProductFormController {
 
     private void openerClicked() {
         try {
-            utils.openPanel(leftPanel, proPanel);
+            Helper.openPanel(leftPanel, proPanel);
             fillProTable();
         } catch (DatabaseException ex) {
             errorListener.onError(ex);

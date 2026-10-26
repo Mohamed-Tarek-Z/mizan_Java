@@ -2,6 +2,7 @@ package formController;
 
 import controller.MachineController;
 import controller.ProductController;
+import docFilters.StringDocumentFilter;
 import exceptions.BusinessException;
 import exceptions.DatabaseException;
 import java.awt.event.ActionEvent;
@@ -18,9 +19,10 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import model.Machine;
 import model.Product;
-import utils.ErrorListener;
-import utils.TextFieldRules;
-import utils.utils;
+import exceptions.ErrorListener;
+import java.awt.event.ActionListener;
+
+import utils.Helper;
 
 public final class MachineFormController {
 
@@ -57,27 +59,27 @@ public final class MachineFormController {
 
     public void init() throws DatabaseException {
 
-        TextFieldRules.apply(this.machName, 15, false, () -> {
-        }, this::clearForm);
-        TextFieldRules.apply(this.machLot, 15, false, () -> {
-        }, this::clearForm);
+        //TO DO make global on panrl Shift Del
+        Helper.applyDocFilter(machName, new StringDocumentFilter(15));
+        Helper.applyDocFilter(machLot, new StringDocumentFilter(15));
 
-        this.machTable.addMouseListener(new MouseAdapter() {
+        machTable.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent evt) {
                 machTableClicked(evt);
             }
         });
-        this.addMachBtn.addActionListener((ActionEvent evt) -> {
+
+        addMachBtn.addActionListener(e -> {
             addMach();
         });
-        this.editMachBtn.addActionListener((ActionEvent evt) -> {
+        editMachBtn.addActionListener(e -> {
             editMach();
         });
-        this.delMachBtn.addActionListener((ActionEvent evt) -> {
+        delMachBtn.addActionListener(e -> {
             deleteMach();
         });
-        this.settingsTapps.addMouseListener(new MouseAdapter() {
+        settingsTapps.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent evt) {
                 settingsTapsClicked();
@@ -177,7 +179,7 @@ public final class MachineFormController {
         try {
             if (settingsTapps.getSelectedIndex() == 0) {
                 fillMachTable();
-                utils.fillComboBoxWihProducts(machPros, prosController.getAvailableProductsLike(""));
+                Helper.fillComboBoxWihProducts(machPros, prosController.getAvailableProductsLike(""));
             }
         } catch (DatabaseException ex) {
             errorListener.onError(ex);
@@ -188,7 +190,7 @@ public final class MachineFormController {
         fillMachTable();
         clearForm();
         machPros.setSelectedIndex(-1);
-        utils.fillComboBoxWihProducts(machPros, prosController.getAvailableProductsLike(""));
+        Helper.fillComboBoxWihProducts(machPros, prosController.getAvailableProductsLike(""));
     }
 
     private void clearForm() {

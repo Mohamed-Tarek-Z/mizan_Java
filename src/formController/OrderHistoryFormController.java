@@ -4,6 +4,7 @@ import com.toedter.calendar.JDateChooser;
 import controller.ClientController;
 import controller.ExportController;
 import controller.ProductController;
+import docFilters.StringDocumentFilter;
 import exceptions.BusinessException;
 import exceptions.DatabaseException;
 import java.awt.event.ActionEvent;
@@ -22,10 +23,9 @@ import javax.swing.table.TableModel;
 import model.Client;
 import model.Product;
 import utils.ArabicDigits;
-import utils.ErrorListener;
+import exceptions.ErrorListener;
 import utils.ExcelManager;
-import utils.TextFieldRules;
-import utils.utils;
+import utils.Helper;
 
 public class OrderHistoryFormController {
 
@@ -80,16 +80,15 @@ public class OrderHistoryFormController {
     }
 
     public void init() {
-        TextFieldRules.apply(soldProSearch, 20, false, () -> {
+        Helper.applyDocFilter(soldProSearch, new StringDocumentFilter(20), () -> {
             try {
-                utils.fillComboBoxWihProducts(soldPros, proController.getAvailableProductsLike(soldProSearch.getText()));
+                Helper.fillComboBoxWihProducts(soldPros, proController.getAvailableProductsLike(soldProSearch.getText()));
             } catch (DatabaseException ex) {
                 errorListener.onError(ex);
             }
-        }, null);
+        });
 
-        TextFieldRules.apply(soldClientSearch, 20, false, () -> {
-        }, null);
+        Helper.applyDocFilter(soldClientSearch, new StringDocumentFilter(20));
 
         this.formOpenerBtn.addActionListener((ActionEvent evt) -> {
             openerClicked();
@@ -206,14 +205,14 @@ public class OrderHistoryFormController {
         soldClientTable.setAutoCreateRowSorter(true);
         soldTable.setAutoCreateRowSorter(true);
         try {
-            utils.fillComboBoxWihProducts(soldPros, proController.getAvailableProductsLike(""));
+            Helper.fillComboBoxWihProducts(soldPros, proController.getAvailableProductsLike(""));
         } catch (DatabaseException ex) {
             errorListener.onError(ex);
         }
     }
 
     private void openerClicked() {
-        utils.openPanel(leftPanel, soldPanel);
+        Helper.openPanel(leftPanel, soldPanel);
         reset();
     }
 

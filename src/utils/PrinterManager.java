@@ -1,5 +1,6 @@
 package utils;
 
+import exceptions.ErrorListener;
 import exceptions.BusinessException;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -22,7 +23,7 @@ public class PrinterManager {
     public PrinterManager(ErrorListener errorListener) throws BusinessException {
         this.errorListener = errorListener;
         this.TicketPrinter = getPrinterByName(
-                utils.CheckConfigFileAndFolder().getProperty("ticketPrinterName", "Microsoft Print"));
+                Config.get("ticketPrinterName", "Microsoft Print"));
     }
 
     /**
@@ -32,7 +33,7 @@ public class PrinterManager {
      */
     public void reInitPrinters() throws BusinessException {
         this.TicketPrinter = getPrinterByName(
-                utils.CheckConfigFileAndFolder().getProperty("ticketPrinterName", "Microsoft Print"));
+                 Config.get("ticketPrinterName", "Microsoft Print"));
     }
 
     /**
@@ -61,7 +62,7 @@ public class PrinterManager {
                 panel.setSize(300, 320);
                 if (TicketPrinter == null) {
                     throw new BusinessException(
-                            utils.CheckConfigFileAndFolder().getProperty("ticketPrinterName", "Microsoft Print")
+                             Config.get("ticketPrinterName", "Microsoft Print")
                             + "Ticket printer not found!");
                 }
                 PrinterJob printerJob = PrinterJob.getPrinterJob();

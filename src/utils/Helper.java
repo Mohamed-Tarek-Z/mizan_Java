@@ -1,26 +1,28 @@
 package utils;
 
+import docFilters.IntDocumentFilter;
 import exceptions.*;
 import java.awt.Component;
+import java.awt.event.ActionEvent;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
-import java.util.Properties;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import javax.swing.AbstractAction;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
+import javax.swing.JComponent;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.KeyStroke;
+import javax.swing.text.AbstractDocument;
+import javax.swing.text.DocumentFilter;
 import model.Product;
 
-public class utils {
+public class Helper {
 
     /**
      * Takes a text and add style to it to be used in jOptionpane
@@ -53,55 +55,84 @@ public class utils {
         return new File(fileName);
     }
 
-    /**
-     * Check for some files and folder like Configuration file and it parent
-     * folder
-     *
-     * @return Properties object with Configuration file open in it
-     * @throws exceptions.BusinessException
-     */
-    public static Properties CheckConfigFileAndFolder() throws BusinessException {
-        try {
-            Files.createDirectories(Paths.get(System.getProperty("user.dir") + "\\Temp"));
-            if (!Files.exists(Paths.get(System.getProperty("user.dir") + "\\Temp\\config.properties"))) {
-                FileOutputStream fileOutputStream = new FileOutputStream(System.getProperty("user.dir") + "\\Temp\\config.properties");
-                fileOutputStream.close();
-            }
-
-            Properties properties = new Properties();
-            FileInputStream input = new FileInputStream(new File(System.getProperty("user.dir") + "\\Temp\\config.properties"));
-            properties.load(input);
-            return properties;
-
-        } catch (IOException ex) {
-            Logger.getLogger(utils.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
-            throw new BusinessException("ملف غير موجود");
-        }
-    }
-
-    /**
-     * Takes a text and add style to it to be used in jOptionpane
-     *
-     * @param input String to be checked for matching the pattern
-     * @param patternToMatch String contain regex pattern
-     * @return Boolean true if the input matches the pattern .
-     */
-    public static boolean isInputMatchPattern(String input, String patternToMatch) {
-        Pattern pattern = Pattern.compile(patternToMatch);
-        Matcher matcher = pattern.matcher(input);
-        return matcher.matches();
-    }
-
     public static void openPanel(JPanel panel, Component comp) {
         panel.removeAll();
         panel.add(comp);
         panel.revalidate();
         panel.repaint();
     }
-    
+
     public static void fillComboBoxWihProducts(JComboBox<Product> Combo, List<Product> products) throws DatabaseException {
         Combo.removeAllItems();
         Combo.setModel(new DefaultComboBoxModel<>(products.toArray(Product[]::new)));
         Combo.setSelectedIndex(-1);
+    }
+
+    /**
+     * @param field the field to configure
+     * @param documentFilter
+     * @param onEnter runs when Enter is pressed in this field (e.g. () ->
+     * next.requestFocusInWindow(), or () -> compute()); pass null to leave
+     */
+    public static void applyDocFilter(JTextField field,
+            DocumentFilter documentFilter,
+            Runnable onEnter
+    ) {
+
+        ((AbstractDocument) field.getDocument())
+                .setDocumentFilter(documentFilter);
+
+        if (onEnter != null) {
+            field.addActionListener(e -> {
+                onEnter.run();
+            });
+        }
+
+        clearOnDelet(field);
+
+    }
+
+    /**
+     * @param field the field to configure
+     * @param documentFilter
+     */
+    public static void applyDocFilter(JTextField field, DocumentFilter documentFilter) {
+        applyDocFilter(field, documentFilter, null);
+    }
+
+    private static void clearOnDelet(JTextField field) {
+        KeyStroke keyStroke = KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0);
+        String actionKey = field.getName() + "-clear-" + keyStroke;
+        field.getInputMap(JComponent.WHEN_FOCUSED).put(keyStroke, actionKey);
+        field.getActionMap().put(actionKey, new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                field.setText("");
+            }
+        });
+    }
+
+    public static void bindKey(JTextField field, KeyStroke keyStroke, Runnable action) {
+        String actionKey = field.getName() + keyStroke;
+        field.getInputMap(JComponent.WHEN_FOCUSED).put(keyStroke, actionKey);
+        field.getActionMap().put(actionKey, new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                action.run();
+            }
+        });
+    }
+
+    public static void goAndSelect(JComponent next) {
+        if (((JTextField) next).isEnabled()) {
+            next.requestFocusInWindow();
+            ((JTextField) next).selectAll();
+        } else {
+            next.transferFocus();
+        }
+    }
+
+    public static void changeMaxLength(JTextField field, int newMaxLength) {
+        ((IntDocumentFilter) ((AbstractDocument) field.getDocument()).getDocumentFilter()).setMaxLength(newMaxLength);
     }
 }

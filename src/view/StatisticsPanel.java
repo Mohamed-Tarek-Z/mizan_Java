@@ -6,7 +6,7 @@ import formController.StatisticsFormController;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import model.Product;
-import utils.ErrorListener;
+import exceptions.ErrorListener;
 import utils.ExcelManager;
 
 public class StatisticsPanel extends javax.swing.JPanel {

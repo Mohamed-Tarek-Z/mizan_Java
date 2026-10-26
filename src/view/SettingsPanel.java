@@ -7,7 +7,7 @@ import formController.SettingsFormController;
 import formController.StorageFormController;
 import javax.swing.JButton;
 import javax.swing.JPanel;
-import utils.ErrorListener;
+import exceptions.ErrorListener;
 import utils.PrinterManager;
 
 public class SettingsPanel extends javax.swing.JPanel {

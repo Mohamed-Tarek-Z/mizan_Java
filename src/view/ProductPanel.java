@@ -7,7 +7,7 @@ import java.awt.Component;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.table.TableCellRenderer;
-import utils.ErrorListener;
+import exceptions.ErrorListener;
 
 public class ProductPanel extends javax.swing.JPanel {
 

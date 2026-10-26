@@ -9,7 +9,7 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.table.TableCellRenderer;
 import model.Product;
-import utils.ErrorListener;
+import exceptions.ErrorListener;
 import utils.ExcelManager;
 
 public class StockPanel extends javax.swing.JPanel {

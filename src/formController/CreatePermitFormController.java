@@ -5,10 +5,10 @@ import controller.ExportController;
 import controller.OrderController;
 import controller.ProductController;
 import controller.StorageController;
+import docFilters.IntDocumentFilter;
+import docFilters.StringDocumentFilter;
 import exceptions.BusinessException;
 import exceptions.DatabaseException;
-import java.awt.event.ActionEvent;
-import java.awt.event.ItemEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
@@ -31,10 +31,9 @@ import model.Client;
 import model.Product;
 import utils.ArabicDigits;
 import utils.Config;
-import utils.ErrorListener;
+import exceptions.ErrorListener;
 import utils.ExcelManager;
-import utils.TextFieldRules;
-import utils.utils;
+import utils.Helper;
 
 public class CreatePermitFormController {
 
@@ -116,26 +115,25 @@ public class CreatePermitFormController {
 
     public void init() {
 
-        TextFieldRules.apply(permitOrderWeight, 3, true, () -> {
-        }, null);
+        Helper.applyDocFilter(permitOrderWeight, new IntDocumentFilter(3));
 
-        TextFieldRules.apply(permitProSearch, 20, false, () -> {
+        Helper.applyDocFilter(permitProSearch, new StringDocumentFilter(20), () -> {
             try {
-                utils.fillComboBoxWihProducts(permitPros, proController.getAvailableStockProductsLike(permitProSearch.getText()));
+                Helper.fillComboBoxWihProducts(permitPros, proController.getAvailableStockProductsLike(permitProSearch.getText()));
             } catch (DatabaseException ex) {
                 errorListener.onError(ex);
             }
-        }, null);
+        });
 
-        this.formOpenerBtn.addActionListener((ActionEvent evt) -> {
+        formOpenerBtn.addActionListener(e -> {
             openerClicked();
         });
 
-        this.permitCreateBtn.addActionListener((ActionEvent evt) -> {
+        permitCreateBtn.addActionListener(e -> {
             createPermit();
         });
 
-        this.permitClearFormBtn.addActionListener((ActionEvent evt) -> {
+        permitClearFormBtn.addActionListener(e -> {
             reset();
         });
 
@@ -146,23 +144,23 @@ public class CreatePermitFormController {
             }
         });
 
-        this.permitPalletsTable.addMouseListener(new MouseAdapter() {
+        permitPalletsTable.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseReleased(MouseEvent evt) {
                 palletTableClicked(evt);
             }
         });
 
-        this.permitPros.addItemListener((ItemEvent evt) -> {
+        permitPros.addItemListener(e -> {
             if (permitPros.hasFocus()) {
                 productSelected();
             }
         });
 
-        permitByWeight.addActionListener((ActionEvent evt) -> {
+        permitByWeight.addActionListener(e -> {
             productSelected();
             permitOrderCountLabel.setText(!permitByWeight.isSelected() ? "عدد الشكاير" : "الوزن المطلوب");
-            TextFieldRules.changeMaxLength(permitOrderWeight, permitByWeight.isSelected() ? 4 : 3);
+            Helper.changeMaxLength(permitOrderWeight, permitByWeight.isSelected() ? 4 : 3);
         });
     }
 
@@ -516,10 +514,10 @@ public class CreatePermitFormController {
     }
 
     private void openerClicked() {
-        utils.openPanel(leftPanel, permitPanel);
+        Helper.openPanel(leftPanel, permitPanel);
         if (permitPros.getItemCount() == 0) {
             try {
-                utils.fillComboBoxWihProducts(permitPros, proController.getAvailableStockProductsLike(permitProSearch.getText()));
+                Helper.fillComboBoxWihProducts(permitPros, proController.getAvailableStockProductsLike(permitProSearch.getText()));
             } catch (DatabaseException ex) {
                 errorListener.onError(ex);
             }

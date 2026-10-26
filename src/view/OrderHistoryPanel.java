@@ -7,7 +7,7 @@ import formController.OrderHistoryFormController;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import model.Product;
-import utils.ErrorListener;
+import exceptions.ErrorListener;
 import utils.ExcelManager;
 
 public class OrderHistoryPanel extends javax.swing.JPanel {

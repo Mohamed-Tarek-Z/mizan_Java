@@ -3,7 +3,7 @@ package repository;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import model.User;
-import model.sqlcon;
+import dataBase.sqlcon;
 import exceptions.DatabaseException;
 import java.util.logging.Level;
 import java.util.logging.Logger;

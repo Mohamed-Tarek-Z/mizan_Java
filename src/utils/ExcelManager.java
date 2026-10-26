@@ -776,7 +776,7 @@ public class ExcelManager {
             date_now = LocalDate.now();
 
             Files.createDirectories(Paths.get(System.getProperty("user.dir") + "\\querys"));
-            File file = utils
+            File file = Helper
                     .NewName(System.getProperty("user.dir") + "\\querys\\" + ClientName + "~" + date_now + ".xlsx");
             try (FileOutputStream outFile = new FileOutputStream(file)) {
                 try (workbook) {
@@ -784,7 +784,7 @@ public class ExcelManager {
                     Desktop desktop = Desktop.getDesktop();
 
                     if (!excelBackupPath.isBlank()) {
-                        File file1 = utils.NewName(excelBackupPath + "\\" + ClientName + "~" + date_now + ".xlsx");
+                        File file1 = Helper.NewName(excelBackupPath + "\\" + ClientName + "~" + date_now + ".xlsx");
                         try (FileOutputStream outFile1 = new FileOutputStream(file1)) {
                             workbook.write(outFile1);
                         }

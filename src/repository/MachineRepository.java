@@ -1,6 +1,6 @@
 package repository;
 
-import model.sqlcon;
+import dataBase.sqlcon;
 
 import exceptions.DatabaseException;
 import java.sql.ResultSet;

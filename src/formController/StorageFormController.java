@@ -30,11 +30,10 @@ import model.Bag;
 import model.Product;
 import model.Ticket;
 import utils.ArabicDigits;
-import utils.ErrorListener;
+import exceptions.ErrorListener;
 import utils.PrinterManager;
-import utils.TextFieldRules;
 import utils.WeightScaleCapture;
-import utils.utils;
+import utils.Helper;
 import view.Mainform;
 import view.MultiEdit;
 import view.PrintPanel;
@@ -132,10 +131,10 @@ public class StorageFormController {
 
     public void init() {
 
-        TextFieldRules.apply(stLot, 15, false, stPalletNumber, this::clearStorageForm);
-        TextFieldRules.apply(stConeCount, 3, true, stEmptyBag, this::clearStorageForm);
-        TextFieldRules.apply(stEmptyBag, 2, true, true, stTotalWeight, this::clearStorageForm);
-        TextFieldRules.apply(stPalletNumber, 3, true, () -> {
+        Helper.applyDocFilter(stLot, 15, false, stPalletNumber, this::clearStorageForm);
+        Helper.applyDocFilter(stConeCount, 3, true, stEmptyBag, this::clearStorageForm);
+        Helper.applyDocFilter(stEmptyBag, 2, true, true, stTotalWeight, this::clearStorageForm);
+        Helper.applyDocFilter(stPalletNumber, 3, true, () -> {
             TextFieldRules.goAndSelect(stConeCount);
             try {
                 calc_pallet_weight();
@@ -143,7 +142,7 @@ public class StorageFormController {
                 errorListener.onError(ex);
             }
         }, null);
-        TextFieldRules.apply(stTotalWeight, 8, true, true, () -> {
+        Helper.applyDocFilter(stTotalWeight, 8, true, true, () -> {
             stNetWeight.requestFocusInWindow();
             try {
                 calc_net_weight();
@@ -152,14 +151,14 @@ public class StorageFormController {
                 showMessageInlable(true);
             }
         }, this::clearStorageForm);
-        TextFieldRules.apply(stNetWeight, 8, true, true, () -> {
+        Helper.applyDocFilter(stNetWeight, 8, true, true, () -> {
             stAdd.doClick();
             stConeCount.requestFocusInWindow();
         }, this::clearStorageForm);
-        TextFieldRules.apply(stConeWeight, 4, true, stConeCount, null);
-        TextFieldRules.apply(stFilterPros, 20, false, () -> {
+        Helper.applyDocFilter(stConeWeight, 4, true, stConeCount, null);
+        Helper.applyDocFilter(stFilterPros, 20, false, () -> {
             try {
-                utils.fillComboBoxWihProducts(stPros, productController.getAvailableProductsLike(stFilterPros.getText()));
+                Helper.fillComboBoxWihProducts(stPros, productController.getAvailableProductsLike(stFilterPros.getText()));
             } catch (DatabaseException ex) {
                 errorListener.onError(ex);
             }
@@ -209,10 +208,10 @@ public class StorageFormController {
         });
 
         formOpenerBtn.addActionListener((ActionEvent evt) -> {
-            utils.openPanel(leftPanel, stPanel);
+            Helper.openPanel(leftPanel, stPanel);
             if (stPros.getItemCount() == 0) {
                 try {
-                    utils.fillComboBoxWihProducts(stPros, productController.getAvailableProductsLike(stFilterPros.getText()));
+                    Helper.fillComboBoxWihProducts(stPros, productController.getAvailableProductsLike(stFilterPros.getText()));
                 } catch (DatabaseException ex) {
                     errorListener.onError(ex);
                 }
@@ -456,7 +455,7 @@ public class StorageFormController {
             stDisableEmptyBagWeight.setSelected(false);
             stMarkBag.setSelected(false);
             stFilterPros.setText("");
-            utils.fillComboBoxWihProducts(stPros, productController.getAvailableProductsLike(stFilterPros.getText()));
+            Helper.fillComboBoxWihProducts(stPros, productController.getAvailableProductsLike(stFilterPros.getText()));
             stPros.setSelectedItem(productController.getProduct(ProName));
             fill_storage_table();
         } catch (BusinessException ex) {

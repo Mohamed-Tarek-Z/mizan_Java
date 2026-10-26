@@ -1,24 +1,22 @@
-package utils;
+package docFilters;
 
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DocumentFilter;
+import utils.ArabicDigits;
 
-public class NumericDocumentFilter extends DocumentFilter {
+public class DoubleDocumentFilter extends DocumentFilter {
 
     private int maxLength;
-    private final boolean isDigitsOnly;
     private final boolean isEven;
 
-    public NumericDocumentFilter(int maxLength, boolean isDigitsOnly) {
+    public DoubleDocumentFilter(int maxLength) {
         this.maxLength = maxLength;
-        this.isDigitsOnly = isDigitsOnly;
         this.isEven = false;
     }
 
-    public NumericDocumentFilter(int maxLength, boolean isDigitsOnly, boolean isEven) {
+    public DoubleDocumentFilter(int maxLength, boolean isEven) {
         this.maxLength = maxLength;
-        this.isDigitsOnly = isDigitsOnly;
         this.isEven = isEven;
     }
 
@@ -66,13 +64,8 @@ public class NumericDocumentFilter extends DocumentFilter {
             char c = text.charAt(i);
             if (Character.isDigit(c)) {
                 sb.append(c);
-                continue;
             } else if (c == ArabicDigits.ARABIC_DECIMAL_SEPARATOR || c == '.') {
                 sb.append(ArabicDigits.ARABIC_DECIMAL_SEPARATOR);
-                continue;
-            }
-            if (!isDigitsOnly) {
-                sb.append(c);
             }
         }
 

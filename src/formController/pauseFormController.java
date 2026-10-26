@@ -4,7 +4,7 @@ import java.awt.event.ActionEvent;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
-import utils.utils;
+import utils.Helper;
 
 public class PauseFormController {
 
@@ -23,7 +23,7 @@ public class PauseFormController {
     public void init() {
 
         this.formOpenerBtn.addActionListener((ActionEvent evt) -> {
-            utils.openPanel(leftPanel, pausePanel);
+            Helper.openPanel(leftPanel, pausePanel);
             EmptyTextArea.requestFocusInWindow();
             EmptyTextArea.setText("");
         });

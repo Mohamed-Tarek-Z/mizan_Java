@@ -2,6 +2,7 @@ package formController;
 
 import controller.ProductController;
 import controller.StorageController;
+import docFilters.StringDocumentFilter;
 import exceptions.BusinessException;
 import exceptions.DatabaseException;
 import java.awt.event.ActionEvent;
@@ -14,10 +15,9 @@ import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 import model.Product;
 import utils.ArabicDigits;
-import utils.ErrorListener;
+import exceptions.ErrorListener;
 import utils.ExcelManager;
-import utils.TextFieldRules;
-import utils.utils;
+import utils.Helper;
 
 public class StockFormController {
 
@@ -51,13 +51,13 @@ public class StockFormController {
     }
 
     public void init() {
-        TextFieldRules.apply(stockProSearch, 20, false, () -> {
+        Helper.applyDocFilter(stockProSearch, new StringDocumentFilter(20), () -> {
             try {
-                utils.fillComboBoxWihProducts(stockPros, proController.getAvailableStockProductsLike(stockProSearch.getText()));
+                Helper.fillComboBoxWihProducts(stockPros, proController.getAvailableStockProductsLike(stockProSearch.getText()));
             } catch (DatabaseException ex) {
                 errorListener.onError(ex);
             }
-        }, null);
+        });
 
         this.stockPros.addItemListener((java.awt.event.ItemEvent evt) -> {
             fillStockTable();
@@ -68,8 +68,8 @@ public class StockFormController {
         });
         this.formOpenerBtn.addActionListener((ActionEvent evt) -> {
             try {
-                utils.openPanel(leftPanel, stockPanel);
-                utils.fillComboBoxWihProducts(stockPros, proController.getAvailableStockProductsLike(stockProSearch.getText()));
+                Helper.openPanel(leftPanel, stockPanel);
+                Helper.fillComboBoxWihProducts(stockPros, proController.getAvailableStockProductsLike(stockProSearch.getText()));
             } catch (DatabaseException ex) {
                 errorListener.onError(ex);
             }

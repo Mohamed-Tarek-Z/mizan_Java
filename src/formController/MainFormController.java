@@ -18,7 +18,7 @@ import javax.swing.JRootPane;
 import javax.swing.JSplitPane;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
-import model.sqlcon;
+import dataBase.sqlcon;
 import repository.ClientRepository;
 import repository.ExportRepository;
 import repository.MachineRepository;
@@ -26,10 +26,10 @@ import repository.OrderRepository;
 import repository.ProductRepository;
 import repository.StorageRepository;
 import utils.Config;
-import utils.ErrorListener;
+import exceptions.ErrorListener;
 import utils.ExcelManager;
 import utils.PrinterManager;
-import utils.utils;
+import utils.Helper;
 import view.CreatePermitPanel;
 import view.Mainform;
 import view.NavPanel;
@@ -171,19 +171,19 @@ public class MainFormController implements ErrorListener {
     }
 
     private void showError(String msg, String title) {
-        JOptionPane.showMessageDialog(mainform, utils.addStyle(msg), title, JOptionPane.WARNING_MESSAGE);
+        JOptionPane.showMessageDialog(mainform, Helper.addStyle(msg), title, JOptionPane.WARNING_MESSAGE);
     }
 
     private void showMessage(String msg, String title) {
-        JOptionPane.showMessageDialog(mainform, utils.addStyle(msg), title, JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(mainform, Helper.addStyle(msg), title, JOptionPane.INFORMATION_MESSAGE);
     }
 
     private int showQuest(String msg, String title) {
-        return JOptionPane.showConfirmDialog(mainform, utils.addStyle(msg), title, JOptionPane.YES_NO_OPTION);
+        return JOptionPane.showConfirmDialog(mainform, Helper.addStyle(msg), title, JOptionPane.YES_NO_OPTION);
     }
 
     private Object showQuest(Object[] quest, String msg, String title) {
-        return JOptionPane.showInputDialog(mainform, utils.addStyle(msg), title, JOptionPane.QUESTION_MESSAGE, null, quest, null);
+        return JOptionPane.showInputDialog(mainform, Helper.addStyle(msg), title, JOptionPane.QUESTION_MESSAGE, null, quest, null);
     }
 
     private void showException(Exception ex) {

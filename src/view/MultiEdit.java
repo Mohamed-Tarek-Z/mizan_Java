@@ -7,7 +7,7 @@ import formController.StorageFormController;
 import java.util.List;
 import model.Bag;
 import model.Product;
-import utils.ErrorListener;
+import exceptions.ErrorListener;
 
 public class MultiEdit extends javax.swing.JFrame {
 

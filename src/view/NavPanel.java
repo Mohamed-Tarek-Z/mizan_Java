@@ -4,8 +4,8 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import model.sqlcon;
-import utils.ErrorListener;
+import dataBase.sqlcon;
+import exceptions.ErrorListener;
 
 public class NavPanel extends javax.swing.JPanel {
 

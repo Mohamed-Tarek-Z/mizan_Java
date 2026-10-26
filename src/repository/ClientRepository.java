@@ -1,7 +1,7 @@
 package repository;
 
 import exceptions.DatabaseException;
-import model.sqlcon;
+import dataBase.sqlcon;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;

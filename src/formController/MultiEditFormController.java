@@ -2,6 +2,8 @@ package formController;
 
 import controller.ProductController;
 import controller.StorageController;
+import docFilters.IntDocumentFilter;
+import docFilters.StringDocumentFilter;
 import exceptions.BusinessException;
 import exceptions.DatabaseException;
 import java.awt.event.ActionEvent;
@@ -12,9 +14,8 @@ import javax.swing.JComboBox;
 import javax.swing.JTextField;
 import model.Bag;
 import model.Product;
-import utils.ErrorListener;
-import utils.TextFieldRules;
-import utils.utils;
+import exceptions.ErrorListener;
+import utils.Helper;
 import view.Mainform;
 import view.MultiEdit;
 
@@ -62,16 +63,14 @@ public class MultiEditFormController {
     public void init() {
 
         try {
-            utils.fillComboBoxWihProducts(mePros, productController.getAvailableProductsLike(""));
+            Helper.fillComboBoxWihProducts(mePros, productController.getAvailableProductsLike(""));
             mePros.setSelectedItem(oProduct);
             mePalletNumber.setText(OPallet);
             meLot.setText(OLot);
             meMark.setSelected(Omark);
 
-            TextFieldRules.apply(meLot, 15, false, () -> {
-            }, null);
-            TextFieldRules.apply(mePalletNumber, 3, true, () -> {
-            }, null);
+            Helper.applyDocFilter(meLot, new StringDocumentFilter(15));
+            Helper.applyDocFilter(mePalletNumber, new IntDocumentFilter(3));
 
             meEdit.addActionListener((ActionEvent evt) -> {
                 editPressed();

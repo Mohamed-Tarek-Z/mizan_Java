@@ -7,7 +7,7 @@ import formController.SingleEditFormController;
 import formController.StorageFormController;
 import model.Bag;
 import model.Product;
-import utils.ErrorListener;
+import exceptions.ErrorListener;
 
 public class SingleEdit extends javax.swing.JFrame {
 
