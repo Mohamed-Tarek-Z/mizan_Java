@@ -33,6 +33,7 @@ import model.Ticket;
 import utils.ArabicDigits;
 import exceptions.ErrorListener;
 import java.awt.event.InputEvent;
+import javax.swing.SwingUtilities;
 import utils.Config;
 import utils.PrinterManager;
 import utils.WeightScaleCapture;
@@ -230,11 +231,11 @@ public class StorageFormController {
             stConeWeight.setEnabled(!stDonotReadConeWeight.isSelected());
         });
         stPrintTicket.addActionListener(e -> {
-            Config.set("isPrintTicket", stPrintTicket.isSelected() ? "True": "False");
+            Config.set("isPrintTicket", stPrintTicket.isSelected() ? "True" : "False");
         });
 
         Helper.bindKey(stPanel, JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT,
-                KeyStroke.getKeyStroke(KeyEvent.VK_INSERT, InputEvent.SHIFT_DOWN_MASK), this::clearStorageForm);
+                KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, InputEvent.SHIFT_DOWN_MASK), this::clearStorageForm);
 
         stPrintTicket.setSelected(Config.getBoolean("isPrintTicket", true));
         new WeightScaleCapture(stTotalWeight).install();

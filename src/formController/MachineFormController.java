@@ -63,8 +63,6 @@ public final class MachineFormController {
     }
 
     public void init() throws DatabaseException {
-
-        //TO DO make global on panrl Shift Del
         Helper.applyDocFilter(machName, new StringDocumentFilter(15));
         Helper.applyDocFilter(machLot, new StringDocumentFilter(15));
 

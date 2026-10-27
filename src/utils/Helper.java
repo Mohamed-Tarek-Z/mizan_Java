@@ -3,6 +3,7 @@ package utils;
 import docFilters.IntDocumentFilter;
 import exceptions.*;
 import java.awt.Component;
+import java.awt.Container;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.io.File;
@@ -111,13 +112,21 @@ public class Helper {
         field.getActionMap().put(actionKey, new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                field.setText("");
+                if (field.isEditable()) {
+                    field.setText("");
+                }
             }
         });
     }
 
     public static void bindKey(JComponent component, int when, KeyStroke keyStroke, Runnable action) {
-        String actionKey = component.getName() + keyStroke;
+        String actionKey = (component.getName() != null ? component.getName() : "") + keyStroke;
+        var x = component.getInputMap(when).get(keyStroke);
+        if (x != null) {
+            throw new BusinessException("this key " + keyStroke + " is already bind to " + x);
+        }
+
+        removeKeyBindingRecursively(component, keyStroke);
         component.getInputMap(when).put(keyStroke, actionKey);
         component.getActionMap().put(actionKey, new AbstractAction() {
             @Override
@@ -125,6 +134,15 @@ public class Helper {
                 action.run();
             }
         });
+    }
+
+    public static void removeKeyBindingRecursively(Container container, KeyStroke keyStroke) {
+        for (Component component : container.getComponents()) {
+            if (component instanceof JComponent jc) {
+                jc.getInputMap().put(keyStroke, "none");
+                jc.getActionMap().put("none", null);
+            }
+        }
     }
 
     public static void goAndSelect(JComponent next) {
