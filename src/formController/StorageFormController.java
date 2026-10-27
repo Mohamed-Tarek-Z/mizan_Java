@@ -234,7 +234,7 @@ public class StorageFormController {
         });
 
         Helper.bindKey(stPanel, JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT,
-                KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, InputEvent.SHIFT_DOWN_MASK), this::clearStorageForm);
+                KeyStroke.getKeyStroke(KeyEvent.VK_INSERT, InputEvent.SHIFT_DOWN_MASK), this::clearStorageForm);
 
         stPrintTicket.setSelected(Config.getBoolean("isPrintTicket", true));
         new WeightScaleCapture(stTotalWeight).install();

@@ -116,10 +116,10 @@ public class Helper {
         });
     }
 
-    public static void bindKey(JComponent field, int when, KeyStroke keyStroke, Runnable action) {
-        String actionKey = field.getName() + keyStroke;
-        field.getInputMap(when).put(keyStroke, actionKey);
-        field.getActionMap().put(actionKey, new AbstractAction() {
+    public static void bindKey(JComponent component, int when, KeyStroke keyStroke, Runnable action) {
+        String actionKey = component.getName() + keyStroke;
+        component.getInputMap(when).put(keyStroke, actionKey);
+        component.getActionMap().put(actionKey, new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 action.run();

@@ -101,6 +101,7 @@ public class StoragePanel extends javax.swing.JPanel {
         jTextField_storage_SearchProducts = new javax.swing.JTextField();
         jTextField_storage_Error = new javax.swing.JTextField();
 
+        setMaximumSize(new java.awt.Dimension(835, 640));
         setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jTable_storage.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
@@ -309,6 +310,7 @@ public class StoragePanel extends javax.swing.JPanel {
 
         jSeparator4.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true));
         add(jSeparator4, new org.netbeans.lib.awtextra.AbsoluteConstraints(602, 232, 230, -1));
+
         add(jSeparator5, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 135, 210, -1));
 
         jSeparator6.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true));
@@ -348,6 +350,7 @@ public class StoragePanel extends javax.swing.JPanel {
         jSeparator7.setMinimumSize(new java.awt.Dimension(37, 3));
         jSeparator7.setPreferredSize(new java.awt.Dimension(37, 55));
         add(jSeparator7, new org.netbeans.lib.awtextra.AbsoluteConstraints(605, 10, 110, 20));
+
         add(jTextField_storage_SearchProducts, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 40, 150, 20));
 
         jTextField_storage_Error.setEditable(false);
@@ -358,6 +361,8 @@ public class StoragePanel extends javax.swing.JPanel {
         jTextField_storage_Error.setRequestFocusEnabled(false);
         jTextField_storage_Error.setVerifyInputWhenFocusTarget(false);
         add(jTextField_storage_Error, new org.netbeans.lib.awtextra.AbsoluteConstraints(780, 40, 40, 30));
+
+        getAccessibleContext().setAccessibleParent(this);
     }// </editor-fold>//GEN-END:initComponents
 
 
