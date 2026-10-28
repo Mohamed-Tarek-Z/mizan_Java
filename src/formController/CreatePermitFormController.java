@@ -75,6 +75,7 @@ public class CreatePermitFormController {
     private final ErrorListener errorListener;
 
     private final int orderDifference;
+    private final JFileChooser fileChooser;
 
     private final List<Bag> orderBags = new ArrayList<>();
     private List<Bag> fOrderBags = new ArrayList<>();
@@ -113,6 +114,10 @@ public class CreatePermitFormController {
         this.leftPanel = leftPanel;
         this.errorListener = errorListener;
         this.orderDifference = Config.getInt("orderDifference", 15);
+        fileChooser = new JFileChooser("P:\\");
+        fileChooser.setFileSelectionMode(javax.swing.JFileChooser.DIRECTORIES_ONLY);
+        fileChooser.setDialogType(JFileChooser.CUSTOM_DIALOG);
+        fileChooser.setFont(new java.awt.Font("Tahoma", 0, 14));
 
     }
 
@@ -127,7 +132,7 @@ public class CreatePermitFormController {
                 errorListener.onError(ex);
             }
         });
-        
+
         Helper.bindKey(permitPanel, JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT,
                 KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, InputEvent.SHIFT_DOWN_MASK), this::reset);
 
@@ -371,10 +376,6 @@ public class CreatePermitFormController {
     }
 
     private void createPermit() {
-        JFileChooser fileChooser = new JFileChooser("P:\\");
-        fileChooser.setFileSelectionMode(javax.swing.JFileChooser.FILES_AND_DIRECTORIES);
-        fileChooser.setDialogType(JFileChooser.CUSTOM_DIALOG);
-        fileChooser.setFont(new java.awt.Font("Tahoma", 0, 14));
 
         double ss = permitTotalWeight.getText().isEmpty() ? 0.0
                 : ArabicDigits.parseDouble(permitTotalWeight.getText());
@@ -412,7 +413,7 @@ public class CreatePermitFormController {
                                 errorListener.onWarning(" برجاء تغير الصنف أو اللوط  ", "إنتبه");
                                 second = !second;
                             } else {
-                                fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+
                                 fileChooser.showOpenDialog(null);
                                 String excelBackupPath = fileChooser.getSelectedFile().getAbsolutePath();
                                 if (excelManager.excel_60_60(fOrderBags, orderBags,
@@ -439,7 +440,7 @@ public class CreatePermitFormController {
                         }
                         second = !second;
                     } else if (permitPreviewTable.getRowCount() <= 120) {
-                        fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+
                         fileChooser.showOpenDialog(null);
                         String excelBackupPath = fileChooser.getSelectedFile().getAbsolutePath();
                         if (excelManager.excel_120(orderBags,
@@ -460,7 +461,7 @@ public class CreatePermitFormController {
                         }
 
                     } else if (permitPreviewTable.getRowCount() <= 160) {
-                        fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+
                         fileChooser.showOpenDialog(null);
                         String excelBackupPath = fileChooser.getSelectedFile().getAbsolutePath();
                         if (excelManager.excel_160(orderBags,

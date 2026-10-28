@@ -33,7 +33,6 @@ import model.Ticket;
 import utils.ArabicDigits;
 import exceptions.ErrorListener;
 import java.awt.event.InputEvent;
-import javax.swing.SwingUtilities;
 import utils.Config;
 import utils.PrinterManager;
 import utils.WeightScaleCapture;
@@ -149,9 +148,9 @@ public class StorageFormController {
             }
         });
         Helper.applyDocFilter(stTotalWeight, new DoubleDocumentFilter(8, true), () -> {
-            Helper.goAndSelect(stNetWeight);
             try {
                 calc_net_weight();
+                Helper.goAndSelect(stNetWeight);
             } catch (BusinessException e) {
                 errorListener.onError(e);
                 showMessageInlable(true);
@@ -400,6 +399,7 @@ public class StorageFormController {
         if (!stDisableNumberOfCone.isSelected()) {
             stConeCount.selectAll();
         }
+        showMessageInlable(false);
     }
 
     private void deleteStorage() {

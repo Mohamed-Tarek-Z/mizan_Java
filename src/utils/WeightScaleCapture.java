@@ -82,8 +82,17 @@ public class WeightScaleCapture implements KeyEventDispatcher {
         if (e.getID() != KeyEvent.KEY_TYPED) {
             if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                 if (e.getID() == KeyEvent.KEY_PRESSED && confirmed) {
-                    suppressEnterRelease = true;
-                    return true;
+                    if (!targetField.hasFocus()) {
+                        suppressEnterRelease = true;
+                        return true;
+                    } else {
+                        boolean swallow = confirmed && WEIGHT_PATTERN.matcher(buffer.toString()).matches();
+                        if (swallow) {
+                            deliverToTargetField(buffer.toString());
+                        }
+                        reset();
+                        return !swallow;
+                    }
                 }
                 if (e.getID() == KeyEvent.KEY_RELEASED && suppressEnterRelease) {
                     suppressEnterRelease = false;
@@ -162,7 +171,7 @@ public class WeightScaleCapture implements KeyEventDispatcher {
     }
 
     private void deliverToTargetField(String raw) {
-        SwingUtilities.invokeLater(() -> targetField.setText(ArabicDigits.toArabicDigits(
-                raw.replace(deviceDecimalMarker, ArabicDigits.ARABIC_DECIMAL_SEPARATOR))));
+        targetField.setText(ArabicDigits.toArabicDigits(
+                raw.replace(deviceDecimalMarker, ArabicDigits.ARABIC_DECIMAL_SEPARATOR)));
     }
 }

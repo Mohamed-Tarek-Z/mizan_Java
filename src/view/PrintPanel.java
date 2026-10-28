@@ -14,7 +14,7 @@ public class PrintPanel extends javax.swing.JPanel {
     public PrintPanel(PrinterManager printerManager) {
         initComponents();
         formController = new PrintFormController(jLabel_print_ValPallet, jLabel_print_ValNCone,
-                jLabel_print_ValColor, jLabel_print_ValLot, jLabel_print_ValLot, jLabel_print_ValLot,
+                jLabel_print_ValColor, jLabel_print_ValTypeDenir, jLabel_print_ValType, jLabel_print_ValLot,
                 jLabel_print_ValTotalWeight, jLabel_print_ValNetWeight, this, printerManager);
     }
 
