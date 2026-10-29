@@ -236,6 +236,29 @@ public class StorageFormController {
         Helper.bindKey(stPanel, JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT,
                 KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, InputEvent.SHIFT_DOWN_MASK), this::clearStorageForm);
 
+        Helper.bindKey(stNetWeight, JComponent.WHEN_FOCUSED, KeyStroke.getKeyStroke(KeyEvent.VK_ADD, 0), () -> {
+            if (!stTotalWeight.getText().isBlank()) {
+                double weight = ArabicDigits.parseDouble(stTotalWeight.getText());
+                stTotalWeight.setText(ArabicDigits.toArabicDigits(weight + 0.02));
+                try {
+                    calc_net_weight();
+                } catch (BusinessException e) {
+                    showMessageInlable(true);
+                }
+            }
+        });
+        Helper.bindKey(stNetWeight, JComponent.WHEN_FOCUSED, KeyStroke.getKeyStroke(KeyEvent.VK_SUBTRACT, 0), () -> {
+            if (!stTotalWeight.getText().isBlank()) {
+                double weight = ArabicDigits.parseDouble(stTotalWeight.getText());
+                stTotalWeight.setText(ArabicDigits.toArabicDigits(weight - 0.02));
+                try {
+                    calc_net_weight();
+                } catch (BusinessException e) {
+                    showMessageInlable(true);
+                }
+            }
+        });
+
         stPrintTicket.setSelected(Config.getBoolean("isPrintTicket", true));
         new WeightScaleCapture(stTotalWeight).install();
 
@@ -460,6 +483,9 @@ public class StorageFormController {
             stIgnoreLimit.setSelected(false);
             stDisableNumberOfCone.setSelected(false);
             stDisableEmptyBagWeight.setSelected(false);
+            stEmptyBag.setEnabled(true);
+            stConeCount.setEnabled(true);
+            stConeWeight.setEnabled(true);
             stMarkBag.setSelected(false);
             stFilterPros.setText("");
             Helper.fillComboBoxWihProducts(stPros, productController.getAvailableProductsLike(stFilterPros.getText()));
