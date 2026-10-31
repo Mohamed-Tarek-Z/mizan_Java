@@ -6,7 +6,6 @@ import exceptions.BusinessException;
 import exceptions.DatabaseException;
 import java.util.Date;
 import java.util.List;
-import model.Product;
 import model.Bag;
 import utils.ArabicDigits;
 
@@ -127,7 +126,7 @@ public class StorageController {
         }
 
         if (!IgnoreLimit) {
-            if (req.getNum_of_con() < 1 || req.getNum_of_con() > 18) {
+            if (req.getNum_of_con() < 1 || req.getNum_of_con() > 25) {
                 throw new BusinessException("برجاء إدخال عدد الكون ");
             }
             if (req.getTot_wight() >= 60.0 && req.getTot_wight() < 15.0) {

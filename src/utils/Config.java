@@ -14,7 +14,7 @@ public final class Config {
     private static final Properties properties = new Properties();
     private static final Path configDirectory = Paths.get(System.getProperty("user.dir"), "Temp");
 
-    private static final Path configFile = configDirectory.resolve("config.properties");
+    private static final Path configFile = configDirectory.resolve("NewConfig.properties");
 
     static {
         load();
@@ -24,7 +24,7 @@ public final class Config {
         try {
             Files.createDirectories(configDirectory);
             if (!Files.exists(configFile)) {
-                FileOutputStream fileOutputStream = new FileOutputStream(System.getProperty("user.dir") + "\\Temp\\config.properties");
+                FileOutputStream fileOutputStream = new FileOutputStream(System.getProperty("user.dir") + "\\Temp\\NewConfig.properties");
                 save();
                 fileOutputStream.close();
             }

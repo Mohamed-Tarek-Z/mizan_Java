@@ -1,63 +1,42 @@
 package utils;
 
 import javax.swing.*;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.Document;
 import javax.swing.text.JTextComponent;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.util.regex.Pattern;
-import javax.swing.text.BadLocationException;
 
 /**
- * Captures a weight reading from a USB scale that emulates a keyboard (HID
- * "keyboard wedge"), no matter which Swing component currently has focus, and
- * writes the parsed value into a designated target field.
+ * Captures a weight reading from a USB scale that behaves like a keyboard, whichever
+ * component has focus, and writes it into {@code targetField}.
  *
- * Background: a keyboard-wedge device just "types" characters into whatever has
- * focus. Since the character Windows actually delivers for the decimal point
- * depends on the active keyboard layout (hence '.' in English vs 'ز' in Arabic
- * here), and you can't predict which field has focus when the scale sends a
- * reading, this class intercepts every keystroke at the KeyboardFocusManager
- * level -- before any component sees it -- and:
+ * How a reading is recognised: the scale types far faster than a human. The first character
+ * is let through (we can't know yet), the second FAST character confirms a burst, the first
+ * character is then retracted from the field it landed in, and the rest are swallowed until the
+ * scale's Enter.
  *
- * 1. Detects the device by typing speed: it sends characters far faster than a
- * human can type. 2. Only treats it as the device once it sees a SECOND fast
- * character in a row (not the very first one), so an ordinary human keystroke
- * is never mistaken for the device. Because of that one-character delay, the
- * very first character of a real burst will have already been typed into
- * whatever field had focus -- this class retracts that one character once the
- * burst is confirmed, so no stray character is left behind. 3. Swallows the
- * rest of the burst (so it never lands in the wrong field) until it sees the
- * terminating Enter/CR that the device sends after a full reading, then
- * validates the buffer looks like a number and delivers it to the target field,
- * replacing the device's decimal marker with the real Arabic decimal separator
- * (٫, U+066B).
- *
- * IMPORTANT: this assumes the scale is a HID keyboard-emulating device (check
- * Device Manager -- it should show up as a keyboard/HID device). If it instead
- * shows up under "Ports (COM & LPT)" as a serial device, don't use this class
- * at all: read the COM port directly (e.g. with jSerialComm). That's simpler
- * and avoids focus/keystroke handling entirely, and the locale-dependent
- * decimal character problem disappears because you're reading the raw bytes the
- * device sent rather than OS-translated keystrokes.
- *
- * TUNING: MAX_GAP_MS must sit comfortably above your device's own
- * inter-character gap and comfortably below a human's fastest realistic typing
- * gap. Log the real gaps you see (print the `gap` value below while triggering
- * a real reading) and adjust if readings are missed or normal typing gets
- * swallowed.
+ * A confirmed burst must keep streaming. If it goes quiet without its Enter (a human who
+ * happened to hit two keys within the gap), the swallowed keystrokes are handed back to the
+ * field they were meant for, so nothing is lost and no stale state is left behind.
  */
 public class WeightScaleCapture implements KeyEventDispatcher {
+
+    // digits, optionally followed by '.' or the device's decimal marker and EXACTLY two digits
+    private static final Pattern WEIGHT_PATTERN = Pattern.compile("\\d+([.\u0632]\\d{2})?");
 
     private final long maxGapMs;
     private final char deviceDecimalMarker;
     private final JTextField targetField;
-    private static final Pattern WEIGHT_PATTERN = Pattern.compile("\\d+([.\u0632]\\d+{2})?");
-    private boolean suppressEnterRelease = false;
+    private final Timer idleTimer;
 
     private final StringBuilder buffer = new StringBuilder();
     private long lastEventTime = 0L;
     private boolean confirmed = false;
     private JTextComponent candidateOwner;
+    private int candidateLengthBefore = -1;
+    private boolean swallowRestOfEnter = false;
 
     public WeightScaleCapture(JTextField targetField) {
         this(targetField, 30L, 'ز');
@@ -67,6 +46,9 @@ public class WeightScaleCapture implements KeyEventDispatcher {
         this.targetField = targetField;
         this.maxGapMs = maxGapMs;
         this.deviceDecimalMarker = deviceDecimalMarker;
+        // Safety net: a confirmed burst that goes quiet without its Enter is not a reading.
+        this.idleTimer = new Timer((int) Math.max(100, maxGapMs * 3), ev -> abortBurst());
+        this.idleTimer.setRepeats(false);
     }
 
     public void install() {
@@ -75,50 +57,67 @@ public class WeightScaleCapture implements KeyEventDispatcher {
 
     public void uninstall() {
         KeyboardFocusManager.getCurrentKeyboardFocusManager().removeKeyEventDispatcher(this);
+        reset();
     }
 
     @Override
     public boolean dispatchKeyEvent(KeyEvent e) {
+
+        // ---- KEY_PRESSED / KEY_RELEASED: only Enter matters -------------------------------
         if (e.getID() != KeyEvent.KEY_TYPED) {
-            if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                if (e.getID() == KeyEvent.KEY_PRESSED && confirmed) {
-                    if (!targetField.hasFocus()) {
-                        suppressEnterRelease = true;
-                        return true;
-                    } else {
-                        boolean swallow = confirmed && WEIGHT_PATTERN.matcher(buffer.toString()).matches();
-                        if (swallow) {
-                            deliverToTargetField(buffer.toString());
-                        }
-                        reset();
-                        return !swallow;
-                    }
+            if (e.getKeyCode() != KeyEvent.VK_ENTER) {
+                return false;
+            }
+            if (e.getID() == KeyEvent.KEY_PRESSED) {
+                // Swing fires a field's ActionListener on Enter's KEY_PRESSED, so the
+                // decision has to be made here, not on KEY_TYPED.
+                swallowRestOfEnter = false;
+                if (!confirmed) {
+                    return false; // an ordinary Enter from the user
                 }
-                if (e.getID() == KeyEvent.KEY_RELEASED && suppressEnterRelease) {
-                    suppressEnterRelease = false;
-                    return true;
+                if (System.currentTimeMillis() - lastEventTime > maxGapMs) {
+                    abortBurst(); // stale burst: it was not the device
+                    return false; // the user's keystrokes are back; let their Enter act normally
                 }
+                boolean reading = finishBurst();
+                swallowRestOfEnter = true;
+                // A valid reading + target focused: let Enter through so the target's own action
+                // runs with the weight in place. Otherwise swallow it so no other field fires.
+                return !(reading && targetField.hasFocus());
+            }
+            if (e.getID() == KeyEvent.KEY_RELEASED && swallowRestOfEnter) {
+                swallowRestOfEnter = false;
+                return true;
             }
             return false;
         }
 
+        // ---- KEY_TYPED --------------------------------------------------------------------
         char c = e.getKeyChar();
+        boolean isTerminator = c == '\n';
+        if (isTerminator && swallowRestOfEnter) {
+            return true; // this Enter was already handled on KEY_PRESSED
+        }
+
         long now = System.currentTimeMillis();
         long gap = now - lastEventTime;
         lastEventTime = now;
 
-        boolean isTerminator = c == '\n' || c == '\r';
-        boolean isBufferable = Character.isDigit(c) || c == '.' || c == deviceDecimalMarker;
-
-        if (isTerminator) {
-            boolean swallow = confirmed && WEIGHT_PATTERN.matcher(buffer.toString()).matches();
-            if (swallow) {
-                deliverToTargetField(buffer.toString());
-            }
-            reset();
-            return swallow;
+        // A confirmed burst must keep streaming; a pause means it wasn't the device.
+        if (confirmed && gap > maxGapMs) {
+            abortBurst();
         }
 
+        if (isTerminator) {
+            if (confirmed) { // fallback, in case KEY_PRESSED wasn't seen
+                finishBurst();
+                return true;
+            }
+            reset();
+            return false;
+        }
+
+        boolean isBufferable = Character.isDigit(c) || c == '.' || c == deviceDecimalMarker;
         if (!isBufferable) {
             reset();
             return false;
@@ -128,21 +127,50 @@ public class WeightScaleCapture implements KeyEventDispatcher {
 
         if (!confirmed && fastFollowUp) {
             confirmed = true;
-            retractLastCharacterFrom(candidateOwner);
+            retractFirstCharacter();
         }
 
         if (confirmed) {
             buffer.append(c);
-            return true;
+            idleTimer.restart();
+            return true; // swallow
         }
 
         if (buffer.length() > 0 && !fastFollowUp) {
-            reset();
+            reset(); // the previous lone character was just normal typing
         }
 
         buffer.append(c);
         candidateOwner = currentTextFocusOwner();
-        return false;
+        // dispatchKeyEvent runs BEFORE the key reaches the field, so this is the "before" length
+        candidateLengthBefore = candidateOwner != null ? candidateOwner.getDocument().getLength() : -1;
+        return false; // not confirmed yet: let it type normally
+    }
+
+    /** Ends a confirmed burst on Enter. Returns true if it was a valid reading (and delivered). */
+    private boolean finishBurst() {
+        String text = buffer.toString();
+        reset();
+        boolean valid = WEIGHT_PATTERN.matcher(text).matches();
+        if (valid) {
+            deliverToTargetField(text);
+        } else {
+            Toolkit.getDefaultToolkit().beep(); // the device sent something we don't recognise
+        }
+        return valid;
+    }
+
+    /** The swallowed characters were NOT a scale reading: give them back to the field. */
+    private void abortBurst() {
+        if (!confirmed) {
+            return;
+        }
+        String text = buffer.toString();
+        JTextComponent owner = candidateOwner;
+        reset();
+        if (owner != null && owner.isShowing() && owner.isEditable() && !text.isEmpty()) {
+            owner.replaceSelection(text);
+        }
     }
 
     private JTextComponent currentTextFocusOwner() {
@@ -150,24 +178,33 @@ public class WeightScaleCapture implements KeyEventDispatcher {
         return (owner instanceof JTextComponent) ? (JTextComponent) owner : null;
     }
 
-    private void retractLastCharacterFrom(JTextComponent owner) {
+    private void retractFirstCharacter() {
+        JTextComponent owner = candidateOwner;
         if (owner == null) {
+            return;
+        }
+        Document doc = owner.getDocument();
+        // Only undo it if the field really took that one character. Its filter may have refused it
+        // (field full, odd number...) and then we'd be deleting something the user typed earlier.
+        if (doc.getLength() != candidateLengthBefore + 1) {
             return;
         }
         try {
             int pos = owner.getCaretPosition();
             if (pos > 0) {
-                owner.getDocument().remove(pos - 1, 1);
+                doc.remove(pos - 1, 1);
             }
-        } catch (BadLocationException ex) {
-            JOptionPane.showMessageDialog(null, ex.getMessage(), "ex", JOptionPane.INFORMATION_MESSAGE);
+        } catch (BadLocationException ignored) {
+            // best effort
         }
     }
 
     private void reset() {
+        idleTimer.stop();
         buffer.setLength(0);
         confirmed = false;
         candidateOwner = null;
+        candidateLengthBefore = -1;
     }
 
     private void deliverToTargetField(String raw) {
