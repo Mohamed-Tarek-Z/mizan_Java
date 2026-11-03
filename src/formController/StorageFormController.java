@@ -270,7 +270,7 @@ public class StorageFormController {
             double weight_of_con = ArabicDigits.parseInt(requireText(stConeWeight, "وزن الكون")) / 1000.00,
                     bag_weight = ArabicDigits.parseInt(requireText(stEmptyBag, "وزن الفارغ")) / 100.00,
                     weight = ArabicDigits.parseDouble(requireText(stTotalWeight, "وزن القائم"));
-
+            
             stNetWeight.setText(ArabicDigits.toArabicDigits(weight - (bag_weight + (num_of_con * weight_of_con))));
         }
 
