@@ -129,10 +129,10 @@ public class StorageController {
             if (req.getNum_of_con() > 29 || req.getNum_of_con() < 2) {
                 throw new BusinessException("برجاء إدخال عدد الكون ");
             }
-            if (req.getTot_wight() >= 60.0 || req.getTot_wight() < 25.0) {
+            if (req.getTot_wight() >= 60.0 || req.getTot_wight() < 15.0) {
                 throw new BusinessException("خطأ في وزن الشيكاره");
             }
-            if (req.getWeight() >= 60.0 || req.getWeight() < 19.0) {
+            if (req.getWeight() >= 60.0 || req.getWeight() < 12.0) {
                 throw new BusinessException("خطأ في وزن الشيكاره");
             }
         }
